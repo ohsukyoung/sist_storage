@@ -2892,49 +2892,819 @@ WHERE T1.인원수 = (SELECT MAX(COUNT(*))
                   )
 ORDER BY 1;
 ```
-### 3.3. 해설
-``` SQL
-
-```
 ## 4. 문제
---
+--○ EMP 테이블과 DEPT 테이블을 대상으로 직종이 MANAGER와 CLERK 인 사원들만  
+--   부서번호, 부서명, 사원명, 직종명, 급여 항목을 조회한다.  
 ### 4.1. 답
 ``` SQL
-
+-- 부서번호,    부서명,    사원명,    직종명,    급여
+-- DEPTNO       DNAME       ENAME       JOB      SAL
+-- E, D         D           E           E        E
+ 
+SELECT D.EMPNO "부서번호", D.DNAME "부서명", E.ENAME "사원명", E.JOB "직종명", E.SAL "급여"
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO
+WHERE E.JOB IN ('MANAGER', 'CLERK');
+/*
+7782	ACCOUNTING	CLARK	MANAGER	2450
+7934	ACCOUNTING	MILLER	CLERK	1300
+7876	RESEARCH	ADAMS	CLERK	1100
+7566	RESEARCH	JONES	MANAGER	2975
+7369	RESEARCH	SMITH	CLERK	800
+7698	SALES	    BLAKE	MANAGER	2850
+7900	SALES	    JAMES	CLERK	950
+*/
+ 
+SELECT 부서번호, 부서명, 사원명, 직종명, 급여
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+ 
+SELECT DEPTNO, DNAME, ENAME, JOB, SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+--==>> 에러 발생(ORA-00918: column ambiguously defined)
+--     두 테이블 간 중복되는 칼럼에 대한
+--     소속 테이블을 정해줘야 (명시해줘야) 한다.
+ 
+--※ 두 테이블 간 중복되는 컬럼에 대해 소속 테이블을 명시하는 경우
+--   부모 테이블의 칼럼을 참조할 수 있도록 처리해야 한다.
+ 
+--** 두개의 테이블이 있을 경우 부모테이블을 가져와서 써야함
+--** 부모테이블이란? 
+--** EMP의 DEPTNO 값이 여러개 있는데 DEPT는 DEPTNO 값이 하나만 있음 -> 따라서 부모테이블은 DEPTNO
+ 
+SELECT *
+FROM DEPT;      -- 부모테이블
+ 
+SELECT *
+FROM EMP;       -- 자식테이블
+ 
+SELECT D.DEPTNO, DNAME, ENAME, JOB, SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+ 
+-- 두 테이블에 모두 포함되어 있는 중복된 컬럼이 아니더라도
+-- 컬럼의 소속 테이블을 명시해 줄 수 있기를 권장한다.
+ 
+SELECT D.DEPTNO, D.DNAME, E.ENAME, E.JOB, E.SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+ 
+--** 즉, 소속테이블을 명시하지 않으면 해당 SELECT를 찾기위해 여러 테이블을 조회한다.
+--** 따라서 소속테이블을 명시함으로써 오라클에게 작업지시를 명확하게 하여, 불필요한 작업을 최소화한다.
+ 
+--** 아우터조인에서 공통된 데이터를 가져올때 부모테이블이 아니면 셀렉트해서 가져올 수 없다.
+ 
+SELECT D.DEPTNO, DNAME, ENAME, JOB, SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO(+) = D.DEPTNO;
+/*
+DEPTNO	DNAME	    ENAME	JOB	    SAL
+40  	OPERATIONS	(null)	(null)  (null)  -- DEPTNO가 40	
+*/
+ 
+SELECT E.DEPTNO, DNAME, ENAME, JOB, SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO(+) = D.DEPTNO;
+--==>>
+/*
+DEPTNO	DNAME	    ENAME	JOB	    SAL
+(null)	OPERATIONS	(null)	(null)  (null)	-- DEPTNO가 (null)
+*/
 ```
-### 4.3. 해설
-``` SQL
 
+<BR>
+
+# 페이지 20231026_01_scott.sql
+## 📌 1. 안내
+-- EMP 테이블의 데이터를 다음과 같이 조회할 수 있도록 쿼리문을 구성한다.
+``` SQL
+/*
+---------------------------------------------------------
+사원번호 사원명 직종명 관리자번호 관리자명 관리자직종명
+7369     SMITH  CLERK   7902      FORD      ANALYST  
+*/
+```
+``` SQL
+SELECT E1.EMPNO "사원번호", E1.ENAME "사원명", E1.JOB "직종명"
+     , E2.EMPNO "관리자번호" --E1.MGR "관리자번호" -- 주석처리된 것처럼 작성해도 되지만, 부모에 해당하는 테이블로 작성
+     , E2.ENAME "관리자명", E2.JOB "관리자직종명"
+FROM EMP E1 LEFT JOIN EMP E2
+ON E1.MGR = E2.EMPNO
+ORDER BY 1;
+ 
+SELECT E1.EMPNO "사원번호", E1.ENAME "사원명", E1.JOB "직종명"
+     , E2.EMPNO "관리자번호" --E1.MGR "관리자번호" -- 주석처리된 것처럼 작성해도 되지만, 부모에 해당하는 테이블로 작성
+     , E2.ENAME "관리자명", E2.JOB "관리자직종명"
+FROM EMP E1, EMP E2
+WHERE E1.MGR = E2.EMPNO(+)
+ORDER BY 1;
+ 
+/*
+7369	SMITH	CLERK	    7902	FORD	ANALYST
+7499	ALLEN	SALESMAN	7698	BLAKE	MANAGER
+7521	WARD	SALESMAN	7698	BLAKE	MANAGER
+7566	JONES	MANAGER	    7839	KING	PRESIDENT
+7654	MARTIN	SALESMAN	7698	BLAKE	MANAGER
+7698	BLAKE	MANAGER	    7839	KING	PRESIDENT
+7782	CLARK	MANAGER	    7839	KING	PRESIDENT
+7788	SCOTT	ANALYST	    7566	JONES	MANAGER
+7839	KING	PRESIDENT	(null)  (null)	(null)	
+7844	TURNER	SALESMAN	7698	BLAKE	MANAGER
+7876	ADAMS	CLERK	    7788	SCOTT	ANALYST
+7900	JAMES	CLERK	    7698	BLAKE	MANAGER
+7902	FORD	ANALYST	    7566	JONES	MANAGER
+7934	MILLER	CLERK	    7782	CLARK	MANAGER
+*/
+ 
+SELECT *
+FROM EMP E1;
+ 
+SELECT *
+FROM EMP E1, EMP E2
+WHERE E1.EMPNO = E2.MGR
+ORDER BY 1;
+ 
+SELECT *
+FROM EMP E1, EMP E2
+WHERE E1.MGR = E2.EMPNO
+ORDER BY 1;
+```
+
+# 페이지 20231026_02_hr.sql
+## 1. 문제
+--○ HR.JOBS, HR.EMPLOYEES, HR.DEPARTMENTS 테이블을 대상으로  
+--   직원들의 데이터를  
+--   FIRST_NAME, LAST_NAME, JOB_TITLE, DEPARTMENT_NAME 항목으로 조회한다.  
+--   E           E          J          D 
+``` SQL
+SELECT *
+FROM JOBS;
+--** 직종의 이름이 아닌 직종의 ID 가 들어가 있음
+/* 19 건
+JOB_ID	JOB_TITLE	                MIN_SALARY	MAX_SALARY
+AD_PRES	President	                    20080	40000
+AD_VP	Administration Vice President	15000	30000
+*/
+ 
+SELECT *
+FROM EMPLOYEES;
+-- JOB_ID       -- 관계 컬럼
+/* 107건
+EMPLOYEE_ID	FIRST_NAME	LAST_NAME	EMAIL	    PHONE_NUMBER	HIRE_DATE	JOB_ID	SALARY	COMMISSION_PCT	MANAGER_ID	DEPARTMENT_ID
+100	        Steven	    King	    SKING	    515.123.4567	2003-06-17	AD_PRES	24000			                        90
+101	        Neena	    Kochhar	    NKOCHHAR	515.123.4568	2005-09-21	AD_VP	17000		                    100	90
+*/
+ 
+SELECT *
+FROM DEPARTMENTS;
+-- DEPARTMENT_ID    -- 관계 컬럼
+/* 27건
+DEPARTMENT_ID	DEPARTMENT_NAME	MANAGER_ID	LOCATION_ID
+10	            Administration	200	        1700
+20	            Marketing	    201	        1800
+*/
+ 
+SELECT *
+FROM LOCATIONS;
+/* 23건
+LOCATION_ID	STREET_ADDRESS	        POSTAL_CODE	CITY	STATE_PROVINCE	COUNTRY_ID
+1000	    1297 Via Cola di Rie	00989	    Roma	(null)	        IT
+1100	    93091 Calle della Testa	10934	    Venice	(null)	        IT
+*/
+ 
+SELECT *
+FROM COUNTRIES;
+/* 25건
+COUNTRY_ID	COUNTRY_NAME	REGION_ID
+AR	        Argentina	    2
+AU	        Australia	    3
+*/
+ 
+SELECT *
+FROM REGIONS;
+/* 4건
+REGION_ID	REGION_NAME
+1	        Europe
+2	        Americas
+*/
+-------------------
+```
+### 1.2. 답
+``` SQL
+SELECT FIRST_NAME, LAST_NAME, JOB_TITLE, DEPARTMENT_NAME
+FROM JOBS J JOIN EMPLOYEES;
+ 
+SELECT E.FIRST_NAME, E.LAST_NAME, J.JOB_TITLE--, DEPARTMENT_NAME
+FROM JOBS J JOIN EMPLOYEES E
+ON J.JOB_ID = E.JOB_ID;
+ 
+--
+SELECT E.FIRST_NAME, E.LAST_NAME, J.JOB_TITLE, D.DEPARTMENT_NAME
+FROM JOBS J JOIN EMPLOYEES E
+ON J.JOB_ID = E.JOB_ID
+    LEFT JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID;
+    
+SELECT E.FIRST_NAME, E.LAST_NAME, J.JOB_TITLE, DEPARTMENT_NAME
+FROM JOBS J, EMPLOYEES E, DEPARTMENTS D
+WHERE J.JOB_ID = E.JOB_ID
+  AND E.DEPARTMENT_ID = D.DEPARTMENT_ID(+);
+```
+### 1.3. 해설
+``` SQL
+/* 1-문제 & 함께 푼 내용 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+SELECT E.FIRST_NAME, E.LAST_NAME, D.DEPARTMENT_NAME
+FROM EMPLOYEES E JOIN DEPARTMENTS D
+ON E.DEPARTMENT_ID = D.DEPARTMENT_ID;
+ 
+SELECT COUNT(*)
+FROM DEPARTMENTS;
+--==>> 107
+ 
+SELECT COUNT(*)
+FROM EMPLOYEES E JOIN DEPARTMENTS D
+ON E.DEPARTMENT_ID = D.DEPARTMENT_ID;
+--==>> 106
+--** EMPLOYEES는 107이나 JOIN 결합후 106이 되었으므로
+--**, EMPLOYEES에서 DEPARTMENT_ID가 없는 한개까지 포함하기 위해 OUTER JOIN을 한다.
+ 
+SELECT E.FIRST_NAME, E.LAST_NAME, D.DEPARTMENT_NAME
+FROM EMPLOYEES E LEFT JOIN DEPARTMENTS D
+ON E.DEPARTMENT_ID = D.DEPARTMENT_ID;
+ 
+SELECT E.FIRST_NAME, E.LAST_NAME, D.DEPARTMENT_NAME
+FROM EMPLOYEES E LEFT JOIN DEPARTMENTS D
+ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+        JOIN JOBS J
+        ON E.JOB_ID = J.JOB_ID;
+--** 99코드의 장점: 누락된 사항이 있는지 단계를 밟아가면서 누락된 건이 있는지 확인할 수 있다.
+--** 누락된 건 확인: 연결된 코드의 값이 NULL 인지 찾아볼 것!
+```
+## 2. 문제
+``` SQL
+/*○ EMPLOYEES,      DEPARTMENTS, JOBS,   LOCATIONS, COUNTRIES, REGIONS 테이블을 대상으로  
+--   E               D            J       L          C          R  
+--   JOB_ID                       JOB_ID  
+--   DEPARTMENT_ID   DEPARTMENT_ID  
+                     LOCATION_ID          LOCATION_ID  
+                                          COUNTRY_ID COUNTRY_ID  
+     MANAGER_ID      MANAGER_ID                      REGION_ID  REGION_ID  
+--   직원들의 데이터를 다음과 같이 조회한다.  
+--   FIRST_NAME, LAST_NAME, JOB_TITLE, DEPARTMENT_NAME, CITY, COUNTRY_NAME, REGION_NAME  
+--   E           E          J          D                L     C             R  
+*/
+```
+### 2.2. 답
+``` SQL
+SELECT FIRST_NAME, LAST_NAME, JOB_TITLE
+FROM EMPLOYEES E, JOBS J
+WHERE E.JOB_ID = J.JOB_ID;
+ 
+SELECT E.FIRST_NAME, E.LAST_NAME, J.JOB_TITLE, D.DEPARTMENT_NAME
+FROM EMPLOYEES E, JOBS J, DEPARTMENTS D
+WHERE E.JOB_ID = J.JOB_ID
+  AND E.DEPARTMENT_ID = D.DEPARTMENT_ID;
+ 
+SELECT E.FIRST_NAME, E.LAST_NAME, J.JOB_TITLE, D.DEPARTMENT_NAME, L.CITY
+FROM EMPLOYEES E, JOBS J, DEPARTMENTS D, LOCATIONS L
+WHERE E.JOB_ID = J.JOB_ID
+  AND E.DEPARTMENT_ID = D.DEPARTMENT_ID
+  AND D.LOCATION_ID = L.LOCATION_ID;
+-- 92버전
+SELECT E.FIRST_NAME, E.LAST_NAME, J.JOB_TITLE, D.DEPARTMENT_NAME, L.CITY, C.COUNTRY_NAME, R.REGION_NAME
+FROM EMPLOYEES E, JOBS J, DEPARTMENTS D, LOCATIONS L,COUNTRIES C, REGIONS R
+WHERE E.JOB_ID = J.JOB_ID
+  AND E.DEPARTMENT_ID = D.DEPARTMENT_ID(+)
+  AND D.LOCATION_ID = L.LOCATION_ID(+)
+  AND L.COUNTRY_ID = C.COUNTRY_ID(+)
+  AND C.REGION_ID = R.REGION_ID(+);
+ 
+--  99버전
+SELECT E.FIRST_NAME, E.LAST_NAME, J.JOB_TITLE, D.DEPARTMENT_NAME, L.CITY, C.COUNTRY_NAME, R.REGION_NAME
+FROM EMPLOYEES E JOIN JOBS J
+ON E.JOB_ID = J.JOB_ID
+    LEFT JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+        LEFT JOIN LOCATIONS L
+        ON D.LOCATION_ID = L.LOCATION_ID
+            LEFT JOIN COUNTRIES C
+            ON L.COUNTRY_ID = C.COUNTRY_ID
+                LEFT JOIN REGIONS R
+                ON C.REGION_ID = R.REGION_ID;
+```
+
+# 페이지 20231026_03_scott.sql
+## 1. 문제
+--※ 현욱이가 과자 쇼핑몰 운영 중 TBL_JUBUN 테이블이 무거워진 상황  
+--   어플리케이션과의 연동으로 인해 주문 내역을 앞으로는 다른 테이블에 저장될 수 있도록 만드는 것은 거의 불가능한 상황. 기존의 모든 데이터를 덮어놓고 지우는 것도 불가능한 상황.  
+--   -> 결과적으로...  
+--      현재까지 누적된 주문 데이터 중 금일 발생한 주문 내역을 제외하고  
+--      나머지 데이터를 다른 테이블(TBL_JUMUNBAKUP)로 데이터를 이관하여 백업을 수행할 계획  
+ 
+>-- *데이터가 무거워졌다 -> 수많은 데이터가 쌓였다*  
+-- *데이터가 무거워졌을 때, 새로만는 것이 아니라*  
+-- *기존 데이터를 옮기고 다시 기존 흐름대로 사용한다*  
+ 
+>-- *기존 데이터를 지우는것은 절대 안됨*  
+-- *쇼핑몰 내역을 확인하거나*  
+-- *반품해야하는 것과 비슷하다**
+
+--○ 오늘건을 제외한 나머지건을 TBL_JUMUNBACKUP 에 옮기기
+## 1.1. 답
+``` SQL
+SELECT *
+FROM TBL_JUMUN
+WHERE 금일발생한주문이아닌것;
+ 
+-- 옮길 테이블 검색
+SELECT *
+FROM TBL_JUMUN
+WHERE TO_CHAR(JUDAY, 'YYYY-MM-DD') != TO_CHAR(SYSDATE, 'YYYY-MM-DD');
+ 
+-- 테이블 복사
+CREATE TABLE TBL_JUMUNBACKUP
+AS
+SELECT *
+FROM TBL_JUMUN
+WHERE TO_CHAR(JUDAY, 'YYYY-MM-DD') != TO_CHAR(SYSDATE, 'YYYY-MM-DD');
+ 
+-- 테이블 삭제
+--DROP TABLE TBL_JUMUNBAKUP;
+ 
+--○ 확인
+SELECT *
+FROM TBL_JUMUNBACKUP;
+```
+## 2. 문제
+--  TBL_JUMUN 테이블의 데이터들 중  
+--  백업을 마친 데이터들... 즉, 금일 발생한 주문 내역이 아닌 데이터들 제거
+### 2.2. 
+``` SQL
+SELECT *
+FROM TBL_JUMUN
+WHERE TO_CHAR(JUDAY, 'YYYY-MM-DD') != TO_CHAR(SYSDATE,'YYYY-MM-DD');
+ 
+DELETE
+FROM TBL_JUMUN
+WHERE TO_CHAR(JUDAY, 'YYYY-MM-DD') != TO_CHAR(SYSDATE,'YYYY-MM-DD');
+--==>> 20개 행 이(가) 삭제되었습니다.
+--      (93763개 행이 삭제)
+ 
+--○ 확인
+SELECT *
+FROM TBL_JUMUN;
+ 
+-- 커밋
+COMMIT;
+--==>> 커밋 완료.
+```
+# 📌 1. 안내
+--※ 아직 제품 발송이 이루어지지 않은 금일 주문 데이터를 제외하고 이전의 모든 주문 데이터들이 삭제된 상황이므로  
+--   테이블은 행(레코드)의 갯수가 줄어들어 매우 가벼워진 상황이다.  
+ 
+--  그런데, 지금까지 주문받은 내역에 대한 정보를 제품별 총 주문량으로 나타내어야 할 상황이 발생하게 되었다.  
+--  그렇다면, TBL_JUMUNBACKUP 테이블의 레코드(행)와 TBL_JUMUN 테이블의 레코드(행)을 모두 합쳐  
+--  하나의 테이블을 조회하는 것과 같은 결과를 확인할 수 있도록 조회가 이루어져야한다.  
+ 
+--※ 컬럼과 컬럼의 관계를 고려하여 테이블을 결합하고자 하는 경우 JOIN을 사용하지만  
+--   레코드와 레코드를 결합하고자 하는 경우 UNION / UNION ALL 을 사용할 수 있다.  
+## 1.2. 답
+``` SQL
+SELECT *
+FROM TBL_JUMUNBACKUP
+UNION
+SELECT *
+FROM TBL_JUMUN;
+
+SELECT *
+FROM TBL_JUMUN
+UNION ALL
+SELECT *
+FROM TBL_JUMUNBACKUP;
+```
+## 1.3. 해설
+``` SQL
+ELECT *
+FROM TBL_JUMUN
+UNION
+SELECT *
+FROM TBL_JUMUNBACKUP;
+ 
+SELECT *
+FROM TBL_JUMUN
+UNION ALL
+SELECT *
+FROM TBL_JUMUNBACKUP;
+--** JUMUN과 JUMUNBACKUP 의 위치를 바꾸면
+--** UNION에서 JUMUN이 위에 있을 경우 첫 번째 컬럼을 기준으로 오름차순 진행
+--** UNION은 중복된 값이 있는 경우 제외하고 진행
+
+>-- *===================================================================*  
+-- * 결론: UNION 을 쓰는 것이 UNION ALL 보다 리소스 소모가 크기 때문에,*  
+-- *        실무에서는 UNION ALL을 더 많이 쓴다.*  
+-- *===================================================================*  
+ 
+--※ UNION 은 항상 결과물의 첫 번째 컬럼을 기준으로 오름차순 정렬을 수행한다.  
+--   반면, UNION ALL 은 결합된 순서(쿼리문에서 테이블을 명시한 순서)대로  
+--   조회한 결과를 있는 그대로 반환한다. (-> 정렬 없음)  
+--   이로 인해 UNION 이 부하가 더 크다. (-> 리소스 소모가 더 크다)  
+--   또한, UNION 은 결과물에 대한 중보된 레코드(행)가 존재할 경우  
+--   중복을 제거하고 1개 행만 조회된 결과를 반환하게 된다.  
+```
+# 📌 2. 안내
+--○ 지금가지 주문받은 데이터를 통해 제품별 총 주문량을 조회할 수 있는 쿼리문을 구성한다.
+## 2.2. 답
+``` SQL
+--** 총 빼뺴로는 x 개 주문되었고
+SELECT JECODE, SUM(JUSU)
+FROM (
+SELECT *
+FROM TBL_JUMUN
+UNION ALL
+SELECT *
+FROM TBL_JUMUNBACKUP
+)
+GROUP BY JECODE HAVING SUM(JUSU) >= 100
+ORDER BY 1;
+ 
+SELECT T.JECODE "제품명", SUM(T.JUSU) "주문량"
+FROM (
+    SELECT *
+    FROM TBL_JUMUN
+    UNION ALL
+    SELECT *
+    FROM TBL_JUMUNBACKUP
+) T
+GROUP BY T.JECODE
+ORDER BY 1;
+/*
+감자깡	30
+꼬북칩	40
+빼빼로	140
+...중략..
+홈런볼	50
+*/
+```
+## 3. 문제
+--○ TBL_JUMUNBACKUP 테이블과 TBL_JUMUN 테이블을 대상으로  
+--   제품코드와 주문량의 값이 똑같은 행의 정보를  
+--   주문번호, 제품코드, 주문량, 주문일자 항목으로 조회한다.  
+### 3.2. 답
+``` SQL
+--방법1: IN 사용
+SELECT *
+FROM (
+    SELECT *
+    FROM TBL_JUMUN
+    UNION ALL
+    SELECT *
+    FROM TBL_JUMUNBACKUP
+) T
+WHERE (T.JECODE, T.JUSU) IN (
+                    SELECT JECODE, JUSU
+                    FROM TBL_JUMUNBACKUP
+                    INTERSECT
+                    SELECT JECODE, JUSU
+                    FROM TBL_JUMUN
+                );
+--방법2: JOIN 사용
+SELECT T.JUNO, T.JECODE, T.JUSU, T.JUDAY
+FROM 
+(
+    SELECT *
+    FROM TBL_JUMUN
+    UNION ALL
+    SELECT *
+    FROM TBL_JUMUNBACKUP
+) T JOIN (
+                    SELECT JECODE, JUSU
+                    FROM TBL_JUMUNBACKUP
+                    INTERSECT
+                    SELECT JECODE, JUSU
+                    FROM TBL_JUMUN
+                ) F
+ON T.JECODE = F.JECODE AND T.JUSU = F.JUSU;
+ON (T.JECODE, T.JUSU) = (F.JECODE, F.JUSU);
+/*
+98766	빼빼로	20	2023-10-26 14:52:38
+98768	홈런볼	10	2023-10-26 14:52:40
+98772	맛동산	30	2023-10-26 14:52:44
+7	홈런볼	10	2001-11-05 11:10:10
+8	홈런볼	10	2001-11-06 11:10:10
+11	빼빼로	20	2001-11-09 11:10:10
+13	빼빼로	20	2001-11-11 11:10:10
+18	맛동산	30	2001-11-18 11:10:10
+*/
+```
+### 3.3. 해설
+``` SQL
+-- 주문번호, 제품코드, 주문량, 주문일자
+/*
+18	맛동산	30	2001-11-18 11:10:10
+98772	맛동산	30	2023-10-26 14:52:44
+11	빼빼로	20	2001-11-09 11:10:10
+13	빼빼로	20	2001-11-11 11:10:10
+98766	빼빼로	20	2023-10-26 14:52:38
+7	홈런볼	10	2001-11-05 11:10:10
+8	홈런볼	10	2001-11-06 11:10:10
+98768	홈런볼	10	2023-10-26 14:52:40
+*/
+ELECT JUNO, JECODE, JUSU, JUDAY
+FROM TBL_JUMUNBACKUP
+INTERSECT
+SELECT JUNO, JECODE, JUSU, JUDAY
+FROM TBL_JUMUN;
+--==>> 조회결과 없음
+--** 이유: 주문번호~ 주문일자까지 모두 같은 레코드는 없다. -> 주문일자는 초까지 있음
+ 
+-- 방법1
+SELECT T2.JUSU "주문번호", T1.JECODE "제품코드", T1.JUSU "주문수량", T2.JUDAY "주문일자"
+FROM
+(
+    SELECT JECODE, JUSU
+    FROM TBL_JUMUNBACKUP
+    INTERSECT
+    SELECT JECODE, JUSU
+    FROM TBL_JUMUN
+) T1
+JOIN
+(
+    SELECT JUNO, JECODE, JUSU, JUDAY
+    FROM TBL_JUMUNBACKUP
+    UNION ALL
+    SELECT JUNO, JECODE, JUSU, JUDAY
+    FROM TBL_JUMUN
+) T2
+ON T1.JECODE = T2.JECODE AND T1.JUSU = T2.JUSU;
+ 
+ 
+-- 방법2
+SELECT T.*
+FROM
+(
+    SELECT JUNO, JECODE, JUSU, JUDAY
+    FROM TBL_JUMUNBACKUP
+    UNION ALL
+    SELECT JUNO, JECODE, JUSU, JUDAY
+    FROM TBL_JUMUN
+) T
+--WHERE T.JUCODE IN ('맛동산', '빼빼로', '홈런볼')
+--    AND T.JUSU IN (30,20,10);
+--==> x 
+--** 맛동산 30,20,10 / 빼빼로 30,20,10 / 홈런볼 30,20,10 모두 나와서 에러상황발생
+WHERE T.JECODE 와 T.JUSU의 묶음 결과가 '맛동산30', '빼빼로20', '홈런볼10';
+ 
+SELECT T.*
+FROM
+(
+    SELECT JUNO, JECODE, JUSU, JUDAY
+    FROM TBL_JUMUNBACKUP
+    UNION ALL
+    SELECT JUNO, JECODE, JUSU, JUDAY
+    FROM TBL_JUMUN
+) T
+WHERE CONCAT(T.JECODE, T.JUSU) IN ('맛동산30', '빼빼로20', '홈런볼10');
+ 
+SELECT T.*
+FROM
+(
+    SELECT JUNO, JECODE, JUSU, JUDAY
+    FROM TBL_JUMUNBACKUP
+    UNION ALL
+    SELECT JUNO, JECODE, JUSU, JUDAY
+    FROM TBL_JUMUN
+) T
+WHERE CONCAT(T.JECODE, T.JUSU) IN (
+                                    SELECT CONCAT(JECODE, JUSU)
+                                    FROM TBL_JUMUNBACKUP
+                                    INTERSECT
+                                    SELECT CONCAT(JECODE, JUSU)
+                                    FROM TBL_JUMUN
+                                  );
+--==>> CONCAT()의 형태로 같게 묶어서 조회하기
+```
+## 4. 문제
+--○ TBL_EMP 테이블에서 급여가 가장 많은 사원의 사원번호, 사원명, 직종명, 급여 항목을 조회한다.
+### 4.1. 답
+``` SQL
+SELECT E.사원번호, E.사원명, E.직종명, E.급여
+FROM
+(SELECT EMPNO "사원번호", ENAME "사원명", JOB "직종명"
+      , SAL "급여", RANK() OVER(ORDER BY SAL DESC) "전체급여순위"
+FROM TBL_EMP
+) E
+WHERE E.전체급여순위 =1;
+--==>> 7839	KING	PRESIDENT	5000
 ```
 ## 5. 문제
---
+-- 급여를 가장 많이 받는 사원의 급여
 ### 5.2. 답
 ``` SQL
-
+SELECT MAX(SAL)
+FROM TBL_EMP;
+--==>> 5000
+ 
+SELECT EMPNO, ENAME, JOB, SAL
+FROM TBL-EMP
+WHERE 급여 = (급여를 가장많이 받는 사원의 급여);
+ 
+SELECT EMPNO "사원번호", ENAME "사원명", JOB "직종명", SAL "급여"
+FROM TBL_EMP
+WHERE SAL = (
+             SELECT MAX(SAL)
+             FROM TBL_EMP
+            );
+--==>> 7839	KING	PRESIDENT	5000
 ```
 ### 5.3. 해설
 ``` SQL
-
+--** 그룹함수를 쓰지 않더라도 찾을 수 있는 구문
+-- <=ANY>
+ 
+-- <=ALL>
+ 
+SELECT SAL
+FROM TBL_EMP;
+/*
+800
+1600
+1250
+2975
+1250
+2850
+2450
+3000
+5000
+1500
+1100
+950
+3000
+1300
+1500
+2000
+1700
+2500
+1000
+*/
+ 
+SELECT EMPNO "사원번호", ENAME "사원명", JOB "직종명", SAL "급여"
+FROM TBL_EMP
+WHERE SAL =ANY (800, 1600, 1250, 2975, 1250, 2850, 2450, 3000, 5000, 1500, 1100, 950, 3000, 1300, 1500, 2000, 1700, 2500, 1000);
+--*8 괄호 안에 있는 어떤 값이라도 같으면
+ 
+SELECT EMPNO "사원번호", ENAME "사원명", JOB "직종명", SAL "급여"
+FROM TBL_EMP
+WHERE SAL =ALL (800, 1600, 1250, 2975, 1250, 2850, 2450, 3000, 5000, 1500, 1100, 950, 3000, 1300, 1500, 2000, 1700, 2500, 1000);
+--** 괄호 안의 모든 값과 같으면
+ 
+SELECT EMPNO "사원번호", ENAME "사원명", JOB "직종명", SAL "급여"
+FROM TBL_EMP
+WHERE SAL >=ALL (800, 1600, 1250, 2975, 1250, 2850, 2450, 3000, 5000, 1500, 1100, 950, 3000, 1300, 1500, 2000, 1700, 2500, 1000);
+--** 하나하나의 값과 모두 크거나 같은 값을 찾는 구문
+ 
+SELECT EMPNO "사원번호", ENAME "사원명", JOB "직종명", SAL "급여"
+FROM TBL_EMP
+WHERE SAL >=ALL (SELECT SAL
+                 FROM TBL_EMP);
+--==>> 7839	KING	PRESIDENT	5000
 ```
-## 6. 문제
---
-### 6.2. 답
-``` SQL
 
+<BR>
+
+# 페이지 20231027_01_scott.sql
+## 1. 문제
+--○ TBL_EMP 테이블에서 수당(커미션, COMM)이 가장 많은 사원의  
+--   사원번호, 사원명, 부서번호, 직종명, 커미션 항목을 조회한다.
+### 1.2. 답
+### 1.3. 해설
+``` SQL
+SELECT EMPNO, ENAME, DEPTNO, JOB, COMM
+FROM TBL_EMP
+WHERE COMM = (모든 직원 중 최고 커미션);
+ 
+--모든 직원 중 최고 커미션
+SELECT MAX(COMM)
+FROM TBL_EMP;
+ 
+--방법1 : MAX 사용
+SELECT EMPNO, ENAME, DEPTNO, JOB, COMM
+FROM TBL_EMP
+WHERE COMM >= (
+                    SELECT MAX(COMM)
+                    FROM TBL_EMP
+              );
+--==>> 7654	MARTIN	30	SALESMAN	1400
+ 
+--방법2 : ALL 사용
+SELECT EMPNO, ENAME, DEPTNO, JOB, COMM
+FROM TBL_EMP
+WHERE COMM >=ALL (
+                    SELECT COMM     -- 300, 500, (null), 1400, (null)...
+                                    --** null 이기 때문에 검색이 되지 않는다.
+                    FROM TBL_EMP
+                 );
+--방법2-1 : NVL을 SELECT 에 사용                 
+SELECT EMPNO, ENAME, DEPTNO, JOB, COMM
+FROM TBL_EMP
+WHERE COMM >=ALL (
+                    SELECT NVL(COMM,0)
+                    FROM TBL_EMP
+                 );
+--방법2-2 : WHERE 절을 사용해 NULL 아닐때 조건 추가             
+SELECT EMPNO, ENAME, DEPTNO, JOB, COMM
+FROM TBL_EMP
+WHERE COMM >=ALL (
+                    SELECT NVL(COMM,0)
+                    FROM TBL_EMP
+                    WHERE COMM IS NOT NULL
+                 );
+--==>> 7654	MARTIN	30	SALESMAN	1400
 ```
-### 6.3. 해설
+## 2. 문제
+-- TBL_EMP 테이블에서 관리자로 등록된 사원의 사원번호, 사원명, 직종명을 조회한다.
+>-- *관리자(MGR)에 등록된 사원번호를 가진 사원*
+### 2.2. 답
+### 2.3. 해설
 ``` SQL
-
+SELECT EMPNO, ENAME, JOB
+FROM TBL_EMP
+WHERE JOB = 'MANAGER';
+ 
+SELECT EMPNO, ENAME, JOB
+FROM TBL_EMP
+WHERE 관리자로 등록된 사원;
+ 
+SELECT EMPNO, ENAME, JOB
+FROM TBL_EMP
+WHERE 사원번호 MGR로 등록된 사원;
+ 
+SELECT EMPNO, ENAME, JOB
+FROM TBL_EMP
+WHERE EMPNO IN (7902, 7698, 7698, 7839, 7839, NULL, 7698, 7788, 7698, 7566, 7839, 7902); -- 등등..
+ 
+SELECT EMPNO, ENAME, JOB
+FROM TBL_EMP
+WHERE EMPNO IN ( SELECT MGR
+                 FROM TBL_EMP ); -- 중복값이 들어감
+--중복값을 제거하는 DISTINCT
+SELECT DISTINCT(MGR)
+FROM TBL_EMP;
+ 
+SELECT EMPNO, ENAME, JOB
+FROM TBL_EMP
+WHERE EMPNO IN ( SELECT DISTINCT(MGR)
+                 FROM TBL_EMP );
+                 
+SELECT DISTINCT(JOB)
+FROM TBL_EMP;
+ 
+SELECT DISTINCT(DEPTNO)
+FROM TBL_EMP;
 ```
-## 7. 문제
---
-### 7.2. 답
-``` SQL
+## 3. 문제
+--○ TBL_SAWON 테이블 백업(데이터 위주) -> 각 테이블 간의 관계나 제약조건 등은 제외한 상태  
+--** AS 로 복사한 것은 관계를 제외하고 데이터만 백업한것  
 
+``` SQL
+CREATE TABLE TBL_SAWONBACKUP
+AS
+SELECT *
+FROM TBL_SAWON;
+--==>> Table TBL_SAWONBACKUP이(가) 생성되었습니다.
+``` 
+-- TBL_SAWON 테이블의 데이터들만 백업을 수행  
+-- 즉, 다른 이름의 테이블로 저장해 둔 상황  
+
+``` SQL
+--○ 데이터 수정
+UPDATE TBL_SAWON
+SET SANAME = '똘똘이';
+COMMIT;
 ```
-### 7.3. 해설
+--** UPDATE와 SET만 사용해서 작업X  
+--** COMMIT 수행 전에 검색X  
+--** TBL_SAWON 테이블의 SANAME 값을 TBL_SAWONBACKUP의 SANAME의 값으로 바꾸는 쿼리를 구성한다. 
+### 3.2. 답
 ``` SQL
-
+--(도움받아) 내가 푼 풀이
+UPDATE TBL_SAWON T1
+SET T1.SANAME = (SELECT T2.SANAME
+                FROM TBL_SAWONBACKUP T2
+                WHERE T1.SANO = T2.SANO);
+```
+### 3.3. 해설
+``` SQL
+UPDATE TBL_SAWON
+SET SANAME = (SAWONBACKUP 테이블의 각각의 SANAME)
+WHERE SANAME = '똘똘이';
+ 
+--함께 푼 풀이
+UPDATE TBL_SAWON
+SET SANAME = (SELECT SANAME
+                FROM TBL_SAWONBACKUP
+                WHERE SANO=TBL_SAWON.SANO)
+WHERE SANAME = '똘똘이';
 ```
 
 
