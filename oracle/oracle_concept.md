@@ -1,47 +1,31 @@
-## ✅ 개념
+# ✅ 개념
 
 <BR>
 
-### 1. 개념
-#### 1.1. 관계형 데이터베이스(RDBMS)
-: 각각의 데이터를 테이블의 형태로 연결시켜 저장해 놓은 구조. 그리고 이들 각각의 테이블 간의 관계를 설정하여 연결시켜 놓은 구조
-``` SQL
- ※ SELECT 문의 처리(PARSING) 순서
- 
-    SELECT      컬럼명     -- ⑤ ┐
-    FROM        테이블명   -- ① ┘
-    WHERE       조건절     -- ② +
-    GROUP BY    절         -- ③ +
-    HAVING      조건절     -- ④ +
-    ORDER BY    절         -- ⑤ +
-```
->-- *테이블 스페이스에서 `FROM`을 가장 먼저 찾음*  
--- *`FROM` - `WHERE` - `GROUP BY` - `HAVING` - `SELECT` - `ORDER BY`*  
--- *1,5는 반드시 있어야함*  
--- *+는 단독으로 존재가능*
-#### 1.2. 오라클의 주요 자료형(DATA TYPE)
-##### 1.2.1. MSSQL 서버
-###### 1.2.1.1. 정수 표현타입
+## 1. 개념
+### 1.1. 오라클의 주요 자료형(DATA TYPE)
+#### 1.1.1. MSSQL 서버
+##### 1.1.1.1. 정수 표현타입
 ``` SQL
     tinyint     0 ~ 255             1byte
     smallint    -32.768 ~ 32.767    2byte
     int         -21억 ~ 21억        4byte
     bigint      엄청큼              8byte
 ```
-###### 1.2.1.2. 실수 표현 타입
+##### 1.1.1.2. 실수 표현 타입
 ``` SQL
 float, real
 ```
-###### 1.2.1.2. 숫자 표현 타입
+##### 1.1.1.2. 숫자 표현 타입
 ``` SQL
 decimal, numeric
 ```
-###### 1.2.1.2. 문자 표현 타입
+##### 1.1.1.2. 문자 표현 타입
 ``` SQL
 char, varchar, Nvarchar
 ```
 > ※ ORACLE 은 숫자 표현 타입이 한 가지로 통일되어 있다.
-##### 1.2.2. 숫자형 
+### 1.1.2. 숫자형 
 ``` SQL
           NUMBER       -> -10의 38승-1 ~ 10의 38승
           NUMBER(3)    -> -999  ~ 999       --** 길이를 명시해야 메모리 낭비가 적음
@@ -49,7 +33,7 @@ char, varchar, Nvarchar
           NUMBER(4,1)  -> -999.9 ~ 999.9    --** 두번째 자리: 소수점 이하 자리
 ```
 > ※ ORACLE 의 문자 표현 타입
-##### 1.2.3. 문자형
+#### 1.2.3. 문자형
 ``` SQL
           CHAR         -> 고정형 크기
                           (무조건 지정된 크기 소모)
@@ -73,12 +57,12 @@ char, varchar, Nvarchar
           NVARCHAR2    -> 유니코드 기반 가변형 크기(글자수)
           NVARCHAR2(10) <---- 10글자
 ```
-##### 1.2.3. 날짜형
+#### 1.2.3. 날짜형
 
+<BR>
 
-
-### 2. 테이블 관련
-#### 2.1. 소유의 테이블 조회
+## 2. 테이블 관련
+### 2.1. 소유의 테이블 조회
 ``` SQL
 SELECT *
 FROM TAB;
@@ -93,7 +77,7 @@ TBL_EXAMPLE1	TABLE
 TBL_EXAMPLE2	TABLE	
 */
 ```
-#### 2.2. 각 테이블의 데이터 조회
+### 2.2. 각 테이블의 데이터 조회
 ``` SQL
 SELECT *
 FROM TAB;
@@ -107,7 +91,7 @@ FROM DEPT;
 40	OPERATIONS	BOSTON
 */
 ```
-#### 2.3. DEPT 테이블에 존재하는 컬럼의 구조 확인
+### 2.3. DEPT 테이블에 존재하는 컬럼의 구조 확인
 ``` SQL
 DESCRIBE DEPT;
 DESC DEPT; -- DESCRIBE 를 DESC로 단축 가
@@ -120,7 +104,8 @@ DNAME           VARCHAR2(14)
 LOC             VARCHAR2(13) 
 */
 ```
-### 3. 형식 지정
+### 2.4. 현재 시간 및 날짜
+### 2.4.1. 형식 지정
 ``` SQL
 ALTER SESSEION SET NLS_DATE_FORMAT = 'YYYY-MM-DD';
 --==>> 2023-10-18
@@ -132,19 +117,869 @@ ALTER SESSEION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS';
 --** 24시를 기준으로 시간 설정됨 EX. 오후 1시 ->13
 --==>>2023-10-18 14:05:55
 ```
+### 2.4.2. 현재 시간 및 날짜 반환
+``` SQL
+SELECT SYSDATE, CURRENT_DATE, LOCALTIMESTAMP
+FROM DUAL;
+--==>> 2023-10-19 10:43:40	2023-10-19 10:43:40	23/10/19 10:43:40.000000000
+```
+### 2.4.3. 날짜 언어 설정 
+``` SQL
+ALTER SESSION SET NLS_DATE_LANGUAGE = 'KOREAN';
+--==>> Session이(가) 변경되었습니다.
+```
+
+### 2.5. 휴지통 비우기
+``` SQL
+PUGER RECYCLEBIN;
+```
+### 2.6. 커멘트
+> -- *커멘트를 안달아도 크게 상과없지만, 같이 일하기 좋은사람이 될 수 있고 내가 관리하기에도 좋다.*
+#### 2.6.1. 테이블 레벨 커멘트
+##### 2.6.1.1. 테이블 레벨 커멘트 정보 확인
+``` SQL
+SELECT *
+FROM USER_TAB_COMMENTS;
+/*
+DEPT	        TABLE	
+EMP	            TABLE	
+BONUS	        TABLE	
+TBL_EMP	        TABLE	
+TBL_EXAMPLE1	TABLE	
+TBL_EXAMPLE2	TABLE	
+SALGRADE	    TABLE	
+EMP4	        TABLE	
+TBL_DEPT	    TABLE	
+EMP5	        TABLE	
+*/
+```
+##### 2.6.1.2. 테이블 레벨 커멘트 정보 입력
+``` SQL
+COMMENT ON TABLE TBL_EMP IS '사원정보';
+--==>> Comment이(가) 생성되었습니다.
+```
+#### 2.6.2. 컬럼 레벨 커멘트
+``` SQL
+COMMENT 작성형식1) COMMENT ON TABLE 테이블명 IS '커멘트';
+```
+##### 2.6.2.1. 컬럼 레벨 커멘트 정보 확인
+``` SQL
+SELECT *
+FROM USER_COL_COMMENTS;
+/*
+TBL_EMP	    HIREDATE	
+EMP4	    EMPNO	
+BIN$IhHBS6pBRP627poXcYfBUA==$0	DEPTNO	
+EMP4	    COMM	
+... 중략 ...
+TBL_DEPT	DEPTNO	
+*/
+
+--○ 커멘트 정보 입력 후 다시 확인
+SELECT *
+FROM USER_TAB_COMMENTS;
+--==>>
+/*
+TBL_EMP	        TABLE	사원 정보
+*/
+```
+##### 2.6.2.2. 컬럼 레벨 커멘트 정보 입력
+--○ 테이블에 소속된 컬럼에 대한 커멘트 데이터 입력
+``` SQL
+COMMENT ON COLUMN TBl_DEPT.DEPTNO IS '부서 번호';
+--==>> Comment이(가) 생성되었습니다.
+
+--○ 확인
+SELECT *
+FROM USER_COL_COMMENTS
+WHERE TABLE_NAME='TBL_DEPT';
+/*
+TBL_DEPT	DEPTNO	부서 번호
+...중략...
+*/
+```
+### 2.7. NULL
+NULL은 상태의 값을 의미.  
+실제 존재하지 않는 값이기 때문에 NULL 이 연산에 포함될 경우 그 결과는 무조건 NULL
+>-- *엄밀히 말하면, NULL은 상태의 값*
+``` SQL
+--○ NULL 의 처리
+SELECT NULL, NULL+2, NULL-2, NULL*2, NULL/2
+FROM DUAL;
+--==>> (NULL) (NULL) (NULL-2), (NULL/2)				
+--** 실제로 값이 보이지 않음
+```
+### 2.7.1. NULL의 표현
+※ NULL은 실제 존재하는 값이 아니기 때문에 일반적인 연산자를 활용하여 비교할 수 없다.  
+    NULL 을 대상으로 사용할 수 없는 연산자들...  
+    >=, <=, =, >, <,  
+    같지 않다(3가지): !=, <>, ^=  
+
+<BR>
 
 
+## 3. 관계형 데이터베이스(RDBMS)
+: 각각의 데이터를 테이블의 형태로 연결시켜 저장해 놓은 구조. 그리고 이들 각각의 테이블 간의 관계를 설정하여 연결시켜 놓은 구조
+``` SQL
+ ※ SELECT 문의 처리(PARSING) 순서
+ 
+    SELECT      컬럼명     -- ⑤ ┐
+    FROM        테이블명   -- ① ┘
+    WHERE       조건절     -- ② +
+    GROUP BY    절         -- ③ +
+    HAVING      조건절     -- ④ +
+    ORDER BY    절         -- ⑤ +
+```
+>-- *테이블 스페이스에서 `FROM`을 가장 먼저 찾음*  
+-- *`FROM` - `WHERE` - `GROUP BY` - `HAVING` - `SELECT` - `ORDER BY`*  
+-- *1,5는 반드시 있어야함*  
+-- *+는 단독으로 존재가능*
+
+### 3.1. 별칭(ALIAS)
+: 테이블을 조회하는 과정에서 각 컬럼의 이름에는 별칭(ALIAS)을 부여할 수 있다.  
+기본 구문의 형식은 『컬럼명 AS "별칭이름"』의 형태로 작성되며 이 때, 『AS』는 생략이 가능하다.  
+또한, 별칭 이름을 감싸는 『""』도 생략이 가능하지만 ""』 를 생략할 경우 별칭 내에서 공백은 사용할 수 없다.  
+공백의 등장은 해당 컬럼의 표현에 대한 종결을 의미하므로 별칭의 이름 내부에 공백을 사용해야 할 경우 『""』 를 사용하여 별칭을 부여할 수 있도록 한다. 
+``` SQL
+EMPNO AS "사원번호"  --: SQL에서는 문자열은 '(작은따옴표)이지만, AS(별칭)을 지을때는 "(큰따옴표)
+                    --   '일시 에러발생(ORA-00923: FROM keyword not found where expected)
+ ENAME "사원명"      --: AS 생략 가능
+ JOB 직종명          --: " 생략 가능
+ SAL "급   여"       --: 별칭안에 공백이 있을 시 " 생략불가
+```
+### 3.2. DDL: 정의어(테이블 생성, 변경, 삭제, 복사)
+DB를 구축하거나 수정할 때 사용(DB구조, DATA 형식, 접근방식)
+> 구조적으로 생성 CREATE  
+            변경 ALTER  
+            삭제 DROP  
+#### 3.2.1. 테이블 생성
+CREATE TABLE 테이블명 (속성명 데이터 타입 NOT NULL)
+``` SQL
+CREATE TABLE EMP4
+( EMPNO NUMBER(4)
+, ENAME VARCHAR2(10)
+, JOB VARCHAR2(9)
+, MGR NUMBER(4)
+, HIREDATE DATE
+, SAL NUMBER(7,2)
+, COMM NUMBER(7,2)
+, DEPTNO NUMBER(2)
+);
+--==>> Table EMP4이(가) 생성되었습니다.
+```
+#### 3.2.2. 테이블 컬럼 구조의 추가 및 제거
+--○ TBL_EMP 테이블에 주민등록번호 데이터를 담을 수 있는 컬럼 추가
+--** 테이블의 구조가 바뀌기 때문에 ALTER
+``` SQL
+ALTER TABLE TBL_EMP
+ADD SSN CHAR(13);
+--==>> Table TBL_EMP이(가) 변경되었습니다.
+```
+#### 3.2.3. 테이블 삭제
+``` SQL
+DROP TABLE TBL_EXAMPLE1;
+--==>> Table TBL_EXAMPLE1이(가) 삭제되었습니다.
+```
+#### 3.2.4. 테이블 복사
+--○ 대상 테이블의 내용에 따라 테이블 생성(TBL_EMP)
+``` SQL
+CREATE TABLE TBL_EMP
+AS
+SELECT *
+FROM EMP;
+```
+### 3.3. DML: 데이터 조작어(데이터 검색, 삽입, 삭제, 갱신)
+사용자가 실질적으로 저장된 데이터를 관리하는 언어
+> 데이터     검색 SELECT  
+            삽입 INSERT  
+            삭제 DELETE  
+            갱신 UPDATE
+### 3.3.1. 데이터 검색
+``` SQL
+SELECT EMPNO, ENAME, SSN
+FROM TBL_EMP;
+```
+> -- *※ 테이블 내에서 컬럼의 순서는 구조적으로 의미 없음.*  
+-- *얼마든지 SELECT로 원하는 모양으로 만들 수 있기 때문에*
+### 3.3.2. 데이터 삽입
+> `INSERT` `INTO` 테이블명 `VALUES`('A','B')
+``` SQL
+INSERT INTO TBL_SAWON(SANO, SANAME, JUBUN, HIREDATE, SAL)
+VALUES(1015, '남궁민', '0202023234567', TO_DATE('2010-10-10', 'YYYY-MM-DD'), 2300);
+```
+### 3.3.3. 데이터 삭제
+> `DELETE` `FROM` 테이블명 [WHERE]
+> -- *조회 후 삭제!*
+``` SQL
+--** 바로 삭제하지 않는다!
+ 
+--○ 삭제할 내용 조회
+SELECT *
+FROM TBL_DEPT
+WHERE DEPTNO = 50;
+--==>> 50	연구부	인천
+ 
+--○ 조회 후 삭제
+DELETE TBL_DEPT
+WHERE DEPTNO = 50;
+--==>> 1 행 이(가) 삭제되었습니다.
+*/
+```
+### 3.3.4. 데이터 갱신
+> `UPDATE` 테이블명 `SET` 속성명 = 데이터 [WHERE]
+``` SQL
+UPDATE TBL_DEPT
+SET DNAME = '연구부', LOC = 'RUDRL'
+WHERE DEPTNO = 50;
+```
+### 3.4. DCL: 데이터 제어어 (COMMIT, ROLLBACK, GRANT)
+데이터 보안, 무결성, 회복, 병행제어를 정의하는 언어
+#### 3.4.1. COMMIT
+츠랜잭션 처리가 정상적으로 완료되면 수행한 내용을 DB에 반영하는 명령어
+#### 3.4.2. ROLLBACK
+변경되었으나 커밋되지 않은 내용을 취소하고 이전상태로 되돌리는 명령어
+>--※ COMMIT 을 실행한 이후로 DML(INSERT, UPDATE, DELETE) 구문을 통해 변경된 데이터를 휘소할 수 있는 것 뿐...  
+--   DML 명령을 사용한 후 COMMIT을 수행하고 나서 ROLLBACK을 실행해봐야 아무소용이 없다.
+-- *CREATE, ALTER 는 AUTO COMMIT!! 주의하기!!*
+#### 3.4.3. GRANT
+권한부여
+##### 3.4.3.1. 사용자 등급
+##### 3.4.3.2. 테이블 속성 권한
+
+#### 3.4.4. REVOKE
+권한취소
+
+## 3.5. DML>SELECT
+### 3.5.1. 조건 연산자
+#### 3.5.1.1. 비교연산자
+`=`,`<`,`>`,`<=`,`>=`...
+#### 3.5.1.2. 논리연산자
+`NOT`,`AND`,`OR`
+#### 3.5.1.3. LIKE 연산자
+`%`,`_`,`#`,`[]`,`[^]` 
+--※ WILD CARD(CHARACTER) -> 『3%』  
+--   『LIKE』 와 함께 사용되는 『%』는 모든 글자를 의미하고  
+--   『LIKE』 와 함께 사용되는 『_』는 아무 글자 한 개를 의미한다. 
+##### 3.5.1.3.1. ESCAPE 
+--※ ESCAPE 로 정한 문자의 다음 한 글자를 와일드 카드에서 탈출시켜라..
+--   일반적으로 사용 빈도가 낮은  특수문자(특수기호)를 사용한다.
+> -- *쓰려고 하는 % 앞에 안쓰는 문자를 넣고, ESCAPE 뒤에 '안쓰는문자' 로 작성*
+-- *안쓰는 문자: $, \, / 등 문법적으로 중복되지 않는 문자*
+``` SQL
+SELECT *
+FROM TBL_WATCH
+WHERE BIGO LIKE '%99.99\%%' ESCAPE '\';
+--==>> 금시계	순금 99.99% 함유된 최고급 시계
+```
+#### 3.5.1.4. OR, IN, =ANY
+--※ 아래의의 3가지 유형의 쿼리문은 모두 같은 결과를 반환한다.  
+--    하지만, 맨 위의 쿼리문(OR)이 가장 빠르게 처리된다.(정말 얼마 안되지만...)  
+--    물론 메모리에 대한 내용이 아니라 CPU에 대한 내용이므로 이 부분까지 감안하여 쿼리문을 구성하게 되는 경우가 많지 않다.  
+--    -> <IN> <=ANY>는 위 상황에서 모두 같은 연산 효과를 가져간다. 이를 모두는 내부적으로 <OR> 구조로 변경되어 연산 처리 된다.
+``` SQL
+SELECT ENAME, JOB, SAL
+FROM TBL_EMP
+WHERE JOB = 'SALESMAN'
+   OR JOB = 'CLOERK';
+ 
+SELECT ENAME, JOB, SAL
+FROM TBL_EMP
+WHERE JOB IN ('SALESMAN', 'CLOERK');
+ 
+SELECT ENAME, JOB, SAL
+FROM TBL_EMP
+WHERE JOB =ANY ('SALESMAN', 'CLOERK');
+```
+### 3.5.2. 하위질의
+### 3.5.3. 그룹함수
+: GROUP BY 절에 지정된 속성의 값 집계
+### 3.5.4. WINDOW 함수
+GROUP BY 절 사용하지 않고 속성값 집계
+>- PARTITION BY : 함수 적용범위  
+- ORDER BY: PARTITION 안에서 정렬 기준이 되는 속성
 
 
+### 3.5.5. 집합연산
+
+## 3.6. ORDER BY
+>-- *`ASC`: 오름차순*  
+-- *`DESC`: 내림차순*  
+>-- *어떤 데이터가 먼저나오고 나중에 나오고는 관계형 데이터베이스에서는 크게 연관이 없음*  
+-- *보기 좋으려고 정렬하면 안된다 -> 부하가 많이 걸림*   
+-- FROM - WHERE - GROUP BY - HAVING - SELECT - `ORDER BY`
+``` SQL
+SELECT ENAME "사원명", DEPTNO "부서번호", JOB "직종", SAL "급여" 
+        , SAL * 12 + NVL(COMM, 0) "연봉"
+FROM EMP
+ORDER BY DEPTNO ASC;    -- DEPTNO -> 정렬 기준 : 부서번호
+                        -- ASC    -> 정렬 유형 : 오름차순(생략가능)
+                        -- DESC   -> 정렬 유형 : 내림차순
+```
+``` SQL
+SELECT ENAME "사원명", DEPTNO "부서번호", JOB "직종", SAL "급여" 
+        , SAL * 12 + NVL(COMM, 0) "연봉"
+FROM EMP
+ORDER BY 연봉 DESC;
+--** '연봉'이라는 별칭을 기준으로 정렬가능 -> SELECT 가 ORDER BY보다 앞에 있어서
+```
+``` SQL
+SELECT ENAME "사원명", DEPTNO "부서번호", JOB "직종", SAL "급여" 
+        , SAL * 12 + NVL(COMM, 0) "연봉"
+FROM EMP
+ORDER BY 2; -- 부서번호 오름차순
+--> EMP 테이블이 갖고있는 고유한 컬럼 순서(2->ENAME)가 아니라
+--  SELECT 처리 되는 두 번째 컬럼(2->DEPTNO, 부서번호)을 기준으로 정렬
+--  ASC는 생략된 상태 -> 오름차순 정렬
+--  오라클에서 기본 인덱스는 자바와 달리 1부터 시작
+--  최종적으로... 현재 <ORDER BY 2>구문은 -> <ORDER BY DEPTNO ASC>이다.
+ 
+--** 2 -> EMP 의 두번째가 아니라, SELECT의 두번째에 해당
+--** 2 -> JAVA는 0번부터 부여했지만, ORACLE은 1번부터 부여됨
+```
+``` SQL
+SELECT ENAME "사원명", DEPTNO "부서번호", JOB "직종", SAL "급여" 
+        , SAL * 12 + NVL(COMM, 0) "연봉"
+FROM EMP
+ORDER BY 2, 4;
+-- 부서번호, 급여 기준 오름차순 정렬
+-- (1차)     (2차)
+```
+``` SQL
+SELECT ENAME, DEPTNO, JOB, SAL
+FROM EMP
+ORDER BY 2, 3, 4 DESC;
+--**    -----  --
+--** 오름차순  내림차순
+--① 2      -> DEPTNO(부서번호) 기준 오름차순 정렬 
+--② 3      -> JOB(직종)        기준 오름차순 정렬
+--③ 4 DESC -> SAL(급여)        기준 내림차순 정렬
+```
+<BR>
 
 
+## 4. 함수
+### 4.1. NULL의 처리
+### 4.1.1. NVL()
+--첫 번째 파라미터 값이 NULL 이면, 두 번째 파라미터 값을 반환한다.  
+--첫 번째 파라미터 앖이 NULL 이 아니면, 그 값을 그대로 반환한다.  
+``` SQL
+SELECT ENAME "사원명", NVL(COMM,1234) "수당"
+FROM TBL_EMP;
+```
+### 4.1.2. NVL2()
+--> 첫 번째 파라미터 값이 NULL 이 아닌 경우, 두 번째 파라미터 값을 반환하고
+--  첫 번째 파라미터 값이 NULL 인 경우, 세 번째 파리미터 값을 반환한다.
+``` SQL
+SELECT ENAME "사원명", NVL2(COMM, '청기올려', '백기올려')"수당확인"
+FROM TBL_EMP;
+
+SELECT EMPNO "사원번호", ENAME "사원명", SAL "급여", COMM "커미션"
+        , NVL2(COMM, SAL*12+COMM, SAL*12) "연봉"
+FROM TBL_EMP;
+```
+### 4.1.3. COALESCE()
+--> 매개변수 제한이 없는 형태로 인지하고 활용한다.  
+--  맨 앞에 있는 매개변수부터 차례로 NULL 인지 아닌지 확인하여  
+--  NULL 이 아닌 경우 그 값을 반환하고, NULL 인 경우에는 그 다음 매개변수의 값을 반환한다.  
+--  NVL()이나 NVL2() 와 비교했을 때 모~~~~ 든 경우의 수를 고려할 수 있다는 특징을 갖는다.  
+``` SQL
+SELECT NULL"COL1"
+    , COALESCE(NULL, NULL, NULL, 40) "COL2"
+FROM DUAL;
+--==>> 	40
+
+SELECT EMPNO, ENAME, SAL, COMMM
+    ,COALESCE(SAL*12_COMM, SAL+12, COMM, 0) "연봉"
+FROM TBL_EMP;
+```
+## 4.2. 대소문자 변환(UPPER(), LOWER(), INITCAP)
+--UPPER() 는 모두 대문자로 변환  
+--LOWER() 는 모두 소문자로 변환  
+--INITCAP() 은 첫 글자만 대문자로 하고 나머지는 모두 소문자로 변환하여 반환  
+``` SQL
+SELECT 'oRaCLe' "COL1"
+    , UPPER('oRaCLe') "COL2"
+    , LOWER('oRaCLe') "COL3"
+    , INITCAP('oRaCLe') "COL3"
+FROM DUAL;
+--==>>oRaCLe	ORACLE	oracle	Oracle
+```
+## 4.3. 사이값 구하기(BETWEEN ⓐ AND ⓑ)
+--※ <BTWEEN ⓐ AND ⓑ>는 날짜형, 숫자형, 문자형 데이터에 모두 적용된다.
+--    단, 문자형이 경우 아스키코드 순서를 다르기 때문에(사전식 배열)  
+--    대문자가 앞쪽에 위치하고, 소문자가 뒤 쪽에 위치한다.  
+--    또한, <BTWEEN ⓐ AND ⓑ>는 해당 구문이 수행되는 시점에서  
+--    오를 내부적으로는 부등호 연산자의 형태로 바뀌어 연산 처리한다.
+### 4.3.1. 날짜형 사이값
+``` SQL
+--○ BETWEEN ⓐ AND ⓑ
+SELECT ENAME "사원명", JOB "직종명", HIREDATE "입사일"
+FROM TBL_EMP
+WHERE HIREDATE BETWEEN TO_DATE('1981-04-02','YYYY-MM-DD')
+                   AND TO_DATE('1981-09-28','YYYY-MM-DD');
+--==>>
+/*
+JONES	MANAGER	1981-04-02
+MARTIN	SALESMAN	1981-09-28
+BLAKE	MANAGER	1981-05-01
+CLARK	MANAGER	1981-06-09
+TURNER	SALESMAN	1981-09-08
+*/
+-----------●------------------●-------------
+--        1981.4.2            1921.9.28
+```
+### 4.3.2. 숫자형 사이값
+--○ TBL_EMP 테이블에서 급여(SAL)가 2450 에서 3000 까지의 직원들을 모두 조회한다.
+``` SQL
+SELECT *
+FROM TBL_EMP
+WHERE SAL BETWEEN 2450 AND 3000;
+--==>>
+/*
+7566	JONES	MANAGER	7839	1981-04-02	2975		20
+7698	BLAKE	MANAGER	7839	1981-05-01	2850		30
+7782	CLARK	MANAGER	7839	1981-06-09	2450		10
+7788	SCOTT	ANALYST	7566	1987-07-13	3000		20
+7902	FORD	ANALYST	7566	1981-12-03	3000		20
+*/
+-----------●------------------●-------------
+--        2450                3000
+```
+### 4.3.3. 문자형 사이값
+--○ TBL_EMP 테이블에서 직원들의 이름이 'C'로 시작하는 이름부터 'S'로 시작하는 이름인 경우 모든 항목을 조회한다.
+``` SQL
+SELECT *
+FROM TBL_EMP
+WHERE ENAME BETWEEN 'C' AND 'S';
+-----------●------------------○-------------    --** 사전식 배열 기준('S'로만 이름이 있다면 검색됨)
+--        'C'                 'S'
+/*
+7566	JONES	MANAGER	7839	1981-04-02	2975		20
+7654	MARTIN	SALESMAN	7698	1981-09-28	1250	1400	30
+7782	CLARK	MANAGER	7839	1981-06-09	2450		10
+7839	KING	PRESIDENT		1981-11-17	5000		10
+7900	JAMES	CLERK	7698	1981-12-03	950		30
+7902	FORD	ANALYST	7566	1981-12-03	3000		20
+7934	MILLER	CLERK	7782	1982-01-23	1300		10
+*/
+```
+## 4.4. 날짜 관련
+--※ 날짜 연산의 기본 단위는 일수(DAY)이다~!!! CHECK~!!!
+``` SQL
+SELECT SYSDATE "COL1"       -- 2023-10-20 15:40:02
+     , SYSDATE + 1 "COL2"   -- 2023-10-21 15:40:02
+     , SYSDATE - 2 "COL3"   -- 2023-10-18 15:40:02	
+     , SYSDATE + 30 "COL4"  -- 2023-11-19 15:40:02
+FROM DUAL;
+```
+--○ 시간 단위 연산
+``` SQL
+SELECT SYSDATE "COL1"           -- 2023-10-20 15:45:15
+     , SYSDATE + 1/24 "COL2"    -- 2023-10-20 16:45:15
+     , SYSDATE - 1/24 "COL3"    -- 2023-10-20 14:45:15
+FROM DUAL;
+--** 1/24 -> 1시간
+```
+## 4.5. 결합
+### 4.5.1. 컬럼과 컬럼의 연결(결합)
+>-- *`,` 를 사용하거나 `||` 를 사용*  
+>--※ 오라클에서는 문자 타입의 형태로 형(TYPE)을 반환하는 별도의 과정 없이  
+--    『||』 만 삽입해 주면 간단히 컬럽과 컬럽(서로 다른 종류의 데이터)을 결합하는 것이 가능하다.  
+--    cf) MSSQL 에서는 모든 데이터를 문자열로 CONVERT 해야 한다. 
+``` SQL
+SELECT 1+2
+FROM DUAL;
+-- *온전히 결합이라고 보기 어려움, 하나의 컬럼에 연산을 넣은 것*
+ 
+SELECT '김둘리', '박또치'
+FROM DUAL;
+ 
+SELECT '김둘리' + '박또치'
+FROM DUAL;
+--=>> 에러발생(ORA-01722: invalid number)
+ 
+SELECT '김둘리' || '박또치'
+FROM DUAL;
+--==>> 김둘리박또치
+ 
+SELECT ENAME, JOB
+FROM TBL_EMP;
+ 
+SELECT ENAME || JOB
+FROM TBL_EMP;
+--==>>
+/*
+SMITHCLERK
+박또치SALSESMAN
+*/
+```
+### 4.5.2. 특수문자 출력
+>--※ 문자열을 나타내는 홑따옴표 사이에서(시작과 끝)  
+--    홑따옴표 두 개각 홑따옴표 하나(어퍼스트로피)를 의미한다.  
+--    홑따옴표 하나(<'>)는 문자열의 시작을 나타내고,  
+--    홑따옴표 두개(<''>)는 문자열 영역 안에서 어퍼스트로피를 나타내며  
+--    다시 마지막에 등장하는 홑따옴표 하나(<'>)는 문자열 영역의 종료를 의미하게 되는 것이다.
+### 4.5.3. 문자열 결합 (CONCAT)
+--○ CONCAT() : 문자열 기반으로 데이터 결합을 수행하는 함수. 오로지 2개의 문자열만 결합시킬 수 있다.
+``` SQL
+SELECT ENAME || JOB "COL1"
+    ,CONCAT(ENAME, JOB) "COL2"
+FROM EMP;
+/*
+SMITHCLERK	SMITHCLERK
+ALLENSALESMAN	ALLENSALESMAN
+*/
+```
+--> 내부적으로 형 변환이 일어나며 결합을 수행하게 된다.  
+--  CONCAT() 은 문자열과 문자열을 결합시켜주는 함수이지만  
+--  내부적으로 숫자나 날짜를 문자로 변환해주는 과정이 포함되어 있다.  
+``` SQL
+SELECT '서로' || '배려하며' || '지내자' "COL1"
+    , CONCAT('서로','배려하며','지내자') "COL2"
+FROM DUAL;
+--==>> 에러발생 (ORA-00909: invalid number of arguments)
+
+SELECT ENAME || JOB || EMPNO
+    ,CONCAT(ENAME,CONCAT(JOB, EMPNO))
+FROM EMP;
+--==>>
+/*
+SMITHCLERK7369	SMITHCLERK7369
+ALLENSALESMAN7499	ALLENSALESMAN7499
+*/
+```
+### 4.5.4. 문자열 추출 (SUBSTR())
+```
+obj.substring()
+----
+문자열 -> 문자열.substring(n, m)
+                          ------
+                          문자열의 n 부터 n-1 까지... (인덱스는 0 부터)
+```
+#### 4.5.4.1. SUBSTR() 개수기반 / SUBSTRB() 바이트 기반
+>-- *바이트 기반인 경우 조심해서 사용해야함 -> UTF-8 에서 문자가 끊겨 잘려서 문제가 생길 수 있음*
+--> 문자열을 추출하는 기능을 가진 함수  
+--  첫 번째 파라미터 값은 대상 문자열(추출의 대상, TARGET)  
+--  두 번째 파라미터 값은 추출을 시작하는 위치(인덱스, START) -> 인덱스는 1부터 시작...  
+--  세 번째 파라미터 값은 추출할 문자열의 갯수(갯수, COUNT)   -> 생략시.. 문자열 길이 끝까지...  
+``` SQL
+SELECT ENAME "COL1"
+      ,SUBSTR(ENAME, 1, 2) "COL2"
+FROM EMP;
+/*
+SMITH	SM
+ALLEN	AL
+*/
+```
+#### 4.5.4.2. ○ LENGTH() 글자 수 / LENGTHB() 바이트 수
+``` SQL
+SELECT ENAME "COL1"
+     , LENGTH(ENAME) "COL2"
+     , LENGTHB(ENAME) "COL3"
+FROM EMP;
+/*
+SMITH	5	5
+*/
+```
+### 4.5.5. 문자열 찾기 (SUBSTR())
+--> 첫 번째 파라미터 값에 해당하는 문자열에서... (대상 문자열, TARGET)  
+--  두 번째 파리미터 값을 통해 넘겨준 문자열이 등장하는 위치를 찾아라~!!!  
+--  세 번째 파라미터 값은 찾기 시작하는 (스캔을 시작하는) 위치  
+--  네 번째 파라미터 값은 몇 번째 등장하는 값을 찾을 것인지에 대한 설정 -> (1일 경우 생략 가능)  
+--> 마지막 파라미터 값으 생략한 형태로 사용 -> 마지막 파라미터 -> 1
+``` SQL
+SELECT 'ORACLE ORAHOME BIORA' "COL1"
+      , INSTR('ORACLE ORAHOME BIORA', 'ORA', 1, 1) "COL2"   -- 1
+      , INSTR('ORACLE ORAHOME BIORA', 'ORA', 1, 2) "COL3"   -- 8
+      , INSTR('ORACLE ORAHOME BIORA', 'ORA', 2, 1) "COL4"   -- 8
+      , INSTR('ORACLE ORAHOME BIORA', 'ORA', 2)    "COL5"   -- 8
+      , INSTR('ORACLE ORAHOME BIORA', 'ORA', 2, 3) "COL6"   -- 0
+FROM DUAL;
+--==>> ORACLE ORAHOME BIORA	1	8	8	8	0
+```
+### 4.5.6. 문자열 바꾸기 (REVERSE())
+-- 대상 문자열을 거꾸로 반환한다. (단, 한글은 제외 - 사용 불가)
+``` SQL
+SELECT 'ORACLE' "COL1"
+      , REVERSE('ORACLE') "COL2"
+      , REVERSE('오라클') "COL3"
+FROM DUAL;
+--==>> ORACLE	ELCARO	???
+```
+### 4.5.7. 문자열 채우기
+#### 4.5.7.1. 왼쪽부터 문자열로 채우기 (LPAD())
+--> Byte 를 확보하여 왼쪽부터 문자열로 채우는 기능을 가진 함수
+``` SQL
+SELECT 'ORACLE' "COL1"
+    , LPAD('ORACLE',10,'*') "COL2"
+FROM DUAL;
+--> ① 10Bype 공간을 확보 한다.                 -> 두 번째 파라미터 값에 의해
+--  ② 확보한 공간에 'OREACLE' 문자열을 담는다  -> 첫 번째 파라미터 값에 의해
+--  ③ 남아있는 Byte 공간을 왼쪽부터 세 번째 파라미터 값으로 채운다.
+--  ④ 이렇게 구성된 최종 결과값을 반환한다.
+--==>> ORACLE	****ORACLE
+```
+#### 4.5.7.2. 오른쪽부터 문자열로 채우기 (RPAD())
+--> Byte 를 확보하여 오른쪽부터 문자열로 채우는 기능을 가진 함수
+``` SQL
+SELECT 'ORACLE' "COL1"
+    , RPAD('ORACLE',10,'*') "COL2"
+FROM DUAL;
+--==>>ORACLE	ORACLE****
+```
+### 4.5.8. 문자열 특정문자 확인해 가져오기, 지우기 (LTRIN()) 
+``` SQL
+SELECT 'ORAORAORAORACLEORACLE' "COL1"   -- 오라 오라 오라 오라클 오라클
+      , LTRIM('ORAORAORAORACLEORACLE', 'ORA') "COL2" 
+      , LTRIM('AAAAAAAAAORACLEORACLE', 'ORA') "COL3"
+      , LTRIM('ORAORAORAoRACLEORACLE', 'ORA') "COL4" 
+      , LTRIM('ORAORA ORAORACLEORACLE', 'ORA')"COL5" -- 왼쪽 공백 제거
+      , LTRIM('                ORACLE', ' ')  "COL6" -- 두 번째 파라미터 생략
+      , LTRIM('                ORACLE') "COL7" 
+FROM DUAL;
+--==>> 
+/*
+ORAORAORAORACLEORACLE	
+CLEORACLE	
+CLEORACLE	
+oRACLEORACLE	 
+ORAORACLEORACLE	
+ORACLE	
+ORACLE
+*/
+--**O 확인 'ORA'에 문자존재 O -> 삭제
+--**R 확인 'ORA'에 문자존재 O -> 삭제
+--**A 확인 'ORA'에 문자존재 O -> 삭제
+--              :
+--**C 확인 'ORA'에 문자존재 X -> 미삭제, 끝
+```
+``` SQL
+SELECT LTRIM('김이신이김김이이신김김김이김이김박이김신', '김신이') "COL1"
+FROM DUAL;
+--==>> 박이김신
+```
+### 4.5.9. 공백제거 (TRTIM())
+### 4.5.10. 문자열 비 완성형 처리 (TRANSLATE())
+--> 첫번째 파라미터 값에 해당하는 문자열을 대상으로  
+--  왼쪽부터 **연속적으로 등장**하는 두 번째 파라미터 값에서 지정한 글자와  
+--  같은 글자가 등장할 경우 이를 제거한 결과값을 반환한다. **제거 후 남은 결과값 반환**  
+--  단, 완성형으로 처리되지 않는다. **하나씩 하나씩 처리함**
+``` SQL
+--> 1 : 1로 바꿔준다,
+SELECT TRANSLATE('MY ORACLE SERVER'
+                ,'ABCDEFGHIJKLMNOPQRSTUVWZYZ'
+                ,'abcdefghijklmnopqrstuvwzyz') "COL1"
+FROM DUAL;
+--==>> my oracle server
+--** 첫번째 파라미터 값 M
+--   -> 두번째 파라미터에서 M 찾기
+--   -> 세번째 파라미터에서 같은 위치에 해당하는 m으로 변환
+ 
+SELECT TRANSLATE('010-9322-9643'
+                , '0123456789'
+                , '공일이삼사오육칠팔구') "COL1"
+FROM DUAL;
+--==>> 공일공-구삼이이-구육사삼
+```
+### 4.5.11. 바꾸기 (REPLACE())
+``` SQL
+SELECT REPLACE('MY ORACLE SERVER ORAHOME', 'ORA', '오라') "COL1"
+FROM DUAL;
+--==>> MY 오라CLE SERVER 오라HOME
+```
+
+### 4.5.12. 수학함수
+#### 4.5.12.1. 반올림 (ROUND())
+``` SQL
+SELECT 48.678 "COL1"            -- 48.678
+     , ROUND(48.678, 2) "COL2"  -- 48.68     -- 소수점 이하 둘째자리까지 표현 -> 두번째 파라미터
+     --** 소수점이하 둘째자리까지 나타내라X
+     --** 소수점이하 둘째자리까지 표현해라O
+     , ROUND(48.674,2) "COL3"   -- 48.67
+     , ROUND(48.674,1) "COL4"   -- 48.7
+     , ROUND(48.684,0) "COL5"   -- 49
+     , ROUND(48.684)   "COL6"   -- 49         -- 정수까지만 보여달라는 0 생략가능
+     , ROUND(48.684,-1)"COL7"   -- 50
+     , ROUND(48.684,-2)"COL8"   -- 0
+     , ROUND(48.684,-3)"COL9"   -- 0
+FROM DUAL;
+--==>> 48.678	48.68	48.67	48.7	49
+```
+#### 4.5.12.2. 절삭 (TRUNC())
+``` SQL
+SELECT 48.678 "COL1"            -- 48.678
+     , TRUNC(48.678, 2) "COL2"  -- 48.67     -- 소수점 이하 둘째자리까지 표현 -> 두번째 파라미터
+     , TRUNC(48.674,2) "COL3"   -- 48.67
+     , TRUNC(48.674,1) "COL4"   -- 48.6
+     , TRUNC(48.684,0) "COL5"   -- 48
+     , TRUNC(48.684)   "COL6"   -- 48         -- 정수까지만 보여달라는 0 생략가능
+     , TRUNC(48.684,-1)"COL7"   -- 40
+     , TRUNC(48.684,-2)"COL8"   -- 0
+     , TRUNC(48.684,-3)"COL9"   -- 0
+FROM DUAL;
+--==>> 48.678	48.67	48.67	48.6	48	48	40	0	0
+```
+#### 4.5.12.3. 나머지를 반환 (MOB())  -> %
+``` SQL
+SELECT MOD(5,2) "COL1"
+FROM DUAL;
+--==>> 1
+```
+#### 4.5.12.4. 제곱의 결과 반환 (POWER())
+``` SQL
+SELECT POWER(5,3) "COL1"
+FROM DUAL;
+--==>> 125
+--> 5의 3승 결과값으로 반환
+```
+#### 4.5.12.5. 루트 결과값 (SQRT())
+``` SQL
+SELECT SQRT(2) "COL1"
+FROM DUAL;
+--==>> 1.41421356237309504880168872420969807857
+```
+#### 4.5.12.6. 로그 함수 (LOG())
+``` SQL
+SELECT LOG(10, 100) "COL1"
+      , LOG(10, 20) 
+FROM DUAL;
+--==>> 2	1.30102999566398119521373889472449302677
+```
+#### 4.5.12.7. 자연 로그 (LN())
+``` SQL
+SELECT LN(95) "COL1"
+FROM DUAL;
+--==>> 4.55387689160054083460978676511404117675
+```
+#### 4.5.12.8. 삼각함수
+``` SQL
+--○ 삼각함수
+SELECT SIN(1), COS(1), TAN(1)
+FROM DUAL;
+----==>> 0.8414709848078965066525023216302989996233	
+--       0.5403023058681397174009366074429766037354	
+--       1.55740772465490223050697480745836017308
+ 
+-->> 각각 싸인, 코싸인, 탄젠트 결과값을 반환한다.
+ 
+--○ 삼각함수의 역함수(범위: -1 ~ 1)
+SELECT SIN(0.5), COS(0.5), TAN(0.5)
+FROM DUAL;
+----==>> 
+/*
+0.4794255386042030002732879352155713880819	
+0.8775825618903727161162815826038296520119	
+0.5463024898437905132551794657802853832851
+*/
+```
+#### 4.5.12.9. 서명, 부호, 특징 (SIGN())
+--> 연산 결과값이 양수이면 1, 0이면 0, 음수이면 -1을 반환한다.  
+--> 매출이나 수지에 관련하여 적자 및 흑자의 개념을 가질 때 종종 사용된다.
+``` SQL
+SELECT SIGN(5-2) "COL1"
+    , SIGN(5-5) "COL2"
+    , SIGN(5-6) "COL3"
+FROM DUAL;
+--==>> 1	0	-1
+```
+#### 4.5.12.10. 아스키코드 값 (ASCII() ↔ CHR()/ -> 서로 대응(상응)하는 함수)
+``` SQL
+SELECT ASCII('A') "COL1"
+       , CHR(65) "COL2"
+FROM DUAL;
+--==>> 65	A
+-- <ASCIII()> : 매개변수로 넘겨받은 문자의 아스키코드 값을 반환한다.
+-- <CHR()>    : 매개변수로 넘겨받은 아스키코드 값으로 해당 문자를 반환한다.
+```
+#### 4.5.12.11. 날짜함수
+##### 4.5.12.11.1. 날짜타입으로 변환 (TO_DATE)
+--※ TO_DATE() 함수를 통해 문자 타입을 날짜 타입으로 변환을 수행하는 과정에서 내부적으로 해당 날짜에 대한 유효성 검사가 이루어진다.
+``` SQL
+--○ 날짜 - 날짜 -> 일수
+SELECT TO_DATE('2024-03-19','YYYY-MM-DD') - TO_DATE('2023-08-22', 'YYYY-MM-DD') "COL1"
+FROM DUAL;
+--==>> 210
+ 
+--○ 데이터 타입의 변환
+SELECT TO_DATE('2023-10-20', 'YYYY-MM-DD') "COL1"
+FROM DUAL;
+--==>> 2023-10-20 00:00:00
+ 
+SELECT TO_DATE('2023-10-32', 'YYYY-MM-DD') "COL1"
+FROM DUAL;
+--==>> 에러발생
+--        (ORA-01847: day of month must be between 1 and last day of month)
+ 
+SELECT TO_DATE('2023-02-29', 'YYYY-MM-DD') "COL1"
+FROM DUAL;
+--==>> 에러 발생(ORA-01839: date not valid for month specified)
+ 
+SELECT TO_DATE('2023-13-20', 'YYYY-MM-DD') "COL1"
+FROM DUAL;
+--==>> 에러 발생()
+```
+##### 4.5.12.11.2. 개월 수를 더하거나 빼기 (ADD_MONTHS())
+``` SQL
+SELECT SYSDATE "COL1"
+    , ADD_MONTHS(SYSDATE, 2) "COL2"
+    , ADD_MONTHS(SYSDATE, 3) "COL3"
+    , ADD_MONTHS(SYSDATE, -2) "COL4"
+    , ADD_MONTHS(SYSDATE, -3) "COL5"
+FROM DUAL;
+--==>> 
+/*
+2023-10-20 16:19:46 -> 현재	
+2023-12-20 16:19:46	-> 2개월 후
+2024-01-20 16:19:46	-> 3개월 후
+2023-08-20 16:19:46	-> 2개월 전
+2023-07-20 16:19:46 -> 3개월 전
+*/
+```
+##### 4.5.12.11.3. 첫번째 인자에서 두 번째 인자값 뺀 개월수 (MONTHS_BETWEEN())
+--> 첫 번째 인자값에서 두 번째 인자값을 뺀 개월수를 반환한다.
+``` SQL
+SELECT MONTHS_BETWEEN(SYSDATE, TO_DATE('2002-05-31','YYYY-MM-DD')) "COL1"
+FROM DUAL;
+--==> 256.667209901433691756272401433691756272
+ 
+--> 개월 수의 차이를 반환하는 함수
+--  결과값의 부호가 <->(음수)로 반환되었을 경우에는
+--  첫 번째 인자값에 해당하는 날짜보다
+--  두 번째 인자값에 해당하는 날짜가 <미래>라는 의미로 확인할 수 있다.
+```
+##### 4.5.12.11.3. 가까운 요일의 날 (NEXT_DAY())
+``` SQL
+SELECT NEXT_DAY(SYSDATE, '토') "COL1"
+    , NEXT_DAY(SYSDATE, '월') "COL2"
+FROM DUAL;
+--==>> 2023-10-21 16:25:45	2023-10-22 16:25:45
+```
+##### 4.5.12.11.4. 마지막 날 (LAST_DAY())
+--> 해당 날짜가 포함되어 있는 그달의 마지막 날을 반환한다.
+``` SQL
+SELECT SYSDATE "COL1"                                       -- 2023-10-20
+    , LAST_DAY(SYSDATE) "COL2"                              -- 2023-10-31
+    , LAST_DAY(TO_DATE('2023-02-12', 'YYYY-MM-DD')) "COL3"  -- 2023-02-28
+    , LAST_DAY(TO_DATE('2020-02-12', 'YYYY-MM-DD')) "COL3"  -- 2020-02-29
+FROM DUAL;
+```
+
+
+## 5. 기타
+  
+
+
+| 함수명 | 내용 | 비고 |
+| :--- | :---: | ---: |
+| 열1 | 열2 | 열3 |
+| 열4 | 열5 | 열6 |
 
 <br><br>
 *******
 <br>
 
-## 작성샘플
-### SQL
+# 작성샘플
+## SQL
 ``` SQL
 
 ```
