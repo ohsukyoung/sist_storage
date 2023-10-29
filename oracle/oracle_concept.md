@@ -1812,7 +1812,7 @@ ON E.DEPTNO = D.DEPTNO;
 ### 6.2.3. OUTER JOIN
 ### 6.2.3.1. LEFT [OUTER] JOIN
 ### 6.2.3.2. RIGHT [OUTER] JOIN
-### 6.2.3.3. RIGHT [OUTER] JOIN
+### 6.2.3.3. FULL [OUTER] JOIN
 >-- *눈여겨서 봐야할 부분*  
 
 ``` SQL
