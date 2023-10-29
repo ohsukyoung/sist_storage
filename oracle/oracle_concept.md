@@ -2,25 +2,25 @@
 
 <BR>
 
-## 1. 개념
-### 1.1. 오라클의 주요 자료형(DATA TYPE)
-#### 1.1.1. MSSQL 서버
-##### 1.1.1.1. 정수 표현타입
+# 1. 개념
+## 1.1. 오라클의 주요 자료형(DATA TYPE)
+### 1.1.1. MSSQL 서버
+#### 1.1.1.1. 정수 표현타입
 ``` SQL
     tinyint     0 ~ 255             1byte
     smallint    -32.768 ~ 32.767    2byte
     int         -21억 ~ 21억        4byte
     bigint      엄청큼              8byte
 ```
-##### 1.1.1.2. 실수 표현 타입
+#### 1.1.1.2. 실수 표현 타입
 ``` SQL
 float, real
 ```
-##### 1.1.1.2. 숫자 표현 타입
+#### 1.1.1.2. 숫자 표현 타입
 ``` SQL
 decimal, numeric
 ```
-##### 1.1.1.2. 문자 표현 타입
+#### 1.1.1.2. 문자 표현 타입
 ``` SQL
 char, varchar, Nvarchar
 ```
@@ -33,7 +33,7 @@ char, varchar, Nvarchar
           NUMBER(4,1)  -> -999.9 ~ 999.9    --** 두번째 자리: 소수점 이하 자리
 ```
 > ※ ORACLE 의 문자 표현 타입
-#### 1.2.3. 문자형
+### 1.2.3. 문자형
 ``` SQL
           CHAR         -> 고정형 크기
                           (무조건 지정된 크기 소모)
@@ -57,12 +57,12 @@ char, varchar, Nvarchar
           NVARCHAR2    -> 유니코드 기반 가변형 크기(글자수)
           NVARCHAR2(10) <---- 10글자
 ```
-#### 1.2.3. 날짜형
+### 1.2.3. 날짜형
 
 <BR>
 
-## 2. 테이블 관련
-### 2.1. 소유의 테이블 조회
+# 2. 테이블 관련
+## 2.1. 소유의 테이블 조회
 ``` SQL
 SELECT *
 FROM TAB;
@@ -77,7 +77,7 @@ TBL_EXAMPLE1	TABLE
 TBL_EXAMPLE2	TABLE	
 */
 ```
-### 2.2. 각 테이블의 데이터 조회
+## 2.2. 각 테이블의 데이터 조회
 ``` SQL
 SELECT *
 FROM TAB;
@@ -91,7 +91,7 @@ FROM DEPT;
 40	OPERATIONS	BOSTON
 */
 ```
-### 2.3. DEPT 테이블에 존재하는 컬럼의 구조 확인
+## 2.3. DEPT 테이블에 존재하는 컬럼의 구조 확인
 ``` SQL
 DESCRIBE DEPT;
 DESC DEPT; -- DESCRIBE 를 DESC로 단축 가
@@ -104,7 +104,7 @@ DNAME           VARCHAR2(14)
 LOC             VARCHAR2(13) 
 */
 ```
-### 2.4. 현재 시간 및 날짜
+## 2.4. 현재 시간 및 날짜
 ### 2.4.1. 형식 지정
 ``` SQL
 ALTER SESSEION SET NLS_DATE_FORMAT = 'YYYY-MM-DD';
@@ -123,20 +123,22 @@ SELECT SYSDATE, CURRENT_DATE, LOCALTIMESTAMP
 FROM DUAL;
 --==>> 2023-10-19 10:43:40	2023-10-19 10:43:40	23/10/19 10:43:40.000000000
 ```
-### 2.4.3. 날짜 언어 설정 
+### 2.4.3. 날짜 언어 및 원 설정 
 ``` SQL
+ALTER SESSION SET NLS_LANGUAGE = 'KOREAN';
 ALTER SESSION SET NLS_DATE_LANGUAGE = 'KOREAN';
 --==>> Session이(가) 변경되었습니다.
+ALTER SESSION SET NLS_CURRENCY='￦'; 
 ```
 
-### 2.5. 휴지통 비우기
+## 2.5. 휴지통 비우기
 ``` SQL
 PUGER RECYCLEBIN;
 ```
-### 2.6. 커멘트
+## 2.6. 커멘트
 > -- *커멘트를 안달아도 크게 상과없지만, 같이 일하기 좋은사람이 될 수 있고 내가 관리하기에도 좋다.*
-#### 2.6.1. 테이블 레벨 커멘트
-##### 2.6.1.1. 테이블 레벨 커멘트 정보 확인
+### 2.6.1. 테이블 레벨 커멘트
+#### 2.6.1.1. 테이블 레벨 커멘트 정보 확인
 ``` SQL
 SELECT *
 FROM USER_TAB_COMMENTS;
@@ -153,16 +155,16 @@ TBL_DEPT	    TABLE
 EMP5	        TABLE	
 */
 ```
-##### 2.6.1.2. 테이블 레벨 커멘트 정보 입력
+#### 2.6.1.2. 테이블 레벨 커멘트 정보 입력
 ``` SQL
 COMMENT ON TABLE TBL_EMP IS '사원정보';
 --==>> Comment이(가) 생성되었습니다.
 ```
-#### 2.6.2. 컬럼 레벨 커멘트
+### 2.6.2. 컬럼 레벨 커멘트
 ``` SQL
 COMMENT 작성형식1) COMMENT ON TABLE 테이블명 IS '커멘트';
 ```
-##### 2.6.2.1. 컬럼 레벨 커멘트 정보 확인
+#### 2.6.2.1. 컬럼 레벨 커멘트 정보 확인
 ``` SQL
 SELECT *
 FROM USER_COL_COMMENTS;
@@ -183,7 +185,7 @@ FROM USER_TAB_COMMENTS;
 TBL_EMP	        TABLE	사원 정보
 */
 ```
-##### 2.6.2.2. 컬럼 레벨 커멘트 정보 입력
+#### 2.6.2.2. 컬럼 레벨 커멘트 정보 입력
 --○ 테이블에 소속된 컬럼에 대한 커멘트 데이터 입력
 ``` SQL
 COMMENT ON COLUMN TBl_DEPT.DEPTNO IS '부서 번호';
@@ -198,7 +200,7 @@ TBL_DEPT	DEPTNO	부서 번호
 ...중략...
 */
 ```
-### 2.7. NULL
+## 2.7. NULL
 NULL은 상태의 값을 의미.  
 실제 존재하지 않는 값이기 때문에 NULL 이 연산에 포함될 경우 그 결과는 무조건 NULL
 >-- *엄밀히 말하면, NULL은 상태의 값*
@@ -218,7 +220,7 @@ FROM DUAL;
 <BR>
 
 
-## 3. 관계형 데이터베이스(RDBMS)
+# 3. 관계형 데이터베이스(RDBMS)
 : 각각의 데이터를 테이블의 형태로 연결시켜 저장해 놓은 구조. 그리고 이들 각각의 테이블 간의 관계를 설정하여 연결시켜 놓은 구조
 ``` SQL
  ※ SELECT 문의 처리(PARSING) 순서
@@ -235,7 +237,7 @@ FROM DUAL;
 -- *1,5는 반드시 있어야함*  
 -- *+는 단독으로 존재가능*
 
-### 3.1. 별칭(ALIAS)
+## 3.1. 별칭(ALIAS)
 : 테이블을 조회하는 과정에서 각 컬럼의 이름에는 별칭(ALIAS)을 부여할 수 있다.  
 기본 구문의 형식은 『컬럼명 AS "별칭이름"』의 형태로 작성되며 이 때, 『AS』는 생략이 가능하다.  
 또한, 별칭 이름을 감싸는 『""』도 생략이 가능하지만 ""』 를 생략할 경우 별칭 내에서 공백은 사용할 수 없다.  
@@ -247,12 +249,12 @@ EMPNO AS "사원번호"  --: SQL에서는 문자열은 '(작은따옴표)이지�
  JOB 직종명          --: " 생략 가능
  SAL "급   여"       --: 별칭안에 공백이 있을 시 " 생략불가
 ```
-### 3.2. DDL: 정의어(테이블 생성, 변경, 삭제, 복사)
+## 3.2. DDL: 정의어(테이블 생성, 변경, 삭제, 복사)
 DB를 구축하거나 수정할 때 사용(DB구조, DATA 형식, 접근방식)
 > 구조적으로 생성 CREATE  
             변경 ALTER  
             삭제 DROP  
-#### 3.2.1. 테이블 생성
+### 3.2.1. 테이블 생성
 CREATE TABLE 테이블명 (속성명 데이터 타입 NOT NULL)
 ``` SQL
 CREATE TABLE EMP4
@@ -267,7 +269,39 @@ CREATE TABLE EMP4
 );
 --==>> Table EMP4이(가) 생성되었습니다.
 ```
-#### 3.2.2. 테이블 컬럼 구조의 추가 및 제거
+#### 3.2.1.1. 뷰 생성
+> CREATE OR REPLACE VIEW VIEW_SAWON2  
+AS  
+SELECT
+FROM...
+``` SQL
+CREATE OR REPLACE VIEW VIEW_SAWON2
+AS
+SELECT T.*
+        , CASE WHEN T.현재나이 >= 40 THEN T.급여*0.7 
+               WHEN T.현재나이 >= 30 THEN T.급여*0.5
+               WHEN T.현재나이 >= 20 THEN T.급여*0.3
+               ELSE 0
+          END "나이보너스"
+FROM
+(
+    SELECT SANAME "사원명"
+         , CASE WHEN SUBSTR(JUBUN,7,1) IN ('1','3') THEN '남자'
+                WHEN SUBSTR(JUBUN,7,1) IN ('2','4') THEN '여자'
+                ELSE '성별확인불가'
+           END "성별"
+         , CASE WHEN SUBSTR(JUBUN,7,1) IN ('1','2') 
+                THEN EXTRACT(YEAR FROM SYSDATE) - (TO_NUMBER(SUBSTR(JUBUN,1,2)) + 1899) 
+                WHEN SUBSTR(JUBUN,7,1) IN ('3','4') 
+                THEN EXTRACT(YEAR FROM SYSDATE) - (TO_NUMBER(SUBSTR(JUBUN,1,2)) + 1999) 
+                ELSE -1
+           END "현재나이"
+         , SAL "급여"
+    FROM TBL_SAWON
+) T;
+--==>> View VIEW_SAWON2이(가) 생성되었습니다.
+```
+### 3.2.2. 테이블 컬럼 구조의 추가 및 제거
 --○ TBL_EMP 테이블에 주민등록번호 데이터를 담을 수 있는 컬럼 추가
 --** 테이블의 구조가 바뀌기 때문에 ALTER
 ``` SQL
@@ -275,12 +309,12 @@ ALTER TABLE TBL_EMP
 ADD SSN CHAR(13);
 --==>> Table TBL_EMP이(가) 변경되었습니다.
 ```
-#### 3.2.3. 테이블 삭제
+### 3.2.3. 테이블 삭제
 ``` SQL
 DROP TABLE TBL_EXAMPLE1;
 --==>> Table TBL_EXAMPLE1이(가) 삭제되었습니다.
 ```
-#### 3.2.4. 테이블 복사
+### 3.2.4. 테이블 복사
 --○ 대상 테이블의 내용에 따라 테이블 생성(TBL_EMP)
 ``` SQL
 CREATE TABLE TBL_EMP
@@ -288,7 +322,7 @@ AS
 SELECT *
 FROM EMP;
 ```
-### 3.3. DML: 데이터 조작어(데이터 검색, 삽입, 삭제, 갱신)
+## 3.3. DML: 데이터 조작어(데이터 검색, 삽입, 삭제, 갱신)
 사용자가 실질적으로 저장된 데이터를 관리하는 언어
 > 데이터     검색 SELECT  
             삽입 INSERT  
@@ -332,21 +366,21 @@ UPDATE TBL_DEPT
 SET DNAME = '연구부', LOC = 'RUDRL'
 WHERE DEPTNO = 50;
 ```
-### 3.4. DCL: 데이터 제어어 (COMMIT, ROLLBACK, GRANT)
+## 3.4. DCL: 데이터 제어어 (COMMIT, ROLLBACK, GRANT)
 데이터 보안, 무결성, 회복, 병행제어를 정의하는 언어
-#### 3.4.1. COMMIT
+### 3.4.1. COMMIT
 츠랜잭션 처리가 정상적으로 완료되면 수행한 내용을 DB에 반영하는 명령어
-#### 3.4.2. ROLLBACK
+### 3.4.2. ROLLBACK
 변경되었으나 커밋되지 않은 내용을 취소하고 이전상태로 되돌리는 명령어
 >--※ COMMIT 을 실행한 이후로 DML(INSERT, UPDATE, DELETE) 구문을 통해 변경된 데이터를 휘소할 수 있는 것 뿐...  
 --   DML 명령을 사용한 후 COMMIT을 수행하고 나서 ROLLBACK을 실행해봐야 아무소용이 없다.
 -- *CREATE, ALTER 는 AUTO COMMIT!! 주의하기!!*
-#### 3.4.3. GRANT
+### 3.4.3. GRANT
 권한부여
-##### 3.4.3.1. 사용자 등급
-##### 3.4.3.2. 테이블 속성 권한
+#### 3.4.3.1. 사용자 등급
+#### 3.4.3.2. 테이블 속성 권한
 
-#### 3.4.4. REVOKE
+### 3.4.4. REVOKE
 권한취소
 
 ## 3.5. DML>SELECT
@@ -393,15 +427,449 @@ WHERE JOB =ANY ('SALESMAN', 'CLOERK');
 ### 3.5.2. 하위질의
 ### 3.5.3. 그룹함수
 : GROUP BY 절에 지정된 속성의 값 집계
+-- SUM() 합, AVG() 평균, COUNT() 카운트, MAX() 최대값, MIN() 최소값  
+-- ,VARIENCE() 분산, STDDEV() 표준편차  
+ 
+--※ 그룹함수의 가장 큰 특징  
+--   처리해야 할 데이터들 중 NULL이 존재한다면(포함되어 있다면)  
+--   이 NULL은 제외한 상태로 연산을 수행한다는 것이다.  
+--   즉, NULL은 연산의 대상에서 제외된다.  
+#### 3.5.3.1. SUM() 합
+``` SQL
+SELECT SAL
+FROM EMP;
+/*
+800
+1600
+1250
+2975
+1250
+2850
+2450
+3000
+5000
+1500
+1100
+950
+3000
+1300
+*/
+ 
+SELECT SUM(SAL) -- 800 + 1600 + ... + 1300
+FROM EMP;
+--==>> 29025
+ 
+SELECT COMM
+FROM EMP;
+/*
+(null)
+300
+500
+(null)
+1400
+(null)
+(null)
+(null)
+(null)
+0
+(null)
+(null)
+(null)
+(null)
+*/
+ 
+SELECT SUM(COMM)    -- NULL + 300 + 500 + NULL + ... + NULL --(X)
+FROM EMP;
+--==>> 2200
+```
+#### 3.5.3.2. COUNT() 행(레코드)의 갯수 조회 -> 데이터가 몇 건인지... 확인...
+``` SQL
+SELECT COUNT(COMM)
+FROM EMP;
+--==>> 4
+ 
+SELECT COUNT(*)
+FROM EMP;
+--==>> 14
+-- COUNT를 수행할때는 NULL 이 조회에서 빠질 수 있으므로 (*)으로 조회
+```
+#### 3.5.3.3. AVG() 평균 반환
+``` SQL
+SELECT AVG(COMM) "COL1"
+     , SUM(COMM) / COUNT(COMM) "COL2"
+     , 2200 / 4 "COL3"  -- NULL을 제외하고 연산
+     , 2200 / 14 "COL4" -- 정답
+FROM EMP;
+ 
+--※ 데이터가 NULL인 컬럼의 레코드는 연산 대상에서 제외되기 때문에
+-- 주의하여 연산 처리해야 한다.
+```
+#### 3.5.3.4. VARIANCE() 표준편차 / STDDEV() 분산
+-- ※ 표준편차의 제곱이 분산, 분산의 제곱근이 표준편차
+``` SQL
+SELECT VARIANCE(SAL), STDDEV(SAL)
+FROM EMP;
+--==>> 1398313.87362637362637362637362637362637	1182.503223516271699458653359613061928508
+ 
+SELECT POWER(STDDEV(SAL),2) "COL1"
+     , VARIANCE(SAL) "COL2"
+FROM EMP;
+--==>> 
+/*
+1398313.87362637362637362637362637362637	
+1398313.87362637362637362637362637362637
+*/
+```
+#### 3.5.3.5. MAX() 최대값 / MIN() 최소값
+-- 오라클에서는 NULL을 가장 큰 값으로 간주한다.  
+-- (ORACLE 9I 까지는 NULL을 가장 작은 값으로 간주했었다.)  
+-- (MSSQL 은 NULL을 가장 작은 값으로 간주한다.)  
+``` SQL
+SELECT MAX(SAL) "COL1"
+     , MIN(SAL) "COL2"
+FROM EMP;
+--==>>800
+ 
+--※ 주의
+SELECT DEPTNO, SUM(SAL) --** DEPTNO : 14건, SUM(SAL)은 단일건
+FROM EMP;
+--==>> 에러 발생(ORA-00937: not a single-group group function)
+
+SELECT DEPTNO, SUM(SAL)
+FROM EMP
+GROUP BY DEPTNO
+ORDER BY 1;
+/*
+10	8750
+20	10875
+30	9400
+*/
+```
+#### 3.5.3.6. ROLLUP()
+N+1 레벨까지 (하위 -> 상위)
+--○ TBL_EMP 테이블을 대상으로 부서별 급여합 조회
+--   부서번호, 급여합 항목  조회
+``` SQL
+SELECT DEPTNO "부서번호", SUM(SAL) "급여합"
+FROM TBL_EMP
+GROUP BY DEPTNO
+ORDER BY DEPTNO;
+/*
+10	    8750
+20	    10875
+30	    9400
+(null)	8700     -- 부서번호가 NULL 인 사원들의 급여합
+*/
+```
+``` SQL
+SELECT DEPTNO "부서번호", SUM(SAL) "급여합"
+FROM TBL_EMP
+GROUP BY ROLLUP(DEPTNO);
+/*
+10	8750
+20	10875
+30	9400
+	8700  -- 부서번호가 NULL 인 사원들의 급여합
+	37725 -- 모든부서 직원들의 급여합
+*/
+```
+#### 3.5.3.7. GROUPING()
+``` SQL
+SELECT GROUPING(DEPTNO), DEPTNO "부서번호", SUM(SAL) "급여합"
+FROM TBL_EMP
+GROUP BY ROLLUP(DEPTNO);
+ 
+/*
+GROUPING(DEPTNO)	부서번호	급여합
+0	                    10	    8750
+0	                    20	    10875
+0	                    30	    9400
+0	                (null)	    8700
+1	                (null)	    37725
+*/
+```
+#### 3.5.3.8. CUBE() -> ROLLUP() 보다 더 자세한 결과를 반환받는다.
+-- ※ ROLLUP()과 CUBE() 는 그룹을 묶어주는 방식이 다르다.(차이)  
+-EX.  
+   
+--ROLLUP(A,B,C)  
+-- -> (A,B,C) / (A,B) / (A) / ()  
+   
+--CUBE(A,B,C)  
+-- -> (A,B,C) / (A,B) / (A,C) / (B,C) / (A)/ (B)/ (C) {}  
+   
+--> 아래의 과정(ROLLUP())은 묶음 방식이 다소 모자랄 때가 있고  
+-- 아래의 과정(CUBE())은 묶음 방식이 다지나칠 때가 있기 때문에  
+-- 다음과 같은 방식의 쿼리를 더 많이 사용하게 된다.  
+-- 다음 작성하는 퀄리는 조회하고 자하는 그룹만  
+-- <GROUPING SETS>를 사용하여 선택적으로 묶어줌  
+``` SQL
+SELECT DEPTNO, JOB, SUM(SAL)
+FROM EMP
+GROUP BY CUBE(DEPTNO, JOB)
+ORDER BY 1,2;
+/*
+DEPTNO	JOB	SUM(SAL)
+10	    CLERK	    1300
+10	    MANAGER	    2450
+10	    PRESIDENT	5000
+10	    (null)	    8750
+20	    ANALYST	    6000
+20	    CLERK	    1900
+20	    MANAGER	    2975
+20	    (null)	    10875
+30	    CLERK	    950
+30	    MANAGER	    2850
+30	    SALESMAN	5600
+30	    (null)	    9400
+(null)	ANALYST	    6000    - 모든 부서 ANALYST 직종의 급여합 -- 추가
+(null)	CLERK	    4150    - 모든 부서 CLECK 직종의 급여합
+(null)	MANAGER	    8275    - 모든 부서 MANAGER 직종의 급여합
+(null)	PRESIDENT	5000    - 모든 부서 PRESIDNT 직종의 급여합
+(null)	SALESMAN	5600
+(null)	(null)	    29025
+*/
+```
+#### 3.5.3.9. 중첩 그룹함수 / 분석함수
+--※ 그룹함수는 2 LEVEL 까지 중첩해서 사용할 수 있다.  
+-- 함수는 일반적으로 중첩에 대한 제한이 없는데, 그룹함수는 논리적인 특성상 제한되어있음(이것도 오라클만 중첩되고, 나머지는 중첩도 안됨)  
+``` SQL
+SELECT SUM(SAL)
+FROM EMP
+GROUP BY DEPTNO;
+--==>>
+/*
+9400
+10875
+8750
+*/
+ 
+SELECT MAX(SUM(SAL)) "COL1"
+FROM EMP
+GROUP BY DEPTNO;
+--==>> 10875
+```
+
 ### 3.5.4. WINDOW 함수
 GROUP BY 절 사용하지 않고 속성값 집계
 >- PARTITION BY : 함수 적용범위  
 - ORDER BY: PARTITION 안에서 정렬 기준이 되는 속성
+#### 3.5.4.1. RANK() -> 등수(순위)를 반환하는 함수
+##### 3.5.4.1.1. RANK() - ORDER BY
+등수(순위)를 반환하는 함수
+``` SQL
+SELECT EMPNO "사원번호", ENAME "사원명", DEPTNO "부서번호", SAL "급여"
+     , RANK() OVER(ORDER BY SAL DESC) "전체급여순위"   --** 급여 내림차순 기준 등수 매기기
+FROM EMP;
+--==>>
+/*
+7839	KING	10	5000	1
+7902	FORD	20	3000	2
+7788	SCOTT	20	3000	2
+7566	JONES	20	2975	4
+7698	BLAKE	30	2850	5
+7782	CLARK	10	2450	6
+*/
+```
+##### 3.5.4.1.2. RANK() - PARTITION BY
+``` SQL
+SELECT EMPNO "사원번호", ENAME "사원명", DEPTNO "부서번호", SAL "급여"
+     , RANK() OVER(PARTITION BY DEPTNO ORDER BY SAL DESC) "부서별급여순위"
+     , RANK() OVER(ORDER BY SAL DESC) "전체급여순위"
+FROM EMP;
+/*
+7839	KING	10	5000	1	1
+7902	FORD	20	3000	1	2
+7788	SCOTT	20	3000	1	2
+7566	JONES	20	2975	3	4
+7698	BLAKE	30	2850	1	5
+```
+#### 3.5.4.2. DENSE_RANK() -> 서열을 반환하는 함수
+``` SQL
+SELECT EMPNO "사원번호", ENAME "사원명", DEPTNO "부서번호", SAL "급여"
+     , DENSE_RANK() OVER(PARTITION BY DEPTNO ORDER BY SAL DESC) "부서별급여서열"
+     , DENSE_RANK() OVER(ORDER BY SAL DESC) "전체급여서열"
+FROM EMP
+ORDER BY 3,4 DESC;
+/*
+7839	KING	10	5000	1	1
+7782	CLARK	10	2450	2	5
+7934	MILLER	10	1300	3	8
+7902	FORD	20	3000	1	2   -> 1
+7788	SCOTT	20	3000	1	2   -> 1
+7566	JONES	20	2975	2	3   -> 2
+*/
+```
+##### 3.5.4.1-2.1 RANK() / DENSE_RANK() 이전 사용
+-- RANK() / DENSE_RANK()  
+--> 오라클 9i부터 적용되었던 함수 (MSSQL은 아마도 2005부터 적용...)  
+ 
+--> 하위 버전에서는 RANK() 나 DENSE_RANK() 를 사용할 수 없기 때문에  
+--  이 함수를 활용하지 않는 다른 방법을 찾아야 한다.  
+--  예를 들어... 급여 순위를 구하고자 한다면...  
+--  해당 사원의 급여보다 더 큰 값이 몇 개인지 확인한 후  
+--  확인한 숫자에 『+1』을 추가로 연산해 주면...  
+--  그 값이 곧 해당 사원의 등수가 된다.  
+``` SQL
+SELECT COUNT(*) + 1
+FROM EMP
+WHERE SAL > 800;        -- SMITH 의 급여
+--==>> 14               -- SMITH 의 등수
+```
+#### 3.5.4.3. ROW_NUMBER() -> 공동순위x, 연속
+-- 정렬한 ENAME을 기준으로 관찰번호 부여했다.(위의 코드와 다른 부분: SELECT의 ORDER BY)  
+ 
+--※ 게시판의 게시물 번호를 SEQUENCE나 IDENTITY를 사용하게 되면  
+--   게시물을 삭제했을 경우... 삭제한 게시물으리 자리에 다음 번호를 가진 게시물이 등록되는 상황이 발생하게 된다.
+--   이는... 보안성 측면이나... 미관상 ... 바람직하지 않은 상태일 수 있기 때문에 ROW_NUMBER()의 사용을 고려해 볼 수 있다.  
+--   관리의 목적으로 사용할 때에는 SEQUENCE 나 IDENTITY 를 사용하지만,  
+--   단순히 게시물을 목록화하여 사용자에게 리스트 형식으로 보여줄 때에는 사용하지 않는 것이 바람직할 수 있다.
+ 
+--   방법1) 중간에 번호가 없는것을 사용자가 알게 된다면(게시물을 삭제하기 때문에)  
+--   사용자의 입장에서는 필터링을 많이하는 게시판이라고 생각이 들어 신뢰성이 떨어진다.  
+ 
+--   방법2) 기동력을 앞세우기 위해서 사용자에게 보여지는 게시물 번호가 실제 DB번호로 연동하기도 한다.  
 
+``` SQL
+SELECT ROW_NUMBER() OVER(ORDER BY SAL DESC) "관찰"
+    , ENAME "사원명", SAL "급여", HIREDATE "입사일"
+FROM EMP;
+/*
+1	KING	5000	1981-11-17
+2	FORD	3000	1981-12-03
+3	SCOTT	3000	1987-07-13
+4	JONES	2975	1981-04-02
+5	BLAKE	2850	1981-05-01
+6	CLARK	2450	1981-06-09
+7	ALLEN	1600	1981-02-20
+8	TURNER	1500	1981-09-08
+9	MILLER	1300	1982-01-23
+10	WARD	1250	1981-02-22
+11	MARTIN	1250	1981-09-28
+12	ADAMS	1100	1987-07-13
+13	JAMES	 950	1981-12-03
+14	SMITH	 800	1980-12-17
+*/
+ 
+SELECT ROW_NUMBER() OVER(ORDER BY SAL DESC) "관찰"
+    , ENAME "사원명", SAL "급여", HIREDATE "입사일"
+FROM EMP
+ORDER BY ENAME;
+/*
+12	ADAMS	1100	1987-07-13
+7	ALLEN	1600	1981-02-20
+5	BLAKE	2850	1981-05-01
+6	CLARK	2450	1981-06-09
+2	FORD	3000	1981-12-03
+13	JAMES	 950	1981-12-03
+4	JONES	2975	1981-04-02
+1	KING	5000	1981-11-17
+11	MARTIN	1250	1981-09-28
+9	MILLER	1300	1982-01-23
+3	SCOTT	3000	1987-07-13
+14	SMITH	 800	1980-12-17
+8	TURNER	1500	1981-09-08
+10	WARD	1250	1981-02-22
+*/
+-- '관찰'이라고 부여된 번호는 정렬을 바꿔도 고유의 번호처럼 붙어있음을 확인한다.
+```
+#### 3.5.4.4. SEQUENCE(시퀀스: 주문번호)
+--    -> 사전적인 의미: 1. (일련의) 연속적인 사건들 2. (사건, 행동 등의) 순서
+``` SQL 
+-- ○ 시퀀스 생성
+CREATE SEQUENCE SEQ_BOARD   -- 기본적인 시퀀스 생성 구문
+START WITH 1                -- 시작값 설정
+INCREMENT BY 1              -- 증가값 설정
+NOMAXVALUE                  -- 최대값 설정 옵션
+NOCACHE;                    -- 캐시 사용 안함 설정 옵션
+--==>> Sequence SEQ_BOARD이(가) 생성되었습니다.
+```
+-- 캐시란, 입장하기 위해 많은 인원이 한꺼번에 들어가려고 하면 들어갈 수 없을 때  
+-- 입장권을 뽑아서 입장으로 했을 경우 들어갈 수는 있지만 대기시간이 있을 수 있는데  
+-- 한꺼번에 여러장을 뽑아서 나누어주는 것과 같다.  
 
-### 3.5.5. 집합연산
+### 3.5.5. 집합연산자
 
-## 3.6. ORDER BY
+## 3.6. GROUP BY 절
+>-- *GROUP BY와 조건에 데이터 타입 통일*  
+-- *GROUP BY 에서 묶어준 방식을 통일(EX. EXTRACT이면, EXTRACT로)*  
+-- *단순히 형을 맞춘다고 해서 해결되지 않음*  
+``` SQL
+SELECT EXTRACT(YEAR FROM HIREDATE) "입사년도"
+    , COUNT(*) "인원수"
+FROM TBL_EMP
+GROUP BY TO_CHAR(HIREDATE, 'YYYY')
+ORDER BY 1;
+--==>> 에러발생: GROUP BY와 SELECT의 형을 맞춰야함
+ 
+SELECT TO_CHAR(HIREDATE, 'YYYY') "입사년도"
+    , COUNT(*) "인원수"
+FROM TBL_EMP
+GROUP BY EXTRACT(YEAR FROM HIREDATE)
+ORDER BY 1;
+--==>> 에러발생(ORA-00979: not a GROUP BY expression)
+ 
+SELECT TO_NUMBER(TO_CHAR(HIREDATE, 'YYYY')) "입사년도"
+    , COUNT(*) "인원수"
+FROM TBL_EMP
+GROUP BY EXTRACT(YEAR FROM HIREDATE)
+ORDER BY 1;
+--==>> 에러발생(ORA-00979: not a GROUP BY expression)
+ 
+SELECT CASE GROUPING(TO_CHAR(HIREDATE, 'YYYY')) WHEN 0
+            THEN TO_CHAR(HIREDATE, 'YYYY')
+            ELSE '전체'
+        END "입사년도"
+    , COUNT(*) "인원수"
+FROM TBL_EMP
+GROUP BY TO_CHAR(HIREDATE, 'YYYY') --> '전체'를 출력해야 하기 때문에 , EXTRACT(YEAR FROM HIREDATE) 사용x
+ORDER BY 1;
+
+SELECT ROW_NUMBER() OVER(ORDER BY ENAME) "관찰"
+    , ENAME "사원명", SAL "급여", HIREDATE "입사일"
+FROM EMP
+ORDER BY ENAME;
+/*
+1	ADAMS	1100	1987-07-13
+2	ALLEN	1600	1981-02-20
+3	BLAKE	2850	1981-05-01
+4	CLARK	2450	1981-06-09
+5	FORD	3000	1981-12-03
+6	JAMES	 950	1981-12-03
+7	JONES	2975	1981-04-02
+8	KING	5000	1981-11-17
+9	MARTIN	1250	1981-09-28
+10	MILLER	1300	1982-01-23
+11	SCOTT	3000	1987-07-13
+12	SMITH	 800	1980-12-17
+13	TURNER	1500	1981-09-08
+14	WARD	1250	1981-02-22
+*/
+```
+## 3.7. HAVING
+--○ EMP 테이블에서 부서번호가 20, 30인 부서를 대상으로
+--   부서의 총 급여가 10000 보다 적을 경우만 부서별 총 급여를 조회한다.
+``` SQL
+-- 방법 1 WHERE 있는 경우
+SELECT DEPTNO, SUM(SAL)
+FROM EMP
+WHERE DEPTNO IN (20, 30)    -- OR
+GROUP BY DEPTNO
+HAVING SUM(SAL) < 10000;    -- 그룹에 대한 조건
+--==>> 30	9400
+-- SELECT 문의 PARSING 순서를 유의하면서 HAVING 사용하기
+ 
+-- 방법 2 WHERE 없는 경우
+SELECT DEPTNO, SUM(SAL)
+FROM EMP
+GROUP BY DEPTNO
+HAVING SUM(SAL) < 10000
+AND DEPTNO IN (20, 30);
+```
+-- EMP 테이블 전체를 1차로 메모리에 퍼올림 + 뒷부분 실행 (VS) WHERE절이 있을 경우, 테이블에서 WHERE 절까지 1차로 메모리에 퍼올림 + 뒷부분 실행  
+-- 쿼리문의 효율성이 극명하게 다름. 두 번째의 방식으로 쿼리문을 구성하는 것이 바람직함  
+
+## 3.8. ORDER BY
 >-- *`ASC`: 오름차순*  
 -- *`DESC`: 내림차순*  
 >-- *어떤 데이터가 먼저나오고 나중에 나오고는 관계형 데이터베이스에서는 크게 연관이 없음*  
@@ -457,8 +925,8 @@ ORDER BY 2, 3, 4 DESC;
 <BR>
 
 
-## 4. 함수
-### 4.1. NULL의 처리
+# 4. 함수
+## 4.1. NULL의 처리
 ### 4.1.1. NVL()
 --첫 번째 파라미터 값이 NULL 이면, 두 번째 파라미터 값을 반환한다.  
 --첫 번째 파라미터 앖이 NULL 이 아니면, 그 값을 그대로 반환한다.  
@@ -758,7 +1226,14 @@ SELECT LTRIM('김이신이김김이이신김김김이김이김박이김신', '�
 FROM DUAL;
 --==>> 박이김신
 ```
-### 4.5.9. 공백제거 (TRTIM())
+### 4.5.9. 공백제거 (TRIM())
+``` SQL
+SELECT TRIM('          TEST           ') "COL1"
+    , LTRIM('          TEST           ') "COL2"
+    , RTRIM('          TEST           ') "COL3"
+FROM DUAL;
+--==>> TEST	TEST           	          TEST
+```
 ### 4.5.10. 문자열 비 완성형 처리 (TRANSLATE())
 --> 첫번째 파라미터 값에 해당하는 문자열을 대상으로  
 --  왼쪽부터 **연속적으로 등장**하는 두 번째 파라미터 값에서 지정한 글자와  
@@ -891,8 +1366,8 @@ FROM DUAL;
 -- <ASCIII()> : 매개변수로 넘겨받은 문자의 아스키코드 값을 반환한다.
 -- <CHR()>    : 매개변수로 넘겨받은 아스키코드 값으로 해당 문자를 반환한다.
 ```
-#### 4.5.12.11. 날짜함수
-##### 4.5.12.11.1. 날짜타입으로 변환 (TO_DATE)
+### 4.5.13. 날짜함수
+#### 4.5.13.1. 날짜타입으로 변환 (TO_DATE)
 --※ TO_DATE() 함수를 통해 문자 타입을 날짜 타입으로 변환을 수행하는 과정에서 내부적으로 해당 날짜에 대한 유효성 검사가 이루어진다.
 ``` SQL
 --○ 날짜 - 날짜 -> 일수
@@ -918,7 +1393,7 @@ SELECT TO_DATE('2023-13-20', 'YYYY-MM-DD') "COL1"
 FROM DUAL;
 --==>> 에러 발생()
 ```
-##### 4.5.12.11.2. 개월 수를 더하거나 빼기 (ADD_MONTHS())
+#### 4.5.13.1. 개월 수를 더하거나 빼기 (ADD_MONTHS())
 ``` SQL
 SELECT SYSDATE "COL1"
     , ADD_MONTHS(SYSDATE, 2) "COL2"
@@ -935,7 +1410,7 @@ FROM DUAL;
 2023-07-20 16:19:46 -> 3개월 전
 */
 ```
-##### 4.5.12.11.3. 첫번째 인자에서 두 번째 인자값 뺀 개월수 (MONTHS_BETWEEN())
+#### 4.5.13.2. 첫번째 인자에서 두 번째 인자값 뺀 개월수 (MONTHS_BETWEEN())
 --> 첫 번째 인자값에서 두 번째 인자값을 뺀 개월수를 반환한다.
 ``` SQL
 SELECT MONTHS_BETWEEN(SYSDATE, TO_DATE('2002-05-31','YYYY-MM-DD')) "COL1"
@@ -947,14 +1422,14 @@ FROM DUAL;
 --  첫 번째 인자값에 해당하는 날짜보다
 --  두 번째 인자값에 해당하는 날짜가 <미래>라는 의미로 확인할 수 있다.
 ```
-##### 4.5.12.11.3. 가까운 요일의 날 (NEXT_DAY())
+#### 4.5.13.3. 가까운 요일의 날 (NEXT_DAY())
 ``` SQL
 SELECT NEXT_DAY(SYSDATE, '토') "COL1"
     , NEXT_DAY(SYSDATE, '월') "COL2"
 FROM DUAL;
 --==>> 2023-10-21 16:25:45	2023-10-22 16:25:45
 ```
-##### 4.5.12.11.4. 마지막 날 (LAST_DAY())
+#### 4.5.13.4. 마지막 날 (LAST_DAY())
 --> 해당 날짜가 포함되어 있는 그달의 마지막 날을 반환한다.
 ``` SQL
 SELECT SYSDATE "COL1"                                       -- 2023-10-20
@@ -963,10 +1438,211 @@ SELECT SYSDATE "COL1"                                       -- 2023-10-20
     , LAST_DAY(TO_DATE('2020-02-12', 'YYYY-MM-DD')) "COL3"  -- 2020-02-29
 FROM DUAL;
 ```
+#### 4.5.13.5. 날짜 반올림 (ROUND())
+--※ 날짜 데이터를 대사으로 반올림, 절삭 등의 연산을 수행할 수 있다.
+``` SQL
+--○ 날짜 반올림
+SELECT SYSDATE "COL1"                   -- 2023-10-23 -> 기본 현재 날짜
+     , ROUND(SYSDATE, 'YEAR') "COL2"    -- 2024-01-01 -> 년도까지 유효한 데이터 (상반기/하반기 기준)
+     , ROUND(SYSDATE, 'MONTH') "COL3"   -- 2023-11-01 -> 월까지 유효한 데이터 (15일 기준)
+     , ROUND(SYSDATE, 'DD') "COL4"      -- 2023-10-23 -> 일까지 유효한 데이터 (정오 기준)
+     , ROUND(SYSDATE, 'DAY') "COL5"     -- 2023-10-22 -> 일까지 유효한 데이터 (수요일 정오 기준)
+FROM DUAL;
+```
+#### 4.5.13.5. 날짜 반올림 (TRUNC())
+``` SQL
+--○ 날짜 절삭
+SELECT SYSDATE "COL1"                   -- 2023-10-23 -> 기본 현재 날짜
+     , TRUNC(SYSDATE, 'YEAR') "COL2"    -- 2023-01-01 -> 년도까지 유효한 데이터
+     , TRUNC(SYSDATE, 'MONTH') "COL3"   -- 2023-10-01 -> 월까지 유효한 데이터
+     , TRUNC(SYSDATE, 'DD') "COL4"      -- 2023-10-23 -> 일까지 유효한 데이터
+     , TRUNC(SYSDATE, 'DAY') "COL5"     -- 2023-10-22 -> 그 전 주에 해당하는 일요일
+FROM DUAL;
+```
+### 4.5.14. 변환 함수
+-- TO_CHAR()    : 숫자나 날짜 데이터를 문자 타입으로 변환시켜주는 함수  
+-- TO_DATE()    : 문자 데이터를 날짜 타입으로 변환시켜주는 함수  
+-- TO_NUMBER()  : 문자 데이터를 숫자 타입으로 변환시켜주는 함수  
+#### 4.5.14.1. 날짜형 -> 문자형
+##### 4.5.14.1.1. TO_CHAR()
+--** 문자타입: 좌측정렬  
+--** 숫자타입: 우측정렬  
+``` SQL
+SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD') "COL1"    -- 2023-10-23
+     , TO_CHAR(SYSDATE, 'YYYY') "COL2"          -- 2023     --** 2023이라는 문자타입
+     , TO_CHAR(SYSDATE, 'YEAR') "COL3"          -- TWENTY TWENTY-THREE
+     , TO_CHAR(SYSDATE, 'MM') "COL4"            -- 10       --** 10이라는 문자타입
+     , TO_CHAR(SYSDATE, 'MONTH') "COL5"         -- 10월
+     , TO_CHAR(SYSDATE, 'MON') "COL6"           -- 10월
+     , TO_CHAR(SYSDATE, 'DD') "COL7"            -- 23
+     , TO_CHAR(SYSDATE, 'MM-DD') "COL8"         -- 10-23
+     , TO_CHAR(SYSDATE, 'DAY') "COL9"           -- 월요일
+     , TO_CHAR(SYSDATE, 'DY') "COL10"           -- 월
+     , TO_CHAR(SYSDATE, 'HH24') "COL11"         -- 10         --** 오후 10시라면, 20으로 결과나옴
+     , TO_CHAR(SYSDATE, 'HH') "COL12"           -- 10
+     , TO_CHAR(SYSDATE, 'HH AM') "COL13"        -- 10 오전    --** 현재가 오전이면 오전
+     , TO_CHAR(SYSDATE, 'HH PM') "COL14"        -- 10 오전    --** 현재가 오후이면 오후
+     , TO_CHAR(SYSDATE, 'MI') "COL15"           -- 31
+     , TO_CHAR(SYSDATE, 'SS') "COL16"           -- 20
+     , TO_CHAR(SYSDATE, 'SSSSS') "COL17"        -- 37880      --** 00시부터 흘러온 전체 초
+     , TO_CHAR(SYSDATE, 'Q') "COL18"            -- 4          --** 분기(123/456/789/101112)
+FROM DUAL;
+ 
+SELECT 10 "COL1"
+     , '10' "COL2"
+FROM DUAL;
+--==>> 
+/*
+--** COL1 : 숫자, 좌측 정렬
+--** COL2 : 문자, 우측 정렬
+COL1    COL2
+-----   -----
+   10	10
+*/
+```
+##### 4.5.14.1.2. EXTRACT()
+``` SQL
+--○ EXTRACT()
+SELECT TO_CHAR(SYSDATE, 'YYYY') "COL1"      -- 2023 -> 연도를 추출하여 문자타입으로...
+     , TO_CHAR(SYSDATE, 'MM') "COL2"        -- 10   -> 월을..
+     , TO_CHAR(SYSDATE, 'DD') "COL3"        -- 23   -> 일을..
+     , EXTRACT(YEAR FROM SYSDATE) "COL4"    -- 2023 -> 연도를..
+     , EXTRACT(MONTH FROM SYSDATE) "COL5"   -- 10   -> 월을..
+     , EXTRACT(DAY FROM SYSDATE) "COL5"     -- 23   -> 일을..
+FROM DUAL;
+--==>> 2023	10	23	2023	10	23
+-->> 년, 월, 일 이외의 다른 항목은 불가~!!!
+```
+##### 4.5.14.1.3. TO_CHAR() -> 형식 맞춤 표기 결과값 반환
+--○ TO_CHAR() 활용 -> 형식 맞춤 표기 결과값 반환
+``` SQL
+SELECT 60000 "COL1"                     -- 60000
+     , TO_CHAR(60000, '99,999') "COL2"  -- 60,000 -- 첫번째 파라미터값: 대상, 두번째 파라미터값: 형식
+     , TO_CHAR(60000, '$99,999') "COL3" -- $60,000
+     , TO_CHAR(60000, 'L99,999') "COL4" -- ￦60,000 -- 원(￦) 
+     --**나라마다 통화가 다르기 때문에 영역을 잡아둔 것이지, 숫자라서 오른쪽 정렬이 아님
+    , LTRIM(TO_CHAR(60000, 'L99,999')) "COL4" -- ￦60,000 -- 원(￦) 
+     --**왼쪽 공백 제거
+FROM DUAL;
+--==>> 60000	 60,000	 $60,000	        ￦60,000	￦60,000
+```
+##### 4.5.14.1.4. TO_YMINTERNAL(), TO_DSINTERVAL() --** YM 년~월까지, DS 날짜~초까지
+--○ 현재 시간을 기준으로 1년 2개월 3일 4시간 5분초 후를 조회한다.
+--○ 현재 시간을 기준으로 1년 2개월 3일 4시간 5분초 후를 조회한다.
+``` SQL
+SELECT SYSDATE "현재시간"
+     , SYSDATE + TO_YMINTERVAL('01-02') + TO_DSINTERVAL('003 04:05:06') "연산결과"
+FROM DUAL;
+--==>> 2023-10-23 11:22:25	
+--     2024-12-26 15:27:31
+```
+#### 4.5.14.1. 숫자형 -> 문자형
+``` SQL
+SELECT 7 "COL1"
+     , '7' "COL2"
+     , TO_CHAR(7) "COL3"
+FROM DUAL;
+--==>> 7	7	7
+--> 조회 결과가 좌측 정렬인지 우측 정렬인지 확인~!!!
 
+SELECT '4' "COL1"
+     , TO_NUMBER(4) "COL2"
+     , 4 "COL3"
+     , TO_CHAR('4') "COL4"
+     , TO_NUMBER('04') "COL5"
+FROM DUAL;
+--==>> 4	4	4	4	4
+--> 조회 결과가 좌측 정렬인지 우측 정렬인지 확인~!!!
+```
+## 4.6. 조건문, 분기문
+### 4.6.1. CASE 구문
+> /* `CASE` `WHEN` `THEN` `ELSE` `END` */
+``` SQL
+--** 상황자체를 분기로 처리
+SELECT CASE 3+3 WHEN 2 THEN '3+3=2'
+                WHEN 3 THEN '3+3=3'
+                WHEN 4 THEN '3+3=4'
+                ELSE '몰라'
+       END
+FROM DUAL;
+--==>> 몰라
+```
+``` SQL
+SELECT CASE WHEN 5+2=4 THEN '5+2=4' 
+            WHEN 6-1=3 THEN '6-1=3'
+            WHEN 7+0=7 THEN '7+0=0'
+            ELSE '몰라' 
+       END
+FROM DUAL;
+--==>> 7+0=0
+```
+### 4.6.2. DECODE()
+``` SQL
+SELECT DECODE(5-2, 1, '5-2=1', 2, '5-2=2', 3, '5-2=3', '5-2는 몰라요') "확인"
+FROM DUAL;
+--==>> 5-3=3
+--** 5-2를 1과 비교해서 맞으면 '5-2=1'
+--         2와 비교해서 맞으면 '5-2=2'
+--         3과 비교해서 맞으면 '5-2=3'
+```
+### 4.6.3.
 
-## 5. 기타
-  
+<BR>
+
+# 5. 서브쿼리
+## 5.1. INLINE VIEW
+서브쿼리가 FROM 절에서 안에서 사용되는 경우, 해당 서브쿼리를 '인라인뷰'라고 한다. FROM 절에서 사용된 서브쿼리의 결과가 하나의 테이블에 대한 뷰(View)처럼 사용된다.
+``` SQL
+SELECT ENAME "사원명", DEPTNO "부서번호", SAL*12+NVL(COMM,0) "연봉"
+     , RANK() OVER(ORDER BY (SAL+12+NVL(COMM,0)) DESC) "전체연봉순위"
+FROM EMP
+WHERE 전체연봉순위 1등부터 5등까지;
+ 
+SELECT ENAME "사원명", DEPTNO "부서번호", SAL*12+NVL(COMM,0) "연봉"
+     , RANK() OVER(ORDER BY (SAL+12+NVL(COMM,0)) DESC) "전체연봉순위"
+FROM EMP
+WHERE RANK() OVER(ORDER BY (SAL+12+NVL(COMM,0)) DESC) <= 5;
+--==>> 에러발생(ORA-30483: window  functions are not allowed here)
+ 
+--※ 위의 내용은 RANK() OVER() 함수를 WHERE 조건절에서 사용한 경우이며...
+--   이 함수는 WHERE 조건절에서 사용할 수 없기 때문에 발생하는 에러이다.
+--   이 경우, 우리는 INLINE VIEW 를 활용해서 풀이해야 한다.
+ 
+SELECT T.*
+FROM
+(
+    SELECT ENAME "사원명", DEPTNO "부서번호", SAL*12+NVL(COMM,0) "연봉"
+         , RANK() OVER(ORDER BY (SAL+12+NVL(COMM,0)) DESC) "전체연봉순위"
+    FROM EMP
+) T
+WHERE T."전체연봉순위" <= 5;
+```
+## 5.2. 서브 상관 쿼리(=상관 서브 쿼리)
+-- 프롬절에 내부쿼리가 들어있는것 = 서브쿼리
+ 
+-- 메인 쿼리가 있는 테이블의 컬럼이
+-- 서브 쿼리의 조건절(WHERE절, HAVING절)에 사용되는 경우
+-- 우리는 이 쿼리문을 서브 상관 쿼리(상관 서브 쿼리)라고 부른다.
+``` SQL
+SELECT ENAME "사원명", SAL "급여", 1 "급여등수"
+FROM EMP;
+ 
+SELECT ENAME "사원명", SAL "급여", (1) "급여등수"
+FROM EMP;
+ 
+SELECT ENAME "사원명", SAL "급여", (SELECT COUNT(*) + 1
+                                    FROM EMP
+                                    WHERE SAL > 1600;) "급여등수"
+FROM EMP;
+ 
+SELECT E.ENAME "사원명", E.SAL "급여", (SELECT COUNT(*) + 1
+                                        FROM EMP
+                                        WHERE SAL > E.SAL) "급여등수"
+```
+
+<BR>
+
+# 6. 서브쿼리리
 
 
 | 함수명 | 내용 | 비고 |
