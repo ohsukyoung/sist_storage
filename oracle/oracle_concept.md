@@ -424,6 +424,8 @@ SELECT ENAME, JOB, SAL
 FROM TBL_EMP
 WHERE JOB =ANY ('SALESMAN', 'CLOERK');
 ```
+#### 3.5.1.4. DISTINCT
+중복 행(레코드)을 제거하는 함수 --** 디스팅트
 ### 3.5.2. 하위질의
 ### 3.5.3. 그룹함수
 : GROUP BY 절에 지정된 속성의 값 집계
@@ -788,8 +790,6 @@ NOCACHE;                    -- 캐시 사용 안함 설정 옵션
 -- 입장권을 뽑아서 입장으로 했을 경우 들어갈 수는 있지만 대기시간이 있을 수 있는데  
 -- 한꺼번에 여러장을 뽑아서 나누어주는 것과 같다.  
 
-### 3.5.5. 집합연산자
-
 ## 3.6. GROUP BY 절
 >-- *GROUP BY와 조건에 데이터 타입 통일*  
 -- *GROUP BY 에서 묶어준 방식을 통일(EX. EXTRACT이면, EXTRACT로)*  
@@ -923,7 +923,30 @@ ORDER BY 2, 3, 4 DESC;
 --③ 4 DESC -> SAL(급여)        기준 내림차순 정렬
 ```
 <BR>
-
+## 3.9. WHERE 절
+``` SQL
+--○ TBL_EMP 테이블에서 20번 부서에 근무하는 사원들 중 급여가 가장 많은 사원의
+--   사원번호, 사원명, 직종명, 급여 항목을 조회하는 쿼리문을 구성한다.
+SELECT EMPNO "사원번호", ENAME "사원명", JOB "직종명", SAL "급여"
+FROM TBL_EMP
+WHERE DEPTNO = 20 ;
+/*
+7369	SMITH	CLERK	800
+7566	JONES	MANAGER	2975
+7788	SCOTT	ANALYST	3000
+7876	ADAMS	CLERK	1100
+7902	FORD	ANALYST	3000
+*/
+SELECT EMPNO "사원번호", ENAME "사원명", JOB "직종명", SAL "급여"
+FROM TBL_EMP
+WHERE DEPTNO = 20 AND SAL >=ALL (SELECT SAL
+                                 FROM TBL_EMP
+                                 WHERE DEPTNO = 20);
+/*
+7902	FORD	ANALYST	3000
+7788	SCOTT	ANALYST	3000
+*/
+```
 
 # 4. 함수
 ## 4.1. NULL의 처리
@@ -1642,7 +1665,404 @@ SELECT E.ENAME "사원명", E.SAL "급여", (SELECT COUNT(*) + 1
 
 <BR>
 
-# 6. 서브쿼리리
+# 6. JOIN
+2개의 릴레이션에서 연관된 튜플을 결합해 하나의 새로운 릴레이션을 반환
+>-- *조인의 사전적 뜻: 합치다, 결합하다*   
+-- *92 코드: 92년에 확정되어서 쓰자한 코드*  
+-- *99 코드: 99년에 확정되어서 쓰자한 코드*  
+ 
+>-- *======================================================*  
+-- * 결론: 실무에서 모두 쓰이기 때문에... 둘다 알아야 함*  
+-- *======================================================*  
+## 6.1. SQL 1992 CODE
+### 6.1.1. CROSS JOIN
+--** 모든 결합 유형이 다 들어있는 코드  
+--> 수학에서 말하는 데카르트 곱(CATERSIAN PRODUCT)  
+``` SQL
+SELECT *
+FROM EMP, DEPT;     -- EMP 테이블과, DEPT 테이블을 퍼올려라
+/*EX)
+EMPNO	ENAME	JOB	MGR	HIREDATE	SAL	COMM	DEPTNO	DEPTNO_1	DNAME	LOC  
+7369	SMITH	CLERK	7902	1980-12-17 00:00:00	800		20	10	ACCOUNTING	NEW YORK
+7369	SMITH	CLERK	7902	1980-12-17 00:00:00	800		20	20	RESEARCH	DALLAS
+7369	SMITH	CLERK	7902	1980-12-17 00:00:00	800		20	30	SALES	CHICAGO
+7369	SMITH	CLERK	7902	1980-12-17 00:00:00	800		20	40	OPERATIONS	BOSTON*/
+--==>> SMITH가 여러가지와 결합해서 보여짐
+```
+### 6.1.2. EQUI JOIN ( = INNER JOIN)
+서로 정확하게 일치하는 데이터들 끼리 연결하여 결합시키는 결합 방법
+``` SQL
+SELECT *
+FROM EMP, DEPT
+WHERE EMP.DEPTNO = DEPT.DEPTNO;
+/*
+7782	CLARK	MANAGER	    7839	1981-06-09 00:00:00	2450	(null)	10	10	ACCOUNTING	NEW YORK
+7839	KING	PRESIDENT	(null)	1981-11-17 00:00:00	5000	(null)	10	10	ACCOUNTING	NEW YORK
+... 중략 ...
+*/
+ 
+SELECT *
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+--==>>
+/*
+7782	CLARK	MANAGER	7839	1981-06-09 00:00:00	2450		10	10	ACCOUNTING	NEW YORK
+7839	KING	PRESIDENT		1981-11-17 00:00:00	5000		10	10	ACCOUNTING	NEW YORK
+7934	MILLER	CLERK	7782	1982-01-23 00:00:00	1300		10	10	ACCOUNTING	NEW YORK
+... 중략 ...
+*/
+```
+### 6.1.2. EQUI JOIN 시 (+)를 활용한 결합 방법 (= OUTER JOIN)
+``` SQL
+FROM TBL_EMP E, TBL_DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+--> 총 14건의 데이터가 결합되어 조화된 상황
+-- 즉, 부서번호를 갖지 못한 사원들(5) 모두 누락
+-- 또한, 소속 사원을 갖지 못한 부서(2) 모두 누락
+ 
+SELECT *
+FROM TBL_EMP E, TBL_DEPT D
+WHERE E.DEPTNO = D.DEPTNO(+);
+--> 총 19 거의 데이터가 결합되어 조회된 상황
+-- 소속 사원을 갖지 못한 부서(2) 누락 -------------------------(+)
+-- 부서번호를 갖지 못한 사원들(5) 모두 조회
+/*
+7934	MILLER	CLERK	    7782	1982-01-23 00:00:00	1300		10	10	ACCOUNTING	NEW YORK
+7839	KING	PRESIDENT		1981-11-17 00:00:00	5000		10	10	ACCOUNTING	NEW YORK
+7782	CLARK	MANAGER	7839	1981-06-09 00:00:00	2450		10	10	ACCOUNTING	NEW YORK
+... 중략 ...
+8007	박나영	SALESMAN	7698	2023-10-24 14:47:30	1000					
+8006	정현욱	SALESMAN	7698	2023-10-24 14:47:30	2500					
+8003	김민지	SALESMAN	7698	2023-10-24 14:47:30	1700					
+8002	임하성	CLERK	7566	2023-10-24 14:47:30	2000	10				
+8001	이윤수	CLERK	7566	2023-10-24 14:47:30	1500	10				
+*/
+ 
+SELECT *
+FROM TBL_EMP E, TBL_DEPT D
+WHERE E.DEPTNO(+) = D.DEPTNO;
+--> 총 16 건의 데이터가 결합되어 조회된 상황
+-- 소속 사원을 갖지 못한 부서(2) 모두 조회
+-- 부서번호를 갖지 못한 사원들(5) 누락 -------------------------(+)
+ 
+--※ <(+)> 가 없는 쪽 테이블의 데이터를 모두 메모리에 적재한 후             -- 기준
+--   <(+)> 가 있는 쪽 테이블의 데이터를 하나하나 확인하여 결합시키는 형태로 -- 추가(첨가)
+--   JOIN 이 이루어진다.
+ 
+/*
+7369	SMITH	CLERK	7902	1980-12-17 00:00:00	800		20	20	RESEARCH	DALLAS
+7499	ALLEN	SALESMAN	7698	1981-02-20 00:00:00	1600	300	30	30	SALES	CHICAGO
+... 중략 ...
+								50	개발부	서울
+								40	OPERATIONS	BOSTON
+*/
+ 
+--이와 같은 이유로...
+SELECT *
+FROM TBL_EMP E, TBL_DEPT D
+FROM E.DEPTNO(+) = D.DEPTNO(+);
+-- 이런식의 JOIN은 존재하지 않는다.
+```
+### 6.1.3. NON EQUI JOIN
+범위 안에 적합한 것들끼리 연결시키는 결합 방법
+>-- *정확하게 일치하는 조건으로 조인이 아님*
+``` SQL
+ELECT *
+FROM EMP, SALGRADE
+WHERE EMP.SAL BETWEEN SALGRADE.LOSAL AND SALGRADE.HISAL;
+--** EMP테이블과 SQLGRADE 테이블을 조합하는데, EMP테이블의 급여가 SALGRADE의 낮은 값부터 SALGRADE테이블의 높은값 사이의 값만 추출한다.
+ 
+SELECT *
+FROM EMP E, SALGRADE S                      --** 결합은 , 콤마로
+WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL;    --** 결합조건은 WHERE에 기재
+/*
+7369	SMITH	CLERK	    7902	1980-12-17 00:00:00	800		20	1	700	1200
+7900	JAMES	CLERK	    7698	1981-12-03 00:00:00	950		30	1	700	1200
+7876	ADAMS	CLERK	    7788	1987-07-13 00:00:00	1100		20	1	700	1200
+*/
+```
+## 6.2. SQL 1999 CODE
+-> <JOIN> 키워드 등장 -> JOIN(결합)의 유형 명시  
+>-- *JOIN이라는 키워드가 보인다 ! -> 99코드*  
+--                     *안보인다! -> 92코드*  
+--                              -> <ON> 키워드 등장   -> 결합 조건은 WHERE 대신 ON  
+### 6.2.1. CROSS JOIN
+``` SQL
+SELECT *
+FROM EMP CROSS JOIN DEPT;
+```
+### 6.2.2. [INNER] JOIN
+``` SQL
+SELECT *
+FROM EMP INNER JOIN DEPT
+ON EMP.DEPTNO = DEPT.DEPTNO;
+``` 
+>-- *엘리어스(ALIAS- 별칭) 가능*
+``` SQL
+SELECT *
+FROM EMP E INNER JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO;
+``` 
+>-- *INNER 생략 가능*
+``` SQL
+SELECT *
+FROM EMP E JOIN DEPT D
+ON E.DEPTNO = D.DEPTNO;
+```
+### 6.2.3. OUTER JOIN
+### 6.2.3.1. LEFT [OUTER] JOIN
+### 6.2.3.2. RIGHT [OUTER] JOIN
+### 6.2.3.3. RIGHT [OUTER] JOIN
+>-- *눈여겨서 봐야할 부분*  
+
+``` SQL
+SELECT *
+FROM TBL_EMP E LEFT OUTER JOIN TBL_DEPT D
+ON E.DEPTNO = D.DEPTNO;
+-- WHERE E.DEPTNO = D.DEPTNO(+);
+ 
+SELECT *
+FROM TBL_EMP E RIGHT OUTER JOIN TBL_DEPT D
+ON E.DEPTNO = D.DEPTNO;
+-- WHERE E.DEPTNO(+) = D.DEPTNO;
+ 
+SELECT *
+FROM TBL_EMP E FULL OUTER JOIN TBL_DEPT D
+ON E.DEPTNO = D.DEPTNO;
+ 
+--** OUTER 생략가능
+SELECT *
+FROM TBL_EMP E RIGHT JOIN TBL_DEPT D
+ON E.DEPTNO = D.DEPTNO;
+ 
+ 
+--※ 참고
+--1번)
+SELECT *
+FROM TBL_EMP E JOIN TBL_DEPT D
+ON E.DEPTNO = D.DEPTNO
+AND E.JOB = 'CLERK';
+--> 이와 같은 방법으로 쿼리문을 구성해도 조회 결과를 얻는 과정에는 문제가 없다.
+ 
+--2번)
+SELECT *
+FROM TBL_EMP E JOIN TBL_DEPT D
+ON E.DEPTNO = D.DEPTNO
+WHERE E.JOB = 'CLERK';
+--> 하지만 이와 같은 구성하여 조회하는 것을 권장한다.
+```
+>-- *==============================*  
+-- * ON: 결합조건*  
+-- * WHERE는: 조회조건*  
+-- *==============================*  
+ 
+>-- *SELECT 조건 처럼*   
+-- *WHERE 절은 웨어 조건에 맞는 것만 1차적으로 퍼올림*  
+-- *1번) TBL_DEPT 조건 & TBL_EMP 모두 퍼올림*  
+-- *2번) TBL_DEPT 와 TBL_EMP조건에 맞는 것만 퍼올림*
+## 6.3. SELF JOIN(자기조인)
+``` SQL
+- EMP 테이블의 데이터를 다음과 같이 조회할 수 있도록 쿼리문을 구성한다.
+/*
+---------------------------------------------------------
+사원번호 사원명 직종명 관리자번호 관리자명 관리자직종명
+7369     SMITH  CLERK   7902      FORD      ANALYST  
+*/
+ 
+SELECT E1.EMPNO "사원번호", E1.ENAME "사원명", E1.JOB "직종명"
+     , E2.EMPNO "관리자번호" --E1.MGR "관리자번호" -- 주석처리된 것처럼 작성해도 되지만, 부모에 해당하는 테이블로 작성
+     , E2.ENAME "관리자명", E2.JOB "관리자직종명"
+FROM EMP E1 LEFT JOIN EMP E2
+ON E1.MGR = E2.EMPNO
+ORDER BY 1;
+ 
+SELECT E1.EMPNO "사원번호", E1.ENAME "사원명", E1.JOB "직종명"
+     , E2.EMPNO "관리자번호" --E1.MGR "관리자번호" -- 주석처리된 것처럼 작성해도 되지만, 부모에 해당하는 테이블로 작성
+     , E2.ENAME "관리자명", E2.JOB "관리자직종명"
+FROM EMP E1, EMP E2
+WHERE E1.MGR = E2.EMPNO(+)
+ORDER BY 1;
+ 
+/*
+7369	SMITH	CLERK	    7902	FORD	ANALYST
+7499	ALLEN	SALESMAN	7698	BLAKE	MANAGER
+7521	WARD	SALESMAN	7698	BLAKE	MANAGER
+7566	JONES	MANAGER	    7839	KING	PRESIDENT
+7654	MARTIN	SALESMAN	7698	BLAKE	MANAGER
+7698	BLAKE	MANAGER	    7839	KING	PRESIDENT
+7782	CLARK	MANAGER	    7839	KING	PRESIDENT
+7788	SCOTT	ANALYST	    7566	JONES	MANAGER
+7839	KING	PRESIDENT	(null)  (null)	(null)	
+7844	TURNER	SALESMAN	7698	BLAKE	MANAGER
+7876	ADAMS	CLERK	    7788	SCOTT	ANALYST
+7900	JAMES	CLERK	    7698	BLAKE	MANAGER
+7902	FORD	ANALYST	    7566	JONES	MANAGER
+7934	MILLER	CLERK	    7782	CLARK	MANAGER
+*/
+```
+## 6.4. JOIN 컬럼 소속 명시
+``` SQL
+SELECT 부서번호, 부서명, 사원명, 직종명, 급여
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+ 
+SELECT DEPTNO, DNAME, ENAME, JOB, SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+--==>> 에러 발생(ORA-00918: column ambiguously defined)
+--     두 테이블 간 중복되는 칼럼에 대한
+--     소속 테이블을 정해줘야 (명시해줘야) 한다.
+```
+--※ 두 테이블 간 중복되는 컬럼에 대해 소속 테이블을 명시하는 경우  
+--   부모 테이블의 칼럼을 참조할 수 있도록 처리해야 한다.  
+ 
+>-- *두개의 테이블이 있을 경우 부모테이블을 가져와서 써야함*
+-- *부모테이블이란?* 
+-- *EMP의 DEPTNO 값이 여러개 있는데 DEPT는 DEPTNO 값이 하나만 있음 -> 따라서 부모테이블은 DEPTNO*
+``` SQL
+SELECT *
+FROM DEPT;      -- 부모테이블
+ 
+SELECT *
+FROM EMP;       -- 자식테이블
+ 
+SELECT D.DEPTNO, DNAME, ENAME, JOB, SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+``` 
+-- 두 테이블에 모두 포함되어 있는 중복된 컬럼이 아니더라도  
+-- 컬럼의 소속 테이블을 명시해 줄 수 있기를 권장한다.  
+``` SQL
+SELECT D.DEPTNO, D.DNAME, E.ENAME, E.JOB, E.SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO;
+``` 
+``` SQL
+>-- *즉, 소속테이블을 명시하지 않으면 해당 SELECT를 찾기위해 여러 테이블을 조회한다.*  
+-- *따라서 소속테이블을 명시함으로써 오라클에게 작업지시를 명확하게 하여, 불필요한 작업을 최소화한다.*  
+ 
+-- *아우터조인에서 공통된 데이터를 가져올때 부모테이블이 아니면 셀렉트해서 가져올 수 없다.*  
+``` SQL
+SELECT D.DEPTNO, DNAME, ENAME, JOB, SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO(+) = D.DEPTNO;
+/*
+DEPTNO	DNAME	    ENAME	JOB	    SAL
+40  	OPERATIONS	(null)	(null)  (null)  -- DEPTNO가 40	
+*/
+ 
+SELECT E.DEPTNO, DNAME, ENAME, JOB, SAL
+FROM EMP E, DEPT D
+WHERE E.DEPTNO(+) = D.DEPTNO;
+--==>>
+/*
+DEPTNO	DNAME	    ENAME	JOB	    SAL
+(null)	OPERATIONS	(null)	(null)  (null)	-- DEPTNO가 (null)
+*/
+```
+## 6.5. 세 개 이상의 테이블 조인(JOIN, 결합)
+-- 형식 1. (SQL 1992 CODE)
+``` SQL
+SELECT 테이블명1.컬럼명, 테이블명2.컬럼명, 테이블명3.컬럼명
+FROM 테이블명1, 테이블명2, 테이블명3
+WHERE 테이블명1.컬럼명1 = 테이블명2.컬럼명1
+  AND 테이블명2.컬럼명2 = 테이블명3.컬럼명2;
+```
+-- 형식 2. (SQL 1999 CODE)
+``` SQL 
+SELECT 테이블명1.컬럼명, 테이블명2.컬럼명, 테이블명3.컬럼명
+FROM 테이블명1 JOIN 테이블명2
+ON 테이블명1.컬럼명1 = 테이블명2.컬럼명1
+        JOIN 테이블명3
+        ON 테이블명2.컬럼명2 = 테이블명3.컬럼명2;
+```
+## 6.6. NATUAL JOIN
+>-- *쿼리가 실행되는지 확인하기 위해서 NATURAL 조인을 하는 것은 괜찮으나,*  
+-- *오라클에게 알아서 하도록하는 NATRUAL을 사용하게 되면 오라클은 맞는 정보를 찾기위해*  
+-- *불필요한 메모리를 잡아 먹기 때문에, 실제 코드로 사용은 적절하지 않다.*  
+``` SQL
+SELECT DEPTNO, DNAME, ENAME, SAL
+FROM EMP E NATURAL JOIN DEPT D;
+/*
+10	ACCOUNTING	CLARK	2450
+10	ACCOUNTING	KING	5000
+10	ACCOUNTING	MILLER	1300
+...중략...
+*/
+
+SELECT DEPTNO, DNAME, ENAME, SAL
+FROM EMP E JOIN DEPT D
+USING(DEPTNO);
+--** 쿼리 자체는 짧아보일 수 있으나,
+--** 오라클은 변환과정을 거치기 때문에 권장하지 않는다.
+```
+
+<BR>
+
+# 7. 집합연산자
+2개 이상의 테이블을 하로 통합
+>-- *JOIN은  두 개의 테이블을 좌 우   로 결합해서 보는 것*  
+-- *UNION은 두 개의 테이블을 위 아래 로 결합해서 보는 것*
+--※ 컬럼과 컬럼의 관계를 고려하여 테이블을 결합하고자 하는 경우 JOIN을 사용하지만  
+--   레코드와 레코드를 결합하고자 하는 경우 UNION / UNION ALL 을 사용할 수 있다. 
+## 7.1. UNION
+중복행 1회 출력
+## 7.2. UNION ALL
+중복행 그대로 출력
+
+>-- *===================================================================*  
+-- * 결론: UNION 을 쓰는 것이 UNION ALL 보다 리소스 소모가 크기 때문에,*  
+-- *        실무에서는 UNION ALL을 더 많이 쓴다.*  
+-- *===================================================================*  
+ 
+--※ UNION 은 항상 결과물의 첫 번째 컬럼을 기준으로 오름차순 정렬을 수행한다.  
+--   반면, UNION ALL 은 결합된 순서(쿼리문에서 테이블을 명시한 순서)대로  
+--   조회한 결과를 있는 그대로 반환한다. (-> 정렬 없음)  
+--   이로 인해 UNION 이 부하가 더 크다. (-> 리소스 소모가 더 크다)  
+--   또한, UNION 은 결과물에 대한 중보된 레코드(행)가 존재할 경우  
+--   중복을 제거하고 1개 행만 조회된 결과를 반환하게 된다.  
+
+## 7.3. INTERSECT 교집합  
+-- TBL_UMUNBACKUP 테이블과 TBL_JUMUN 테이블에서  
+-- 제품코드와 주문수량의 값이 똑같은 행만 추출해서 조회하고자 한다.
+``` SQL
+SELECT JECODE, JUSU
+FROM TBL_JUMUNBACKUP
+INTERSECT
+SELECT JECODE, JUSU
+FROM TBL_JUMUN;
+/*
+맛동산	30
+빼빼로	20
+홈런볼	10
+*/
+```
+## 7.4. MINUS 차집합
+``` SQL
+SELECT JECODE, JUSU
+FROM TBL_JUMUNBACKUP
+MINUS
+SELECT JECODE, JUSU
+FROM TBL_JUMUN;
+/*
+감자깡	10
+꼬북칩	30
+마이쮸	20
+맛동산	20
+빅파이	10
+빅파이	20
+사또밥	10
+사또밥	30
+오예스	20
+포스틱	20
+포카칩	10
+포카칩	20
+포카칩	30
+홈런볼	20
+*/
+```
+
+
 
 
 | 함수명 | 내용 | 비고 |
