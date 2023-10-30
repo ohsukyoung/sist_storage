@@ -389,7 +389,7 @@ WHERE DEPTNO ^= 20;
 */
 ```
 
-<br>
+
 *******
 <br>
 
@@ -954,7 +954,6 @@ WHERE BIGO LIKE '%99.99\%%' ESCAPE '\';
 --   일반적으로 사용 빈도가 낮은  특수문자(특수기호)를 사용한다.
 ```
 
-<br>
 *******
 <br>
 
@@ -1638,7 +1637,6 @@ SELECT SYSDATE "현재 시간"
 FROM DUAL;
 ```
 
-<br>
 *******
 <br>
 
@@ -2150,7 +2148,6 @@ FROM
 */
 ```
 
-<br>
 *******
 <br>
 
@@ -2606,7 +2603,6 @@ GROUP BY TO_CHAR(HIREDATE, 'YYYY') --> '전체'를 출력해야 하기 때문에
 ORDER BY 1;
 ```
 
-<br>
 *******
 <br>
 
@@ -2980,7 +2976,6 @@ DEPTNO	DNAME	    ENAME	JOB	    SAL
 */
 ```
 
-<br>
 *******
 <br>
 
@@ -3040,7 +3035,8 @@ WHERE E1.MGR = E2.EMPNO
 ORDER BY 1;
 ```
 
-<BR>
+*******
+<br>
 
 # 페이지 20231026_02_hr.sql
 ## 1. 문제
@@ -3205,6 +3201,7 @@ ON E.JOB_ID = J.JOB_ID
                 ON C.REGION_ID = R.REGION_ID;
 ```
 
+*******
 <br>
 
 # 페이지 20231026_03_scott.sql
@@ -3272,7 +3269,7 @@ FROM TBL_JUMUN;
 COMMIT;
 --==>> 커밋 완료.
 ```
-# 📌 1. 안내
+## 📌 1. 안내
 --※ 아직 제품 발송이 이루어지지 않은 금일 주문 데이터를 제외하고 이전의 모든 주문 데이터들이 삭제된 상황이므로  
 --   테이블은 행(레코드)의 갯수가 줄어들어 매우 가벼워진 상황이다.  
  
@@ -3282,7 +3279,7 @@ COMMIT;
  
 --※ 컬럼과 컬럼의 관계를 고려하여 테이블을 결합하고자 하는 경우 JOIN을 사용하지만  
 --   레코드와 레코드를 결합하고자 하는 경우 UNION / UNION ALL 을 사용할 수 있다.  
-## 1.2. 답
+### 1.2. 안내_답
 ``` SQL
 SELECT *
 FROM TBL_JUMUNBACKUP
@@ -3296,7 +3293,7 @@ UNION ALL
 SELECT *
 FROM TBL_JUMUNBACKUP;
 ```
-## 1.3. 해설
+### 1.3. 안내_해설
 ``` SQL
 ELECT *
 FROM TBL_JUMUN
@@ -3325,9 +3322,9 @@ FROM TBL_JUMUNBACKUP;
 --   또한, UNION 은 결과물에 대한 중보된 레코드(행)가 존재할 경우  
 --   중복을 제거하고 1개 행만 조회된 결과를 반환하게 된다.  
 ```
-# 📌 2. 안내
+## 📌 2. 안내
 --○ 지금가지 주문받은 데이터를 통해 제품별 총 주문량을 조회할 수 있는 쿼리문을 구성한다.
-## 2.2. 답
+### 2.2. 안내_답
 ``` SQL
 --** 총 빼뺴로는 x 개 주문되었고
 SELECT JECODE, SUM(JUSU)
@@ -3583,7 +3580,6 @@ WHERE SAL >=ALL (SELECT SAL
 --==>> 7839	KING	PRESIDENT	5000
 ```
 
-<br>
 *******
 <br>
 
@@ -3722,21 +3718,405 @@ SET SANAME = (SELECT SANAME
 WHERE SANAME = '똘똘이';
 ```
 
-<BR>
+*******
+<br>
 
 # 페이지 ▒ TBL_INSA_OSK_3팀.sql (★과제★)
 
-<br>
 *******
 <br>
 
+# 페이지 20231030_01_hr.sql
+## 📌 1. 안내
+-- ○ PK 지정 실습((1) 컬럼 레벨의 형식)
+### 1.2. 안내_답
+``` SQL
+CREATE TABLE TBL_TEST1
+( COL1 NUMBER(5) PRIMARY KEY
+  ,COL2 VARCHAR2(30)
+ 
+);
+--==>> Table TBL_TEST1이(가) 생성되었습니다.
+ 
+SELECT *
+FROM TBL_TEST1;
+ 
+DESC TBL_TEST1;
+--==>>
+/*
+이름   널?       유형           
+---- -------- ------------ 
+COL1 NOT NULL NUMBER(5)    -> PK 제약조건 확인불가
+COL2          VARCHAR2(30) 
+*/
+-- 데이터 입력
+-- *일반적인 방법*
+INSERT INTO TBL_TEST1 VALUES();
+
+-- *권장방법: INSERT VALUE값에 어떤 것을 넣는지 명시*
+INSERT INTO TBL_TEST1(COL1,COL2) VALUES(1, 'ABCD');
+
+-- *가능*
+INSERT INTO TBL_TEST1(COL2,COL1) VALUES('ABCD', 1);
+INSERT INTO TBL_TEST1(COL2) VALUES('ABCD');
+
+-- 데이터 입력
+INSERT INTO TBL_TEST1(COL1,COL2) VALUES(1, 'TEST'); 
+INSERT INTO TBL_TEST1(COL1,COL2) VALUES(1, 'TEST'); --> 에러 발생
+
+-- *제약조건을 실행해도 진행되었으나, 제약조건으로 인해 1번이후부터 에러 발생*
+INSERT INTO TBL_TEST1(COL1,COL2) VALUES(1, 'ABCD'); --> 에러 발생
+INSERT INTO TBL_TEST1(COL1,COL2) VALUES(2, 'TEST'); 
+INSERT INTO TBL_TEST1(COL1,COL2) VALUES(3, NULL);   --> 가능 첫번째 컬럼만 NULL 불가
+INSERT INTO TBL_TEST1(COL1) VALUES(4);
+INSERT INTO TBL_TEST1(COL1) VALUES(4);              --> 에러 발생
+INSERT INTO TBL_TEST1(COL1) VALUES(4);
+INSERT INTO TBL_TEST1(COL1,COL2) VALUES(5, 'ABCD'); 
+INSERT INTO TBL_TEST1(COL1,COL2) VALUES(NULL, NULL);--> 에러 발생
+INSERT INTO TBL_TEST1(COL2) VALUES('ABCD');         --> 에러 발생
+ 
+-- 확인
+SELECT *
+FROM TBL_TEST1;
+--==>> 
+/*
+1	TEST
+2	TEST
+3	
+4	
+5	ABCD
+*/
+
+--※ 제약조건 확인
+SELECT *
+FROM USER_CONSTRAINTS
+WHERE TABLE_NAME='TBL_TEST1';
+--==>> HR	SYS_C007091	P	TBL_TEST1					ENABLED	NOT DEFERRABLE	IMMEDIATE	VALIDATED	GENERATED NAME			2023-10-30	HR	SYS_C007091
+
+--※ 제약조건이 지정된 컬럼 확인(조회)
+SELECT *
+FROM USER_CONS_COLUMNS
+WHERE TABLE_NAME = 'TBL_TEST1';
+--==>> 
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	COLUMN_NAME	POSITION
+HR	    SYS_C007091	    TBL_TEST1	COL1	    1
+*/
+```
+-- ○ PK 지정 실습((2) 테이블 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST2
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+, CONSTRAINT TEST2_COL1_PK PRIMARY KEY(COL1) -- *제약조건의이름 제약조건(적용할컬럼명)  
+)
+--==>> Table TBL_TEST2이(가) 생성되었습니다.
+ 
+-- 데이터 입력
+INSERT INTO TBL_TEST2(COL1,COL2) VALUES(1, 'TEST');
+INSERT INTO TBL_TEST2(COL1,COL2) VALUES(1, 'TEST'); --> 에러발생 (ORA-00001: unique constraint (HR.TEST2_COL1_PK) violated)
+INSERT INTO TBL_TEST2(COL1,COL2) VALUES(1, 'ABCD'); --> 에러발생 (ORA-00001: unique constraint (HR.TEST2_COL1_PK) violated)
+INSERT INTO TBL_TEST2(COL1,COL2) VALUES(2, 'ABCD');
+INSERT INTO TBL_TEST2(COL1,COL2) VALUES(3, NULL);
+INSERT INTO TBL_TEST2(COL1) VALUES(4);
+INSERT INTO TBL_TEST2(COL1) VALUES(4); --> 에러발생
+INSERT INTO TBL_TEST2(COL1,COL2) VALUES(5, 'ABCD');
+INSERT INTO TBL_TEST2(COL1,COL2) VALUES(NULL, NULL); --> 에러발생 (ORA-01400: cannot insert NULL into ("HR"."TBL_TEST2"."COL1"))
+INSERT INTO TBL_TEST2(COL2) VALUES('KKKK');          --> 에러발생 (ORA-01400: cannot insert NULL into ("HR"."TBL_TEST2"."COL1"))
+ 
+--○ 확인
+SELECT * 
+FROM TBL_TEST2;
+--==>>
+/*
+1	TEST
+2	ABCD
+3	
+4	
+5	ABCD
+*/
+
+--○ USER_CONSTRAINTS 와 USER_CONS_COLUMNS 를 대상으로
+--   제약조건이 설정된 내용에 대해서
+--   소유주, 제약조건명, 테이블명, 제약조건종류, 컬럼명 항목을 조회한다.
+SELECT UC.OWNER "소유주", UC.CONSTRAINT_NAME "제약조건명", UC.TABLE_NAME "테이블명", UC.CONSTRAINT_TYPE "제약조건종류", UCC.COLUMN_NAME "컬럼명"
+FROM USER_CONSTRAINTS UC JOIN USER_CONS_COLUMNS UCC
+ON UC.CONSTRAINT_NAME = UCC.CONSTRAINT_NAME
+  AND UC.TABLE_NAME = 'TBL_TEST2';
+--==>> HR	TEST2_COL1_PK	TBL_TEST2	P	COL1
+-- *제약조건명이 오라클이 임의부여한 이름이 아닌, 우리가 지정한 이름으로 부여되어 있음*  
+```
+
+--○ PK 지정 실습((3) 다중 컬럼 PK 지정)
+``` SQL
+-- 테이블 생성
+ 
+--CREATE TABLE TBL_TEST3
+--( COL1 NUMBER(5)
+--, COL2 VARCHAR2(30)
+--, CONSTRAINT TEST3_COL1_COL2_PK PRIMARY KEY(COL1) 
+--, CONSTRAINT TEST3_COL1_COL2_PK PRIMARY KEY(COL2) 
+--);
+--==>> PRIMARY KEY(COL1) , PRIMARY KEY(COL2) 이렇게 실행X
+ 
+CREATE TABLE TBL_TEST3
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+, CONSTRAINT TEST3_COL1_COL2_PK PRIMARY KEY(COL1, COL2) 
+);
+--==>> Table TBL_TEST3이(가) 생성되었습니다.
+ 
+-- 데이터 입력
+INSERT INTO TBL_TEST3(COL1, COL2) VALUES(1,'TEST');
+INSERT INTO TBL_TEST3(COL1, COL2) VALUES(1,'TEST'); --> 에러 발생(ORA-00001: unique constraint (HR.TEST3_COL1_COL2_PK) violated)
+INSERT INTO TBL_TEST3(COL1, COL2) VALUES(1,'ABCD'); --> 가능 --*복합으로 묶여 있다면, 둘의 합이 정확하게 일치하는 지 체크함*
+INSERT INTO TBL_TEST3(COL1, COL2) VALUES(2,'ABCD');
+INSERT INTO TBL_TEST3(COL1, COL2) VALUES(2,'TEST');
+INSERT INTO TBL_TEST3(COL1, COL2) VALUES(3, NULL);    --> 에러 발생
+INSERT INTO TBL_TEST3(COL1, COL2) VALUES(NULL, NULL); --> 에러 발생
+ 
+SELECT *
+FROM TBL_TEST3;
+--==>>
+/*
+1	ABCD
+1	TEST
+2	ABCD
+2	TEST
+*/
+ 
+--○ USER_CONSTRAINTS 와 USER_CONS_COLUMNS 를 대상으로
+--   제약조건이 설정된 내용에 대해서
+--   소유주, 제약조건명, 테이블명, 제약조건종류, 컬럼명 항목을 조회한다.
+SELECT UC.OWNER "소유주", UC.CONSTRAINT_NAME "제약조건명", UC.TABLE_NAME "테이블명", UC.CONSTRAINT_TYPE "제약조건종류", UCC.COLUMN_NAME "컬럼명"
+FROM USER_CONSTRAINTS UC JOIN USER_CONS_COLUMNS UCC
+ON UC.CONSTRAINT_NAME = UCC.CONSTRAINT_NAME
+  AND UC.TABLE_NAME = 'TBL_TEST3';
+--==>> 
+/*
+HR	TEST3_COL1_COL2_PK	TBL_TEST3	P	COL1
+HR	TEST3_COL1_COL2_PK	TBL_TEST3	P	COL2
+*/
+-- * TBL_TEST3 PRIMARY KEY 가 2개(X) -> 복합 PRIMARY KEY (O)
+```
+--○ PK 지정 실습((4) 테이블 생성 이후 제약조건 추가 설정)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST4
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+);
+--==>> Table TBL_TEST4이(가) 생성되었습니다.
+ 
+--※ 이미 생성된(만들어져 있는) 상태의 테이블에
+--   부여하려는 제약조건을 위반한 데이터가 포함되어 있을 경우
+--   해당 테이블에 제약조건을 추가하는 것은 불가능하다.
+ 
+-- 제약조건 추가
+ALTER TABLE TBL_TEST4
+ADD CONSTRAINT TEST4_COL1_PK PRIMARY KEY(COL1);
+--==>> Table TBL_TEST4이(가) 변경되었습니다.
+ 
+-- *제약조건을 변경하는 것은 문법적으로 가능하나,*
+-- *삭제후 다시 생성을 권장*
+INSERT INTO TBL_TEST4(COL1,COL2) VALUE;
+ 
+--※ 제약조건 확인 전용 뷰(VIEW) 생성
+-- *VIEW 만들때는 SELECT 확인후 생성!*  
+CREATE OR REPLACE VIEW VIEW_CONSTCHECK
+AS
+SELECT UC.OWNER "OWNER"
+    , UC.CONSTRAINT_NAME "CONSTRAINT_NAME"
+    , UC.TABLE_NAME "TABLE_NAME"
+    , UC.CONSTRAINT_TYPE "CONSTRAINT_TYPE"
+    , UCC.COLUMN_NAME "COLUMN_NAME"
+    , UC.SEARCH_CONDITION "SEARCH_CONDITION"
+    , UC.DELETE_RULE "DELETE_RULE"
+FROM USER_CONSTRAINTS UC JOIN USER_CONS_COLUMNS UCC
+ON UC.CONSTRAINT_NAME = UCC.CONSTRAINT_NAME;
+--==>> View VIEW_CONSTCHECK이(가) 생성되었습니다.
+ 
+--○ 생성된 뷰(VIEW)를 통한 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_TEST4';
+--==>> HR	TEST4_COL1_PK	TBL_TEST4	P	COL1
+```
+## 1. 문제
+--○ USER_CONSTRAINTS 와 USER_CONS_COLUMNS 를 대상으로
+--   제약조건이 설정된 내용에 대해서
+--   소유주, 제약조건명, 테이블명, 제약조건종류, 컬럼명 항목을 조회한다.
+### 1.2. 답
+``` SQL
+-- 1992
+SELECT UC.OWNER "소유주", UC.CONSTRAINT_NAME "제약조건명", UC.TABLE_NAME "테이블명", UC.CONSTRAINT_TYPE "제약조건종류", UCC.COLUMN_NAME "컬럼명"
+FROM USER_CONSTRAINTS UC , USER_CONS_COLUMNS UCC
+WHERE UC.CONSTRAINT_NAME = UCC.CONSTRAINT_NAME
+  AND UC.TABLE_NAME = 'TBL_TEST1';
+--==>> HR	SYS_C007091	TBL_TEST1	P	COL1
+ 
+-- 1999
+SELECT UC.OWNER "소유주", UC.CONSTRAINT_NAME "제약조건명", UC.TABLE_NAME "테이블명", UC.CONSTRAINT_TYPE "제약조건종류", UCC.COLUMN_NAME "컬럼명"
+FROM USER_CONSTRAINTS UC JOIN USER_CONS_COLUMNS UCC
+ON UC.CONSTRAINT_NAME = UCC.CONSTRAINT_NAME
+  AND UC.TABLE_NAME = 'TBL_TEST1';
+--==>> HR	SYS_C007091	TBL_TEST1	P	COL1
+```
+## 2. 문제
+--※ 제약조건 확인 전용 뷰(VIEW) 생성  
+>-- *VIEW 만들때는 SELECT 확인후 생성!*
+### 2.2. 답
+``` SQL
+CREATE OR REPLACE VIEW VIEW_CONSTCHECK
+AS
+SELECT UC.OWNER "OWNER"
+    , UC.CONSTRAINT_NAME "CONSTRAINT_NAME"
+    , UC.TABLE_NAME "TABLE_NAME"
+    , UC.CONSTRAINT_TYPE "CONSTRAINT_TYPE"
+    , UCC.COLUMN_NAME "COLUMN_NAME"
+    , UC.SEARCH_CONDITION "SEARCH_CONDITION"
+    , UC.DELETE_RULE "DELETE_RULE"
+FROM USER_CONSTRAINTS UC JOIN USER_CONS_COLUMNS UCC
+ON UC.CONSTRAINT_NAME = UCC.CONSTRAINT_NAME;
+--==>> View VIEW_CONSTCHECK이(가) 생성되었습니다.
+ 
+--○ 생성된 뷰(VIEW)를 통한 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_TEST4';
+--==>> HR	TEST4_COL1_PK	TBL_TEST4	P	COL1		
+```
+## 📌 2. 안내
+1. 테이블에서 지정한 컬럼의 데이터가 중복되지 않고 유일할 수 있도록 설정하는 제약조건.  
+--      PRIMARY KEY 와 유사한 제약조건이지만, **NULL을 허용**한다는 차이점이 있다.  
+--      내부적으로 PRIMARY KEY와 마찬가지로 UNIQUE INDEX 가 자동 생성된다.  
+--      **하나의 테이블 내**에서 **UNIQUE 제약조건은 여러 번 설정하는 것이 가능**하다.  
+--      즉, 하나의 테이블에 UNIQUE 제약조건을 여러 개 만드는 것은 가능하다는 것이다.  
+>-- *UNIQUE에는 NOT NULL제약조건이 포함되어있지 않다.*  
+``` SQL
+/* 
+--회원 테이블
+회원번호    아이디     패스워드    성명  주민번호 휴대폰번호 우편번호 주소1 주소2
+P.K        P.K(X)/U                         U        U
+*/
+```
+ 
+2. 형식 및 구조  
+(1) 컬럼 레벨의 형식
+``` SQL
+-- 컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명] UNIQUE
+```
+(2) 테이블 레벨의 형식
+``` SQL
+-- 컬럼명 데이터타입,
+-- 컬럼명 데이터타입,
+-- CONSTRAINT CONSTARINT명 UNIZUE(컬럼명,...)
+```
+## 📌 2. 안내
+--○ UK 지정 실습((1) 컬럼 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST5
+( COL1 NUMBER(5)    PRIMARY KEY
+, COL2 VARCHAR(30)  UNIQUE
+);
+--==>> Table TBL_TEST5이(가) 생성되었습니다.
+ 
+-- 제약조건 조회
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST5';
+--==>> 
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007095	    TBL_TEST5	    P	        COL1		
+HR	    SYS_C007096	    TBL_TEST5	    U	        COL2		
+*/
+ 
+-- 데이터 입력
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(1,'TEST');
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(1,'TEST'); --> 에러 발생(ORA-00001: unique constraint (HR.SYS_C007095) violated)
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(2,'ABCD');
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(3,'ABCD'); --> 에러 발생(INSERT INTO TBL_TEST5(COL1,COL2) VALUES(2,'ABCD');)
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(3, NULL);
+INSERT INTO TBL_TEST5(COL1) VALUES(4);
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(5,'ABCD'); --> 에러 발생(ORA-00001: unique constraint (HR.SYS_C007096) violated)
+ 
+SELECT *
+FROM TBL_TEST5;
+--==>>
+/*
+1	TEST
+2	ABCD
+3	
+4	
+*/
+```
+
+--○ UK 지정 실습((2) 테이블 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST6
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+, CONSTRAINT TEST6_COL1_PK PRIMARY KEY(COL1)
+, CONSTRAINT TEST6_COL2_UK UNIQUE(COL2)
+);
+--==>> Table TBL_TEST6이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST6';
+--==>> 
+/*
+HR	TEST6_COL1_PK	TBL_TEST6	P	COL1		
+HR	TEST6_COL2_UK	TBL_TEST6	U	COL2		
+*/
+-- *UNIQUE는 복합 UNIQUE없음*  
+``` 
+--○ UK 지정 실습((3) 테이블 생성 이후 제약조건 추가)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST7
+( COL1 NUMBER(5)
+, COL2 VARCHAR(30)
+);
+--==>> Table TBL_TEST7이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST7';
+--==>> 조회 결과 없음
+ 
+-- 제약조건 추가
+ALTER TABLE TBL_TEST7
+ADD CONSTRAINT TEST7_COL1_PK PRIMARY KEY(COL1);
+-- +
+ALTER TABLE TBL_TEST7
+ADD CONSTRAINT TETS7_COL2_UK UNIQUE(COL2);
+-- 
+ALTER TABLE TBL_TEST7
+ADD( CONSTRAINT TEST7_COL1_PK PRIMARY KEY(COL1)
+    ,CONSTRAINT TEST7_COL2_UK UNIQUE(COL2));
+--==>> Table TBL_TEST7이(가) 변경되었습니다.
+ 
+-- 제약조건 추가 후 다시 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST7';
+--==>>
+/*
+HR	TEST7_COL1_PK	TBL_TEST7	P	COL1		
+HR	TEST7_COL2_UK	TBL_TEST7	U	COL2		
+*/
+```
 
 
-<br><br>
 *******
 <br>
-
-<BR>
 
 # 작성샘플
 
