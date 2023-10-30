@@ -2993,6 +2993,7 @@ WHERE T.랭크 = 1;
 
 --87. 부서별 인원수가 가장 많은 부서 및 인원수 조회.
 --==>>
+--방법1
 SELECT *
 FROM(
     SELECT T.BUSEO,T.인원수,RANK() OVER(ORDER BY T.인원수 DESC) "랭크"
@@ -3003,6 +3004,14 @@ FROM(
     ) T
 )T2
 WHERE T2.랭크 = 1;
+
+--방법2
+SELECT BUSEO, COUNT(*)
+FROM TBL_INSA
+GROUP BY BUSEO
+HAVING COUNT(*) = (SELECT MAX(COUNT(*))
+                    FROM TBL_INSA
+                    GROUP BY BUSEO);
 --==>>
 /*
 영업부	16	1
@@ -3225,3 +3234,5 @@ WHERE (BASICPAY+SUDANG) >=ALL (SELECT (BASICPAY+SUDANG)
 홍길동	2810000
 */
 ----------------------------------------------------------------------------
+
+DESC EMP;
