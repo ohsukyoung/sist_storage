@@ -389,8 +389,9 @@ WHERE DEPTNO ^= 20;
 */
 ```
 
-<BR>
-
+<br>
+*******
+<br>
 
 # 페이지 20231019_01_scott.sql
 ## 1. 문제
@@ -953,8 +954,9 @@ WHERE BIGO LIKE '%99.99\%%' ESCAPE '\';
 --   일반적으로 사용 빈도가 낮은  특수문자(특수기호)를 사용한다.
 ```
 
-<BR>
-
+<br>
+*******
+<br>
 
 # 페이지 20231020_01_scott.sql
 ## 📌 1. 안내
@@ -1636,7 +1638,9 @@ SELECT SYSDATE "현재 시간"
 FROM DUAL;
 ```
 
-<BR>
+<br>
+*******
+<br>
 
 # 페이지 20231023_01_scott.sql
 
@@ -2146,8 +2150,9 @@ FROM
 */
 ```
 
-<BR>
-
+<br>
+*******
+<br>
 
 # 페이지 20231024_01_scott.sql
 ## 1. 문제
@@ -2601,7 +2606,9 @@ GROUP BY TO_CHAR(HIREDATE, 'YYYY') --> '전체'를 출력해야 하기 때문에
 ORDER BY 1;
 ```
 
-<BR>
+<br>
+*******
+<br>
 
 # 페이지 20231025_01_scott.sql
 ## 1. 문제
@@ -2973,7 +2980,9 @@ DEPTNO	DNAME	    ENAME	JOB	    SAL
 */
 ```
 
-<BR>
+<br>
+*******
+<br>
 
 # 페이지 20231026_01_scott.sql
 ## 📌 1. 안내
@@ -3030,6 +3039,8 @@ FROM EMP E1, EMP E2
 WHERE E1.MGR = E2.EMPNO
 ORDER BY 1;
 ```
+
+<BR>
 
 # 페이지 20231026_02_hr.sql
 ## 1. 문제
@@ -3193,6 +3204,8 @@ ON E.JOB_ID = J.JOB_ID
                 LEFT JOIN REGIONS R
                 ON C.REGION_ID = R.REGION_ID;
 ```
+
+<br>
 
 # 페이지 20231026_03_scott.sql
 ## 1. 문제
@@ -3570,7 +3583,9 @@ WHERE SAL >=ALL (SELECT SAL
 --==>> 7839	KING	PRESIDENT	5000
 ```
 
-<BR>
+<br>
+*******
+<br>
 
 # 페이지 20231027_01_scott.sql
 ## 1. 문제
@@ -3706,6 +3721,14 @@ SET SANAME = (SELECT SANAME
                 WHERE SANO=TBL_SAWON.SANO)
 WHERE SANAME = '똘똘이';
 ```
+
+<BR>
+
+# 페이지 ▒ TBL_INSA_OSK_3팀.sql (★과제★)
+
+<br>
+*******
+<br>
 
 
 
