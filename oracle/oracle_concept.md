@@ -133,7 +133,7 @@ ALTER SESSION SET NLS_CURRENCY='￦';
 
 ## 2.5. 휴지통 비우기
 ``` SQL
-PUGER RECYCLEBIN;
+PURGE RECYCLEBIN;
 ```
 ## 2.6. 커멘트
 > -- *커멘트를 안달아도 크게 상과없지만, 같이 일하기 좋은사람이 될 수 있고 내가 관리하기에도 좋다.*
