@@ -2921,7 +2921,674 @@ HR	TEST7_COL1_PK	TBL_TEST7	P	COL1
 HR	TEST7_COL2_UK	TBL_TEST7	U	COL2		
 */
 ```
+### 8.8.4. CHECK(CK:C)
+1. 컬럼에서 허용 가능한 데이터의 범위나 조건을 지정하기 위한 제약조건  
+    컬럼에 입력되는 데이터를 검사하여 조건에 맞는 데이터만 입력될 수 있도록 한다.
+    또한, 컬러멩서 주어되는 데이터를 검사하여 조건에 맞는 데이터로 수정되는 것만 
+    허용하는 기능을 수행하게 된다.
+    
+2. 형식 및 구조  
+    (1) 컬럼 레벨의 형식
+    ``` SQL
+    컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명] CHECK(컬럼 조건)
+    ```
+    
+    (2) 테이블 레벨의 형식
+    ``` SQL
+    컬럼명 타입,
+    컬럼명 타입,
+    CONSTRAINT CONSTRAINT명 CHECK(컬럼 조건)
+    ```
 
+### 8.8.4. CHECK(CK:C)
+1. 컬럼에서 허용 가능한 데이터의 범위나 조건을 지정하기 위한 제약조건  
+    컬럼에 입력되는 데이터를 검사하여 조건에 맞는 데이터만 입력될 수 있도록 한다.  
+    또한, 컬럼에서 주어되는 데이터를 검사하여 조건에 맞는 데이터로 수정되는 것만 
+    허용하는 기능을 수행하게 된다.
+    
+2. 형식 및 구조  
+    (1) 컬럼 레벨의 형식
+    ``` SQL
+    컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명] CHECK(컬럼 조건)
+    ```
+    
+    (2) 테이블 레벨의 형식
+    ``` SQL
+    컬럼명 타입,
+    컬럼명 타입,
+    CONSTRAINT CONSTRAINT명 CHECK(컬럼 조건)
+    ```
+--○ CK 지정 실습((1) 컬럼 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST8
+( COL1 NUMBER(5)    PRIMARY KEY
+, COL2 VARCHAR2(30)
+, COL3 NUMBER(3)    CHECK(COL3 BETWEEN 0 AND 100)
+);
+--==>> Table TBL_TEST8이(가) 생성되었습니다.
+ 
+-- 데이터 입력
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(1,'박범구',100);
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(1,'엄재용',100); --> 에러 발생 (ORA-00001: unique constraint (HR.SYS_C007106) violated)
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(2,'엄재용',101); --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(2,'엄재용',-1);  --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(2,'엄재용',80);
+ 
+-- 확인
+SELECT *
+FROM TBL_TEST8;
+--==>>
+/*
+1	박범구	100
+2	엄재용	80
+*/    
+ 
+-- 커밋
+COMMIT;
+--==>> 커밋 완료.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST8';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	    DELETE_RULE
+HR	    SYS_C007105	    TBL_TEST8	    C	        COL3	    COL3 BETWEEN 0 AND 100	(null)
+HR	    SYS_C007106	    TBL_TEST8	    P	        COL1		(null)                  (null)
+*/
+-- *SEARCH_CONDITION: 제약조건 기술*  
+``` 
+--○ CK 지정 실습((2) 테이블 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST9
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+, COL3 NUMBER(3)
+, CONSTRAINT TEST9_COL1_PK PRIMARY KEY(COL1)
+, CONSTRAINT TEST9_COL3_CK CHECK(COL3 BETWEEN 0 AND 100)
+);
+--==>> Table TBL_TEST9이(가) 생성되었습니다.
+ 
+-- 데이터 입력
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(1,'박범구',100);
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(1,'엄재용',100); --> 에러 발생 (ORA-00001: unique constraint (HR.SYS_C007106) violated)
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(2,'엄재용',101); --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(2,'엄재용',-1);  --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(2,'엄재용',80);
+ 
+-- 확인
+SELECT *
+FROM TBL_TEST9;
+--==>>
+/*
+1	박범구	100
+2	엄재용	80
+*/    
+ 
+-- 커밋
+COMMIT;
+--==>> 커밋 완료.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST9';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	    DELETE_RULE
+HR	    SYS_C007105	    TBL_TEST8	    C	        COL3	    COL3 BETWEEN 0 AND 100	(null)
+HR	    SYS_C007106	    TBL_TEST8	    P	        COL1		(null)                  (null)
+*/
+``` 
+--○ CK 지정 실습((3) 테이블 생성 이후 제약조건 추가)  
+--※ 이미 생성된(만들어져 있는) 상태의 테이블에  
+--   부여하려는 제약조건을 위반한 데이터가 포함되어 있을 경우  
+--   해당 테이블에 제약조건을 추가하는 것은 불가능하다.  
+``` SQL
+CREATE TABLE TBL_TEST10
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+, COL3 NUMBER(3)
+);
+--==>> Table TBL_TEST10이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_TEST10';
+--==>> 조회결과 없음
+ 
+-- 제약조건 추가
+ALTER TABLE TBL_TEST10
+ADD ( CONSTRAINT TEST10_COL1_PK PRIMARY KEY(COL1)
+    , CONSTRAINT TEST10_COL3_CK CHECK(COL3 BETWEEN 0 AND 100));
+--==>> Table TBL_TEST10이(가) 변경되었습니다.
+-- *제약조건을 여러개 추가시 ADD ( 제약조건1, 제약조건2,...)로 작성*  
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST10';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	    DELETE_RULE
+HR	    SYS_C007105	    TBL_TEST8	    C	        COL3	    COL3 BETWEEN 0 AND 100	(null)
+HR	    SYS_C007106	    TBL_TEST8	    P	        COL1		(null)                  (null)
+*/
+ 
+-- 테이블 생성
+CREATE TABLE TBL_TESTMEMBER
+( SID   NUMBER
+, NAME  VARCHAR2(30)
+, SSN   CHAR(14)            -- 입력형태 -> 'YYMMDD-NNNNNNN' -> 14자리
+                            --              12345678901234
+, TEL   VARCHAR2(40)
+);
+--==>> Table TBL_TESTMEMBER이(가) 생성되었습니다.
+```
+
+#### 📌 1. 안내
+--○ TBL_TESTMEMBER 테이블의 SSN 컬럼(주민등록번호 컬럼)에서  
+--   데이터 입력이나 수정 시, 성별이 유효한 데이터만 입력될 수 있도록  
+--   체크 제약조건을 추가할 수 있도록 한다.  
+--   (-> 주민번호 특정 자리에 입력가능한 데이터를 1,2,3,4 만 가능하도록 처리)  
+--   또한, SID 컬럼에는 PRIMARY KEY 제약조건을 설정할 수 있도록 한다.  
+``` SQL 
+-- 제약조건 삭제
+ALTER TABLE TBL_TESTMEMBER DROP CONSTRAINT TESTMEMBER_SSN_CK_01;
+ 
+-- 제약조건 추가
+ALTER TABLE TBL_TESTMEMBER
+ADD (
+    CONSTRAINT TESTMEMBER_SID_PK PRIMARY KEY(SID)
+    ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(주민번호 8번째 자리 1개가 '1' 또는 '2' 또는 '3' 또는 '4')
+    );
+    
+ALTER TABLE TBL_TESTMEMBER
+ADD (
+    CONSTRAINT TESTMEMBER_SID_PK PRIMARY KEY(SID)
+   ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(SUBSTR(SSN,8,1) IN ('1','2','3','4'))
+    );
+    
+ALTER TABLE TBL_TESTMEMBER
+ADD (
+--    CONSTRAINT TESTMEMBER_SSN_CK CHECK(SSN LIKE ('_______1%'))                              -- 실행됨
+--    ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(SSN LIKE ('_______1%') OR SSN LIKE ('_______2%'))   -- 안됨
+--    ,CONSTRAINT TESTMEMBER_SSN_CK01 CHECK(SSN LIKE ('_______1%') OR SSN LIKE ('_______2%')) -- 안됨
+--    ,CONSTRAINT TESTMEMBER_SSN_CK01 CHECK(SSN LIKE ('_______1%') OR SSN LIKE ('_______2%')) -- 안됨
+    );
+ 
+-- *제약조건 LIKE AND 코드가 맞는지 확인-> 가능*
+-- *WHERE의 모든 조건이 제약조건에 작성되는 것은 아님. AND OR 불가.*
+SELECT *
+FROM TBL_TESTMEMBER
+WHERE SSN LIKE ('_______1%') OR SSN LIKE ('_______2%');
+ 
+ 
+-- 테스트 데이터 입력
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(1,'123456-1901234');
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(2,'123456-2901234');
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(3,'123456-3901234');
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(4,'123456-4901234');
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(5,'123456-5901234'); --> 에러 발생(ORA-02290: check constraint (HR.TESTMEMBER_SSN_CK) violated)
+ 
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(1,'이윤수','950106-1234567','010-1111-1111');
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(2,'박나영','990208-2234567','010-2222-2222');
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(3,'최혜인','070811-4234567','010-3333-3333');
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(4,'길현욱','090111-3234567','010-4444-4444');
+ 
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(4,'정현욱','000220-5234567','010-5555-5555'); --> 에러 발생
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(4,'정현욱','000220-6234567','010-5555-5555'); --> 에러 발생
+ 
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TESTMEMBER';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	    TABLE_NAME	    CONSTRAINT_TYPE	COLUMN_NAME	 SEARCH_CONDITION	                  DELETE_RULE
+HR	    TESTMEMBER_SID_PK	TBL_TESTMEMBER	P	            SID		     (null)                               (null)
+HR	    TESTMEMBER_SSN_CK	TBL_TESTMEMBER	C	            SSN	         SUBSTR(SSN,8,1) IN ('1','2','3','4') (null)	
+*/
+ 
+-- 확인을 위한 테이블 삭제
+DROP TABLE TBL_TESTMEMBER;
+ 
+-- 확인
+SELECT *
+FROM TBL_TESTMEMBER;
+--==>>
+/*
+1	이윤수	950106-1234567	010-1111-1111
+2	박나영	990208-2234567	010-2222-2222
+3	최혜인	070811-4234567	010-3333-3333
+4	길현욱	090111-3234567	010-4444-4444
+*/
+```
+### 8.8.5. FOREIGN KEY(FK:F:R)
+1. 참조 키(R)또는 외래 키(FK:F)는 두 테이블의 데이터 간 연결을 설정하고 강제 적용시키는데 사용되는 열이다.  
+    한 테이블의 기본 키 값이 있는 열을 다른 테이블에 추가하면 테이블 간 연결을 설정할 수 있다.  
+    이 때, 두 번째 테이블에 추가되는 열이 외래키가 된다.  
+    
+2. 부모 테이블(참조받는 컬럼이 포함된 테이블)이 먼저 생성된 후 자식 테이블(참조하는 컬럼이 포함된 테이블)이 생성되어야 한다. 이 때, 자식 테이블에 FOREIGN KEY 제약조건이 설정된다.  
+    
+3. 형식 및 구조  
+    (1) 컬럼 레벨의 형식
+    ``` SQL
+    컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명]
+                      RERERENCES 참조테이블명(참조컬럼명)
+                      [ON DELETE CASCADE : ON DELETE SET NULL]  -> 추가옵션
+    ```
+                      
+    (2) 테이블 레벨의 형식
+    ``` SQL
+    컬럼명 데이터타입,
+    컬럼명 데이터타입,
+    CONSTRAINT CONSTRAINT명 FOREIGN KEY(컬럼명)
+                      RERERENCES 참조테이블명(참조컬럼명)
+                      [ON DELETE CASCADE : ON DELETE SET NULL]  -> 추가옵션
+    ```
+    --※ FOREIGN KEY 제약조건을 설정하는 실습을 진행하기 위해서는 부모테이블의 생성 작업을 먼저 수행해야 한다.,  
+--   그리고 이 때, 부모 테이블에는 반드시 PK 또는 UK 제약조건이 설정된 컬럼이 존재해야 한다.  
+``` SQL
+-- 부모테이블 생성
+CREATE TABLE TBL_JOBS
+( JIKWI_ID      NUMBER
+, JIKWI_NAME    VARCHAR2(30)
+, CONSTRAINT JOBS_ID_PK PRIMARY KEY(JIKWI_ID)
+);
+--==>> Table TBL_JOBS이(가) 생성되었습니다.
+ 
+-- 부모 테이블에 데이터 입력
+INSERT INTO TBL_JOBS(JIKWI_ID, JIKWI_NAME) VALUES(1,'사원');
+INSERT INTO TBL_JOBS(JIKWI_ID, JIKWI_NAME) VALUES(2,'대리');
+INSERT INTO TBL_JOBS(JIKWI_ID, JIKWI_NAME) VALUES(3,'과장');
+INSERT INTO TBL_JOBS(JIKWI_ID, JIKWI_NAME) VALUES(4,'부장');
+--==> 1 행 이(가) 삽입되었습니다. * 4
+ 
+-- 확인
+SELECT *
+FROM TBL_JOBS;
+--==>>
+/*
+1	사원
+2	대리
+3	과장
+4	부장
+*/
+ 
+-- 커밋
+COMMIT;
+--==>> 커밋 완료.
+```
+--○ FK 지정 실습((1) 컬럼 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_EMP1
+( SID       NUMBER          PRIMARY KEY
+, NAME      VARCHAR2(30)
+, JIKWI_ID  NUMBER          REFERENCES TBL_JOBS(JIKWI_ID)
+--                                              -------- TBL_JOBS의 JIKWI_ID
+);
+--==>> Table TBL_EMP1이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_EMP1';
+--==>> 
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007125	    TBL_EMP1	P	            SID		
+HR	    SYS_C007126	    TBL_EMP1	R	            JIKWI_ID		                NO ACTION
+*/
+-- * SEARCH_CONDITION: (NULL)       -> 체크제약조건의 상세 내용
+-- * CONSTRAINT_TYPE: R             -> FOREIFN KEY
+-- * DELETE_RULE: NO ACTION         -> 두개의 테이블이 연결되어 있는데, FK가 삭제되면 -> 남은 값은 어떻게 할 것인지..
+ 
+-- 데이터 입력
+INSERT INTO TBL_EMP1(SID,NAME, JIKWI_ID) VALUES(1, '노은하',1);
+INSERT INTO TBL_EMP1(SID,NAME, JIKWI_ID) VALUES(2, '박가영',2);
+INSERT INTO TBL_EMP1(SID,NAME, JIKWI_ID) VALUES(3, '채다선',3);
+INSERT INTO TBL_EMP1(SID,NAME, JIKWI_ID) VALUES(4, '김수환',4);
+ 
+INSERT INTO TBL_EMP1(SID,NAME, JIKWI_ID) VALUES(5, '김다슬',5); -->> 에러 발생(5의 참조번호가 없어서 실행X)
+INSERT INTO TBL_EMP1(SID,NAME, JIKWI_ID) VALUES(5, '김다슬',1);
+INSERT INTO TBL_EMP1(SID,NAME) VALUES(6, '오수경'); --*직위ID를 NULL인 상태로 입력하겠다는 뜻
+-- *비워두는 것은 가능하지만, 입력을 할 것이라면 있는 번호 입력가능*  
+ 
+SELECT *
+FROM TBL_EMP1;
+--==>>
+/*
+1	노은하	1
+2	박가영	2
+3	채다선	3
+4	김수환	4
+5	김다슬	1
+6	오수경	
+*/
+ 
+COMMIT;
+``` 
+--○ FK 지정 실습((2) 테이블 레벨의 형식)
+``` SQL
+--  테이블 생성
+CREATE TABLE TBL_EMP2
+( SID       NUMBER
+, NAME      VARCHAR2(30)
+, JIKWI_ID  NUMBER
+, CONSTRAINT EMP2_SID_PK PRIMARY KEY(SID)
+, CONSTRAINT EMP_JIKWI_ID_FK FOREIGN KEY(JIKWI_ID)  -- *TBL_EMP2의 직위 ID
+             REFERENCES TBL_JOBS(JIKWI_ID)          -- *JOBS 직위ID
+);
+--==>> Table TBL_EMP2이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_EMP2';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007125	    TBL_EMP1	P	            SID		
+HR	    SYS_C007126	    TBL_EMP1	R	            JIKWI_ID		                NO ACTION
+*/
+``` 
+--○ FK 지정 실습((3) 테이블 생성 이후 제약조건 추가)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_EMP3
+( SID       NUMBER
+, NAME      VARCHAR2(30)
+, JIKWI_ID  NUMBER
+);
+--==>> Table TBL_EMP3이(가) 생성되었습니다.
+ 
+-- 제약조건 추가
+ALTER TABLE TBL_EMP3
+ADD ( CONSTRAINT EMP3_SID_PK PRIMARY KEY(SID)
+    , CONSTRAINT EMP3_JIKWI_ID_FK FOREIGN KEY(JIKWI_ID)
+                REFERENCES TBL_JOBS(JIKWI_ID)
+    );
+--==>> Table TBL_EMP3이(가) 변경되었습니다.
+ 
+-- 제약조건 제거
+ALTER TABLE TBL_EMP3
+DROP CONSTRAINT EMP3_JIKWI_ID_FK;   -- *오라클이 알아서 이름부여한 경우 꼭 조회후 제거*
+--==>> Table TBL_EMP3이(가) 변경되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_EMP3';
+--==>> HR	EMP3_SID_PK	TBL_EMP3	P	SID		
+ 
+-- 다시 제약조건 추가
+ALTER TABLE TBL_EMP3
+ADD CONSTRAINT EMP3_JIKWI_ID_FK FOREIGN KEY(JIKWI_ID)
+               REFERENCES TBL_JOBS(JIKWI_ID);
+--==>> Table TBL_EMP3이(가) 변경되었습니다.
+ 
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_EMP3';
+--==>>
+/*
+HR	EMP3_SID_PK	TBL_EMP3	P	SID		
+HR	EMP3_JIKWI_ID_FK	TBL_EMP3	R	JIKWI_ID		NO ACTION
+*/
+``` 
+
+4. FOREIGN KEY 생성 시 주의사항  
+    참조하고자 하는 부모 테이블을 먼저 생성해야 한다. 참조하고자 하는 컬럼이 PRIMARY KEY 또는 UNIQUE 제약조건이 설정되어 있어야 한다.
+    테이블 사이에 PRIMARY KEY 와 FOREIGN KEY 가 정의되어 있으면 PRIMARY KEY 제약조건이 설정된 데이터 삭제 시  FOREIGN KEY 컬럼에 그 값이 입력되어 있는 경우 삭제되지 않는다.  
+    (즉, 자식 테이블에 참조하는 레코드가 존재할 경우 부모 테이블의 참조받는 해당 레코드는 삭제할 수 없다는 것이다.)  
+    단, FK 설정 과정에서 <ON DELETE CASCADE>나 <ON DLELETE SET NULL> 옵션을  
+    >-- *정말 특별한 경우가 아니고서는 사용하지 않는 옵션*
+    -- *자식 값을 모두 지우고 본인 삭제됨*
+    사용하여 설정한 경우에는 삭제가 가능하다.  
+    또한, 부모 테이블을 제거하기 위해서는 자식 테이블을 먼저 제거해야 한다.
+
+ 
+>-- *==================================  
+-- *결론: FOREIGN KEY설정 시  
+-- *(1) 부모테이블 P.K 또는 UNIQUE가 먼저 생성되어야함  
+-- *(2)   
+-- *==================================  
+``` SQL 
+-- 부모 테이블
+SELECT *
+FROM TBL_JOBS;
+--==>>
+/*
+1	사원
+2	대리
+3	과장
+4	부장
+*/
+ 
+-- 자식 테이블
+SELECT *
+FROM TBL_EMP1;
+--==>>
+/*
+1	노은하	1
+2	박가영	2
+3	채다선	3
+4	김수환	4
+5	김다슬	1
+6	오수경	
+*/
+ 
+-- 부모 테이블 제거 시도
+DROP TABLE TBL_JOBS; --> 에러 발생(02449. 00000 -  "unique/primary keys in table referenced by foreign keys")
+ 
+-- 부모 테이블의 부장 직위 데이터 삭제 시도
+SELECT *
+FROM TBL_JOBS
+WHERE JIKWI_ID =4;
+--==>> 4	부장
+ 
+DELETE
+FROM TBL_JOBS
+WHERE JIKWI_ID =4;  --> 에러 발생(ORA-02292: integrity constraint (HR.SYS_C007126) violated - child record found)
+ 
+-- 김수환 부장의 직위를 사원으로 변경
+UPDATE TBL_EMP1
+SET JIKWI_ID=1
+WHERE SID=4;
+--==>> 1 행 이(가) 업데이트되었습니다.
+ 
+-- 확인
+SELECT *
+FROM TBL_EMP1;
+--==>> 
+/*
+1	노은하	1
+2	박가영	2
+3	채다선	3
+4	김수환	1
+5	김다슬	1
+6	오수경	
+*/
+ 
+-- 커밋
+COMMIT;
+ 
+-- 부모 테이블(TBL_JOBS)의 부장 데이터를 참조하고 있는
+-- 자식 테이블(TBL_EMP1)의 데이터가 존재하지 않는 상황
+ 
+-- 이와 같은 상황에서 부모 테이블(TBL_JOBS)의
+-- 부장 데이터 삭제
+DELETE
+FROM TBL_JOBS
+WHERE JIKWI_ID =4;
+--==>> 1 행 이(가) 삭제되었습니다.
+ 
+SELECT *
+FROM TBL_JOBS;
+--==>>
+/*
+1	사원
+2	대리
+3	과장
+*/
+ 
+COMMIT;
+ 
+--※ 부모 테이블의 데이터를 자유롭게(?) 삭제하기 위해서는 <ON DELETE CASCADE> 옵션 지정이 필요하다.
+``` 
+#### 📌 2. 안내
+-- TBL_EMP1 테이블(자식 테이블)에서 FK 제약조건을 제거한 후 CASCADE 옵션을 포함하여 다시 FK 제약조건을 설정한다.  
+``` SQL
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_EMP1';
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007125	    TBL_EMP1	P	            SID		
+HR	    SYS_C007126	    TBL_EMP1	R	            JIKWI_ID		                NO ACTION
+*/
+--> FK 제약조건(CONSTRAINT_TYPE:R)의 이름(CONASTRAINT_NAME): SYS_C007126
+ 
+-- 제약조건 제거
+ALTER TABLE TBL_EMP1
+DROP CONSTRAINT SYS_C007126;
+ 
+-- 제약조건 제거 이후 다시 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_EMP1';
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007125	    TBL_EMP1	P	            SID		
+*/
+ 
+-- <ON DELTET CASCADE> 옵션이 포함된 내용으로 제약조건 다시 설정
+ALTER TABLE TBL_EMP1
+ADD CONSTRAINT EMP1_JIKWI_ID_FK FOREIGN KEY(JIKWI_ID)
+                REFERENCES TBL_JOBS(JIKWI_ID)
+                ON DELETE CASCADE;
+--==>> Table TBL_EMP1이(가) 변경되었습니다.
+ 
+-- 제약조건 생성 이후 다시 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_EMP1';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	  TABLE_NAME    CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007125	      TBL_EMP1	    P	            SID		
+HR	    EMP1_JIKWI_ID_FK  TBL_EMP1	    R	            JIKWI_ID		CASCADE
+*/
+``` 
+--※ CASCADE 옵션을 지정한 후에는 참참조받고 있는 부모테이블의 데이터를 언제든지 자유롭게 삭제하는 것이 가능하다.  
+--   단, 부모 테이블의 데이터가 삭제될 경우...이를 참조하는 **자식 테이블**의 데이터도 모~~~~~~~~~~두 함께 삭제된다.
+>-- *참조하고 있는 자식테이블에서 하나라도 있는 경우 삭제되지 않음
+``` SQL 
+-- 부모 테이블
+SELECT *
+FROM TBL_JOBS;
+--==>>
+/*
+1	사원
+2	대리
+3	과장
+*/
+ 
+-- 자식 테이블
+SELECT *
+FROM TBL_EMP1;
+--==>>
+/*
+1	노은하	1
+2	박가영	2
+3	채다선	3
+4	김수환	1
+5	김다슬	1
+6	오수경	
+*/
+ 
+-- 부모 테이블(TBL_JOBS)에서 과장 데이ㅣ터 삭제
+SELECT *
+FROM TBL_JOBS
+WHERE JIKWI_ID=3;
+--==>> 3	과장
+ 
+DELETE
+FROM TBL_JOBS
+WHERE JIKWI_ID=3;
+ 
+-- 부모 테이블
+SELECT *
+FROM TBL_JOBS;
+--==>>
+/*
+1	사원
+2	대리
+*/
+ 
+-- 자식 테이블
+SELECT *
+FROM TBL_EMP1;
+--==>>
+/*
+1	노은하	1
+2	박가영	2
+4	김수환	1
+5	김다슬	1
+6	오수경	
+*/
+ 
+SELECT *
+FROM TBL_JOBS
+WHERE JIKWI_ID=1;
+--==>> 1	사원
+ 
+-- 부모테이블에서(TBL_JOBS)에서 사원 삭제
+DELETE
+FROM TBL_JOBS
+WHERE JIKWI_ID=1;
+--==>> 1 행 이(가) 삭제되었습니다.
+ 
+-- 부모 테이블
+SELECT *
+FROM TBL_JOBS;
+--==>>
+/*
+2	대리
+*/
+ 
+-- 자식 테이블
+SELECT *
+FROM TBL_EMP1;
+/*
+2	박가영	2
+6	오수경	
+*/
+ 
+DROP TABLE TBL_EMP2;
+--==>> Table TBL_EMP2이(가) 삭제되었습니다.
+ 
+DROP TABLE TBL_EMP3;
+--==>> Table TBL_EMP3이(가) 삭제되었습니다.
+ 
+DROP TABLE TBL_JOBS;
+--==>> 에러 발생(02449. 00000 -  "unique/primary keys in table referenced by foreign keys")
+ 
+DROP TABLE TBL_EMP1;
+--==>> Table TBL_EMP1이(가) 삭제되었습니다.
+ 
+DROP TABLE TBL_JOBS;
+--==>> Table TBL_JOBS이(가) 삭제되었습니다.
+``` 
+>-- *FOREGIN에서 자식 테이블의 값이 삭제되더라도 제약조건은 살아있어서 부모테이블은 삭제되지 않는다.*  
 
 
 
