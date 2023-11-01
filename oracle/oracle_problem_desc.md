@@ -4114,6 +4114,700 @@ HR	TEST7_COL2_UK	TBL_TEST7	U	COL2
 */
 ```
 
+*******
+<br>
+
+# 페이지 20231031_01_hr.sql
+## 1. 문제
+--○ TBL_TESTMEMBER 테이블의 SSN 컬럼(주민등록번호 컬럼)에서  
+--   데이터 입력이나 수정 시, 성별이 유효한 데이터만 입력될 수 있도록 체크 제약조건을 추가할 수 있도록 한다.
+--   (-> 주민번호 특정 자리에 입력가능한 데이터를 1,2,3,4 만 가능하도록 처리)  
+--   또한, SID 컬럼에는 PRIMARY KEY 제약조건을 설정할 수 있도록 한다.  
+### 1.2. 답
+``` SQL
+-- 제약조건 삭제
+ALTER TABLE TBL_TESTMEMBER DROP CONSTRAINT TESTMEMBER_SSN_CK_01;
+ 
+-- 제약조건 추가
+ALTER TABLE TBL_TESTMEMBER
+ADD (
+    CONSTRAINT TESTMEMBER_SID_PK PRIMARY KEY(SID)
+    ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(주민번호 8번째 자리 1개가 '1' 또는 '2' 또는 '3' 또는 '4')
+    );
+    
+ALTER TABLE TBL_TESTMEMBER
+ADD (
+    CONSTRAINT TESTMEMBER_SID_PK PRIMARY KEY(SID)
+   ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(SUBSTR(SSN,8,1) IN ('1','2','3','4'))
+    );
+```
+## 2. 문제
+-- TBL_EMP1 테이블(자식 테이블)에서 FK 제약조건을 제거한 후 CASCADE 옵션을 포함하여 다시 FK 제약조건을 설정한다.
+### 2.2. 답
+``` SQL
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_EMP1';
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007125	    TBL_EMP1	P	            SID		
+HR	    SYS_C007126	    TBL_EMP1	R	            JIKWI_ID		                NO ACTION
+*/
+--> FK 제약조건(CONSTRAINT_TYPE:R)의 이름(CONASTRAINT_NAME): SYS_C007126
+ 
+-- 제약조건 제거
+ALTER TABLE TBL_EMP1
+DROP CONSTRAINT SYS_C007126;
+ 
+-- 제약조건 제거 이후 다시 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_EMP1';
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007125	    TBL_EMP1	P	            SID		
+*/
+ 
+-- <ON DELTET CASCADE> 옵션이 포함된 내용으로 제약조건 다시 설정
+ALTER TABLE TBL_EMP1
+ADD CONSTRAINT EMP1_JIKWI_ID_FK FOREIGN KEY(JIKWI_ID)
+                REFERENCES TBL_JOBS(JIKWI_ID)
+                ON DELETE CASCADE;
+--==>> Table TBL_EMP1이(가) 변경되었습니다.
+ 
+-- 제약조건 생성 이후 다시 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_EMP1';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	  TABLE_NAME    CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007125	      TBL_EMP1	    P	            SID		
+HR	    EMP1_JIKWI_ID_FK  TBL_EMP1	    R	            JIKWI_ID		CASCADE
+*/
+ 
+--※ CASCADE 옵션을 지정한 후에는 
+--   참조받고 있는 부모테이블의 데이터를 
+--   언제든지 자유롭게 삭제하는 것이 가능하다.
+--   단, 부모 테이블의 데이터가 삭제될 경우...
+--   이를 참조하는 **자식 테이블**의 데이터도 모~~~~~~~~~~두 함께 삭제된다.
+-- *참조하고 있는 자식테이블에서 하나라도 있는 경우 삭제되지 않음
+ 
+-- 부모 테이블
+SELECT *
+FROM TBL_JOBS;
+--==>>
+/*
+1	사원
+2	대리
+3	과장
+*/
+ 
+-- 자식 테이블
+SELECT *
+FROM TBL_EMP1;
+--==>>
+/*
+1	노은하	1
+2	박가영	2
+3	채다선	3
+4	김수환	1
+5	김다슬	1
+6	오수경	
+*/
+ 
+-- 부모 테이블(TBL_JOBS)에서 과장 데이ㅣ터 삭제
+SELECT *
+FROM TBL_JOBS
+WHERE JIKWI_ID=3;
+--==>> 3	과장
+ 
+DELETE
+FROM TBL_JOBS
+WHERE JIKWI_ID=3;
+ 
+-- 부모 테이블
+SELECT *
+FROM TBL_JOBS;
+--==>>
+/*
+1	사원
+2	대리
+*/
+ 
+-- 자식 테이블
+SELECT *
+FROM TBL_EMP1;
+--==>>
+/*
+1	노은하	1
+2	박가영	2
+4	김수환	1
+5	김다슬	1
+6	오수경	
+*/
+ 
+SELECT *
+FROM TBL_JOBS
+WHERE JIKWI_ID=1;
+--==>> 1	사원
+ 
+-- 부모테이블에서(TBL_JOBS)에서 사원 삭제
+DELETE
+FROM TBL_JOBS
+WHERE JIKWI_ID=1;
+--==>> 1 행 이(가) 삭제되었습니다.
+ 
+-- 부모 테이블
+SELECT *
+FROM TBL_JOBS;
+--==>>
+/*
+2	대리
+*/
+ 
+-- 자식 테이블
+SELECT *
+FROM TBL_EMP1;
+/*
+2	박가영	2
+6	오수경	
+*/
+ 
+DROP TABLE TBL_EMP2;
+--==>> Table TBL_EMP2이(가) 삭제되었습니다.
+ 
+DROP TABLE TBL_EMP3;
+--==>> Table TBL_EMP3이(가) 삭제되었습니다.
+ 
+DROP TABLE TBL_JOBS;
+--==>> 에러 발생(02449. 00000 -  "unique/primary keys in table referenced by foreign keys")
+ 
+DROP TABLE TBL_EMP1;
+--==>> Table TBL_EMP1이(가) 삭제되었습니다.
+ 
+DROP TABLE TBL_JOBS;
+--==>> Table TBL_JOBS이(가) 삭제되었습니다.
+ 
+-- *FOREGIN에서 자식 테이블의 값이 삭제되더라도 제약조건은 살아있어서 부모테이블은 삭제되지 않는다.*
+```
+
+*******
+<br>
+
+
+# 페이지 20231031_02_scott.sql  
+-> 팀과제참조(20231031_03_hr(3팀_osk).sql)  
+
+*******
+<br>
+
+# 페이지 20231031_01_hr.sql
+
+## 1. 문제
+--○ TBL_SAWON 테이블에서 사원번호 1005번 사원의 주민번호를 <760917223467>로 수정한다.
+### 1.2. 답
+``` SQL
+UPDATE TBL_SAWON
+SET JUBUN = '760917223467'
+WHERE SANO = 1005;
+--==>> 1 행 이(가) 업데이트되었습니다.
+-- *UPDATE 구문은 WHERE 이 없어도 실행가능하지만, 조건을 확인 후 UPDATE하기 위해서 꼭 WHERE를 같이 작성하고 조회후 UPDATE 진행*  
+ 
+-- 확인
+SELECT *
+FROM TBL_SAWON;
+--==>>
+/*
+:
+1005	박나영	760917223467 	2015-10-19	1000
+:
+*/
+ 
+-- 실행 후 COMMIT 또는 ROLLBACK 을 반드시 선택적으로 실행
+COMMIT;
+--==>> 실행완료
+```
+## 📌 1. 안내
+--○ TBL_SAWON 테이블에서 1005번 사원의 입사일과 급여를 각각 2020-04-01, 1200 으로 변경한다.
+``` SQL
+--UPDATE TBL_SAWON
+--SET HIREDATE = TO_DATE('2020-04-01','YYYY-MM-DD')
+--    AND SAL = 1200                  -- *조건이 아니어서 AND 안됨!
+--WHERE SANO = 1005;
+ 
+UPDATE TBL_SAWON
+SET HIREDATE = TO_DATE('2020-04-01','YYYY-MM-DD'), SAL = 1200
+WHERE SANO = 1005;
+ 
+-- ○ TBL_INSA 테이블 복사(구조와 데이터만...)
+SELECT *
+FROM TBL_INSA;
+ 
+CREATE TABLE TBL_INSABACKUP
+AS
+SELECT *
+FROM TBL_INSA;
+--==>> Table TBL_INSABACKUP이(가) 생성되었습니다.
+ 
+--○ 확인
+SELECT *
+FROM TBL_INSABACKUP;
+```
+## 2. 문제
+--○ TBL_INSALBACKUP 테이블에서 과장과 부장만 수당 10% 인상하는 쿼리문을 작성한다.
+### 2.2. 답
+``` SQL
+SELECT *
+FROM TBL_INSABACKUP;
+ 
+UPDATE TBL_INSABACKUP 
+SET SUDANG = (SUDANG + (SUDANG*0.1))
+WHERE JIKWI IN ('과장','부장');
+ 
+UPDATE TBL_INSABACKUP 
+SET SUDANG = SUDANG * 1.1
+WHERE JIKWI IN ('과장','부장');
+--==>> 15개 행 이(가) 업데이트되었습니다.
+```
+## 3. 문제
+--○ TBL_INSABACKUP 테이블에서 전화번호가 016, 017, 018, 109 로 시작하는 전화번호인 경우  
+--   이를 모두 010 으로 변경하는 쿼리문을 구성한다.  
+### 3.2. 답
+``` SQL
+SELECT *
+FROM TBL_INSABACKUP;
+ 
+SELECT *
+FROM TBL_INSABACKUP
+WHERE SUBSTR(TEL,1,3) IN ('016','017','018','019');
+ 
+SELECT SUBSTR(TEL,4,13)
+FROM TBL_INSABACKUP;
+ 
+UPDATE TBL_INSABACKUP
+SET TEL = CONCAT('010',SUBSTR(TEL,4))
+WHERE SUBSTR(TEL,1,3) IN ('016','017','018','019');
+ 
+UPDATE TBL_INSABACKUP
+SET TEL = '010' || SUBSTR(TEL,4)
+WHERE SUBSTR(TEL,1,3) IN ('016','017','018','019');
+ 
+--UPDATE TBL_INSABACKUP
+--SET SUBSTR(TEL,1,3) = '010'  -- *안됨
+--WHERE SUBSTR(TEL,1,3) IN ('016','017','018','019');
+```
+### 3.3. 해설
+``` SQL
+SELECT *
+FROM TBL_INSABACKUP
+WHERE TEL IN ('016','017','018','019');
+--==>> 조회 결과 없음
+ 
+SELECT TEL "기존번호", ('010' || SUBSTR(TEL,4)) "바뀐번호"
+FROM TBL_INSABACKUP
+WHERE SUBSTR(TEL,1,3) IN ('016','017','018','019');
+ 
+UPDATE TBL_INSABACKUP
+SET TEL = ('010' || SUBSTR(TEL,4))
+WHERE SUBSTR(TEL,1,3) IN ('016','017','018','019');
+--==>> 24개 행이 없데이트 되었습니다.
+ 
+SELECT *
+FROM TBL_INSABACKUP;
+```
+
+
+*******
+<br>
+
+
+# 페이지 20231101_02_hr.sql
+## 📌 1. 안내
+--○ EMPLOYEES 테이블에서 직원들의 데이터를 삭제한다. 단, 부서명이 'IT'인 경우로 한정한다.
+``` SQL
+SELECT *
+FROM EMPLOYEES;
+ 
+SELECT *
+FROM DEPARTMENTS;
+ 
+-- IT 부서 직원들의 FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID 조회
+SELECT FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID
+FROM EMPLOYEES;
+ 
+SELECT FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID
+FROM EMPLOYEES
+WHERE 부서명 = 'IT';
+ 
+SELECT FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID
+FROM EMPLOYEES
+WHERE 부서아이디 = 부서명이 'IT'인 부서의 부서아이디;
+ 
+SELECT FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID
+FROM EMPLOYEES
+WHERE DEPARTMENT_ID = 60;
+ 
+SELECT FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID
+FROM EMPLOYEES
+WHERE DEPARTMENT_ID = 부서명이 'IT'인 부서의 부서아이디;
+ 
+SELECT FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID
+FROM EMPLOYEES
+WHERE DEPARTMENT_ID = ( SELECT DEPARTMENT_ID
+                        FROM DEPARTMENTS
+                        WHERE DEPARTMENT_NAME = 'IT');
+--==>> 
+/*
+Alexander	Hunold	    9000	60
+Bruce	    Ernst	    6000	60
+David	    Austin	    4800	60
+Valli	    Pataballa	4800	60
+Diana	    Lorentz	    4200	60
+*/
+ 
+SELECT FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID
+    ,SALARY * 1.1 "10%인상된급여"
+FROM EMPLOYEES
+WHERE DEPARTMENT_ID = ( SELECT DEPARTMENT_ID
+                        FROM DEPARTMENTS
+                        WHERE DEPARTMENT_NAME = 'IT');
+--==>>
+/*
+Alexander	Hunold	9000	60	9900
+Bruce	    Ernst	6000	60	6600
+David	    Austin	4800	60	5280
+Valli	    Pataballa	4800	60	5280
+Diana	    Lorentz	4200	60	4620
+*/
+ 
+UPDATE EMPLOYEES
+SET SALARY = SALARY * 1.1
+WHERE DEPARTMENT_ID = ( SELECT DEPARTMENT_ID
+                        FROM DEPARTMENTS
+                        WHERE DEPARTMENT_NAME = 'IT');
+--==>> 5개 행 이(가) 업데이트되었습니다.
+```
+
+## 1. 문제
+--○ EMPLOYEES 테이블에서 JOB_TITLE 이 'Sales Manager' 인 사원들의  
+--   SALARY 를 해당 직무(직종)의 최고급여(MAX_SALARY)로 수정한다.  
+--   단, 입사일이 2006년 이전(해당 년도 제외) 입사자에 한해 적용할 수 있도록 처리한다.  
+--   (또한, 변경에 대한 결과 확인 후 ROLLBACK 수행한다~!!!)  
+### 1.2. 답
+``` SQL
+SELECT *
+FROM EMPLOYEES;
+ 
+SELECT *
+FROM JOBS;
+ 
+SELECT *, SALARY, 직무(직종)의 최고급여(MAX_SALARY)
+FROM EMPLOYEES
+WHERE JOB_TITLE 이 'Sales Manager' 인 사원들
+    AND 입사일이 2006년 이전(해당 년도 제외) 입사자;
+    
+    
+SELECT FIRST_NAME, LAST_NAME, SALARY, JOB_ID, HIRE_DATE
+FROM EMPLOYEES;
+ 
+SELECT FIRST_NAME, LAST_NAME, SALARY, JOB_ID, HIRE_DATE
+FROM EMPLOYEES
+WHERE JOB_ID = 'Sales Manager';
+ 
+SELECT FIRST_NAME, LAST_NAME, SALARY, JOB_ID, HIRE_DATE
+FROM EMPLOYEES
+WHERE JOB_ID = ( SELECT JOB_ID
+                FROM JOBS
+                WHERE JOB_TITLE = 'Sales Manager');
+ 
+SELECT FIRST_NAME, LAST_NAME, SALARY, JOB_ID, HIRE_DATE
+FROM EMPLOYEES
+WHERE JOB_ID = ( SELECT JOB_ID
+                FROM JOBS
+                WHERE JOB_TITLE = 'Sales Manager')
+    AND TO_NUMBER(TO_CHAR(HIRE_DATE,'YYYY'))<2006;
+ 
+SELECT *
+FROM EMPLOYEES
+WHERE TO_NUMBER(TO_CHAR(HIRE_DATE,'YYYY'))<2006;
+ 
+SELECT MAX(E.SALARY)
+FROM(
+    SELECT FIRST_NAME, LAST_NAME, SALARY, JOB_ID, HIRE_DATE
+    FROM EMPLOYEES
+    WHERE JOB_ID = ( SELECT JOB_ID
+                    FROM JOBS
+                    WHERE JOB_TITLE = 'Sales Manager')
+) E;
+ 
+UPDATE EMPLOYEES
+SET SALARY = (SELECT MAX_SALARY
+                FROM JOBS
+                WHERE JOB_TITLE = 'Sales Manager')
+WHERE JOB_ID = ( SELECT JOB_ID
+                FROM JOBS
+                WHERE JOB_TITLE = 'Sales Manager')
+    AND TO_NUMBER(TO_CHAR(HIRE_DATE,'YYYY'))<2006;
+ 
+/* 1-문제 & 다른사람이 푼 내용 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+-- JOIN 사용
+UPDATE
+    (SELECT E.*, J.MAX_SALARY
+    FROM EMPLOYEES E INNER JOIN JOBS J
+    ON E.JOB_ID = J.JOB_ID
+        AND J.JOB_TITLE = 'Sales Manager'
+        AND EXTRACT(YEAR FROM HIRE_DATE)<2006
+    )
+SET SALARY = MAX_SALARY;
+```
+### 1.3. 해설
+``` SQL
+UPDATE EMPLOYEES
+SET SALARY = ('Sales Manager' 의 MAX_SALARY)
+WHERE JOB_IE = ('Sales Manager' 의 JOB_ID)
+ AND HIRE_DATE가 2006 년 이전;
+ 
+UPDATE EMPLOYEES
+SET SALARY = ('Sales Manager' 의 MAX_SALARY)
+WHERE JOB_IE = ('Sales Manager' 의 JOB_ID)
+ AND TO_NUMBER(TO_CAHR(HIRE_DATE,'YYYY')) < 2006;
+ 
+UPDATE EMPLOYEES
+SET SALARY = ('Sales Manager' 의 MAX_SALARY)
+WHERE JOB_IE = ('Sales Manager' 의 JOB_ID)
+ AND TO_NUMBER(TO_CAHR(HIRE_DATE,'YYYY')) < 2006; 
+ 
+-- 'Sales Manager' 의 MAX_SALARY
+SELECT MAX_SALARY
+FROM JOBS
+WHERE JOB_TITLE = 'Sales Manager';
+--==>> 20080
+ 
+-- 'Sales Manager' 의 JOB_ID
+SELECT JOB_ID
+FROM JOBS
+WHERE JOB_TITLE = 'Sales Manager';
+--==>> SA_MAN
+ 
+UPDATE EMPLOYEES
+SET SALARY = (SELECT MAX_SALARY
+                FROM JOBS
+                WHERE JOB_TITLE = 'Sales Manager')
+WHERE JOB_ID = ( SELECT JOB_ID
+                FROM JOBS
+                WHERE JOB_TITLE = 'Sales Manager')
+    AND TO_NUMBER(TO_CHAR(HIRE_DATE,'YYYY')) < 2006;
+--==>> 3개 행 이(가) 업데이트되었습니다.
+ 
+-- 업데이트 된 내용 확인
+SELECT *
+FROM EMPLOYEES
+WHERE JOB_ID = ( SELECT JOB_ID
+                FROM JOBS
+                WHERE JOB_TITLE = 'Sales Manager')
+    AND TO_NUMBER(TO_CHAR(HIRE_DATE,'YYYY')) < 2006;
+--==>> 
+/*
+145	John	Russell	JRUSSEL	011.44.1344.429268	2004-10-01	SA_MAN	20080	0.4	100	80
+146	Karen	Partners	KPARTNER	011.44.1344.467268	2005-01-05	SA_MAN	20080	0.3	100	80
+147	Alberto	Errazuriz	AERRAZUR	011.44.1344.429278	2005-03-10	SA_MAN	20080	0.3	100	80
+*/
+```
+## 2. 문제
+--○ EMPLOYEES 테이블에서 SALARY를 각 부서의 이름별로 다른 인상률을 적용하여 수정할 수 있도록 한다.  
+--   Finance -> 10% 인상  
+--   Executive -> 15% 인상  
+--   Accounting -> 20% 인상  
+--   (쿼리문에 의한 변경 결과 확인 후 ROLLBACK 수행~!!!)  
+### 2.2. 답
+``` SQL
+SELECT *
+FROM EMPLOYEES;
+ 
+SELECT *
+FROM EMPLOYEES
+WHERE 부서이름=F;
+ 
+SELECT *
+FROM DEPARTMENTS
+WHERE DEPARTMENT_NAME = 'Finance';
+ 
+SELECT *
+FROM EMPLOYEES
+WHERE DEPARTMENT_ID = (SELECT DEPARTMENT_ID
+                        FROM DEPARTMENTS
+                        WHERE DEPARTMENT_NAME = 'Finance');
+                        
+UPDATE EMPLOYEES
+SET SALARY = SALARY * 1.1
+WHERE EMPLOYEES의 부서ID = (SELECT 부서ID
+                            FROM DEPARTENTS
+                            WHERE 부서이름 = F);
+ 
+UPDATE EMPLOYEES
+SET SALARY = SALARY * 1.1
+WHERE DEPARTMENT_ID = (SELECT DEPARTMENT_ID
+                        FROM DEPARTMENTS
+                        WHERE DEPARTMENT_NAME = 'Finance');
+                        
+                        
+    SELECT 
+    FROM EMPLOYEES 
+    WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                            FROM DEPARTMENTS
+                            WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting')
+                            )
+                            
+;
+ 
+ 
+SELECT DECODE(DEPARTMENT_ID,90,'Finance',100,'Executive',110,'Accounting')
+FROM EMPLOYEES 
+WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                        FROM DEPARTMENTS
+                        WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting')
+                        );
+-- 수정전                            
+SELECT EMPLOYEE_ID, FIRST_NAME, SALARY, DEPARTMENT_ID      
+FROM EMPLOYEES
+WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                        FROM DEPARTMENTS
+                        WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting')
+                        );
+--==>> 
+/*
+100	Steven	    24000	90
+101	Neena	    17000	90
+102	Lex	        17000	90
+108	Nancy	    12008	100
+109	Daniel	    9000	100
+110	John	    8200	100
+111	Ismael	    7700	100
+112	Jose Manuel	7800	100
+113	Luis	    6900	100
+205	Shelley	    12008	110
+206	William	    8300	110
+*/
+    
+UPDATE EMPLOYEES
+SET SALARY = DECODE(DEPARTMENT_ID
+                        ,(SELECT DEPARTMENT_ID
+                            FROM DEPARTMENTS
+                            WHERE DEPARTMENT_NAME = 'Finance'),SALARY*1.1
+                        ,(SELECT DEPARTMENT_ID
+                            FROM DEPARTMENTS
+                            WHERE DEPARTMENT_NAME = 'Executive'),SALARY*1.15
+                        ,(SELECT DEPARTMENT_ID
+                            FROM DEPARTMENTS
+                            WHERE DEPARTMENT_NAME = 'Accounting'),SALARY*1.2)
+WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                        FROM DEPARTMENTS
+                        WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting')
+                        );
+--==>> 11개 행 이(가) 업데이트되었습니다.
+ 
+-- 수정후                            
+SELECT EMPLOYEE_ID, FIRST_NAME, SALARY, DEPARTMENT_ID      
+FROM EMPLOYEES
+WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                        FROM DEPARTMENTS
+                        WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting')
+                        );
+--==>> 
+/*
+100	Steven	    27600	90
+101	Neena	    19550	90
+102	Lex	        19550	90
+108	Nancy	    13208.8	100
+109	Daniel	    9900	100
+110	John	    9020	100
+111	Ismael	    8470	100
+112	Jose Manuel	8580	100
+113	Luis	    7590	100
+205	Shelley	    14409.6	110
+206	William	    9960	110
+*/
+ 
+-- 방법2
+UPDATE
+    (SELECT E.*, DECODE(DEPARTMENT_NAME,'Finance',SALARY*1.1,'Executive', SALARY*1.15,'Accounting',SALARY*1.2, SALARY) "인상급여"
+    FROM EMPLOYEES E JOIN DEPARTMENTS D
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+        AND D.DEPARTMENT_NAME IN ('Finance','Executive','Accounting')
+    )
+SET SALARY = 인상급여;
+--==>> 11개 행 이(가) 업데이트되었습니다.
+```
+### 2.3. 해설
+``` SQL
+SELECT *
+FROM EMPLOYEES;
+ 
+SELECT *
+FROM DEPARTMENTS;
+ 
+SELECT *
+FROM DEPARTMENTS
+WHERE 부서명 IN ('Finance','Executive','Accounting');
+ 
+SELECT *
+FROM DEPARTMENTS
+WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting');
+ 
+SELECT DEPARTMENT_ID
+FROM DEPARTMENTS
+WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting');
+ 
+SELECT *
+FROM EMPLOYEES
+WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                            FROM DEPARTMENTS
+                            WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting')
+                            );
+                            'Finance',SALARY*1.1,'Executive', SALARY*1.15,'Accounting',SALARY*1.2
+                            
+UPDATE EMPLOYEES
+SET SALARY = CASE DEPARTMENT_ID WHEN ('Finance' 의 부서 아이디)       THEN SALARY*1.1
+                                WHEN ('Executive' 의 부서 아이디)     THEN SALARY*1.15
+                                WHEN ('Accounting' 의 부서 아이디)    THEN SALARY*1.2
+                                ELSE SALARY
+            END
+WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                            FROM DEPARTMENTS
+                            WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting')
+                         );
+ 
+-- ('Finance' 의 부서 아이디)
+SELECT DEPARTMENT_ID
+FROM DEPARTMENTS
+WHERE DEPARTMENT_NAME ='Finance';
+ 
+UPDATE EMPLOYEES
+SET SALARY = CASE DEPARTMENT_ID WHEN (SELECT DEPARTMENT_ID
+                                        FROM DEPARTMENTS
+                                        WHERE DEPARTMENT_NAME ='Finance')       THEN SALARY*1.1
+                                WHEN (SELECT DEPARTMENT_ID
+                                        FROM DEPARTMENTS
+                                        WHERE DEPARTMENT_NAME ='Executive')     THEN SALARY*1.15
+                                WHEN (SELECT DEPARTMENT_ID
+                                        FROM DEPARTMENTS
+                                        WHERE DEPARTMENT_NAME ='Accounting')    THEN SALARY*1.2
+                                ELSE SALARY
+            END
+WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                            FROM DEPARTMENTS
+                            WHERE DEPARTMENT_NAME IN ('Finance','Executive','Accounting')
+                         );
+--==>> 11개 행 이(가) 업데이트되었습니다.
+```
+
+
+
+
+
+
 
 *******
 <br>
