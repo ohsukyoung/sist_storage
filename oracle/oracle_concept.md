@@ -341,7 +341,7 @@ FROM TBL_EMP;
 INSERT INTO TBL_SAWON(SANO, SANAME, JUBUN, HIREDATE, SAL)
 VALUES(1015, '남궁민', '0202023234567', TO_DATE('2010-10-10', 'YYYY-MM-DD'), 2300);
 ```
-### 3.3.3. 데이터 삭제
+### 3.3.3. 데이터 삭제(DELETE )
 > `DELETE` `FROM` 테이블명 [WHERE]
 > -- *조회 후 삭제!*
 ``` SQL
@@ -359,13 +359,39 @@ WHERE DEPTNO = 50;
 --==>> 1 행 이(가) 삭제되었습니다.
 */
 ```
-### 3.3.4. 데이터 갱신
+1. 테이블에서 지정된 행(레코드)을 삭제하는데 사용하는 구문    
+ 
+2. 형식 및 구조    
+``` SQL
+DELETE [FROM] 테이블명  
+[WHERE 조건절]  
+``` 
+>-- *2가지 강조*    
+-- *DELEFE **FROM** 테이블명에서 'FROM' 꼭 붙여서 작업*    
+-- *SELECT * -> DELETE 로 SELECT 조회 후 삭제*    
+ 
+-- *레코드, 참조 구성이 어떻게 되어있는지에 따라서 삭제되지 않는다*  
+ 
+-- *MGR컬럼이 EMP_ID를 참조하고 있음  
+-- *EMP_ID가 등록되어 있지 않으면 MGR이 등록되지 않음  
+-- *참조 구성을 삭제해야 지워질 수 있음  
+
+### 3.3.4. 데이터 갱신 (UPDATE)
 > `UPDATE` 테이블명 `SET` 속성명 = 데이터 [WHERE]
 ``` SQL
 UPDATE TBL_DEPT
 SET DNAME = '연구부', LOC = 'RUDRL'
 WHERE DEPTNO = 50;
 ```
+1. 테이블에서 기존 데이터를 수정(변경)하는 구문  
+ 
+2. 형식 및 구조
+``` SQL
+ UPDATE 테이블명
+ SET 컬럼명=변경할값[, 컬럼명=변경할값,...]
+ [WHERE 조건절]
+```
+
 ## 3.4. DCL: 데이터 제어어 (COMMIT, ROLLBACK, GRANT)
 데이터 보안, 무결성, 회복, 병행제어를 정의하는 언어
 ### 3.4.1. COMMIT
@@ -3590,9 +3616,272 @@ DROP TABLE TBL_JOBS;
 ``` 
 >-- *FOREGIN에서 자식 테이블의 값이 삭제되더라도 제약조건은 살아있어서 부모테이블은 삭제되지 않는다.*  
 
+#### 8.8.6. NOT NULL(NN:CK:C)
+1. 테이블에서 지저한 컬럼의 데이터가 NULL 인 상태를 갖지 못하도록 하는 제약조건.
+*테이블레벨이 보통은 부여하지만, NOT NULL 제약조건의 경우 컬럼 레벨의 형식이 더 많아서 기본됨.*
+ 
+2. 형식 및 구조
+ (1) 컬럼 레벨의 형식
+``` SQL
+  컬럼명 데이터타입 [CONSTRATINT CONSTRAINT명] NOT NULL
+```
+ 
+ (2) 테이블 레벨의 형식
+``` SQL
+  컬럼명 데이터 타입,
+  컬러명 데잍타입,
+  CONSTRAINT CONSTRAINT명 CHECK(컬럼명 IS NOT NULL)
+``` 
+3. 기존에 생성되어 있는 테이블에 NOT NULL 제약조건을 추가할 경우
+``` SQL
+  ADD 보다 MODIFY 절이 더 많이 사용된다.
+  ALTER TABLE 테이블명
+  MODIFY 컬럼명 데이터타입 NOT NULL;
+``` 
+5. 기존 테이블에 데이터가 이미 들어있지 않은 컬럼(-> NULL인 상태)을
+   NOT NULL 제약조건을 갖도록 수정하는 경우에는 에러 발생한다.
 
+--○ NOT NULL 지정 실습((1) 컬럼 레벨의 형식)
+``` SQL
+--   테이블 생성
+CREATE TABLE TBL_TEST11
+( COL1 NUMBER(5)    PRIMARY KEY
+, COL2 VARCHAR2(30) NOT NULL
+);
+--==>> Table TBL_TEST11이(가) 생성되었습니다.
+ 
+-- 데이터 입력
+INSERT INTO TBL_TEST11(COL1,COL2) VALUES(1,'TEST');
+INSERT INTO TBL_TEST11(COL1,COL2) VALUES(2,'ABCD');
+INSERT INTO TBL_TEST11(COL1,COL2) VALUES(3, NULL); --> 에러발생 (ORA-01400: cannot insert NULL into ("HR"."TBL_TEST11"."COL2"))
+INSERT INTO TBL_TEST11(COL1) VALUES(4);            --> 에러발생 (ORA-01400: cannot insert NULL into ("HR"."TBL_TEST11"."COL2"))
+ 
+-- 확인
+SELECT *
+FROM TBL_TEST11;
+/*
+1	TEST
+2	ABCD
+*/
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_TEST11';
+--==>>
+/*
+HR	SYS_C007133	TBL_TEST11	C	COL2	"COL2" IS NOT NULL	
+HR	SYS_C007134	TBL_TEST11	P	COL1		
+*/
+``` 
+--○ NOT NULL 지정 실습((2) 테이블 레벨의 형식)
+``` SQL
+--   테이블 생성
+CREATE TABLE TBL_TEST12
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+, CONSTRAINT TEST12_COL1_PK PRIMARY KEY(COL1)
+, CONSTRAINT TEST12_COL2_NN CHECK(COL2 IS NOT NULL)
+);
+--==>> Table TBL_TEST12이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST12';
+--==>>
+/*
+HR	TEST12_COL2_NN	TBL_TEST12	C	COL2	COL2 IS NOT NULL	
+HR	TEST12_COL1_PK	TBL_TEST12	P	COL1		
+*/
+``` 
+--○ NOT NULL 지정 실습((3) 테이블 생성 이후 제약조건 추가)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST13
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+);
+--==>> Table BL_TEST13이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST13';
+--==>> 조회 결과 없음
+ 
+--  제약조건 추가
+ALTER TABLE TBL_TEST13
+ADD ( CONSTRAINT TEST13_COL1_PK PRIMARY KEY(COL1)
+    , CONSTRAINT TEST13_COL2_NN CHECK(COL2 IS NOT NULL)
+);
+--==>> Table TBL_TEST13이(가) 변경되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST13';
+--==>>
+/*
+HR	TEST13_COL1_PK	TBL_TEST13	P	COL1		
+HR	TEST13_COL2_NN	TBL_TEST13	C	COL2	COL2 IS NOT NULL	
+*/
+ 
+--※ NOT NULL 제약조건만 TBL_TEST3 테이블의 COL2 에 추가하는 경우
+--   다음과 같은 방법을 사용하는 것도 가능하다.
+ALTER TABLE TBL_TEST13
+MODIFY COL2 NOT NULL;
+--==>> Table TBL_TEST13이(가) 변경되었습니다.
+ 
+-- 컬럼 레벨에서 NOT NULL 제약조건을 지정한 테이블(TBL_TEST11)
+DESC TBL_TEST11;
+--==>>
+/*
+이름   널?       유형           
+---- -------- ------------ 
+COL1 NOT NULL NUMBER(5)    
+COL2 NOT NULL VARCHAR2(30)
+*/
+-- *가장 많이쓰는 구문 DESC 에서 NOT NULL 확인
+ 
+-- 테이블 레벨에서 NOT NULL 제약조건을 지정한 테이블(TBL_TEST12)
+DESC TBL_TEST12;
+--==>>
+/*
+이름   널?       유형           
+---- -------- ------------ 
+COL1 NOT NULL NUMBER(5)    
+COL2          VARCHAR2(30)
+*/
+``` SQL
+>-- *가장 많이쓰는 구문 DESC 에서 NOT NULL 미확인됨(VIEW로만 가능함)  
+``` SQL
+-- 테이블 생성 이후 ADD를 통해 NOT NULL 제약조건을 추가하였으며
+-- 여기에 더하여, MODIFY 절을 통해 NOT NULL 제약조건을 추가한 테이블
+DESC TBL_TEST13;
+--==>>
+/*
+이름   널?       유형           
+---- -------- ------------ 
+COL1 NOT NULL NUMBER(5)    
+COL2 NOT NULL VARCHAR2(30) 
+*/
+-- * NOT NULL 확인가능*
+SELECT *
+FROM  VIEW_CONSTCHECK
+WHERE TABLE_NAME IN ('TBL_TEST11', 'TBL_TEST12', 'TBL_TEST13');
+--==>>
+/*
+--○ CK 지정 실습((1) 컬럼 레벨의 형식)
+HR	SYS_C007133	TBL_TEST11	    C	COL2	"COL2" IS NOT NULL	
+HR	SYS_C007134	TBL_TEST11	    P	COL1		
+ 
+--○ CK 지정 실습((2) 테이블 레벨의 형식)
+HR	TEST12_COL2_NN	TBL_TEST12	C	COL2	COL2 IS NOT NULL	
+HR	TEST12_COL1_PK	TBL_TEST12	P	COL1		
+ 
+--○ CK 지정 실습((3) 테이블 생성 이후 제약조건 추가)
+HR	TEST13_COL1_PK	TBL_TEST13	P	COL1		
+HR	TEST13_COL2_NN	TBL_TEST13	C	COL2	COL2 IS NOT NULL	
+HR	SYS_C007139	TBL_TEST13	    C	COL2	"COL2" IS NOT NULL	-> MODIFY절에서 구분 된 것
+*/
+```
+>-- *========================================================*  
+-- * 결론: NOT NULL에서는 컬럼 레벨의 형식으로 부여하는 것이  DESC로 널?(NOT NULL)을 확인할 수 있고  
+-- * 제약조건을 VIEW로 볼 때도 'SEARCH_CONDITION'에서 NULL을 확일 할 수있다.  
+-- *========================================================*  
+ 
+>-- *컬럼레벨에서 이름을부여하면서 NOT NULL을 넣는게 바람직함  
 
-
+#### 8.8.7. DEFAULT 표현식
+ 
+1. ISERT 와 UPDATE 문에서 특정 값이 아닌 기본 값을 입력하도록 한다.  
+ 
+2. 형식 및 구조  
+``` SQL
+   컬럼명 데이터타입 DEFAULT 기본값
+```
+4. INSERT 명령 시 해당 컬럼에 입력된 값을 할당 하지 않거나 DEFAULT 키워드를 활용하여 기본으로 설정된 값을 입력하도록 한다.  
+ 
+5. DEFAULT 키워드와 다른 제약(NOT NULL 등) 표기가 함께 사용되어야하는 경우 DFAULT 키워드를 먼저 표기(작성)할 것을 권장한다.  
+ 
+--○ DEFAULT 표현식 적용 실습  
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_BBS                            -- 게시판 테이블 생성
+( SID       NUMBER          PRIMARY KEY         -- 게시물 번호-> 식별자 -> 자동 증가
+, NAME      VARCHAR2(20)                        -- 게시물 작성자
+, CONTENTS  VARCHAR2(200)                       -- 게시물 내용
+, WRITEDAY  DATE            DEFAULT SYSDATE     -- 게시물 작성일
+, COUNTS    NUMBER          DEFAULT 0           -- 게시물 조회수
+, COMMENTS  NUMBER          DEFAULT 0           -- 게시물 댓글 갯수
+);
+--==>> Table TBL_BBS이(가) 생성되었습니다.
+ 
+-- *입력항목에서 제외하면, 넘어오지 못하는 상태가 줄어들지만
+--※ SID 를 자동 증가 값으로 운영하려면 시퀀스 객체가 필요하다.
+--   자동으로 입력되는 컬럼은 사용자들의 입력 항목에서 제외시킬 수 있다.
+ 
+-- 사퀀스 생성
+CREATE SEQUENCE SEQ_BBS
+NOCACHE;
+--==>> Sequence SEQ_BBS이(가) 생성되었습니다.
+ 
+-- 날짜 관련 세션 설정 변경
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS';
+ 
+-- 게시물 작성
+INSERT INTO TBL_BBS(SID, NAME, CONTENTS, WRITEDAY, COUNTS, COMMENTS)
+VALUES(SEQ_BBS.NEXTVAL, '김다슬', '오라클 DEFAULT 표현식을 실습중입니다.'
+    , TO_DATE('2023-10-31 14:39:10', 'YYYY-MM-DD HH24:MI:SS'),0,0);
+--==>> 1 행 이(가) 삽입되었습니다.
+ 
+INSERT INTO TBL_BBS(SID, NAME, CONTENTS, WRITEDAY, COUNTS, COMMENTS)
+VALUES(SEQ_BBS.NEXTVAL, '김다슬', '오라클 DEFAULT 표현식을 실습중입니다.', SYSDATE,0,0);
+--==>> 1 행 이(가) 삽입되었습니다.
+ 
+INSERT INTO TBL_BBS(SID, NAME, CONTENTS, WRITEDAY, COUNTS, COMMENTS)
+VALUES(SEQ_BBS.NEXTVAL, '노은하', '계속 실습중입니다.', DEFAULT,0,0);
+--==>> 1 행 이(가) 삽입되었습니다.
+ 
+INSERT INTO TBL_BBS(SID, NAME, CONTENTS, WRITEDAY, COUNTS, COMMENTS)
+VALUES(SEQ_BBS.NEXTVAL, '문정환', '열심히 실습중입니다.', DEFAULT, DEFAULT, DEFAULT);
+--==>> 1 행 이(가) 삽입되었습니다.
+ 
+INSERT INTO TBL_BBS(SID, NAME, CONTENTS)
+VALUES(SEQ_BBS.NEXTVAL, '이윤수', '무진장 실습중입니다.');
+--==>> 1 행 이(가) 삽입되었습니다.
+ 
+-- 확인
+SELECT *
+FROM TBL_BBS;
+ 
+--○ DEFAULT 표현식 조회(확인)
+SELECT *
+FROM USER_TAB_COLUMNS
+WHERE TABLE_NAME='TBL_BBS';
+--==>>
+/*
+TABLE_NAME	COLUMN_NAME	DATA_TYPE		DATA_LENGTH	NULLABLE	COLUMN_ID	DEFAULT_LENGTH	DATA_DEFAULT	
+TBL_BBS	    SID	        NUMBER			22			N	        1											
+TBL_BBS	    NAME	    VARCHAR2		20			Y	        2											
+TBL_BBS	    CONTENTS	VARCHAR2		200			Y	        3											
+TBL_BBS	    WRITEDAY	DATE			7			Y	        4	        35	            "SYSDATE     -- 게시물 작성일" 
+TBL_BBS	    COUNTS	    NUMBER			22			Y	        5	        35	            "0           -- 게시물 조회수"
+TBL_BBS	    COMMENTS	NUMBER			22			Y	        6	        39	            "0           -- 게시물 댓글 갯수"
+*/
+ 
+--○ 테이블 생성 이후 DEFAULT 표현식 추가 / 변경
+ALTER TABLE 테이블명
+MODIFY 컬럼명 [자료형] DEFAULT 기본값;
+ 
+-- *DEFAULT 표현식은 제약조건의 범주안에 들어가지 않음*  
+-- *DEFAULT는 제거하는 표현식이 없음. 따라서, NULL로 표현*  
+ 
+--○ 기존의 DEFAULT 표현식 제거
+ALTER TABLE 테이블명
+MODIFY 컬럼명 [자료형] DEFAULT NULL;
+```
 
 
 
