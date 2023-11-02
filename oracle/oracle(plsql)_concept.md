@@ -125,8 +125,10 @@ PL/SQL 프로시저가 성공적으로 완료되었습니다.
 */
 ```
 
+<BR>
+
 # 2. 조건문
-## IF 문(조건문)
+## 2.1. IF 문(조건문)
 ``` SQL
 -- IF ~ THEN ~ ELSE ~ END IF;                   --> CASE에서 쓰이는 THEN, ELSE와 같은 의미
 ```
@@ -217,10 +219,209 @@ PL/SQL 프로시저가 성공적으로 완료되었습니다.
 */
 ```
 
+## 2.2. CASE 문(조건문)
+``` SQL
+-- CASE ~ WHEN ~ TEHN ~ ELSE ~ END CASE;
+``` 
+1. 형식 및 구조  
+``` SQL
+CASE 변수
+     WHEN 값1 THEN 실행문;
+     WHEN 값2 THEN 실행문;
+     ELSE 실행문;
+END CASE;
+```
 
+``` SQL 
+ACCEPT NUM PROMPT '남자1 여자2 입력하세요';
+-- *외부로부터 값을 받아들여 올 것인데, 사용자에게 안내메세지 출력*  
+ 
+DECLARE
+    -- 선언부
+    -- (주요 변수 선언)
+--    SEL NUMBER := 1;
+    SEL NUMBER := &NUM;
+    RESULT VARCHAR2(10) := '남자';
+BEGIN
+    -- 실행부
+    -- (테스트)
+    DBMS_OUTPUT.PUT_LINE('SEL : ' || SEL);
+    -- System.out.println("sel : " + sel);
+    DBMS_OUTPUT.PUT_LINE('RESULT : ' || RESULT);
+END;
 
+ 
+ACCEPT NUM PROMPT '남자1 여자2 입력하세요';
+-- *외부로부터 값을 받아들여 올 것인데, 사용자에게 안내메세지 출력*  
+ 
+DECLARE
+    -- 선언부
+    -- (주요 변수 선언)
+--    SEL NUMBER := 1;
+    SEL NUMBER := &NUM;
+    RESULT VARCHAR2(20) := '확인불가';
+BEGIN
+    -- 실행부
+    -- (테스트)
+--    DBMS_OUTPUT.PUT_LINE('SEL : ' || SEL);
+    -- System.out.println("sel : " + sel);
+--    DBMS_OUTPUT.PUT_LINE('RESULT : ' || RESULT);
+ 
+    -- (연산 및 처리)
+    /*CASE SEL
+        WHEN 1
+        THEN DBMS_OUTPUT.PUT_LINE('남자입니다.');
+        WHEN 2
+        THEN DBMS_OUTPUT.PUT_LINE('여자입니다.');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('확인불가');
+    END CASE;
+    */
+    
+    CASE SEL
+        WHEN 1
+        THEN RESULT := '남자';
+        WHEN 2
+        THEN RESULT := '여자';
+        ELSE RESULT := '확인불가';
+    END CASE;
+    
+    -- (결과 출력)
+    DBMS_OUTPUT.PUT_LINE('처리 결과는 '|| RESULT || '입니다.');
+    
+END;
+```
+>-- *인코딩방식이 모두 다름*  
+-- *파이널 프로젝트 자료형 지정할때(테이블 컬럼) 여유있게 만들기*  
+ 
+--※ 외부 입력 처리  
+``` SQL
+-- ACCEPT 구문
+-- ACCEPT 변수명 PROMPT '메세지';
+```
+--> 외부 변수로부터 입력받은 데이터를 내부 변수에 전달할 때  
+-- <&외부변수명> 형태로 접근하게 된다.  
 
+## 2.3. WHILE 반복문
+-- WHILE LOOP ~ END LOOP;  
+-- *와일, 루프시작했다, 엔드, 루프끝났다~*  
+ 
+1. 제어 조건이 TRUE 인 동안 일련의 문장을 반복하기 위해 WHILE LOOP 구문을 사용한다.  
+     조건은 반복이 시작되는 시점에 체크하게 되어 LOOP 내의 문장이 한 번도 수행되지 않을 경우도 있다.  
+     LOOP 를 시작할 때 조건이 FALSE 이면, 반복 문장을 탈출하게 된다.  
+ 
+2. 형식 및 구조  
+``` SQL
+/*
+WHILE 조건 LOOP   -- 조건이 참인 경우 반복 수행
+    -- 실행문;
+END LOOP;
+*/
+ 
+-- 1부터 10 까지의 수 출력(WHILE LOOP 문 활용)
+DECLARE
+    N NUMBER;
+BEGIN
+    N := 0;
+    
+    WHILE N<10 LOOP
+        N := N+1;
+        DBMS_OUTPUT.PUT_LINE(N);
+    END LOOP;
+END;
+--==>>
+/*
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+ 
+ 
+PL/SQL 프로시저가 성공적으로 완료되었습니다.
+*/
+```
 
+## 2.4. FOR 반복문  
+``` SQL
+-- FOR LOOP ~ END LOOP;  
+-- *FOR문보다 향상된 FOR문에 가까움*  
+/*
+FOR(INT N : 자료구조)
+ 
+*/
+``` 
+1. <시작수>에서 1씩 증가하여 <끝냄수> 가 될 때까지 반복 수행한다.  
+
+2. 형식 및 구조  
+``` SQL
+/*
+FOR 카운터 LOOP 시작수.. 끝냄수 LOOP
+    -- 실행문;
+END LOOP
+*/
+ 
+-- 1 부터 10 까지의 수 출력(FOR LOOP 문 활용)
+DECLARE
+    N NUMBER;
+BEGIN
+    FOR N IN 1 .. 10 LOOP
+        DBMS_OUTPUT.PUT_LINE(N);
+    END LOOP;
+END;
+/*
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+ 
+ 
+PL/SQL 프로시저가 성공적으로 완료되었습니다.
+*/
+```
+## 2.5. %TYPE
+1. 특정 테이블에 포함되어 있는 컬럼의 데이터타입(자료형)을 참조하는 데이터 타입    
+ 
+2. 형식 및 구조  
+변수명 테이블.컬럼명%TYPE [:= 초기값];  
+*변수명 VARCHAR2(30);*  
+*이미 있는 테이블의 컬럼구조와 데이터타입을 직접 확인하는게 아니라, %TYPE을 통해서 알아서 설정하는 법*  
+ 
+-- HR.EMPLOYEES 테이블의 특정 데이터를 변수에 저장  
+``` SQL
+DECLARE
+--    V_NAME  VARCHAR2(20);
+    V_NAME  EMPLOYEES.FIRST_NAME%TYPE;
+    -- *내부적으로 윗줄의 주석같이 오라클이 처리해줌*  
+BEGIN
+    -- *맞는 방법*  
+    SELECT FIRST_NAME INTO V_NAME
+    FROM EMPLOYEES
+    WHERE EMPLOYEE_ID = 103;
+    
+    DBMS_OUTPUT.PUT_LINE(V_NAME);
+END;
+    -- *맞지 않는 방법*
+    /*
+    V_NAME := (
+        SELECT FIRST_NAME
+        FROM EMPLOYEES
+        WHERE EMPLOYEE_ID = 103);
+    */
+--    SELECT FIRST_NAME, LAST_NAME INTO V_NAME,V_LASTNAME
+    -- *여러셀 가져오는 것도 가능* 
+```
 
 
 
