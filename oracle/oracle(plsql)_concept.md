@@ -718,11 +718,13 @@ END;
 --==>> Procedure PRC_STUDENT_INSERT이(가) 컴파일되었습니다.
 ```
 ## 6.1. ☑ 20231103_02_scott.sql
---○ 프로시저 생성 후 실행
+--○ 프로시저 생성 후 실행  
+``` SQL
 EXEC PRC_STUDENT_INSERT('wool','java006$','정한울','010-2222-2222','서울 강남구');
 --==>> PL/SQL 프로시저가 성공적으로 완료되었습니다.
-
+```
 --○ 프로시저 호출 이후 확인
+``` SQL
 SELECT*
 FROM TBL_IDPW;
 --==>>
@@ -738,7 +740,7 @@ FROM TBL_STUDENTS;
 moon	문정환	010-1111-1111	제주도 서귀포시
 wool	정한울	010-2222-2222	서울 강남구
 */
-
+```
 
 
 
