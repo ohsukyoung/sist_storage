@@ -237,7 +237,7 @@ FROM DUAL;
 -- *1,5는 반드시 있어야함*  
 -- *+는 단독으로 존재가능*
 
-## 3.1. 별칭(ALIAS)
+## 3.0. 별칭(ALIAS)
 : 테이블을 조회하는 과정에서 각 컬럼의 이름에는 별칭(ALIAS)을 부여할 수 있다.  
 기본 구문의 형식은 『컬럼명 AS "별칭이름"』의 형태로 작성되며 이 때, 『AS』는 생략이 가능하다.  
 또한, 별칭 이름을 감싸는 『""』도 생략이 가능하지만 ""』 를 생략할 경우 별칭 내에서 공백은 사용할 수 없다.  
@@ -249,6 +249,29 @@ EMPNO AS "사원번호"  --: SQL에서는 문자열은 '(작은따옴표)이지�
  JOB 직종명          --: " 생략 가능
  SAL "급   여"       --: 별칭안에 공백이 있을 시 " 생략불가
 ```
+
+## 3.1. 참고(쿼리문의 유형 분류)
+
+1. INSERT, UPDATE, DELETE, (MERGE)  
+--==>> DML(Data Manipulation Language)  
+-- COMMIT / ROLLBACK 이 필요하다.  
+>-- *삽입, 갱신, 삭제, (병합)  
+
+2. CREATE, DROP, ALTER, (TRUNCATE)  
+--==>> DDL(Data Definition Language)  
+-- 실행하면 자동으로 COMMIT 된다.  
+>-- *구조적 생성, 삭제, 변경, (잘라내기)*  
+
+3. GRANT, REVOKE  
+--==>> DCL(Date Control Language)  
+-- 실행하면 자동으로 COMMIT 된다.  
+
+4. COMMIT, ROLLBACK  
+--==>> TCL(Trasaction Control Language)  
+
+-- 정적 pl/sql문 -> DML문, TCL문만 사용 가능하다.  
+-- 동적 pl/sql문 -> DML문, DDL문, DCL문, TCL문 사용가능하다.  
+
 ## 3.2. DDL: 정의어(테이블 생성, 변경, 삭제, 복사)
 DB를 구축하거나 수정할 때 사용(DB구조, DATA 형식, 접근방식)
 > 구조적으로 생성 CREATE  
