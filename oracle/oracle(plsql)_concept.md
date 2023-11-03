@@ -660,12 +660,48 @@ EXE[CUTE] 프로시저명[(인수1, 인수2, ...)];
 ```
 
 --※ 프로시저 실습을 위한 테이블 생성은...  
---  <20231103_02_scott.sql> 파일 참조~!!!  
+--  **<20231103_02_scott.sql>** 파일 참조~!!!  
 >-- *프로시저를 잘 이해하기 위해서는 복잡한 테이블이어야하는데,*  
 -- *이 구조가 논리적으로 맞지 않을 수 있음. -> 이렇게 이해하고 갈 것*  
 
+--○ 프로시저 생성  
+--   프로시저명: PRC_STUDENT_INSERT(아이디, 패스워드, 이름, 전화, 주소)  
 
+>-- *뼈대잡기*  
+``` SQL
+CREATE OR REPLACE PROCEDURE PRC_STUDENT_INSERT
+( 아이디
+, 패스워드
+, 이름
+, 전화
+, 주소
+)
+IS
+BEGIN
+END;
 
+CREATE OR REPLACE PROCEDURE PRC_STUDENT_INSERT
+( V_ID      IN TBL_IDPW.ID%TYPE
+, V_PW      IN TBL_IDPW.PW%TYPE
+, V_NAME    IN TBL_STUDENTS.NAME%TYPE
+, V_TEL     IN TBL_STUDENTS.TEL%TYPE
+, V_ADDR    IN TBL_STUDENTS.ADDR%TYPE
+)
+IS
+BEGIN
+    -- TBL_IDW 테이블에 데이터 입력 -> INSERT
+    INSERT INTO TBL_IDPW(ID,PW)
+    VALUES(V_ID,V_PW);
+    
+    -- TBL_STUDENTS 테이블에 데이터 입력 -> INSERT
+    INSERT INTO TBL_STUDENTS(ID,NAME,TEL,ADDR)
+    VALUES(V_ID,V_NAME, V_TEL, V_ADDR);
+    
+    -- 커밋
+    COMMIT;
+END;
+--==>> Procedure PRC_STUDENT_INSERT이(가) 컴파일되었습니다.
+```
 
 
 
