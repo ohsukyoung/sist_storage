@@ -611,7 +611,22 @@ END;
 -- *CREATE OR REPLACE FUNCTION FN_GENDER(V_SSN VARCHAR2, COL1 NUMBER)...*  
 
 >-- *SET SERVEROUTPUT ON; 하지 않는 이유: 어제의 과정에서는 결과를 출력하기 위한 것이었고,  
--- *오늘의 실습은 함수를 선언하는 형태이기 때문에 하지 않는다.*  
+-- *오늘의 실습은 함수를 선언하는 형태이기 때문에 하지 않는다.*
+
+## 5.2. ☑ 20231103_02_scott.sql
+--○ 20231103_01_scott(qlsql).sql 파일에서  
+--   FN_GENDER() 함수 생성 후 테스트  
+``` SQL
+SELECT NUM, NAME, SSN, FN_GENDER(SSN) "성별"
+FROM TBL_INSA;
+--==>> 
+/*
+1001	홍길동	771212-1022432	남자
+1002	이순신	801007-1544236	남자
+... 중략 ...
+1060	김신애	810809-2111111	여자
+*/
+```
 
 <BR>
 
