@@ -744,9 +744,67 @@ wool	정한울	010-2222-2222	서울 강남구
 */
 ```
 
+<BR>
 
+# 6. 프로시저 내에서의 예외 처리
+--○ TBL_NUMBER 테이블에 데이터를 입력하는 프로시저를 작성  
+--   단, 이 프로시저를 통해 데이터를 입력하는 경우  
+--   CITY(지역) 항목에 '서울', '경기', '대전'만 입력이 가능하도록 구성한다.  
+--   이 지역 외의 다른 지역을 프로시저 호출을 통해 입력하려는 경우  
+--   (즉, 유효하지 않은 데이터 입력을 시도하려는 경우)  
+--   예외에 대한 처리를 하려고 한다.  
+--   프로시저명: PRC_MEMBER_INSERT()  
+``` SQL
+실행 예)
+EXEC PRC_MEMBER_INSERT('박범구', '010-1111-1111', '서울');
+--> 데이터 입력 ○
 
+EXEC PRC_MEMBER_INSERT('김경태', '010-2222-2222', '부산');
+--> 데이터 입력 x
+```
+``` SQL
+CREATE OR REPLACE PROCEDURE PRC_MEMBER_INSERT
+( V_NAME    IN TBL_MEMBER.NAME%TYPE
+, V_TEL     IN TBL_MEMBER.TEL%TYPE
+, V_CITY    IN TBL_MEMBER.CITY%TYPE
+)
+IS
+    -- 실행 영역의 쿼리문 수행을 위해 필요한 변수 선언
+    V_NUM               TBL_MEMBER.NUM%TYPE;
+    
+    -- 사용자 정의 예외에 대한 변수 선언 CHECK~!!!
+    USER_DEFINE_ERROR     EXCEPTION;  -- *예외타입, 이름자유롭게 선언 가능*  
+BEGIN
+    -- 프로시저를 통해 입력 처리를 정상적으로 진행해야 할 데이터인지 아닌지의 여부를
+    -- 가장 먼저 확인할 수 있도록 코드 구성
+    IF (V_CITY NOT IN ('서울', '경기', '대전'))
+        -- 예외 발생 CHECK~!!!
+        THEN RAISE USER_DEFINE_ERROR;   -- *THRROW: 예외를 발생시키겠다*  
+    END IF;
 
+    -- 선언한 변수에 값 담아내기
+    SELECT NVL(MAX(NUM),0) INTO V_NUM
+    FROM TBL_MEMBER;
 
+    -- 쿼리문 구성 -> INSERT
+    INSERT INTO TBL_MEMBER(NUM, NAME, TEL, CITY)
+    VALUES((V_NUM+1) ,V_NAME, V_TEL, V_CITY);
+    
+    -- 예외 처리 구문
+    -- *TRY~CATCH: 예외에 대한 분기처리*  
+    -- *커밋보다 예외처리구문을 먼저 작성하기*  
+    EXCEPTION
+        WHEN USER_DEFINE_ERROR
+            THEN RAISE_APPLICATION_ERROR(-20001, '서울,경기,대전만 입력이 가능합니다.'); -- *오라클 내장 함수*  
+            -- *20001부터 사용자 지정 에러코드 지정가능*  
+            -- *EXCEPTION 테이블 참조하여 에러코드 넣기*  
+        WHEN OTHERS     -- *기타 다른 에러가 날 경우*  
+            THEN ROLLBACK;
+    
+    -- 커밋
+    COMMIT;
+END;
+--==>> Procedure PRC_MEMBER_INSERT이(가) 컴파일되었습니다.
+```
 
 
