@@ -696,3 +696,577 @@ WHERE NUM = 1001;
 
 ```
 
+<BR>
+
+
+# 페이지 20231103_01_scott(qlsql).sql
+
+## 1. 문제
+--○ 임의의 정수 두 개를 매개변수(입력 파라미터)로 넘겨받아 -> (A,B)  
+--   A 의 B 승의 값을 반환하는 사용자 정의 함수를 작성한다.  
+--   단, 기존의 오라클 내장 함수를 이용하지 않고, 반복문을 활용하여 작성한다.  
+-- 함수명 : FN_POW()  
+/*
+사용 예)
+SELECT FN_POW(10,3)
+FROM DUAL;
+--==>> 1000
+*/
+### 1.2. 답
+``` SQL
+CREATE OR REPLACE FUNCTION FN_POW(V_N1 NUMBER, V_N2 NUMBER)
+RETURN NUMBER
+IS
+    -- 선언부
+    V_I      NUMBER := 1;   -- 증가변수
+    V_RESULT NUMBER := V_N1;-- 결과값
+BEGIN
+    -- 실행부    
+    LOOP
+        EXIT WHEN V_I >= V_N2;
+        V_RESULT := V_RESULT * V_N1;
+        V_I := V_I + 1;
+    END LOOP;
+    
+    -- 결과값 반환
+    RETURN V_RESULT;
+END;
+--==>> Function FN_POW이(가) 컴파일되었습니다.
+```
+### 1.3. 해설
+``` SQL
+/*
+FN_POW(10,3)
+    기준 1 * 10 * 10 * 10 -> 1000 -(O)
+    기준 0 * 10 * 10 * 10 -> 0    -(X)
+*/
+CREATE OR REPLACE FUNCTION FN_POW(A NUMBER, B NUMBER)
+RETURN NUMBER
+IS
+    V_RESULT    NUMBER := 1;    -- 반환 결과값 변수 -> 1로 초기화~!!! CHECK~!!!
+    V_NUM       NUMBER;         -- 루프 변수
+BEGIN
+    -- 반복문 구성
+    FOR V_NUM IN 1 .. B LOOP
+        V_RESULT := V_RESULT * A;   -- V_RESULT *= A;
+    END LOOP;
+    
+    -- 최종 결과값 반환
+    RETURN V_RESULT;
+END;
+--==>> Function FN_POW이(가) 컴파일되었습니다.
+-- *PLSQL의 경우 컴파일 되었다고 해서, 로직이 문제가 없다는 것은 아님*  
+```
+### 1.4. ☑ 20231103_02_scott.sql
+--○ 20231103_01_scott(qlsql).sql 파일에서  
+--   FN_POW() 함수 생성 후 테스트  
+``` SQL
+SELECT FN_POW(10,3) "RESULT"
+FROM DUAL;
+--==>> 1000
+```
+## 2. 문제
+--○ TBL_INSA 테이블의 급여 계산 전용 함수를 정의한다.  
+--   급여는 <(기본급*12)+수당> 기반으로 연산을 수행한다.  
+-- 함수명: FN_PAY(기본급, 수당)  
+
+--BASICPAY
+--SUDANG
+### 2.2. 답
+``` SQL
+CREATE OR REPLACE FUNCTION FN_PAY(V_BPAY NUMBER, V_SUDANG NUMBER)
+RETURN NUMBER
+IS
+    V_RESULT NUMBER;
+BEGIN
+    V_RESULT := V_BPAY*12 + V_SUDANG;
+    
+    RETURN V_RESULT;
+END;
+--==>> Function FN_PAY이(가) 컴파일되었습니다.
+```
+### 2.3. 해설
+``` SQL
+CREATE OR REPLACE FUNCTION FN_PAY(VBASICPAY NUMBER, VSUDANG NUMBER)
+RETURN NUMBER
+IS
+    -- 주요 변수 선언
+    VRESULT NUMBER;
+BEGIN
+    -- 연산 및 처리
+    VRESULT := (NVL(VBASICPAY,0)*12) + NVL(VSUDANG,0);
+    
+    -- 최종 결과값 반환
+    RETURN VRESULT;
+END;
+--==>> Function FN_PAY이(가) 컴파일되었습니다.
+
+-- *기본급 누락, 수락 누락 등이 있으면 -> NULL*  
+-- *따라서, 안정적이기 위해 NULL을 고려해 연산 및 처리 하기*  
+```
+### 2.4. ☑ 20231103_02_scott.sql
+--○ 20231103_01_scott(qlsql).sql 파일에서  
+--   FN_PAY() 함수 생성 후 테스트  
+``` SQL
+SELECT NUM, NAME, BASICPAY, SUDANG, FN_PAY(BASICPAY,SUDANG) "급여"
+FROM TBL_INSA;
+--==>> 
+/*
+1001	홍길동	2610000	200000	31520000
+1002	이순신	1320000	200000	16040000
+... 중략 ...
+1060	김신애	900000	102000	10902000
+*/
+```
+## 3. 문제
+--○ TBL_INSA 테이블에서
+--   입사일을 기준으로 현재까지 근무년수를 반환하는 함수를 정의한다.
+--   단, 근무년수는 소수점 이하 한자리까지 계산한다.
+-- 함수명: FN_WORKYEAR(입사일)
+>-- *현재의 기준은 내년에 조회하더라도 가능하도록* 
+
+--IBSADATE: 입사일
+### 3.2. 답
+``` SQL
+CREATE OR REPLACE FUNCTION FN_WORKYEAR(VIBSADATE DATE)
+RETURN VARCHAR2
+IS
+    V_RESULT NUMBER;
+    V_RESULT2 VARCHAR2(20);
+BEGIN
+    V_RESULT := TRUNC(MONTHS_BETWEEN(SYSDATE,VIBSADATE)/12,1);
+    V_RESULT2 := (TO_CHAR(V_RESULT) ||'='||TRUNC(V_RESULT)||'년'||MOD(V_RESULT,1)*12||'개월');
+    
+    V_RESULT2 := (TO_CHAR(TRUNC(MONTHS_BETWEEN(SYSDATE,VIBSADATE)/12))||'년')
+                 ||(TO_CHAR(TRUNC(MOD(MONTHS_BETWEEN(SYSDATE,VIBSADATE),12)))||'개월');
+                 
+    RETURN V_RESULT2;
+END;
+--==>> Function FN_WORKYEAR이(가) 컴파일되었습니다.
+```
+### 3.3. 해설
+``` SQL
+-- 1
+SELECT MONTHS_BETWEEN(SYSDATE, TO_DATE('1998-10-11','YYYY-MM-DD'))/12 "RESULT"
+FROM DUAL;
+--==>> 25.06314046321186778176025487853444842692
+
+-- 2
+SELECT TRUNC(MONTHS_BETWEEN(SYSDATE, TO_DATE('1998-10-11','YYYY-MM-DD'))/12) || '년' ||
+        TRUNC(MOD(MONTHS_BETWEEN(SYSDATE, TO_DATE('1998-10-11','YYYY-MM-DD')),12)) || '개월'
+FROM DUAL;
+--==>> 25년0개월
+
+-- 3: 년의 소수점 첫째자리까지
+CREATE OR REPLACE FUNCTION FN_WORKYEAR(VIBSADATE DATE)
+RETURN NUMBER
+IS 
+    VRESULT NUMBER;
+BEGIN
+    VRESULT := TRUNC(MONTHS_BETWEEN(SYSDATE, VIBSADATE) / 12 ,1);
+    
+    RETURN VRESULT;
+END;
+
+-- 4: X년 X개월
+CREATE OR REPLACE FUNCTION FN_WORKYEAR(VIBSADATE DATE)
+RETURN VARCHAR2
+IS 
+    VRESULT VARCHAR2(20);
+BEGIN
+    VRESULT := TRUNC(MONTHS_BETWEEN(SYSDATE, VIBSADATE) / 12) || '년' ||
+               TRUNC(MOD(MONTHS_BETWEEN(SYSDATE,VIBSADATE),12))||'개월';
+    
+    RETURN VRESULT;
+END;
+```
+### 3.4. 해설
+--○ 20231103_01_scott(qlsql).sql 파일에서  
+--   FN_WORKYEAR() 함수 생성 후 테스트  
+``` SQL
+SELECT *
+FROM TBL_INSA;
+
+DESC TBL_INSA;
+
+SELECT FN_WORKYEAR(IBSADATE) "RESULT"
+FROM TBL_INSA;
+
+SELECT NUM, NAME, IBSADATE, FN_WORKYEAR(IBSADATE) "RESULT"
+FROM TBL_INSA;
+```
+### 3.4. ☑ 20231103_02_scott.sql
+--○ 20231103_01_scott(qlsql).sql 파일에서  
+--   FN_WORKYEAR() 함수 생성 후 테스트  
+``` SQL
+SELECT NUM, NAME, IBSADATE, FN_WORKYEAR(IBSADATE) "RESULT"
+FROM TBL_INSA;
+```
+
+## 4. 문제
+--○ 데이터 입력 시 특정 항목의 데이터만 입력하면  
+--  내부적으로 다른 추가항목에 대한 처리가 함께 이루어질 수 있도록 하는 프로시저를 작성한다.(생성한다.)  
+--  프로시저명: PRC_SUNGJUK_INSERT()  
+
+``` SQL
+문제 인식)  
+현재 TBL_SUNGJUK 테이블은  
+HAKBUN, NAME, KOR, ENG, MAT, TOT, AVG, GRADE  
+(학번, 이름, 국어점수, 영어점수, 수학점수, 총점, 평균, 등급) 컬럼으로 구성되어 있다.  
+이 컬럼을 대상으로 특정 항목(학번, 이름, 국어점수, 영어점수, 수학점수)만 입력하면  
+추가 항목(총점, 평균, 등급)은 알아서 처리될 수 있도록 프로시저를 구성하라는 것이다.  
+
+실행 예)  
+EXEC PRC_SUNGJUC_INSERT(1,'김다슬',90,80,70);  
+
+-> 이와 같은 프로시저 호출로 처리된 결과  
+
+학번 이름   국어점수 영어점수 수학점수  총점  평균  등급  
+1    김다슬    90       80       70     240     80    B  
+```
+### 4.1. 답
+``` SQL
+CREATE OR REPLACE PROCEDURE PRC_SUNGJUC_INSERT
+( V_HAKBUN  IN TBL_SUNGJUK.HAKBUN%TYPE
+, V_NAME    IN TBL_SUNGJUK.NAME%TYPE
+, V_KOR     IN TBL_SUNGJUK.KOR%TYPE
+, V_ENG     IN TBL_SUNGJUK.ENG%TYPE
+, V_MAT     IN TBL_SUNGJUK.MAT%TYPE
+)
+IS
+    V_TOT   TBL_SUNGJUK.TOT%TYPE;
+    V_AVG   TBL_SUNGJUK.TOT%TYPE;
+    V_GRADE TBL_SUNGJUK.GRADE%TYPE;
+BEGIN
+  -- 연산
+  V_TOT := V_KOR + V_ENG + V_MAT;
+  V_AVG := (V_TOT) / 3;
+  
+  IF V_AVG >= 90
+    THEN V_GRADE := 'A';
+  ELSIF V_AVG >= 80
+    THEN V_GRADE := 'B';
+  ELSIF V_AVG >= 70
+    THEN V_GRADE := 'C';
+  ELSE
+    V_GRADE := 'D';
+  END IF;
+
+  -- 데이터 입력
+  INSERT INTO TBL_SUNGJUK(HAKBUN, NAME, KOR, ENG, MAT, TOT, AVG, GRADE)
+         VALUES(V_HAKBUN, V_NAME, V_KOR, V_ENG, V_MAT, V_TOT, V_AVG, V_GRADE);
+  
+  -- 커밋
+  COMMIT;
+END;
+--==>> Procedure PRC_SUNGJUC_INSERT이(가) 컴파일되었습니다.
+```
+### 4.3. 해설
+``` SQL
+CREATE OR REPLACE PROCEDURE PRC_SUNGJUC_INSERT
+( 학번
+, 성명
+, 국어점수
+, 영어점수
+, 수학점수
+)
+IS
+BEGIN
+END;
+
+CREATE OR REPLACE PROCEDURE PRC_SUNGJUC_INSERT
+( V_HAKBUN  IN TBL_SUNGJUK.HAKBUN%TYPE
+, V_NAME    IN TBL_SUNGJUK.NAME%TYPE
+, V_KOR     IN TBL_SUNGJUK.KOR%TYPE
+, V_ENG     IN TBL_SUNGJUK.ENG%TYPE
+, V_MAT     IN TBL_SUNGJUK.MAT%TYPE
+)
+IS
+    -- 선언부
+    -- INSERT 쿼리문을 수행하기 위해 필요한 추가 변수 구성
+    V_TOT   TBL_SUNGJUK.TOT%TYPE;
+    V_AVG   TBL_SUNGJUK.AVG%TYPE;
+    V_GRADE TBL_SUNGJUK.GRADE%TYPE;
+BEGIN
+    -- 실행부
+    -- 선언부에 추가로 선언한 주요 변수들에 값을 담아내야 한다.
+    V_TOT := V_KOR + V_ENG + V_MAT;
+    V_AVG := V_TOT / 3;
+    IF (V_AVG>=90)
+    -- *오라클에서는 괄호()가 있어야 한다는 규칙은 없음, 있어도 상관없음*
+        THEN V_GRADE := 'A';
+    ELSIF (V_AVG>=80)
+        THEN V_GRADE := 'B';
+    ELSIF (V_AVG>=70)
+        THEN V_GRADE := 'C';
+    ELSIF (V_AVG>= 60)
+        THEN V_GRADE := 'D';
+    ELSE
+        V_GRADE := 'F';
+    END IF;
+    
+    -- INSERT 쿼리문 수행
+    INSERT INTO TBL_SUNGJUK(HAKBUN, NAME, KOR, ENG, MAT, TOT, AVG, GRADE)
+    VALUES(V_HAKBUN, V_NAME, V_KOR, V_ENG, V_MAT, V_TOT, V_AVG, V_GRADE);
+    
+    -- 커밋
+    COMMIT;
+END;
+--==>> Procedure PRC_SUNGJUC_INSERT이(가) 컴파일되었습니다.
+```
+### 4.4. ☑ 20231103_02_scott.sql
+-- ※ 프로시저를 생성하는 구문은  
+--    <20231103_01_scott(qlsql).sql>파일 참조~!!  
+
+--○ 프로시저 생성 후 실행(호출)  
+``` SQL
+EXEC PRC_SUNGJUC_INSERT(1, '김다슬', 90, 80, 70);
+EXEC PRC_SUNGJUC_INSERT(2, '노은하', 80, 70, 65);
+--==>> PL/SQL 프로시저가 성공적으로 완료되었습니다.
+```
+--○ 프로시저 호출 이후 테이블 조회
+``` SQL
+SELECT *
+FROM TBL_SUNGJUK;
+--==>> 
+/*
+1	김다슬	90	80	70	240	80	B
+2	노은하	80	70	65	215	71.7	C
+*/
+```
+## 5. 문제
+--○ TBL_SUNGJUCK 테이블에서 특정 학생의 점수 (학번, 국어점수, 영어점수, 수학점수) 데이터 수정 시  
+--  총점, 평균, 등급까지 함께 수정되는 프로시저를 생성한다.  
+-- 프로시저명: PRC_SUNGJUK_UPDATE()  
+``` SQL
+실행 예)
+EXEC PRC_SUNGJUK_UPDATE(2,50,50,50);
+
+-> 이와 같은 프로시저 호출로 처리된 결과  
+
+학번 이름   국어점수 영어점수 수학점수  총점  평균  등급  
+1    김다슬    90       80       70     240     80    B
+2    노은하    50       50       50     150     50    F
+```
+### 5.2. 답
+``` SQL
+CREATE OR REPLACE PROCEDURE PRC_SUNGJUK_UPDATE
+( V_HAKBUN  IN TBL_SUNGJUK.HAKBUN%TYPE
+, V_KOR     IN TBL_SUNGJUK.KOR%TYPE
+, V_ENG     IN TBL_SUNGJUK.ENG%TYPE
+, V_MAT     IN TBL_SUNGJUK.MAT%TYPE
+)
+IS
+    V_TOT   TBL_SUNGJUK.TOT%TYPE;
+    V_AVG   TBL_SUNGJUK.TOT%TYPE;
+    V_GRADE TBL_SUNGJUK.GRADE%TYPE;
+BEGIN
+    -- 연산
+    V_TOT := V_KOR + V_ENG + V_MAT;
+    V_AVG := (V_TOT) / 3;
+    
+    IF (V_AVG>=90)
+        THEN V_GRADE := 'A';
+    ELSIF (V_AVG>=80)
+        THEN V_GRADE := 'B';
+    ELSIF (V_AVG>=70)
+        THEN V_GRADE := 'C';
+    ELSIF (V_AVG>= 60)
+        THEN V_GRADE := 'D';
+    ELSE
+        V_GRADE := 'F';
+    END IF;
+    
+    -- 데이터 입력
+    UPDATE TBL_SUNGJUK
+    SET KOR=V_KOR, ENG=V_ENG, MAT=V_MAT, TOT=V_TOT, AVG=V_AVG, GRADE=V_GRADE
+    WHERE HAKBUN = V_HAKBUN;
+      
+    -- 커밋
+    COMMIT;
+END;
+```
+### 5.3. 해설
+
+### 5.4. ☑ 20231103_02_scott.sql
+``` SQL
+EXEC PRC_SUNGJUK_UPDATE(2,50,50,50);
+--==>>
+/*
+1	김다슬	90	80	70	240	80	B
+2	노은하	50	50	50	150	50	F
+*/
+
+```
+
+## 6. 문제
+--○ TBL_STUDENTS 테이블에서 전화번호와 주소 데이터를 수정하는(변경하는) 프로시저를 작성한다.  
+--  단, ID와 PW가 일치는 경우에만 수정을 진행 할 수 있도록 처리한다.  
+-- 프로시저명: PRG_STUDENT_UPDATE()   
+``` SQL
+실행 예)
+EXEC PRC_STUDENT_UPDATE('moon', 'java000$', '010-9999-9999', '강원도 횡성');
+--> 데이터 수정 X
+
+EXEC PRC_STUDENT_UPDATE('moon', 'java006$', '010-9999-9999', '강원도 횡성');
+--> 데이터 수정 O
+```
+### 6.2. 답
+``` SQL
+DESC TBL_STUDENTS;
+
+CREATE OR REPLACE PROCEDURE PRC_STUDENT_UPDATE
+( 
+  V_ID      IN TBL_IDPW.ID%TYPE
+, V_PW      IN TBL_IDPW.PW%TYPE
+, V_TEL     IN TBL_STUDENTS.TEL%TYPE
+, V_ADDR    IN TBL_STUDENTS.ADDR%TYPE  
+)
+IS
+BEGIN
+    
+    UPDATE TBL_STUDENTS
+    SET TEL=V_TEL, ADDR=V_ADDR
+    WHERE ID=V_ID
+      AND (SELECT PW
+            FROM TBL_IDPW
+            WHERE ID=V_ID)= V_PW;
+      
+    COMMIT;
+END;
+```
+### 6.3. 해설
+``` SQL
+-- 방법1
+CREATE OR REPLACE PROCEDURE PRC_STUDENT_UPDATE
+( 
+  V_ID      IN TBL_IDPW.ID%TYPE
+, V_PW      IN TBL_IDPW.PW%TYPE
+, V_TEL     IN TBL_STUDENTS.TEL%TYPE
+, V_ADDR    IN TBL_STUDENTS.ADDR%TYPE  
+)
+IS
+    V_PW2   TBL_IDPW.PW%TYPE;       -- 사용자가 입력한 PW를 담을 변수
+    V_FLAG  NUMBER := 0;            -- 패스워드일치:1 / 패스워드불일치:2
+BEGIN
+    -- 작성개념1) FROM TBL_IDPW를 통해 ID 확인;
+    
+    -- 작성개념2) 'moon'일 것이다고 가정하고
+    --              사용자가 입력한 PW를 받을 수 있도록 작성    
+    SELECT PW INTO V_PW2
+    FROM TBL_IDPW
+    WHERE ID = 'moon';
+    
+    -- 조건에 따라 분기(사용자 입력PW, 테이블을 통해 얻은 PW - 일치/ 불일치)
+    IF (V_PW = V_PW2)       -- 패스워드 일치
+        THEN V_FLAG := 1;
+    ELSE                    -- 패스워드 불일치
+        V_FLAG := 2;
+    END IF;
+    
+    UPDATE TBL_STUDENTS
+    SET TEL=V_TEL, ADDR=V_ADDR
+    WHERE ID=V_ID
+--      AND 패스워드 일치;
+      AND V_FLAG = 1;
+      
+    COMMIT;
+END;
+--==>> Procedure PRC_STUDENT_UPDATE이(가) 컴파일되었습니다.
+
+
+-- 방법2
+CREATE OR REPLACE PROCEDURE PRC_STUDENT_UPDATE
+( 
+  V_ID      IN TBL_IDPW.ID%TYPE
+, V_PW      IN TBL_IDPW.PW%TYPE
+, V_TEL     IN TBL_STUDENTS.TEL%TYPE
+, V_ADDR    IN TBL_STUDENTS.ADDR%TYPE  
+)
+IS
+BEGIN
+    
+    -- 두개의 테이블을 JOIN 해서 업데이트
+    UPDATE (SELECT T1.ID, T1.PW, T2.TEL, T2.ADDR    -- 괄호 안의 서브쿼리만 잡아서 조회해보기
+            FROM TBL_IDPW T1 JOIN TBL_STUDENTS T2   
+            ON T1.ID = T2.ID) T
+    SET TEL=V_TEL, ADDR=V_ADDR
+    WHERE T.ID = V_ID
+      AND T.PW = V_PW;
+      
+    COMMIT;
+END;
+--==>> Procedure PRC_STUDENT_UPDATE이(가) 컴파일되었습니다.
+```
+### 6.4. ☑ 20231103_02_scott.sql
+--○ TBL_STUDENT 테이블 조회
+SELECT *
+FROM TBL_STUDENTS;
+--==>>
+/*
+moon	문정환	010-1111-1111	제주도 서귀포시
+wool	정한울	010-2222-2222	서울 강남구
+*/
+
+SELECT *
+FROM TBL_IDPW;
+--==>>
+/*
+moon	java006$
+wool	java006$
+*/
+
+--○ 방법1) 프로시저 생성 후 실행 & 조회 ---------------------------------------
+``` SQL
+--○ 프로시저 생성 후 실행 테스트(잘못된 테스트)  
+EXEC PRC_STUDENT_UPDATE('moon', 'java000$', '010-9999-9999', '강원도 횡성');
+--==>> PL/SQL 프로시저가 성공적으로 완료되었습니다.
+
+--○ 프로시저 호출 후 테이블 조회
+SELECT *
+FROM TBL_STUDENTS;
+/*
+moon	문정환	010-1111-1111	제주도 서귀포시
+wool	정한울	010-2222-2222	서울 강남구
+*/
+
+--○ 프로시저 생성 후 실행 테스트(올바른 테스트)
+EXEC PRC_STUDENT_UPDATE('moon', 'java006$', '010-9999-9999', '강원도 횡성');
+--==>> PL/SQL 프로시저가 성공적으로 완료되었습니다.
+
+--○ 프로시저 호출 후 테이블 조회
+SELECT *
+FROM TBL_STUDENTS;
+/*
+moon	문정환	010-9999-9999	강원도 횡성
+wool	정한울	010-2222-2222	서울 강남구
+*/
+```
+--○ 방법2) 프로시저 생성 후 실행 & 조회 ---------------------------------------
+``` SQL
+--○ 프로시저 생성 후 실행 테스트(잘못된 테스트)
+EXEC PRC_STUDENT_UPDATE('wool', 'java000$', '010-8888-8888', '전남 목포');
+--==>> PL/SQL 프로시저가 성공적으로 완료되었습니다.
+
+--○ 프로시저 호출 후 테이블 조회
+SELECT *
+FROM TBL_STUDENTS;
+/*
+moon	문정환	010-9999-9999	강원도 횡성
+wool	정한울	010-2222-2222	서울 강남구
+*/
+
+--○ 프로시저 생성 후 실행 테스트(올바른 테스트)
+EXEC PRC_STUDENT_UPDATE('wool', 'java006$', '010-8888-8888', '전남 목포');
+--==>> PL/SQL 프로시저가 성공적으로 완료되었습니다.
+
+--○ 프로시저 호출 후 테이블 조회
+SELECT *
+FROM TBL_STUDENTS;
+/*
+moon	문정환	010-9999-9999	강원도 횡성
+wool	정한울	010-8888-8888	전남 목포
+*/
+```
+
+
