@@ -1200,6 +1200,7 @@ END;
 ```
 ### 6.4. ☑ 20231103_02_scott.sql
 --○ TBL_STUDENT 테이블 조회
+``` SQL
 SELECT *
 FROM TBL_STUDENTS;
 --==>>
@@ -1215,6 +1216,7 @@ FROM TBL_IDPW;
 moon	java006$
 wool	java006$
 */
+```
 
 --○ 방법1) 프로시저 생성 후 실행 & 조회 ---------------------------------------
 ``` SQL
