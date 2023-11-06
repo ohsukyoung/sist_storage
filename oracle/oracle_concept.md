@@ -2915,381 +2915,7 @@ WHERE TABLE_NAME='TBL_TEST4';
 ```
 ### 8.8.2. FOREIGN KEY
 
-### 8.8.3. UNIQUE(UK:U)
-1. 테이블에서 지정한 컬럼의 데이터가 중복되지 않고 유일할 수 있도록 설정하는 제약조건.  
---      PRIMARY KEY 와 유사한 제약조건이지만, **NULL을 허용**한다는 차이점이 있다.  
---      내부적으로 PRIMARY KEY와 마찬가지로 UNIQUE INDEX 가 자동 생성된다.  
---      **하나의 테이블 내**에서 **UNIQUE 제약조건은 여러 번 설정하는 것이 가능**하다.  
---      즉, 하나의 테이블에 UNIQUE 제약조건을 여러 개 만드는 것은 가능하다는 것이다.  
->-- *UNIQUE에는 NOT NULL제약조건이 포함되어있지 않다.*  
-``` SQL
-/* 
---회원 테이블
-회원번호    아이디     패스워드    성명  주민번호 휴대폰번호 우편번호 주소1 주소2
-P.K        P.K(X)/U                         U        U
-*/
-```
- 
-2. 형식 및 구조  
-(1) 컬럼 레벨의 형식
-``` SQL
--- 컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명] UNIQUE
-```
-(2) 테이블 레벨의 형식
-``` SQL
--- 컬럼명 데이터타입,
--- 컬럼명 데이터타입,
--- CONSTRAINT CONSTARINT명 UNIZUE(컬럼명,...)
-```
-## 📌 2. 안내
---○ UK 지정 실습((1) 컬럼 레벨의 형식)
-``` SQL
--- 테이블 생성
-CREATE TABLE TBL_TEST5
-( COL1 NUMBER(5)    PRIMARY KEY
-, COL2 VARCHAR(30)  UNIQUE
-);
---==>> Table TBL_TEST5이(가) 생성되었습니다.
- 
--- 제약조건 조회
-SELECT *
-FROM VIEW_CONSTCHECK
-WHERE TABLE_NAME = 'TBL_TEST5';
---==>> 
-/*
-OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
-HR	    SYS_C007095	    TBL_TEST5	    P	        COL1		
-HR	    SYS_C007096	    TBL_TEST5	    U	        COL2		
-*/
- 
--- 데이터 입력
-INSERT INTO TBL_TEST5(COL1,COL2) VALUES(1,'TEST');
-INSERT INTO TBL_TEST5(COL1,COL2) VALUES(1,'TEST'); --> 에러 발생(ORA-00001: unique constraint (HR.SYS_C007095) violated)
-INSERT INTO TBL_TEST5(COL1,COL2) VALUES(2,'ABCD');
-INSERT INTO TBL_TEST5(COL1,COL2) VALUES(3,'ABCD'); --> 에러 발생(INSERT INTO TBL_TEST5(COL1,COL2) VALUES(2,'ABCD');)
-INSERT INTO TBL_TEST5(COL1,COL2) VALUES(3, NULL);
-INSERT INTO TBL_TEST5(COL1) VALUES(4);
-INSERT INTO TBL_TEST5(COL1,COL2) VALUES(5,'ABCD'); --> 에러 발생(ORA-00001: unique constraint (HR.SYS_C007096) violated)
- 
-SELECT *
-FROM TBL_TEST5;
---==>>
-/*
-1	TEST
-2	ABCD
-3	
-4	
-*/
-```
-
---○ UK 지정 실습((2) 테이블 레벨의 형식)
-``` SQL
--- 테이블 생성
-CREATE TABLE TBL_TEST6
-( COL1 NUMBER(5)
-, COL2 VARCHAR2(30)
-, CONSTRAINT TEST6_COL1_PK PRIMARY KEY(COL1)
-, CONSTRAINT TEST6_COL2_UK UNIQUE(COL2)
-);
---==>> Table TBL_TEST6이(가) 생성되었습니다.
- 
--- 제약조건 확인
-SELECT *
-FROM VIEW_CONSTCHECK
-WHERE TABLE_NAME = 'TBL_TEST6';
---==>> 
-/*
-HR	TEST6_COL1_PK	TBL_TEST6	P	COL1		
-HR	TEST6_COL2_UK	TBL_TEST6	U	COL2		
-*/
--- *UNIQUE는 복합 UNIQUE없음*  
-``` 
---○ UK 지정 실습((3) 테이블 생성 이후 제약조건 추가)
-``` SQL
--- 테이블 생성
-CREATE TABLE TBL_TEST7
-( COL1 NUMBER(5)
-, COL2 VARCHAR(30)
-);
---==>> Table TBL_TEST7이(가) 생성되었습니다.
- 
--- 제약조건 확인
-SELECT *
-FROM VIEW_CONSTCHECK
-WHERE TABLE_NAME = 'TBL_TEST7';
---==>> 조회 결과 없음
- 
--- 제약조건 추가
-ALTER TABLE TBL_TEST7
-ADD CONSTRAINT TEST7_COL1_PK PRIMARY KEY(COL1);
--- +
-ALTER TABLE TBL_TEST7
-ADD CONSTRAINT TETS7_COL2_UK UNIQUE(COL2);
--- 
-ALTER TABLE TBL_TEST7
-ADD( CONSTRAINT TEST7_COL1_PK PRIMARY KEY(COL1)
-    ,CONSTRAINT TEST7_COL2_UK UNIQUE(COL2));
---==>> Table TBL_TEST7이(가) 변경되었습니다.
- 
--- 제약조건 추가 후 다시 확인
-SELECT *
-FROM VIEW_CONSTCHECK
-WHERE TABLE_NAME = 'TBL_TEST7';
---==>>
-/*
-HR	TEST7_COL1_PK	TBL_TEST7	P	COL1		
-HR	TEST7_COL2_UK	TBL_TEST7	U	COL2		
-*/
-```
-### 8.8.4. CHECK(CK:C)
-1. 컬럼에서 허용 가능한 데이터의 범위나 조건을 지정하기 위한 제약조건  
-    컬럼에 입력되는 데이터를 검사하여 조건에 맞는 데이터만 입력될 수 있도록 한다.
-    또한, 컬러멩서 주어되는 데이터를 검사하여 조건에 맞는 데이터로 수정되는 것만 
-    허용하는 기능을 수행하게 된다.
-    
-2. 형식 및 구조  
-    (1) 컬럼 레벨의 형식
-    ``` SQL
-    컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명] CHECK(컬럼 조건)
-    ```
-    
-    (2) 테이블 레벨의 형식
-    ``` SQL
-    컬럼명 타입,
-    컬럼명 타입,
-    CONSTRAINT CONSTRAINT명 CHECK(컬럼 조건)
-    ```
-
-### 8.8.4. CHECK(CK:C)
-1. 컬럼에서 허용 가능한 데이터의 범위나 조건을 지정하기 위한 제약조건  
-    컬럼에 입력되는 데이터를 검사하여 조건에 맞는 데이터만 입력될 수 있도록 한다.  
-    또한, 컬럼에서 주어되는 데이터를 검사하여 조건에 맞는 데이터로 수정되는 것만 
-    허용하는 기능을 수행하게 된다.
-    
-2. 형식 및 구조  
-    (1) 컬럼 레벨의 형식
-    ``` SQL
-    컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명] CHECK(컬럼 조건)
-    ```
-    
-    (2) 테이블 레벨의 형식
-    ``` SQL
-    컬럼명 타입,
-    컬럼명 타입,
-    CONSTRAINT CONSTRAINT명 CHECK(컬럼 조건)
-    ```
---○ CK 지정 실습((1) 컬럼 레벨의 형식)
-``` SQL
--- 테이블 생성
-CREATE TABLE TBL_TEST8
-( COL1 NUMBER(5)    PRIMARY KEY
-, COL2 VARCHAR2(30)
-, COL3 NUMBER(3)    CHECK(COL3 BETWEEN 0 AND 100)
-);
---==>> Table TBL_TEST8이(가) 생성되었습니다.
- 
--- 데이터 입력
-INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(1,'박범구',100);
-INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(1,'엄재용',100); --> 에러 발생 (ORA-00001: unique constraint (HR.SYS_C007106) violated)
-INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(2,'엄재용',101); --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
-INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(2,'엄재용',-1);  --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
-INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(2,'엄재용',80);
- 
--- 확인
-SELECT *
-FROM TBL_TEST8;
---==>>
-/*
-1	박범구	100
-2	엄재용	80
-*/    
- 
--- 커밋
-COMMIT;
---==>> 커밋 완료.
- 
--- 제약조건 확인
-SELECT *
-FROM VIEW_CONSTCHECK
-WHERE TABLE_NAME = 'TBL_TEST8';
---==>>
-/*
-OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	    DELETE_RULE
-HR	    SYS_C007105	    TBL_TEST8	    C	        COL3	    COL3 BETWEEN 0 AND 100	(null)
-HR	    SYS_C007106	    TBL_TEST8	    P	        COL1		(null)                  (null)
-*/
--- *SEARCH_CONDITION: 제약조건 기술*  
-``` 
---○ CK 지정 실습((2) 테이블 레벨의 형식)
-``` SQL
--- 테이블 생성
-CREATE TABLE TBL_TEST9
-( COL1 NUMBER(5)
-, COL2 VARCHAR2(30)
-, COL3 NUMBER(3)
-, CONSTRAINT TEST9_COL1_PK PRIMARY KEY(COL1)
-, CONSTRAINT TEST9_COL3_CK CHECK(COL3 BETWEEN 0 AND 100)
-);
---==>> Table TBL_TEST9이(가) 생성되었습니다.
- 
--- 데이터 입력
-INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(1,'박범구',100);
-INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(1,'엄재용',100); --> 에러 발생 (ORA-00001: unique constraint (HR.SYS_C007106) violated)
-INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(2,'엄재용',101); --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
-INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(2,'엄재용',-1);  --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
-INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(2,'엄재용',80);
- 
--- 확인
-SELECT *
-FROM TBL_TEST9;
---==>>
-/*
-1	박범구	100
-2	엄재용	80
-*/    
- 
--- 커밋
-COMMIT;
---==>> 커밋 완료.
- 
--- 제약조건 확인
-SELECT *
-FROM VIEW_CONSTCHECK
-WHERE TABLE_NAME = 'TBL_TEST9';
---==>>
-/*
-OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	    DELETE_RULE
-HR	    SYS_C007105	    TBL_TEST8	    C	        COL3	    COL3 BETWEEN 0 AND 100	(null)
-HR	    SYS_C007106	    TBL_TEST8	    P	        COL1		(null)                  (null)
-*/
-``` 
---○ CK 지정 실습((3) 테이블 생성 이후 제약조건 추가)  
---※ 이미 생성된(만들어져 있는) 상태의 테이블에  
---   부여하려는 제약조건을 위반한 데이터가 포함되어 있을 경우  
---   해당 테이블에 제약조건을 추가하는 것은 불가능하다.  
-``` SQL
-CREATE TABLE TBL_TEST10
-( COL1 NUMBER(5)
-, COL2 VARCHAR2(30)
-, COL3 NUMBER(3)
-);
---==>> Table TBL_TEST10이(가) 생성되었습니다.
- 
--- 제약조건 확인
-SELECT *
-FROM VIEW_CONSTCHECK
-WHERE TABLE_NAME='TBL_TEST10';
---==>> 조회결과 없음
- 
--- 제약조건 추가
-ALTER TABLE TBL_TEST10
-ADD ( CONSTRAINT TEST10_COL1_PK PRIMARY KEY(COL1)
-    , CONSTRAINT TEST10_COL3_CK CHECK(COL3 BETWEEN 0 AND 100));
---==>> Table TBL_TEST10이(가) 변경되었습니다.
--- *제약조건을 여러개 추가시 ADD ( 제약조건1, 제약조건2,...)로 작성*  
- 
--- 제약조건 확인
-SELECT *
-FROM VIEW_CONSTCHECK
-WHERE TABLE_NAME = 'TBL_TEST10';
---==>>
-/*
-OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	    DELETE_RULE
-HR	    SYS_C007105	    TBL_TEST8	    C	        COL3	    COL3 BETWEEN 0 AND 100	(null)
-HR	    SYS_C007106	    TBL_TEST8	    P	        COL1		(null)                  (null)
-*/
- 
--- 테이블 생성
-CREATE TABLE TBL_TESTMEMBER
-( SID   NUMBER
-, NAME  VARCHAR2(30)
-, SSN   CHAR(14)            -- 입력형태 -> 'YYMMDD-NNNNNNN' -> 14자리
-                            --              12345678901234
-, TEL   VARCHAR2(40)
-);
---==>> Table TBL_TESTMEMBER이(가) 생성되었습니다.
-```
-
-#### 📌 1. 안내
---○ TBL_TESTMEMBER 테이블의 SSN 컬럼(주민등록번호 컬럼)에서  
---   데이터 입력이나 수정 시, 성별이 유효한 데이터만 입력될 수 있도록  
---   체크 제약조건을 추가할 수 있도록 한다.  
---   (-> 주민번호 특정 자리에 입력가능한 데이터를 1,2,3,4 만 가능하도록 처리)  
---   또한, SID 컬럼에는 PRIMARY KEY 제약조건을 설정할 수 있도록 한다.  
-``` SQL 
--- 제약조건 삭제
-ALTER TABLE TBL_TESTMEMBER DROP CONSTRAINT TESTMEMBER_SSN_CK_01;
- 
--- 제약조건 추가
-ALTER TABLE TBL_TESTMEMBER
-ADD (
-    CONSTRAINT TESTMEMBER_SID_PK PRIMARY KEY(SID)
-    ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(주민번호 8번째 자리 1개가 '1' 또는 '2' 또는 '3' 또는 '4')
-    );
-    
-ALTER TABLE TBL_TESTMEMBER
-ADD (
-    CONSTRAINT TESTMEMBER_SID_PK PRIMARY KEY(SID)
-   ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(SUBSTR(SSN,8,1) IN ('1','2','3','4'))
-    );
-    
-ALTER TABLE TBL_TESTMEMBER
-ADD (
---    CONSTRAINT TESTMEMBER_SSN_CK CHECK(SSN LIKE ('_______1%'))                              -- 실행됨
---    ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(SSN LIKE ('_______1%') OR SSN LIKE ('_______2%'))   -- 안됨
---    ,CONSTRAINT TESTMEMBER_SSN_CK01 CHECK(SSN LIKE ('_______1%') OR SSN LIKE ('_______2%')) -- 안됨
---    ,CONSTRAINT TESTMEMBER_SSN_CK01 CHECK(SSN LIKE ('_______1%') OR SSN LIKE ('_______2%')) -- 안됨
-    );
- 
--- *제약조건 LIKE AND 코드가 맞는지 확인-> 가능*
--- *WHERE의 모든 조건이 제약조건에 작성되는 것은 아님. AND OR 불가.*
-SELECT *
-FROM TBL_TESTMEMBER
-WHERE SSN LIKE ('_______1%') OR SSN LIKE ('_______2%');
- 
- 
--- 테스트 데이터 입력
---INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(1,'123456-1901234');
---INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(2,'123456-2901234');
---INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(3,'123456-3901234');
---INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(4,'123456-4901234');
---INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(5,'123456-5901234'); --> 에러 발생(ORA-02290: check constraint (HR.TESTMEMBER_SSN_CK) violated)
- 
-INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(1,'이윤수','950106-1234567','010-1111-1111');
-INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(2,'박나영','990208-2234567','010-2222-2222');
-INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(3,'최혜인','070811-4234567','010-3333-3333');
-INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(4,'길현욱','090111-3234567','010-4444-4444');
- 
-INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(4,'정현욱','000220-5234567','010-5555-5555'); --> 에러 발생
-INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(4,'정현욱','000220-6234567','010-5555-5555'); --> 에러 발생
- 
- 
--- 제약조건 확인
-SELECT *
-FROM VIEW_CONSTCHECK
-WHERE TABLE_NAME = 'TBL_TESTMEMBER';
---==>>
-/*
-OWNER	CONSTRAINT_NAME	    TABLE_NAME	    CONSTRAINT_TYPE	COLUMN_NAME	 SEARCH_CONDITION	                  DELETE_RULE
-HR	    TESTMEMBER_SID_PK	TBL_TESTMEMBER	P	            SID		     (null)                               (null)
-HR	    TESTMEMBER_SSN_CK	TBL_TESTMEMBER	C	            SSN	         SUBSTR(SSN,8,1) IN ('1','2','3','4') (null)	
-*/
- 
--- 확인을 위한 테이블 삭제
-DROP TABLE TBL_TESTMEMBER;
- 
--- 확인
-SELECT *
-FROM TBL_TESTMEMBER;
---==>>
-/*
-1	이윤수	950106-1234567	010-1111-1111
-2	박나영	990208-2234567	010-2222-2222
-3	최혜인	070811-4234567	010-3333-3333
-4	길현욱	090111-3234567	010-4444-4444
-*/
-```
-### 8.8.5. FOREIGN KEY(FK:F:R)
+8.8.5. FOREIGN KEY(FK:F:R)
 1. 참조 키(R)또는 외래 키(FK:F)는 두 테이블의 데이터 간 연결을 설정하고 강제 적용시키는데 사용되는 열이다.  
     한 테이블의 기본 키 값이 있는 열을 다른 테이블에 추가하면 테이블 간 연결을 설정할 수 있다.  
     이 때, 두 번째 테이블에 추가되는 열이 외래키가 된다.  
@@ -3710,7 +3336,381 @@ DROP TABLE TBL_JOBS;
 ``` 
 >-- *FOREGIN에서 자식 테이블의 값이 삭제되더라도 제약조건은 살아있어서 부모테이블은 삭제되지 않는다.*  
 
-#### 8.8.6. NOT NULL(NN:CK:C)
+### 8.8.3. UNIQUE(UK:U)
+1. 테이블에서 지정한 컬럼의 데이터가 중복되지 않고 유일할 수 있도록 설정하는 제약조건.  
+--      PRIMARY KEY 와 유사한 제약조건이지만, **NULL을 허용**한다는 차이점이 있다.  
+--      내부적으로 PRIMARY KEY와 마찬가지로 UNIQUE INDEX 가 자동 생성된다.  
+--      **하나의 테이블 내**에서 **UNIQUE 제약조건은 여러 번 설정하는 것이 가능**하다.  
+--      즉, 하나의 테이블에 UNIQUE 제약조건을 여러 개 만드는 것은 가능하다는 것이다.  
+>-- *UNIQUE에는 NOT NULL제약조건이 포함되어있지 않다.*  
+``` SQL
+/* 
+--회원 테이블
+회원번호    아이디     패스워드    성명  주민번호 휴대폰번호 우편번호 주소1 주소2
+P.K        P.K(X)/U                         U        U
+*/
+```
+ 
+2. 형식 및 구조  
+(1) 컬럼 레벨의 형식
+``` SQL
+-- 컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명] UNIQUE
+```
+(2) 테이블 레벨의 형식
+``` SQL
+-- 컬럼명 데이터타입,
+-- 컬럼명 데이터타입,
+-- CONSTRAINT CONSTARINT명 UNIZUE(컬럼명,...)
+```
+## 📌 2. 안내
+--○ UK 지정 실습((1) 컬럼 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST5
+( COL1 NUMBER(5)    PRIMARY KEY
+, COL2 VARCHAR(30)  UNIQUE
+);
+--==>> Table TBL_TEST5이(가) 생성되었습니다.
+ 
+-- 제약조건 조회
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST5';
+--==>> 
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	DELETE_RULE
+HR	    SYS_C007095	    TBL_TEST5	    P	        COL1		
+HR	    SYS_C007096	    TBL_TEST5	    U	        COL2		
+*/
+ 
+-- 데이터 입력
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(1,'TEST');
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(1,'TEST'); --> 에러 발생(ORA-00001: unique constraint (HR.SYS_C007095) violated)
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(2,'ABCD');
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(3,'ABCD'); --> 에러 발생(INSERT INTO TBL_TEST5(COL1,COL2) VALUES(2,'ABCD');)
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(3, NULL);
+INSERT INTO TBL_TEST5(COL1) VALUES(4);
+INSERT INTO TBL_TEST5(COL1,COL2) VALUES(5,'ABCD'); --> 에러 발생(ORA-00001: unique constraint (HR.SYS_C007096) violated)
+ 
+SELECT *
+FROM TBL_TEST5;
+--==>>
+/*
+1	TEST
+2	ABCD
+3	
+4	
+*/
+```
+
+--○ UK 지정 실습((2) 테이블 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST6
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+, CONSTRAINT TEST6_COL1_PK PRIMARY KEY(COL1)
+, CONSTRAINT TEST6_COL2_UK UNIQUE(COL2)
+);
+--==>> Table TBL_TEST6이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST6';
+--==>> 
+/*
+HR	TEST6_COL1_PK	TBL_TEST6	P	COL1		
+HR	TEST6_COL2_UK	TBL_TEST6	U	COL2		
+*/
+-- *UNIQUE는 복합 UNIQUE없음*  
+``` 
+--○ UK 지정 실습((3) 테이블 생성 이후 제약조건 추가)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST7
+( COL1 NUMBER(5)
+, COL2 VARCHAR(30)
+);
+--==>> Table TBL_TEST7이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST7';
+--==>> 조회 결과 없음
+ 
+-- 제약조건 추가
+ALTER TABLE TBL_TEST7
+ADD CONSTRAINT TEST7_COL1_PK PRIMARY KEY(COL1);
+-- +
+ALTER TABLE TBL_TEST7
+ADD CONSTRAINT TETS7_COL2_UK UNIQUE(COL2);
+-- 
+ALTER TABLE TBL_TEST7
+ADD( CONSTRAINT TEST7_COL1_PK PRIMARY KEY(COL1)
+    ,CONSTRAINT TEST7_COL2_UK UNIQUE(COL2));
+--==>> Table TBL_TEST7이(가) 변경되었습니다.
+ 
+-- 제약조건 추가 후 다시 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST7';
+--==>>
+/*
+HR	TEST7_COL1_PK	TBL_TEST7	P	COL1		
+HR	TEST7_COL2_UK	TBL_TEST7	U	COL2		
+*/
+```
+### 8.8.4. CHECK(CK:C)
+1. 컬럼에서 허용 가능한 데이터의 범위나 조건을 지정하기 위한 제약조건  
+    컬럼에 입력되는 데이터를 검사하여 조건에 맞는 데이터만 입력될 수 있도록 한다.
+    또한, 컬러멩서 주어되는 데이터를 검사하여 조건에 맞는 데이터로 수정되는 것만 
+    허용하는 기능을 수행하게 된다.
+    
+2. 형식 및 구조  
+    (1) 컬럼 레벨의 형식
+    ``` SQL
+    컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명] CHECK(컬럼 조건)
+    ```
+    
+    (2) 테이블 레벨의 형식
+    ``` SQL
+    컬럼명 타입,
+    컬럼명 타입,
+    CONSTRAINT CONSTRAINT명 CHECK(컬럼 조건)
+    ```
+
+### 8.8.4. CHECK(CK:C)
+1. 컬럼에서 허용 가능한 데이터의 범위나 조건을 지정하기 위한 제약조건  
+    컬럼에 입력되는 데이터를 검사하여 조건에 맞는 데이터만 입력될 수 있도록 한다.  
+    또한, 컬럼에서 주어되는 데이터를 검사하여 조건에 맞는 데이터로 수정되는 것만 
+    허용하는 기능을 수행하게 된다.
+    
+2. 형식 및 구조  
+    (1) 컬럼 레벨의 형식
+    ``` SQL
+    컬럼명 데이터타입 [CONSTRAINT CONSTRAINT명] CHECK(컬럼 조건)
+    ```
+    
+    (2) 테이블 레벨의 형식
+    ``` SQL
+    컬럼명 타입,
+    컬럼명 타입,
+    CONSTRAINT CONSTRAINT명 CHECK(컬럼 조건)
+    ```
+--○ CK 지정 실습((1) 컬럼 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST8
+( COL1 NUMBER(5)    PRIMARY KEY
+, COL2 VARCHAR2(30)
+, COL3 NUMBER(3)    CHECK(COL3 BETWEEN 0 AND 100)
+);
+--==>> Table TBL_TEST8이(가) 생성되었습니다.
+ 
+-- 데이터 입력
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(1,'박범구',100);
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(1,'엄재용',100); --> 에러 발생 (ORA-00001: unique constraint (HR.SYS_C007106) violated)
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(2,'엄재용',101); --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(2,'엄재용',-1);  --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
+INSERT INTO TBL_TEST8(COL1,COL2,COL3) VALUES(2,'엄재용',80);
+ 
+-- 확인
+SELECT *
+FROM TBL_TEST8;
+--==>>
+/*
+1	박범구	100
+2	엄재용	80
+*/    
+ 
+-- 커밋
+COMMIT;
+--==>> 커밋 완료.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST8';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	    DELETE_RULE
+HR	    SYS_C007105	    TBL_TEST8	    C	        COL3	    COL3 BETWEEN 0 AND 100	(null)
+HR	    SYS_C007106	    TBL_TEST8	    P	        COL1		(null)                  (null)
+*/
+-- *SEARCH_CONDITION: 제약조건 기술*  
+``` 
+--○ CK 지정 실습((2) 테이블 레벨의 형식)
+``` SQL
+-- 테이블 생성
+CREATE TABLE TBL_TEST9
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+, COL3 NUMBER(3)
+, CONSTRAINT TEST9_COL1_PK PRIMARY KEY(COL1)
+, CONSTRAINT TEST9_COL3_CK CHECK(COL3 BETWEEN 0 AND 100)
+);
+--==>> Table TBL_TEST9이(가) 생성되었습니다.
+ 
+-- 데이터 입력
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(1,'박범구',100);
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(1,'엄재용',100); --> 에러 발생 (ORA-00001: unique constraint (HR.SYS_C007106) violated)
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(2,'엄재용',101); --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(2,'엄재용',-1);  --> 에러 발생 (ORA-02290: check constraint (HR.SYS_C007105) violated)
+INSERT INTO TBL_TEST9(COL1,COL2,COL3) VALUES(2,'엄재용',80);
+ 
+-- 확인
+SELECT *
+FROM TBL_TEST9;
+--==>>
+/*
+1	박범구	100
+2	엄재용	80
+*/    
+ 
+-- 커밋
+COMMIT;
+--==>> 커밋 완료.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST9';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	    DELETE_RULE
+HR	    SYS_C007105	    TBL_TEST8	    C	        COL3	    COL3 BETWEEN 0 AND 100	(null)
+HR	    SYS_C007106	    TBL_TEST8	    P	        COL1		(null)                  (null)
+*/
+``` 
+--○ CK 지정 실습((3) 테이블 생성 이후 제약조건 추가)  
+--※ 이미 생성된(만들어져 있는) 상태의 테이블에  
+--   부여하려는 제약조건을 위반한 데이터가 포함되어 있을 경우  
+--   해당 테이블에 제약조건을 추가하는 것은 불가능하다.  
+``` SQL
+CREATE TABLE TBL_TEST10
+( COL1 NUMBER(5)
+, COL2 VARCHAR2(30)
+, COL3 NUMBER(3)
+);
+--==>> Table TBL_TEST10이(가) 생성되었습니다.
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME='TBL_TEST10';
+--==>> 조회결과 없음
+ 
+-- 제약조건 추가
+ALTER TABLE TBL_TEST10
+ADD ( CONSTRAINT TEST10_COL1_PK PRIMARY KEY(COL1)
+    , CONSTRAINT TEST10_COL3_CK CHECK(COL3 BETWEEN 0 AND 100));
+--==>> Table TBL_TEST10이(가) 변경되었습니다.
+-- *제약조건을 여러개 추가시 ADD ( 제약조건1, 제약조건2,...)로 작성*  
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TEST10';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	TABLE_NAME	CONSTRAINT_TYPE	COLUMN_NAME	SEARCH_CONDITION	    DELETE_RULE
+HR	    SYS_C007105	    TBL_TEST8	    C	        COL3	    COL3 BETWEEN 0 AND 100	(null)
+HR	    SYS_C007106	    TBL_TEST8	    P	        COL1		(null)                  (null)
+*/
+ 
+-- 테이블 생성
+CREATE TABLE TBL_TESTMEMBER
+( SID   NUMBER
+, NAME  VARCHAR2(30)
+, SSN   CHAR(14)            -- 입력형태 -> 'YYMMDD-NNNNNNN' -> 14자리
+                            --              12345678901234
+, TEL   VARCHAR2(40)
+);
+--==>> Table TBL_TESTMEMBER이(가) 생성되었습니다.
+```
+
+#### 📌 1. 안내
+--○ TBL_TESTMEMBER 테이블의 SSN 컬럼(주민등록번호 컬럼)에서  
+--   데이터 입력이나 수정 시, 성별이 유효한 데이터만 입력될 수 있도록  
+--   체크 제약조건을 추가할 수 있도록 한다.  
+--   (-> 주민번호 특정 자리에 입력가능한 데이터를 1,2,3,4 만 가능하도록 처리)  
+--   또한, SID 컬럼에는 PRIMARY KEY 제약조건을 설정할 수 있도록 한다.  
+``` SQL 
+-- 제약조건 삭제
+ALTER TABLE TBL_TESTMEMBER DROP CONSTRAINT TESTMEMBER_SSN_CK_01;
+ 
+-- 제약조건 추가
+ALTER TABLE TBL_TESTMEMBER
+ADD (
+    CONSTRAINT TESTMEMBER_SID_PK PRIMARY KEY(SID)
+    ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(주민번호 8번째 자리 1개가 '1' 또는 '2' 또는 '3' 또는 '4')
+    );
+    
+ALTER TABLE TBL_TESTMEMBER
+ADD (
+    CONSTRAINT TESTMEMBER_SID_PK PRIMARY KEY(SID)
+   ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(SUBSTR(SSN,8,1) IN ('1','2','3','4'))
+    );
+    
+ALTER TABLE TBL_TESTMEMBER
+ADD (
+--    CONSTRAINT TESTMEMBER_SSN_CK CHECK(SSN LIKE ('_______1%'))                              -- 실행됨
+--    ,CONSTRAINT TESTMEMBER_SSN_CK CHECK(SSN LIKE ('_______1%') OR SSN LIKE ('_______2%'))   -- 안됨
+--    ,CONSTRAINT TESTMEMBER_SSN_CK01 CHECK(SSN LIKE ('_______1%') OR SSN LIKE ('_______2%')) -- 안됨
+--    ,CONSTRAINT TESTMEMBER_SSN_CK01 CHECK(SSN LIKE ('_______1%') OR SSN LIKE ('_______2%')) -- 안됨
+    );
+ 
+-- *제약조건 LIKE AND 코드가 맞는지 확인-> 가능*
+-- *WHERE의 모든 조건이 제약조건에 작성되는 것은 아님. AND OR 불가.*
+SELECT *
+FROM TBL_TESTMEMBER
+WHERE SSN LIKE ('_______1%') OR SSN LIKE ('_______2%');
+ 
+ 
+-- 테스트 데이터 입력
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(1,'123456-1901234');
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(2,'123456-2901234');
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(3,'123456-3901234');
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(4,'123456-4901234');
+--INSERT INTO TBL_TESTMEMBER(SID,SSN) VALUES(5,'123456-5901234'); --> 에러 발생(ORA-02290: check constraint (HR.TESTMEMBER_SSN_CK) violated)
+ 
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(1,'이윤수','950106-1234567','010-1111-1111');
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(2,'박나영','990208-2234567','010-2222-2222');
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(3,'최혜인','070811-4234567','010-3333-3333');
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(4,'길현욱','090111-3234567','010-4444-4444');
+ 
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(4,'정현욱','000220-5234567','010-5555-5555'); --> 에러 발생
+INSERT INTO TBL_TESTMEMBER(SID,NAME,SSN,TEL) VALUES(4,'정현욱','000220-6234567','010-5555-5555'); --> 에러 발생
+ 
+ 
+-- 제약조건 확인
+SELECT *
+FROM VIEW_CONSTCHECK
+WHERE TABLE_NAME = 'TBL_TESTMEMBER';
+--==>>
+/*
+OWNER	CONSTRAINT_NAME	    TABLE_NAME	    CONSTRAINT_TYPE	COLUMN_NAME	 SEARCH_CONDITION	                  DELETE_RULE
+HR	    TESTMEMBER_SID_PK	TBL_TESTMEMBER	P	            SID		     (null)                               (null)
+HR	    TESTMEMBER_SSN_CK	TBL_TESTMEMBER	C	            SSN	         SUBSTR(SSN,8,1) IN ('1','2','3','4') (null)	
+*/
+ 
+-- 확인을 위한 테이블 삭제
+DROP TABLE TBL_TESTMEMBER;
+ 
+-- 확인
+SELECT *
+FROM TBL_TESTMEMBER;
+--==>>
+/*
+1	이윤수	950106-1234567	010-1111-1111
+2	박나영	990208-2234567	010-2222-2222
+3	최혜인	070811-4234567	010-3333-3333
+4	길현욱	090111-3234567	010-4444-4444
+*/
+```
+#### 8.8.5. NOT NULL(NN:CK:C)
 1. 테이블에서 지저한 컬럼의 데이터가 NULL 인 상태를 갖지 못하도록 하는 제약조건.
 *테이블레벨이 보통은 부여하지만, NOT NULL 제약조건의 경우 컬럼 레벨의 형식이 더 많아서 기본됨.*
  
@@ -3887,8 +3887,7 @@ HR	SYS_C007139	TBL_TEST13	    C	COL2	"COL2" IS NOT NULL	-> MODIFY절에서 구�
  
 >-- *컬럼레벨에서 이름을부여하면서 NOT NULL을 넣는게 바람직함  
 
-#### 8.8.7. DEFAULT 표현식
- 
+#### 8.8.6. DEFAULT 표현식
 1. ISERT 와 UPDATE 문에서 특정 값이 아닌 기본 값을 입력하도록 한다.  
  
 2. 형식 및 구조  
