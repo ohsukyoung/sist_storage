@@ -518,6 +518,7 @@ END;
         WHERE EMPLOYEE_ID = 103);
     */
    -- 'PLSQL 에서 조회후 처리되는 구조'와 'SQL에서 처리되는 구조'가 달라서 위의 구조로는 처리되지 않음
+
 --    SELECT FIRST_NAME, LAST_NAME INTO V_NAME,V_LASTNAME
     -- *여러셀 가져오는 것도 가능* 
 ```
