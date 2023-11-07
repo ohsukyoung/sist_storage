@@ -1025,18 +1025,18 @@ END;
 --○ TRIGGER(트리거) 생성
 ``` SQL
 CREATE OR REPLACE TRIGGER TRG_EVENTLOG
-        AFTER   -- *사후에 작동*
-        INSERT OR UPDATE OR DELETE ON TBL_TEST1
-BEGIN
+        AFTER                                       -- *사후에 작동*
+        INSERT OR UPDATE OR DELETE ON TBL_TEST1     -- *INSERT OR UPDATE OR DELETE: 가 일어나면*   
+BEGIN                                               -- *ON TBL_TEST1: 어디를 기준으로 작동하는지*   
     -- 이벤트 종류 구분(조건문을 통한 분기)
-    IF(INSERTING)
-        THEN INSERT INTO TBL_EVENTLOG(MEMO)
+    IF(INSERTING)                                   -- **INSERTING**  
+        THEN INSERT INTO TBL_EVENTLOG(MEMO)         -- *(공통)THEN INSERT~*
             VALUES('INSERT 쿼리가 실행되었습니다.');
-    ELSIF (UPDATING)
-        THEN INSERT INTO TBL_EVENTLOG(MEMO)
+    ELSIF (UPDATING)                                -- **UPDATING**
+        THEN INSERT INTO TBL_EVENTLOG(MEMO)         -- *(공통)THEN INSERT~*
             VALUES('UPDATE 쿼리가 실행되었습니다.');
-    ELSIF (DELETING)
-        THEN INSERT INTO TBL_EVENTLOG(MEMO)
+    ELSIF (DELETING)                                -- **DELETING**
+        THEN INSERT INTO TBL_EVENTLOG(MEMO)         -- *(공통)THEN INSERT~*
             VALUES('DELETE 쿼리가 실행되었습니다.');
     END IF;
     
@@ -1047,10 +1047,125 @@ END;
 ```
 ### 9.1.1. ☑ 20231107_02_scott.sql
 ``` SQL
+--○ 실습을 위한 준비 -> 테이블 생성(TBL_TES)
+CREATE TABLE TBL_TEST1
+( ID    NUMBER
+, NAME  VARCHAR2(30)
+, TEL   VARCHAR2(60)
+, CONSTRAINT TEST1_ID_PK PRIMARY KEY(ID)
+);
+--==>> Table TBL_TEST1이(가) 생성되었습니다.
+
+--○ 실습을 위한 준비 -> 테이블 생성(TBL_EVENTLOG)
+CREATE TABLE TBL_EVENTLOG
+( MEMO  VARCHAR2(200)
+, INJA  DATE DEFAULT SYSDATE
+);
+--==>> Table TBL_EVENTLOG이(가) 생성되었습니다.
+
+--○ 날짜 관련 세션 설정 변경
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS';
+--==>> Session이(가) 변경되었습니다.
+
+--○ 확인
+SELECT *
+FROM TBL_TEST1;
+--==>> 조회 결과 없음
+
+SELECT *
+FROM TBL_EVENTLOG;
+--==>> 조회 결과 없음
+```
+``` SQL
+--○ 생성한 TRIGGER 작동여부 확인
+--  -> TBL_TEST1 테이블을 대상으로 INSERT, UPDATE, DELETE 수행
+
+INSERT INTO TBL_TEST1(ID,NAME,TEL)
+VALUES(1, '이윤수', '010-1111-1111');
+--==>> 1 행 이(가) 삽입되었습니다.
+
+INSERT INTO TBL_TEST1(ID,NAME,TEL)
+VALUES(2, '강혜성', '010-2222-2222');
+--==>> 1 행 이(가) 삽입되었습니다.
+
+INSERT INTO TBL_TEST1(ID,NAME,TEL)
+VALUES(3, '문정환', '010-3333-3333');
+--==>> 1 행 이(가) 삽입되었습니다.
+
+UPDATE TBL_TEST1
+SET NAME='박가영', TEL='010-4444-4444'
+WHERE ID=1;
+--==>> 1 행 이(가) 업데이트되었습니다.
+
+SELECT *
+FROM TBL_TEST1;
+/*
+1	박가영	010-4444-4444
+2	강혜성	010-2222-2222
+3	문정환	010-3333-3333
+*/
+
+DELETE
+FROM TBL_TEST1
+WHERE ID IN (2,3);
+--==>> 2개 행 이(가) 삭제되었습니다.
+
+SELECT *
+FROM TBL_TEST1;
+--==>> 1	박가영	010-4444-4444
+
+DELETE
+FROM TBL_TEST1
+WHERE ID=1;
+--==>> 1 행 이(가) 삭제되었습니다.
+
+SELECT *
+FROM TBL_TEST1;
+--==>> 조회 결과 없음
+
+SELECT *
+FROM TBL_EVENTLOG;
+--==>>
+/*
+INSERT 쿼리가 실행되었습니다.	2023-11-07 16:14:33
+INSERT 쿼리가 실행되었습니다.	2023-11-07 16:15:19
+INSERT 쿼리가 실행되었습니다.	2023-11-07 16:17:49
+UPDATE 쿼리가 실행되었습니다.	2023-11-07 16:18:59
+DELETE 쿼리가 실행되었습니다.	2023-11-07 16:19:36
+DELETE 쿼리가 실행되었습니다.	2023-11-07 16:20:17
+*/
+-- *쓰는 사람 입장에서는 별도의 함수나 프로시저를 쓴다는 개념을 모르고, 미리 걸어둔 조건에 의해 돌아가는 것* 
 ```
 
+## 9.2. BEFORE STATEMENT TRIGGER 상황 실습
+-- ※ DML 작업 수행 전에 작업에 대한 가능여부 확인  
 
+--○ TRIGGER(트리거) 생성 -> TRG_TEST1_DML
+-- *호출해서 쓰는 것이 아니기 때문에 중요하지 않지만,*  
+-- *트리거 삭제등을 실행할때 구분지어질 수 있도록 규칙에 맞게 적기*  
 
+``` SQL
+CREATE OR REPLACE TRIGGER TRG_TEST1_DML
+    BEFORE                                          -- *사전에 작동되어 입력하지 못하게*  
+    INSERT OR UPDATE OR DELETE ON TBL_TEST1
+--DECLARE
+    -- 변수선언..  -- *구문적으로 사용은 가능하나,*
+                   -- *사용자의 의지와 상관없이 실행되지 않기 때문에.. 트리거에서 변수선언은 하지 않는다*  
+BEGIN
+--    IF (작업시간이 오전 9시 이전이거나... 오후 6시 이후라면)
+--        THEN 작업을 수행하지 못하게 처리하겠다.
+--    END IF;
+
+    IF (TO_NUMBER(TO_CHAR(SYSDATE, 'HH24')) < 9 OR TO_NUMBER(TO_CHAR(SYSDATE, 'HH24')) >= 18)
+        -- *6시 이후로 작업하지 못하도록... (시간>17) OR (시간>=18)으로 해야함*  
+        THEN RAISE_APPLICATION_ERROR(-2003, '작업 시간은 09:00 ~ 18:00 까지만 가능합니다.');
+    END IF;
+END;
+--==>> Trigger TRG_TEST1_DML이(가) 컴파일되었습니다.
+```
+### 9.2.1. ☑ 20231107_02_scott.sql
+``` SQL
+```
 
 
 
