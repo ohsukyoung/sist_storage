@@ -575,7 +575,7 @@ END;
 
 <BR>
 
-# 페이지 20231102_05_scott(qlsql).sql
+# 페이지 20231102_05_scott(plsql).sql
 ## 📌 1. 안내
 --○ TBL_INSA 테이블의 여러 명의 데이터 여러 개를 변수에 저장하여 출력
 -- (반복문 활용)
@@ -699,7 +699,7 @@ WHERE NUM = 1001;
 <BR>
 
 
-# 페이지 20231103_01_scott(qlsql).sql
+# 페이지 20231103_01_scott(plsql).sql
 
 ## 1. 문제
 --○ 임의의 정수 두 개를 매개변수(입력 파라미터)로 넘겨받아 -> (A,B)  
@@ -758,7 +758,7 @@ END;
 -- *PLSQL의 경우 컴파일 되었다고 해서, 로직이 문제가 없다는 것은 아님*  
 ```
 ### 1.4. ☑ 20231103_02_scott.sql
---○ 20231103_01_scott(qlsql).sql 파일에서  
+--○ 20231103_01_scott(plsql).sql 파일에서  
 --   FN_POW() 함수 생성 후 테스트  
 ``` SQL
 SELECT FN_POW(10,3) "RESULT"
@@ -805,7 +805,7 @@ END;
 -- *따라서, 안정적이기 위해 NULL을 고려해 연산 및 처리 하기*  
 ```
 ### 2.4. ☑ 20231103_02_scott.sql
---○ 20231103_01_scott(qlsql).sql 파일에서  
+--○ 20231103_01_scott(plsql).sql 파일에서  
 --   FN_PAY() 함수 생성 후 테스트  
 ``` SQL
 SELECT NUM, NAME, BASICPAY, SUDANG, FN_PAY(BASICPAY,SUDANG) "급여"
@@ -881,7 +881,7 @@ BEGIN
 END;
 ```
 ### 3.4. 해설
---○ 20231103_01_scott(qlsql).sql 파일에서  
+--○ 20231103_01_scott(plsql).sql 파일에서  
 --   FN_WORKYEAR() 함수 생성 후 테스트  
 ``` SQL
 SELECT *
@@ -896,7 +896,7 @@ SELECT NUM, NAME, IBSADATE, FN_WORKYEAR(IBSADATE) "RESULT"
 FROM TBL_INSA;
 ```
 ### 3.4. ☑ 20231103_02_scott.sql
---○ 20231103_01_scott(qlsql).sql 파일에서  
+--○ 20231103_01_scott(plsql).sql 파일에서  
 --   FN_WORKYEAR() 함수 생성 후 테스트  
 ``` SQL
 SELECT NUM, NAME, IBSADATE, FN_WORKYEAR(IBSADATE) "RESULT"
@@ -1016,7 +1016,7 @@ END;
 ```
 ### 4.4. ☑ 20231103_02_scott.sql
 -- ※ 프로시저를 생성하는 구문은  
---    <20231103_01_scott(qlsql).sql>파일 참조~!!  
+--    <20231103_01_scott(plsql).sql>파일 참조~!!  
 
 --○ 프로시저 생성 후 실행(호출)  
 ``` SQL
@@ -1272,7 +1272,7 @@ wool	정한울	010-8888-8888	전남 목포
 ```
 <BR>
 
-# 페이지 20231106_01_scott(qlsql).sql
+# 페이지 20231106_01_scott(plsql).sql
 
 ## 1. 문제
 --○ TBL_INSA 테이블을 대상으로 신규 데이터 입력 프로시저를 작성한다.  
@@ -1350,7 +1350,7 @@ SUDANG   NOT NULL NUMBER(10)
 */
 
 --○ 프로시저 생성 후 실행 테스트(올바른 테스트)
---    <20231106_01_scott(qlsql).sql>파일 참조~!!
+--    <20231106_01_scott(plsql).sql>파일 참조~!!
 EXEC PRC_INSA_INSERT('최혜인', '970812-2234567', SYSDATE, '서울', '010-2509-1783', '개발부', '대리', 2000000, 2000000);
 
 --○ 프로시저 호출 후 테이블 조회
