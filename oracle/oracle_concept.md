@@ -277,7 +277,7 @@ DB를 구축하거나 수정할 때 사용(DB구조, DATA 형식, 접근방식)
 > 구조적으로 생성 CREATE  
             변경 ALTER  
             삭제 DROP  
-### 3.2.1. 테이블 생성
+### 3.2.1. 테이블 생성(CREATE)
 CREATE TABLE 테이블명 (속성명 데이터 타입 NOT NULL)
 ``` SQL
 CREATE TABLE EMP4
@@ -292,7 +292,7 @@ CREATE TABLE EMP4
 );
 --==>> Table EMP4이(가) 생성되었습니다.
 ```
-### 3.2.2. 테이블 컬럼 구조의 추가 및 제거
+### 3.2.2. 테이블 컬럼 구조의 추가 및 제거(ALTER)
 --○ TBL_EMP 테이블에 주민등록번호 데이터를 담을 수 있는 컬럼 추가
 --** 테이블의 구조가 바뀌기 때문에 ALTER
 ``` SQL
@@ -300,7 +300,7 @@ ALTER TABLE TBL_EMP
 ADD SSN CHAR(13);
 --==>> Table TBL_EMP이(가) 변경되었습니다.
 ```
-### 3.2.3. 테이블 삭제
+### 3.2.3. 테이블 삭제(DROP)
 ``` SQL
 DROP TABLE TBL_EXAMPLE1;
 --==>> Table TBL_EXAMPLE1이(가) 삭제되었습니다.
@@ -312,6 +312,14 @@ CREATE TABLE TBL_EMP
 AS
 SELECT *
 FROM EMP;
+```
+### 3.2.5. 테이블 잘라내기(TRUNCATE)
+>-- *ROLLBACK 해도 TRUNCATE는 되돌아가지 않음*  
+-- *TRUNCATE: 테이블의 가위로 오려냄*  
+-- *잘라낸 것은 ROLLBACK 되지 않음(오토커밋) -> 잘 판단해서 쓰기* 
+``` SQL
+TRUNCATE TABLE TBL_입고;
+--==>> Table TBL_입고이(가) 잘렸습니다.
 ```
 ## 3.3. DML: 데이터 조작어(데이터 검색, 삽입, 삭제, 갱신)
 사용자가 실질적으로 저장된 데이터를 관리하는 언어
