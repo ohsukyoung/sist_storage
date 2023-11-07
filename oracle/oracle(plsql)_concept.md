@@ -1150,28 +1150,234 @@ CREATE OR REPLACE TRIGGER TRG_TEST1_DML
     INSERT OR UPDATE OR DELETE ON TBL_TEST1
 --DECLARE
     -- 변수선언..  -- *구문적으로 사용은 가능하나,*
-                   -- *사용자의 의지와 상관없이 실행되지 않기 때문에.. 트리거에서 변수선언은 하지 않는다*  
+                   -- *사용자의 의지와 상관없이 실행되기 때문에.. 트리거에서 변수선언은 하지 않는다*  
 BEGIN
 --    IF (작업시간이 오전 9시 이전이거나... 오후 6시 이후라면)
 --        THEN 작업을 수행하지 못하게 처리하겠다.
 --    END IF;
 
-    IF (TO_NUMBER(TO_CHAR(SYSDATE, 'HH24')) < 9 OR TO_NUMBER(TO_CHAR(SYSDATE, 'HH24')) >= 18)
+    IF (TO_NUMBER(TO_CHAR(SYSDATE, 'HH24')) < 9 OR TO_NUMBER(TO_CHAR(SYSDATE, 'HH24')) > 17)
         -- *6시 이후로 작업하지 못하도록... (시간>17) OR (시간>=18)으로 해야함*  
-        THEN RAISE_APPLICATION_ERROR(-2003, '작업 시간은 09:00 ~ 18:00 까지만 가능합니다.');
+        THEN RAISE_APPLICATION_ERROR(-20003, '작업 시간은 09:00 ~ 18:00 까지만 가능합니다.');
     END IF;
 END;
 --==>> Trigger TRG_TEST1_DML이(가) 컴파일되었습니다.
 ```
 ### 9.2.1. ☑ 20231107_02_scott.sql
 ``` SQL
+-- *로컬시간 6시 이후로 바꾸고 실행*  
+SELECT SYSDATE
+FROM DUAL;
+--==>> 2023-11-07 18:49:00
+
+INSERT INTO TBL_TEST1(ID,NAME,TEL)
+VALUES(1,'김다슬','010-1111-1111');
+--==>> 에러 발생(ORA-20003: 작업 시간은 09:00 ~ 18:00 까지만 가능합니다.)
+
+-- *로컬시간 6시 이전으로 바꾸고 실행*  
+SELECT SYSDATE
+FROM DUAL;
+--==>> 2023-11-07 16:49:55
+
+INSERT INTO TBL_TEST1(ID,NAME,TEL)
+VALUES(1,'김다슬','010-1111-1111');
+--==>> 1 행 이(가) 삽입되었습니다.
+
+COMMIT;
+
+UPDATE TBL_TEST1
+SET NAME='오수경', TEL='010-2222-2222'
+WHERE ID=1;
+--==>> 1 행 이(가) 업데이트되었습니다.
+
+INSERT INTO TBL_TEST1(ID,NAME,TEL)
+VALUES(2,'김경태','010-3333-3333');
+--==>> 1 행 이(가) 삽입되었습니다.
+
+SELECT *
+FROM TBL_TEST1;
+--==>> 
+/*
+2	김경태	010-3333-3333
+1	오수경	010-2222-2222
+*/
+
+COMMIT;
+
+-- *로컬시간 오전 9시 이전으로 바꾸고 실행*  
+UPDATE TBL_TEST1
+SET NAME='박범구', TEL='010-3333-3333'
+WHERE ID=1;
+--==>> 에러 발생 (ORA-20003: 작업 시간은 09:00 ~ 18:00 까지만 가능합니다.)
+
+DELETE
+FROM TBL_TEST1
+WHERE ID=2;
+--==>> 에러 발생 (ORA-20003: 작업 시간은 09:00 ~ 18:00 까지만 가능합니다.)
 ```
 
+## 9.3. BEFORE ROW TRIGGER 상황 실습
+-- ※ 참조 관계가 설정된 데이터(자식) 삭제를 먼저 수행하는 모델  
 
+``` SQL
+--○ TRIGGER(트리거) 생성 -> TRG_TEST2_DELETE
+-- *부모테이블에서 지울때 참조되고 있는 자식 데이터 삭제*  
+CREATE OR REPLACE TRIGGER TRG_TEST2_DELETE
+        BEFORE
+        DELETE ON TBL_TEST2
+        FOR EACH ROW                        -- *FOR EACH ROW: 각각 하나씩 확인* 
+BEGIN
+    DELETE
+    FROM TBL_TEST3
+    WHERE CODE = :OLD.CODE;     -- *『:OLD.』
+END;
+--==>> Trigger TRG_TEST2_DELETE이(가) 컴파일되었습니다.
+```
+``` SQL
+-- *                UPDATE 시점
+-- *--------------------●-------------------------
+-- *     『:OLD』                 『:NEW』
 
+-- *사실, UPDATE라는 쿼리문은 오라클에 내부에 존재하지 않음*
+-- *UPDATE        ====>> DELETE + INSERT
+-- *비효율의 크기 ====>> 'UPDATE * 10' > 'INSERT * 10'
 
+-- ※ 『:OLD』  
+--    참조 전 열의 값
+--    - INSERT: 입력하기 이전 자료 즉, 입력할 자료
+--    - DELETE: 삭제하기 이전 자료 즉, 삭제할 자료
 
+-- ※ UPDATE
+--    내부적으로 DELETE 그리고 INSERT 가 결합된 형태
+--    UPDATE 하기 이전의 데이터는 『:OLD』
+--    UPDATE 수행한 이후의 데이터는 『:NEW』
+```
+### 9.3.1. ☑ 20231107_02_scott.sql
+``` SQL
+--○ 실습 환경 구성을 위한 테이블 생성 -> TBL_TEST2
+CREATE TABLE TBL_TEST2
+( CODE NUMBER
+, NAME VARCHAR2(40)
+, CONSTRAINT TEST2_CODE_PK PRIMARY KEY(CODE)
+);
+--==>> Table TBL_TEST2이(가) 생성되었습니다.
 
+--○ 실습 환경 구성을 위한 테이블 생성 -> TBL_TEST3
+CREATE TABLE TBL_TEST3
+( SID   NUMBER
+, CODE  NUMBER
+, SU    NUMBER
+, CONSTRAINT TEST3_SID_PK PRIMARY KEY(SID)
+, CONSTRAINT TEST3_CODE_FK FOREIGN KEY(CODE)
+            REFERENCES TBL_TEST2(CODE)
+);
+--==>> Table TBL_TEST3이(가) 생성되었습니다.
+
+--○ 실습 관련 데이터 입력
+INSERT INTO TBL_TEST2(CODE, NAME) VALUES(1,'텔레비전');
+INSERT INTO TBL_TEST2(CODE, NAME) VALUES(2,'냉장고');
+INSERT INTO TBL_TEST2(CODE, NAME) VALUES(3,'세탁기');
+INSERT INTO TBL_TEST2(CODE, NAME) VALUES(4,'건조기');
+--==>> 1 행 이(가) 삽입되었습니다. * 4
+
+SELECT *
+FROM TBL_TEST2;
+--==>> 
+/*
+1	텔레비전
+2	냉장고
+3	세탁기
+4	건조기
+*/
+
+COMMIT;
+--==>> 커밋 완료.
+
+--○ 실습 관련 데이터 입력
+INSERT INTO TBL_TEST3(SID, CODE, SU) VALUES(1,1,30); -- 텔레비전
+INSERT INTO TBL_TEST3(SID, CODE, SU) VALUES(2,1,50); -- 텔레비전
+INSERT INTO TBL_TEST3(SID, CODE, SU) VALUES(3,1,60); -- 텔레비전
+INSERT INTO TBL_TEST3(SID, CODE, SU) VALUES(4,2,20); -- 냉장고
+INSERT INTO TBL_TEST3(SID, CODE, SU) VALUES(5,2,20); -- 냉장고
+INSERT INTO TBL_TEST3(SID, CODE, SU) VALUES(6,3,40); -- 세탁기
+INSERT INTO TBL_TEST3(SID, CODE, SU) VALUES(7,1,30); -- 텔레비전
+INSERT INTO TBL_TEST3(SID, CODE, SU) VALUES(8,4,30); -- 건조기
+INSERT INTO TBL_TEST3(SID, CODE, SU) VALUES(9,3,10); -- 세탁기
+--==>> 1 행 이(가) 삽입되었습니다. * 9
+
+SELECT *
+FROM TBL_TEST3;
+/*
+1	1	30
+2	1	50
+3	1	60
+4	2	20
+5	2	20
+6	3	40
+7	1	30
+8	4	30
+9	3	10
+*/
+
+COMMIT;
+--==>> 커밋 완료.
+```
+``` SQL
+--○ 부모 테이블(TBL_TEST2)의 데이터 삭제 시도
+SELECT *
+FROM TBL_TEST2
+WHERE CODE=1;
+--==>> 1	텔레비전
+
+DELETE
+FROM TBL_TEST2
+WHERE CODE=1;
+--==>> 에러 발생(ORA-02292: integrity constraint (SCOTT.TEST3_CODE_FK) violated - child record found)
+-- *참조하고 있는 자식 레코드가 있어서 삭제할수 없음*  
+
+--○ TRIGGER 생성 이후 확인
+DELETE
+FROM TBL_TEST2
+WHERE CODE=1;
+--==>> 1 행 이(가) 삭제되었습니다.
+
+SELECT *
+FROM TBL_TEST3;
+--==>>
+/*
+4	2	20
+5	2	20
+6	3	40
+8	4	30
+9	3	10
+*/
+-- *부모테이블의 1을참조하고있던 데이터 모두 삭제됨*  
+
+DELETE
+FROM TBL_TEST2
+WHERE CODE=2;
+--==>> 1 행 이(가) 삭제되었습니다.
+
+SELECT *
+FROM TBL_TEST3;
+--==>>
+/*
+6	3	40
+8	4	30
+9	3	10
+*/
+```
+## 9.4. AFTER ROW TRIGGER 상황 실습
+-- ※ 참조 테이블 관련 트랜잭션 처리  
+-- *가장 많이 사용됨*  
+-- *프로시저에서 입고,출고를 할 때 관련제고 컨트롤이 중요했는데, AFTER ROW로 가능*  
+-- *ROW TRIGGER의 경우 1:다 하나가 여러건에 걸쳐 두루 파장이 일어나야 하는 경우 ROW TRIGGER 사용*  
+``` SQL
+
+```
+### 9.4.1. ☑ 20231107_02_scott.sql
+``` SQL
+```
 
 
 
