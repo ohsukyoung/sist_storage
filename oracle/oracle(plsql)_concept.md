@@ -1019,10 +1019,32 @@ BEGIN
 END;
 ```
 ## 9.1. AFTER STATEMENT TRIGGER 상황 실습
--- ※ DML 작업에 대한 이벤트 기록
+-- ※ DML 작업에 대한 이벤트 기록  
 -- *떠든사람 적기, 떠들기 전에 예측해서 적을 수 없음*  
 
 --○ TRIGGER(트리거) 생성
+``` SQL
+CREATE OR REPLACE TRIGGER TRG_EVENTLOG
+        AFTER   -- *사후에 작동*
+        INSERT OR UPDATE OR DELETE ON TBL_TEST1
+BEGIN
+    -- 이벤트 종류 구분(조건문을 통한 분기)
+    IF(INSERTING)
+        THEN INSERT INTO TBL_EVENTLOG(MEMO)
+            VALUES('INSERT 쿼리가 실행되었습니다.');
+    ELSIF (UPDATING)
+        THEN INSERT INTO TBL_EVENTLOG(MEMO)
+            VALUES('UPDATE 쿼리가 실행되었습니다.');
+    ELSIF (DELETING)
+        THEN INSERT INTO TBL_EVENTLOG(MEMO)
+            VALUES('DELETE 쿼리가 실행되었습니다.');
+    END IF;
+    
+    --COMMIT;
+    -- ※ TRIGGER 내에서는 COMMIT / ROLLBACK 구문 사용 불가~!!! CHECK~!!!
+END;
+--==>> Trigger TRG_EVENTLOG이(가) 컴파일되었습니다.
+```
 ### 9.1.1. ☑ 20231107_02_scott.sql
 ``` SQL
 ```
