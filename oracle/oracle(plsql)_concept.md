@@ -939,7 +939,9 @@ BEGIN
 END;
 ```
 
+
 <BR>
+
 
 # 9. TRIGGER(트리거)
 -- 사전적인 의미: 방아쇠, 촉발시키다, 야기하다, 유발하다.  
@@ -1007,16 +1009,23 @@ END;
 ``` SQL
 CRAETE [OR REPLACE] TRIGGER 트리거명
     [BEFORE | AFTER]
-    이벤트1 [OR 이벤트2 [OR 이벤트3]] ON 테이블명
-    [FOR EACH ROW [WHEN TRIGGER 조건]]
+    이벤트1 [OR 이벤트2 [OR 이벤트3]] ON 테이블명    -- *ON 테이블명: 어디에 장착할지*
+    [FOR EACH ROW [WHEN TRIGGER 조건]]               -- *ROW에서 'FOR EACH ROW' 사용(FOR:각각의 행에 대해)*
+                                                     -- *STATEMENT에서 'FOR EACH ROW' 삭제*
 [DECLARE]
     -- 선언구문;
 BEGIN
     -- 실행구문;
 END;
 ```
+## 9.1. AFTER STATEMENT TRIGGER 상황 실습
+-- ※ DML 작업에 대한 이벤트 기록
+-- *떠든사람 적기, 떠들기 전에 예측해서 적을 수 없음*  
 
-
+--○ TRIGGER(트리거) 생성
+### 9.1.1. ☑ 20231107_02_scott.sql
+``` SQL
+```
 
 
 
