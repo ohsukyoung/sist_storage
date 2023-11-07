@@ -616,7 +616,7 @@ END;
 -- *오늘의 실습은 함수를 선언하는 형태이기 때문에 하지 않는다.*
 
 ## 5.2. ☑ 20231103_02_scott.sql
---○ 20231103_01_scott(qlsql).sql 파일에서  
+--○ 20231103_01_scott(plsql).sql 파일에서  
 --   FN_GENDER() 함수 생성 후 테스트  
 ``` SQL
 SELECT NUM, NAME, SSN, FN_GENDER(SSN) "성별"
