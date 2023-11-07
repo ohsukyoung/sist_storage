@@ -807,7 +807,9 @@ END;
 --==>> Procedure PRC_MEMBER_INSERT이(가) 컴파일되었습니다.
 ```
 
-# CURSOR(커서)
+# 8. CURSOR(커서)
+>-- *커서(상자)는 압축해 넣어서 뚜껑을 닫아놓았다가, 뚜껑을 열면 왁~~~!하고 나오는 모양*  
+  
 1. 오라클에서는 하나의 레코드가 아닌 여러 레코드로 구성된 작업 영역에서   
     SQL 문을 실행하고 그 과정에서 발생한 정보를 저장하기 위해서 커서(CURSOR)를 사용하며  
     커서에는 암시적인 커서와 명시적인 커서가 있다.  
@@ -816,13 +818,168 @@ END;
     그러나 SQL문을 실행한 결과물(RESULT SET)이 여러행(ROW)으로 구셩된 경우  
     커서(CURSOR)를 명시적으로 선언해야 여러 행(ROW)을 다룰 수 있다.
 
+--○ 커서 이용 전 상황(단일 행 접근 시)  
+``` SQL
+SET SERVEROUTPUT ON;
+--==>> [스크립트 출력] 작업이 완료되었습니다.(0.063초)
 
+DECLARE
+    V_NAME  TBL_INSA.NAME%TYPE;
+    V_TEL   TBL_INSA.TEL%TYPE;
+BEGIN
+    SELECT NAME, TEL INTO V_NAME, V_TEL
+    FROM TBL_INSA
+    WHERE NUM=1001;
+    
+    DBMS_OUTPUT.PUT_LINE(V_NAME || ' -- ' || V_TEL );
+END;
+--==>> 
+/*
+홍길동 -- 011-2356-4528
 
+PL/SQL 프로시저가 성공적으로 완료되었습니다.
+*/
+```
 
+--○ 커서 이용 전 상황(다중 행 접근 시)
+``` SQL
+DECLARE
+    V_NAME  TBL_INSA.NAME%TYPE;
+    V_TEL   TBL_INSA.TEL%TYPE;
+BEGIN
+    SELECT NAME, TEL INTO V_NAME, V_TEL
+    FROM TBL_INSA;
+    
+    DBMS_OUTPUT.PUT_LINE(V_NAME || ' -- ' || V_TEL );
+END;
+--==>> 에러 발생(01422. 00000 -  "exact fetch returns more than requested number of rows")
+```
 
+/* 2-문제 & 내가 푼 내용 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+```SQL
+-- *반복문을 활용해 INSA 테이블 출력*  
+DECLARE
+    V_NAME  TBL_INSA.NAME%TYPE;
+    V_TEL   TBL_INSA.TEL%TYPE;
+    V_NUM   TBL_INSA.NUM%TYPE := 1001;
+BEGIN
+    FOR N IN 1001 .. 1061 LOOP
+        SELECT NAME, TEL INTO V_NAME, V_TEL
+        FROM TBL_INSA
+        WHERE NUM = V_NUM;
+        
+        DBMS_OUTPUT.PUT_LINE(V_NAME || ' -- ' || V_TEL );
+    END LOOP;
+END;
+--==>>
+/*
+홍길동 -- 011-2356-4528
+  :
+최혜인 -- 010-2509-1783
+*/
+```
 
+``` SQL
+일반변수 -> 선언
+예외변수 -> 선언
 
+변수명 자료형     -- *이런형태를 취함*  
+V_NUM   NUMBER;
+U_ERR   EXCEPTION;
+커서명  CURSOR;   -- (X)
+```
 
+>-- *선생님이 만든 정의(우리끼리는)/ 내부적으로는 선언으로 표현하기도함*  
+``` SQL
+커서 -> 정의
+
+TABLE   테이블명
+INDEX   인덱스명
+USER    유저명
+
+CURSOR  커서명   -- (O)
+```
+>-- *선언과 정의의 쓰임이 변수명-자료형의 위치가 다름*   
+
+--○ 커서 이용 후 상황  
+``` SQL
+DECLARE
+    -- 주요 변수 선언
+    V_NAME TBL_INSA.NAME%TYPE;
+    V_TEL  TBL_INSA.TEL%TYPE;
+    
+    -- 커서 이용을 위한 커서 정의  CHECK~!!!
+    CURSOR CUR_INSA_SELECT     -- *눌러 담은 모양*  
+    IS
+    SELECT NAME, TEL
+    FROM TBL_INSA;
+    
+BEGIN
+    -- 오픈 커서
+    OPEN CUR_INSA_SELECT;
+    
+    -- 커서 오픈 시 (와~!!!)쏟아져 나오는 데이터들 처리(반복문을 활용하여 처리) 
+    LOOP
+        -- 한 행 한 행 받아다가 처리하는 행위 -> 가져오다(데려오다)    -> 『FETCH』
+        FETCH CUR_INSA_SELECT INTO V_NAME, V_TEL;
+        
+        -- 언제까지??? (EXIT WHEN)
+        --  -> 커서에서 더 이상 데이터가 쏟아져 나오지 않는 상태...  -> 『NOTFOUND』
+        EXIT WHEN CUR_INSA_SELECT%NOTFOUND;
+        
+        -- 출력
+        DBMS_OUTPUT.PUT_LINE(V_NAME || ' -- ' || V_TEL );
+    END LOOP;
+    
+    -- 클로즈 커서
+    CLOSE CUR_INSA_SELECT;
+    
+    -- *오라클 자체 커서의 경우, 오픈해 쓰면 자동으로 닫기 때문에... 클로즈 커서때문에 에러가 나는 경우가 있다.*  
+    -- *이럴 대는 클로즈 커서만 주석처리하고 재실행해보기*  
+END;
+```
+
+<BR>
+
+# 9. TRIGGER(트리거)
+-- 사전적인 의미: 방아쇠, 촉발시키다, 야기하다, 유발하다.  
+>-- *부비트랩은 내가 계속 지켜보다가 터트리는 것이 아니라, 설치만 해두고 떠나면 알아서 터지는것이 중요함*  
+
+1. TRIGGER(트리거)란 DML 작업 즉, INSERT, UPDATE, DELETE 작업이 일어날 때 
+    자동적으로 실행되는(유발되는, 촉발되는) 객체로  
+    이와 같은 특징을 강조하여 DML TRIGGER 라고 부르기도 한다.  
+    TRIGGER 는 무결성 뿐 아니라 다음과 같은 작업에도 널리 사용된다.  
+    
+-- 자동으로 파생된 열 값 생성  
+-- 잘못된 트랜잭션 방지  
+-- 복잡한 보안 권한 강제 수행  
+-- 분산 데이터베이스 노드 상에서 참조 무결성 강제 수행  
+-- 복잡한 업무 규칙 강제 적용  
+-- 투명한 이벤트 로깅 제공  
+-- 복잡한 감사 제공  
+-- 동기 테이블 복제 유지관리  
+-- 테이블 액세스 통계 수집  
+
+2. TRIGGER(트리거) 내에서는 COMMIT, ROLLBACK 문을 상요할 수 없다.  
+
+3. 특징 및 종류  
+--      - BEFORE STATEMENT   
+--      - BEFORE ROW  
+--      - AFTER STATEMENT  
+--      - AFTER ROW  
+
+4. 형식 및 구조  
+``` SQL
+CRAETE [OR REPLACE] TRIGGER 트리거명
+    [BEFORE | AFTER]
+    이벤트1 [OR 이벤트2 [OR 이벤트3]] ON 테이블명
+    [FOR EACH ROW [WHEN TRIGGER 조건]]
+[DECLARE]
+    -- 선언구문;
+BEGIN
+    -- 실행구문;
+END;
+```
 
 
 
