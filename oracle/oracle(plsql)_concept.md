@@ -1597,7 +1597,25 @@ IS
 END INSA_PACK;
 --==>> Package Body INSA_PACK이(가) 컴파일되었습니다.
 ```
+### 9.4.1. ☑ 20231108_02_scott.sql
+``` sql
+--○ 패키지 활용 실습
+SELECT INSA_PACK.FN_GENDER('801007-1544236') "함수호출결과"
+FROM DUAL;
+--==>> 남자
 
+SELECT NAME, SSN, INSA_PACK.FN_GENDER(SSN) "함수호출결과"
+FROM TBL_INSA;
+--==>>
+/*
+홍길동	771212-1022432	남자
+이순신	801007-1544236	남자
+이순애	770922-2312547	여자
+            :
+김신애	810809-2111111	여자
+최혜인	970812-2234567	여자
+*/
+```
 
 
 
