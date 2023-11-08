@@ -1373,10 +1373,130 @@ FROM TBL_TEST3;
 -- *프로시저에서 입고,출고를 할 때 관련제고 컨트롤이 중요했는데, AFTER ROW로 가능*  
 -- *ROW TRIGGER의 경우 1:다 하나가 여러건에 걸쳐 두루 파장이 일어나야 하는 경우 ROW TRIGGER 사용*  
 ``` SQL
+CREATE OR REPLACE TRIGGER TRG_IBGO
+    AFTER
+    INSERT ON TBL_입고
+    FOR EACH ROW
+BEGIN
+    IF (INSERTING)
+        THEN UPDATE TBL_상품
+            SET 재고수량 = 재고수량 + 새로입고되는수량
+            WHERE 상품코드 = 새로입고되는상품코드;
+    END IF;
+END;
 
+
+CREATE OR REPLACE TRIGGER TRG_IBGO
+    AFTER
+    INSERT ON TBL_입고
+    FOR EACH ROW
+BEGIN
+    IF (INSERTING)
+        THEN UPDATE TBL_상품
+            SET 재고수량 = 재고수량 + :NEW.입고수량
+            WHERE 상품코드 = :NEW.상품코드;
+    END IF;
+END;
+--==>> Trigger TRG_IBGO이(가) 컴파일되었습니다.
 ```
 ### 9.4.1. ☑ 20231107_02_scott.sql
 ``` SQL
+-- ※ 실습을 위한 준비
+UPDATE TBL_상품
+SET 재고수량 = 0;
+--==>> 17개 행 이(가) 업데이트되었습니다.
+
+TRUNCATE TABLE TBL_입고;
+--==>> Table TBL_입고이(가) 잘렸습니다.
+
+TRUNCATE TABLE TBL_출고;
+--==>> Table TBL_출고이(가) 잘렸습니다.
+
+SELECT *
+FROM TBL_상품;
+--==>>
+/*
+H001	바밤바	600	0
+H002	죠스바	500	0
+H003	보석바	500	0
+H004	누가바	600	0
+H005	쌍쌍바	700	0
+H006	수박바	500	0
+H007	알껌바	500	0
+C001	빵빠레	1600	0
+C002	월드콘	1500	0
+C003	메타콘	1500	0
+C004	구구콘	1600	0
+C005	슈퍼콘	1700	0
+E001	빵또아	2600	0
+E002	투게더	2500	0
+E003	팥빙수	2500	0
+E004	셀렉션	2600	0
+E005	설레임	2700	0
+*/
+
+ROLLBACK;
+-- *ROLLBACK 해도 TRUNCATE는 되돌아가지 않음*  
+-- *TRUNCATE: 테이블의 가위로 오려냄*  
+-- *잘라낸 것은 ROLLBACK 되지 않음(오토커밋) -> 잘 판단해서 쓰기*  
+
+SELECT *
+FROM TBL_상품;
+--==>>
+/*
+H001	바밤바	600	0
+H002	죠스바	500	0
+H003	보석바	500	0
+H004	누가바	600	0
+H005	쌍쌍바	700	0
+H006	수박바	500	0
+H007	알껌바	500	0
+C001	빵빠레	1600	0
+C002	월드콘	1500	0
+C003	메타콘	1500	0
+C004	구구콘	1600	0
+C005	슈퍼콘	1700	0
+E001	빵또아	2600	0
+E002	투게더	2500	0
+E003	팥빙수	2500	0
+E004	셀렉션	2600	0
+E005	설레임	2700	0
+*/
+
+--○ TRIGGER(트리거) 생성 이후 실습 테스트
+INSERT INTO TBL_입고(입고번호, 상품코드, 입고일자, 입고수량, 입고단가)
+VALUES(1, 'H001', SYSDATE, 40, 1000);
+--==>> 1 행 이(가) 삽입되었습니다.
+
+SELECT *
+FROM TBL_입고;
+--==>> 
+/*
+1	H001	2023-11-08 09:11:22	40	1000
+*/
+
+COMMIT;
+
+SELECT *
+FROM TBL_상품;
+--==>>
+/*         :
+H001	바밤바	600	40
+*/
+
+INSERT INTO TBL_입고(입고번호, 상품코드, 입고일자, 입고수량, 입고단가)
+VALUES(2, 'H001',SYSDATE, 20, 1000);
+--==>> 1 행 이(가) 삽입되었습니다.
+
+SELECT *
+FROM TBL_상품;
+--==>>
+/*         :
+H001	바밤바	600	60
+*/
+
+COMMIT;
+--==>> 커밋 완료.
 ```
 
 
