@@ -1574,8 +1574,8 @@ IS
     END;
     
 END INSA_PACK;                               -- *END BODY 아님!*  
-
-
+```
+``` SQL
 CREATE OR REPLACE PACKAGE BODY INSA_PACK
 IS
     FUNCTION FN_GENDER(V_SSN VARCHAR2)      
