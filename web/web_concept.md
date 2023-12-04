@@ -110,7 +110,7 @@ document.write("2023년 11월의 끝");
 //	출력 내용: 문자열, 변수명, 연산결과
 ```
 
-### 3.3.2. Test002.html_document.write의 개행("<br>") 및 태그 삽입
+### 3.3.2. Test002.html_document.write의 개행("&lt;br&gt;") 및 태그 삽입
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/47421ebd-ad31-4843-9821-a443c72cf9f1)
 
 ``` javascript
