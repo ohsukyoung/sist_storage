@@ -3546,8 +3546,95 @@ function myMenu(status)
 ``` html
 ```
 
-### 3.3.36.
+### 3.3.36. Test036.html_자바스크립트 객체(사용자 정의 객체)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/672f87ac-84db-4c72-8dda-3e8520dcb01d)
+
 ``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test036.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript">
+function objTest()
+{
+	// 확인
+	//alert("함수호출");
+	
+	// 사용자 정의 객체(생성자) 정의
+	function Blog(b,d)
+	{
+		// 객체를 구성하는 속성
+		this.body = b;
+		this.date = d;
+	}
+	
+	// 객체 1개 생성 -----------------------------------
+	var blog = new Blog("블로그 개설", "2023-11-15");
+	
+	// 생성된 객체의 속성(멤버) 접근
+	var str = blog.body + " / " + blog.date;
+	
+	// 확인
+	//alert(str);
+	//--==>> 블로그 개설 / 2023-11-15
+	
+	// 객체 여러개 생성 -----------------------------------
+	// 1) 방법1
+	/* 
+	var ob1 = new Blog("블로그 개설", "2023-11-15");
+	var ob2 = new Blog("블로그 레이아웃 구성", "2023-11-16");
+	var ob3 = new Blog("생성자 이용한 객체 생성", "223-11-17");
+	
+	var arr = [ob1, ob2, ob3];
+	 */
+
+	// 2) 방법2
+	var arr = [new Blog("블로그 개설", "2023-11-15")
+			 , new Blog("블로그 레이아웃 구성", "2023-11-16")
+			 , new Blog("생성자 이용한 객체 생성", "223-11-17")];
+	
+	str = "<table border='1' class='table'>";
+	str += "<tr><th>제목</th><th>날짜</th></tr>";
+	
+	for (var i = 0; i < arr.length; i++)
+	{
+		str += "<tr>";
+		str += "<td>" + arr[i].body + "</td>"
+		str += "<td>" + arr[i].date + "</td>" ;
+		str += "</tr>";
+	}
+	
+	str += "</table>";
+	
+	var result = document.getElementById("result");
+	
+	result.innerHTML = str;
+	
+	
+}
+</script>
+
+</head>
+<body class="section">
+	
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>	
+
+<div class="layout">
+	<h2>자바스크립트 객체(사용자 정의 객체)</h2>
+	
+	<div class="btn_box">
+		<input type="button" value="사용자 정의 객체 테스트" onclick="objTest()">
+	</div>
+	<div id="result"></div>
+</div>
+</body>
+</html>
 ```
 
 ### 3.3.37.
