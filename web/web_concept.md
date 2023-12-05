@@ -3153,12 +3153,152 @@ function formclear()
 </html>
 ```
 
-### 3.3.32.
+### 3.3.32. Test032.html_주소검색/ window.open()
+※ window.open();
+
+- 형식 및 구조
+``` javascript
+var result = window.open(url,name,spec,replace);
+```
+  ·result
+	새로 생성된 창의 객체가 반환된다.
+	창 객체 생성이 정상적으로 이룽지지 않을 경우 null을 반환한다.
+  ·url
+	새 창으로 요청할 주소.
+  ·name
+	새 창의 속성 또는 이름.
+	(_blank / _parent / _self / _top / 임의의 이름)
+  ·spec
+	새 창의 스펙 설정.
+  ·replace
+  	히스토리 목록에 새창을 만들지의 여부 지정.
 ``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test032.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+function searchAddr()
+{
+	//console.log("함수호출");
+	
+	window.open("Test033.html","Test","width=500, height=300");
+	//----내장 객체(DOM 객체)
+	//**DOM은 BOM 객체 위에 생성됨**
+	//			------------- 열 페이지
+	//						   ------ 열렸을 때 이름
+	//								  ----------------------- 스펙(위치, 크기 등..)
+	
+	
+}
+</script>
+
+</head>
+<body class="section">
+<div>
+	<h1>자바스크립트를 활용</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<h2>주소 검색</h2>
+	
+	<form>
+		<div class="input_box btn_box">
+			<span class="tit">기본 주소</span>
+			<input type="text" id="addr1" readonly="readonly" class="txt">
+			<input type="button" value="검색" class="btn" onclick="searchAddr()">
+		</div>
+		<div>
+			<span class="tit">상세 주소</span>
+			<input type="text" id="addr2" class="txt">
+		</div>
+		<div>
+			<span id="txt1" style="color: red; font-weight: bold">
+				시각적으로 확인 할 수 있게 처리
+			</span>
+		</div>
+	</form>
+</div>
+</body>
+</html>
 ```
 
-### 3.3.33.
+### 3.3.33. Test033.html_주소 검색(새창)
 ``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test033.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+function myAddr(addr)
+{
+	// 확인
+	//alert("함수호출");
+	
+	// 확인
+	//alert(addr);
+	
+	// 실행되지 않음
+	//document.getElementById("addr").value = "1234";
+	
+	//window.opener.document.getElementById("addr1").value = "1234";
+	//---- Test033
+	//       ----- Test032
+	
+	window.opener.document.getElementById("addr1").value = addr;
+	
+	//IE 용
+	//window.opener.document.getElementById("txt1").innerText = addr;
+	
+	//CR, FF 용
+	window.opener.document.getElementById("txt1").innerHTML = addr;
+	
+	// 현재 창 닫기
+	window.close();
+}
+</script>
+</head>
+<body class="section">
+	
+<div class="layout" style="padding: 20px 0;">
+	<form>
+		<div class="input_box btn_box">
+			<span class="tit">주소 검색(새창)</span>
+			<input type="text">
+			<input type="button" value="검색">
+		</div>
+		<div>
+			<ul>
+				<!-- **바람직하지 않은 방법** -->
+				<!-- <li><a href="Test032.html">서울 마포구 월드컵북로 1가 (1~110번지)</a></li> -->
+				
+				<!-- **함수호출: 그냥 함수명을 넣어서는 실행X** -->
+				<!-- <li><a href="myAddr()">서울 마포구 월드컵북로 1가 (1~110번지)</a></li> -->
+				<li><a href="javascript:myAddr('04044 서울 마포구 월드컵북로1가')">서울 마포구 월드컵북로 1가 (1~110번지)</a></li>
+				<li><a href="javascript:myAddr('04045 서울 마포구 월드컵북로2가')">서울 마포구 월드컵북로 2가 (111~132번지)</a></li>
+				<li><a href="javascript:myAddr('04046 서울 마포구 월드컵북로3가')">서울 마포구 월드컵북로 3가 (133~145번지)</a></li>
+				<li><a href="javascript:myAddr('04047 서울 마포구 월드컵북로4가')">서울 마포구 월드컵북로 4가 (146~153번지)</a></li>
+				<li><a href="javascript:myAddr('04048 서울 마포구 월드컵북로5가')">서울 마포구 월드컵북로 5가 (152~166번지)</a></li>
+				<li><a href="javascript:myAddr('04049 서울 마포구 월드컵북로6가')">서울 마포구 월드컵북로 6가 (167~180번지)</a></li>
+				<!-- 문자열 사용시 큰따옴표(") 작은따옴표(')모두 사용가능. 단, 묶어서 구분지어 사용해야함 -->
+				
+				<li><a href="">서울 마포구 월드컵북로 1가 (1~110번지)</a></li>
+				<li><a href="">서울 마포구 월드컵북로 2가 (111~132번지)</a></li>
+			</ul>
+		</div>
+		
+	</form>
+</div>	
+	
+</body>
+</html>
 ```
 
 ### 3.3.34.
@@ -3185,7 +3325,13 @@ function formclear()
 ``` html
 ```
 
+### 3.3.35.
+``` html
+```
 
+### 3.3.36.
+``` html
+```
 
 
 
