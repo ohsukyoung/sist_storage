@@ -2657,8 +2657,8 @@ function actionChoice()
 </html>
 ```
 
-### 3.3.30. Test030.html_아이스크림 주문
-![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/99c4ebf4-fe27-4cdb-95cf-be472f497175)
+### 3.3.30. Test030.html_아이스크림 주문/this
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/5a6c8583-609e-408e-bc50-0424ad183123)
 
 ``` html
 <!DOCTYPE html>
@@ -2666,137 +2666,524 @@ function actionChoice()
 <head>
 <meta charset="UTF-8">
 <title>Test030.html</title>
-<link rel="stylesheet" href="css/style.css">
- 
+
+<style type="text/css">
+	@font-face {
+				    font-family: 'CookieRun-Regular';
+				    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+				    font-weight: normal;
+				    font-style: normal;
+				}
+				
+	* {font-family: 'CookieRun-Regular'; color: #ed2499; text-align: center; background-color: #ffcfd6;}
+	
+	
+	form {background-image: url("https://isplus.com/data/isp/image/2017/12/21/isphtm_20171221112824165729.jpg");
+		   padding: 20pt; border-radius: 40pt; color: #8f3251; margin: auto; text-align: center;}
+		   
+	label { color: #e06c8f; background-color: #defaf1; margin: 10pt; border-radius: 20pt; padding: 3pt; vertical-align: middle; line-height: 25pt; justify-content: center;}
+
+	span {background-color: #e86d96; color: white;  padding: 15pt; border-radius: 20pt; border: thick;}
+
+	h1 { padding: 10pt; background-color: #defaf1; border-radius: 20pt; text-align: center; border: thick;}
+</style>
+
+
+<script type="text/javascript">
+
+	//*************************************************************
+	// 체크박스를 선택 할 때, 최대로 선택 가능한 값이 몇인지를
+	// 체크박스 선택 함수에서도 확인할 수 있어야 하기 때문에
+	// 전역변수로 선언해 주었다~~
+	//************************************************************
+	var cnt = 0;				//-- 선택할 수 있는 아이스크림의 개수는
+	var userCnt = 0;			//-- 사용자가 선택한 아이스크림의 개수
+
+	// 사이즈 선택 시 호출
+	function countSet(val)
+	{
+		// 확인
+		//alert("함수 호출 확인~!!!");
+		//alert(val);
+		
+		// 매개변수로 넘겨받은 데이터를 이용하여
+		// 선택할 수 있는 아이스크림의 개수 설정
+		cnt = parseInt(val);
+		
+		// 확인
+		alert("당신이 선택할 수 있는 아이스크림의 개수는 『" + cnt + "』 입니다.");
+	}
+	
+	// 아이스크림 종류 선택 시 호출
+	function actionChoice(obj)
+	{
+		// 확인
+		//alert("함수 호출~!!!");
+		//alert("체크되었는지의 여부");
+		
+		//===============================================================
+		// checked 속성 : 체크되었을 때 true 반환.
+		// 체크박스의 기본 설정으로 부여하게 되면, 디폴트값이 checked!
+		//===============================================================
+			
+		//alert(obj);
+		//alert(obj.checked);
+		
+		
+		//-- 체크 설정되며 클릭된 상황 vs 체크 해제되며 클릭된 상황 → 판단 가능~!!!
+		//--==>> true / false → 클릭 액션에 의해 check 되었을 때 true
+		
+		
+		
+		
+		
+		if (obj.checked)	//-- true → 체크 설정
+		{
+			if (userCnt >= cnt)
+			{
+				alert("선택할 수 있는 개수를 초과하였습니다~!!!");
+				
+				// check~!!!
+				
+				obj.checked = false;
+				
+				return;
+				// return 문 뒤에 작성하면, 함수가 종료된 이후이므로
+				// 작성 내용이 반영되지 않는다. 반드시 return 이전에 작성하자.
+			}
+			
+			
+			// 사용자가 선택한 개수 증가
+			userCnt++;
+		}
+		else				//-- flase → 체크 해제
+		{
+			// 사용자가 선택한 개수 감소 
+			userCnt--;
+		}
+		
+		// 확인
+		//alert("userCnt : " + userCnt);
+		//alert(cnt + " 중 " + userCnt + " 선택");
+		
+	}
+
+</script>
+
+
 </head>
-<body class="section">
- 
+<body>
+<!-- 
+	1. 사이즈 선택
+	2. 몇 종류의 아이스크림을 선택할 수 있는지 앞에서 했던 내용에 준하도록 처리.
+	3. 최대 선택 가능 → 
+	   초과해서 선택할 경우 ("선택 개수를 초과하셨습니다.")
+	    → 확인 버튼 누르면 마지막에 선택한 항목을 체크 해제한다.
+	
+	
+ -->
+
 <div>
 	<h1>자바스크립트 활용</h1>
 	<hr>
 </div>
-<!-- 
-	1. 사이즈 선택(몇종류 아이스크림 선택할 수 있는지)
-	 파인트-> 3개
-	2. 선택 종류 초과시
-	ㄴ"선택개수 초과" 경고창
-	ㄴ 확인버튼 누르면 없어야함
-	3. 취소후 선택가능
-	
-	힌트) 엑션 버튼 클릭시 걸었음. 지금은 선택마다 실행되어야함.
- -->
-<div class="layout">
+
+<div>
 	<h2>아이스크림 주문</h2>
+	
 	<form>
-		<div>		
-			--- 사이즈 선택 ---<br><br>
-			<input type="radio" name="iceSize" value="1" onclick="actionChoice1()"> 싱글
-			<input type="radio" name="iceSize" value="2" onclick="actionChoice1()"> 더블
-			<input type="radio" name="iceSize" value="3" onclick="actionChoice1()"> 파인트
-			<input type="radio" name="iceSize" value="4" onclick="actionChoice1()"> 쿼터
-			<input type="radio" name="iceSize" value="5" onclick="actionChoice1()"> 패밀리
-			<input type="radio" name="iceSize" value="6" onclick="actionChoice1()"> 하프갤런
-		</div>
-				
-		<div>
-			--- 종류 선택 -- <br><br>
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 엄마는외계인
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 레인보우샤베트
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 민트초코
-			<br>
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 바람과함께사라지다
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 애플민트
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 초코나무숲
-			<br>
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 피스타치오아몬드
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 아몬드봉봉
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 요거트31
-			<br>
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 체리쥬빌레
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 슈팅스타
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 사랑에빠진딸기
-			<br>
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 뉴옥치즈케이크
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 쿠앤크
-			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2()"> 베리베리스트로베리
-		</div>
+		--- 사이즈 선택 --- <br><br>
+		<span>
+			<input type="radio" id="a1" name="radioGroup" value="1" onclick="countSet(1)"> 싱글
+			<input type="radio" id="b1" name="radioGroup" value="2" onclick="countSet(2)"> 더블
+			<input type="radio" id="c1" name="radioGroup" value="3" onclick="countSet(3)"> 파인트
+			<input type="radio" id="d1" name="radioGroup" value="4" onclick="countSet(4)"> 쿼터
+			<input type="radio" id="e1" name="radioGroup" value="5" onclick="countSet(5)"> 패밀리
+			<input type="radio" id="f1" name="radioGroup" value="6" onclick="countSet(6)"> 하프갤런
+		</span>
+		<br><br>
+		
+		
+		-- 종류 선택 -- <br><br>
+		
+		<label>																	<!-- "" 큰 따옴표 안에 문자열을 넣을 때는 작은 따옴표 '' 로 문자열을 전달하자.  -->
+																				<!-- '엄마=\'A\'' 이스케이프 문자를 사용한 '' 따옴표 문자열 포함.-->
+			<input type="checkbox" name="checkGroup" id="a2" value="엄마" onclick="actionChoice(this)"> 엄마는외계인
+		</label>		
+			<!-- [this] : this 가 포함된 객체 전체를 가져온다. 여기서의 this는 checkbox 오브젝트 전체를 의미한다. -->
+		
+		<label>
+			<input type="checkbox" name="checkGroup" id="b2" value="레인" onclick="actionChoice(this)"> 레인보우샤베트
+		</label>
+		
+		<label>
+			<input type="checkbox" name="checkGroup" id="c2" value="민트" onclick="actionChoice(this)"> 민트초코
+		</label>
+		<br>
+		
+		<label>
+			<input type="checkbox" name="checkGroup" id="d2" value="바람" onclick="actionChoice(this)"> 바람과함께사라지다
+		</label>
+		<label>
+			<input type="checkbox" name="checkGroup" id="e2" value="애플" onclick="actionChoice(this)"> 애플민트
+		</label>
+		<label>
+			<input type="checkbox" name="checkGroup" id="f2" value="나무" onclick="actionChoice(this)"> 초코나무숲
+		</label>
+		<br>
+		
+		<label>
+			<input type="checkbox" name="checkGroup" id="g2" value="피스" onclick="actionChoice(this)"> 피스타치오아몬드
+		</label>
+		<label>
+			<input type="checkbox" name="checkGroup" id="h2" value="봉봉" onclick="actionChoice(this)"> 아몬드봉봉
+		</label>
+		<label>
+			<input type="checkbox" name="checkGroup" id="i2" value="요거" onclick="actionChoice(this)"> 요거트31
+		</label>
+		<br>
+		
+		<label>
+			<input type="checkbox" name="checkGroup" id="j2" value="체리" onclick="actionChoice(this)"> 체리쥬빌레
+		</label>
+		<label>
+			<input type="checkbox" name="checkGroup" id="k2" value="슈팅" onclick="actionChoice(this)"> 슈팅스타
+		</label>
+		<label>
+			<input type="checkbox" name="checkGroup" id="l2" value="사랑" onclick="actionChoice(this)"> 사랑에빠진딸기
+		</label>
+		<br>
+		
+		<label>
+			<input type="checkbox" name="checkGroup" id="m2" value="치즈" onclick="actionChoice(this)"> 뉴욕치즈케이크
+		</label>
+		<label>
+			<input type="checkbox" name="checkGroup" id="n2" value="쿠앤크" onclick="actionChoice(this)"> 쿠앤크
+		</label>
+		<label>
+			<input type="checkbox" name="checkGroup" id="o2" value="베리" onclick="actionChoice(this)"> 베리베리스트로베리
+		</label>
+		<br>
+		
+	
 	</form>
 </div>
-<script type="text/javascript">
-/* document.addEventListener('DOMContentLoaded', function() {
-	var radios = document.querySelectorAll('input[type=radio][name=iceSize]');
-	 
-    for (var radio of radios)
-    {
-    	radio.addEventListener('change', function(event)
-        {
-        	actionChoice1();
-        });
-    }
-    
-    var checkboxes = document.querySelectorAll('input[type=checkbox][name=iceType]');
- 
-    for (var checkbox of checkboxes)
-    {
-        checkbox.addEventListener('change', function(event)
-        {
-        	actionChoice2();
-        });
-    }
-}, false); */
- 
-// 사이즈 선택
-function actionChoice1()
-{
-	var radioObj = document.getElementsByName("iceSize");
-	var size = 0;
-	
-	for (var i = 0; i < radioObj.length; i++)
-	{
-		if(radioObj[i].checked)
-		{
-			size = parseInt(radioObj[i].value);
-			break;
-		}
-	}
-	console.log("size: "+size);
-	return size;
-}
- 
-// 종류 선택
-function actionChoice2()
-{	
-	var checkObj = document.getElementsByName("iceType");
-	var size = actionChoice1();
-	var type = 0;
-	
-	for (var i = 0; i < checkObj.length; i++)
-	{
-		if(checkObj[i].checked)
-		{
-			type++;
-		}
-		console.log("type: "+type);
-		
-		if(size<type){
-			checkObj[i].checked = false;
-			alert("선택개수 초과");
-			break;
-		}
-	}
-}
-</script>
+
 </body>
 </html>
 ```
 
-### 3.3.31.
+### 3.3.31. Test031_1.html_선택목록(select) 다루기/ formclear(), .reset(), .forms[0].reset(), .focus()
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test031_1.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+
+	// select 를 다루어보기 위한 테스트 함수 정의
+	function selectTest()
+	{
+		// 확인
+		//alert("함수 호출~!!!");
+		
+		
+		// **컨트롤 하는 방법을 여러가지로 알아둬야함**
+		
+		// 첫 번째 방법 ========================================================
+		/* 
+		var positionStr = document.getElementById("userPosition").value;
+		
+		// 확인
+		alert(positionStr);
+		*/
+		
+		// 두 번째 방법 ========================================================
+		/* 
+		var positionObj = document.getElementById("userPosition");
+		var positionOptions = positionObj.options;		//**배열~!!!**
+		var positionMsg = "";
+		
+		// 확인
+		//alert(positionOptions);
+		//--==>> [object HTMLOptionsCollection] -> 자바스크립트 배열
+		
+		//alert(positionOptions.length);
+		//--==>> 4
+		
+		for (var i = 0; i < positionOptions.length; i++)		// 0 1 2 3
+		{
+			// 확인
+			//alert(positionOptions[i].selected);
+			//--==>> 선택된 옵션 항목에 따라 true/false 형태로 확인
+			//		ture false false false (부장 선택된 상태)
+			//		false false false true (사원 선택된 상태)
+			
+			if(positionOptions[i].selected)
+			{
+				// 확인
+				//alert(i);
+				//--==>> 0 (부장 선택된 상태)
+				//		 3 (사원 선택된 상태)
+				
+				// 단일 선택
+				//positionMsg = positionOptions[i].value;
+				//break;
+				
+				// 다중 선택
+				positionMsg = positionOptions[i].value + " ";
+				// **다중 선택에서는 break 쓰면 X**
+			}
+		}
+		
+		// 확인
+		alert(positionMsg); 
+		*/
+		
+		// 세 번째 방법 =====================================================
+		/* 
+		var positionObj = document.getElementById("userPosition");
+		
+		// 확인
+		//alert(positionObj.selectedIndex);
+		//--==>> 부장->0, 과장->1, 대리->2, 사원->3
+		
+		// 확인
+		//alert(positionObj.options[2].value);
+		//--==>> cde(대리)
+		//alert(positionObj.options[0].value);
+		//--==>> zaq(부장)
+		
+		positionMsg = positionObj.options[positionObj.selectedIndex].value;
+		//			  ------------------- 배열
+		//								 -------------------------- 선택된 인덱스 번호
+		//															------ 배열의 값
+		
+		// 확인
+		alert(positionMsg);
+		 */
+		
+	}
+function addMember()
+{
+	var uName = document.getElementById("userName").value;
+	var uSsn = document.getElementById("userSsn").value;
+	
+	//var uCity = document.getElementById("userCity").value
+	var cityObj = document.getElementById("userCity");
+	
+	//alert(cityObj.selectedIndex);
+	//--==>> 서울 -> 0, 대전 -> 1, 대구 -> 3
+	
+	//alert(cityObj.options[cityObj.selectedIndex].value);
+	//--==>> 1123(서울), 3328(대전), 4239(광주), 5832(대구)
+	
+	
+	
+	var uCity = cityObj.options[cityObj.selectedIndex].value;
+	
+	var BuseoObj = document.getElementById("userDepartment");
+	var uBuseo = BuseoObj.options[BuseoObj.selectedIndex].value;
+	
+	var positionObj = document.getElementById("userPosition");
+	var uPosition = positionObj.options[positionObj.selectedIndex].value;
+	
+	var uBasicPay = document.getElementById("userBasicPay").value;
+	
+	// 테이블 그리기 ---------------------------------------------------
+	
+	var tableNode = document.getElementById("memberList");
+	
+	var trNode = document.createElement("tr");
+	
+	trNode.appendChild(createTdNode(uName));
+	trNode.appendChild(createTdNode(uSsn));
+	trNode.appendChild(createTdNode(uCity));
+	trNode.appendChild(createTdNode(uBuseo));
+	trNode.appendChild(createTdNode(uPosition));
+	trNode.appendChild(createTdNode(uBasicPay));
+	
+	tableNode.appendChild(trNode)	
+	// ---------------------------------------------------- 테이블 그리기
+	
+	//formclear();									//check~!!!
+													//**데이터 입력후 내용 리셋**
+	
+	//document.getElementById("listForm").reset();	//check~!!!
+	document.forms[0].reset();						//check~!!!
+	
+	document.getElementById("userName").focus();		//check~!!!
+	
+}
+function createTdNode(val)
+{
+	var txtNode = document.createTextNode(val);
+	var tdNode = document.createElement("td");
+	tdNode.appendChild(txtNode);
+	
+	return tdNode;
+}
+function formclear()
+{
+	document.getElementById("userName").value = "";
+	document.getElementById("userSsn").value = "";
+	var cityObj = document.getElementById("userCity");
+	cityObj.options[0].selected = true;
+	
+	var buseoObj = document.getElementById("userDepartment");
+	buseoObj.options[3].selected = true;
+	
+	var jikwiObj = document.getElementById("userPosition");
+	document.getElementById("userBasicPay").value= "";
+}
+
+</script>
+
+
+</head>
+<body class="section">
+
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+
+<div>
+	<h2>선택목록(select) 다루기</h2>
+	
+	
+	<form id="listForm">
+		<table>
+			<tr>	
+				<td>이름</td>
+				<td>
+					<input type="text" id="userName">
+				</td>
+			</tr>
+			<tr>
+				<td>주민번호</td>
+				<td>
+					<input type="text" id="userSsn">
+				</td>
+			</tr>
+			<tr>
+			
+			<!-- "서울" "마포구"... 이런식으로 사용자 입력으로 받으면 처리가 불가능하다. -->
+			<!-- 선택지에서 선택할 수 있도록 변경해야 한다! 【text → select[드롭다운]】 -->
+			
+				<td>지역</td>
+				<td>
+					<!-- <input type="text" id="userCity"> -->
+					<select id="userCity">
+						<option value="1123(서울)">서울</option>
+						<option value="3328(대전)">대전</option>
+						<option value="4239(광주)">광주</option>
+						<option value="5832(대구)">대구</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>부서</td>
+				<td>
+					<!-- <input type="text" id="userDepartment"> -->
+					<select id="userDepartment">
+						<option value="9987(개발부)">개발부</option>
+						<option value="9986(인사부)">인사부</option>
+						<option value="9985(자재부)">자재부</option>
+						<option value="9984(영업부)" selected>영업부</option>
+						<option value="9983(총무부)">총무부</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>직위</td>
+				<td>
+					<!-- <input type="text" id="userPosition"> -->
+					<select id="userPosition">
+						<option value="zaq(부장)">부장</option>
+						<option value="xsw(과장)">과장</option>
+						<option value="cde(대리)">대리</option>
+						<option value="bgt(사원)" selected>사원</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>기본급</td>
+				<td>
+					<input type="text" id="userBasicPay">
+				</td>
+			</tr>
+			<tr class="btn_box">
+				<td colspan="2" style="text-align: center">
+					
+					<!-- 선택된 값을 가져오는 1,2,3 방법 -->
+					<!-- <input type="button" value="직원 추가" class="btn" style="width: 48%"
+					onclick="selectTest()"> -->
+					
+					<!-- 직원 추가 기능  -->
+					<input type="button" value="직원 추가" class="btn"
+					onclick="addMember()">
+					
+					<input type="reset" value="입력 취소" class="btn">
+				</td>
+			</tr>
+		</table>
+		<br>
+		
+		
+		<table id="memberList">
+			<tr>
+				<td>이름</td>
+				<td>주민번호</td>
+				<td>지역</td>
+				<td>부서</td>
+				<td>직위</td>
+				<td>기본급</td>
+			</tr>
+		</table>
+		
+	</form>
+</div>
+
+
+</body>
+</html>
+```
+
+### 3.3.32.
 ``` html
 ```
 
+### 3.3.33.
+``` html
+```
 
+### 3.3.34.
+``` html
+```
 
+### 3.3.35.
+``` html
+```
 
+### 3.3.36.
+``` html
+```
+
+### 3.3.37.
+``` html
+```
+
+### 3.3.38.
+``` html
+```
+
+### 3.3.34.
+``` html
+```
 
 
 
