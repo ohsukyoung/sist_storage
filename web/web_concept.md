@@ -2,15 +2,51 @@
 
 <BR>
 
-# 1. HTML
-## 1.1. 
-### 1.1.1. 
+# 1. 구조적 설계(HTML)
+## 1.1. ·컨텐츠에 대한 레이아웃 구성(부모 자식 관계 설정)
+## 1.2. ... 태그에 대한 공부(인라인/블럭)
+		
+		http://www.w3schools.com/
+		http://koxo.com/
 
 <br><br>
 
-# 2. CSS
-## 2.1. 
-### 2.1.1. 
+# 2. 프리젠테이션 추가(CSS)
+## 2.1. 선택자 구성 및 설정
+### 2.1.1. 『*』 (공용 선택자)
+모든 엘리먼트를 선택한다.
+### 2.1.2. 『E』 (엘리먼트 선택자, 태그 선택자, 타입 선택자)
+엘리먼트를 선택한다.
+### 2.1.3. 『.』 (클래스 선택자)
+html 에서만 사용할 수 있으며... 예를 들어 『tr.even』은 『even』이라는 클래스를 갖고 있는 tr 엘리먼트를 선택하게 된다.  
+class는 하나의 페이지에서 동일한 class 를 여러 번 사용할 수 있기 때문에 반복적으로 여러 번 나오는 스타일읠 경우 용이하게 지정하여 사용할 수 있다.
+### 2.1.4. 『#』 (아이디 선택자)
+예를 들어... 『#user』라는 선택자는 아이디가 『user』인 엘리먼트를 선택하게 된다.
+### 2.1.5. 『E F』 (하위 선택자, 자손 선택자)
+E 엘리먼트 하위에 있는 F 엘리먼트를 선택하게 된다.  
+이 경우, F는 E의 바로 직접적인 자식 엘리먼트가 아니어도 무방하다.
+### 2.1.6. 『E>F』 (자식 선택자)
+E 엘리먼트의 자식 엘리먼트인 F 엘리먼트를 선택하게 된다.
+### 2.1.7. 『E>F』 (자식 선택자)
+E 엘리먼트와 F 엘리먼트가 서로 동등한 관계에서 인접해 있는 경우 선택하게 된다.
+### 2.1.8. 『E:hover』, 『E:acitve』, 『E:focus』... (동적 선택자, 가상 선택자, 상태 선택자)
+사용자 액션이 선택자로 구성한 상태에 해당하는 (만족하는) E 엘리먼트를 선택하게 된다.
+
+## 2.2. CSS의 선언 방법
+### 2.2.1. 외부선언
+``` html
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+```
+### 2.2.2. 문서 안에 포함하여 선언
+``` html
+	<style type="text/css">
+		div {...}
+	</style>
+```
+### 2.2.3. 엘리먼트(태그)에 직접 선언
+``` html
+	<input type="text" style="width: 20px; height: 40px;">
+```
 
 <br><br>
 
@@ -2874,6 +2910,8 @@ function actionChoice()
 ```
 
 ### 3.3.31. Test031_1.html_선택목록(select) 다루기/ formclear(), .reset(), .forms[0].reset(), .focus()
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/08145aed-6a02-4772-938f-433d1eb42bb6)
+
 ``` html
 <!DOCTYPE html>
 <html>
@@ -3154,6 +3192,7 @@ function formclear()
 ```
 
 ### 3.3.32. Test032.html_주소검색/ window.open()
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/80082a68-e755-4c41-a3fe-92224796dc8d)
 ※ window.open();
 
 - 형식 및 구조
@@ -3301,9 +3340,119 @@ function myAddr(addr)
 </html>
 ```
 
-### 3.3.34.
+### 3.3.34. Test034.html_메뉴 보이기/감추기 / onmouseover, onmouseout
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/6dc79973-313f-49a5-8d6a-62ed69345018)
+
 ``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test034.html</title>
+<link rel="stylesheet" href="css/style.css">
+<style type="text/css">
+	#menuTable {display: none;}
+</style>
+
+<script type="text/javascript" src="js/myMenu.js"></script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>	
+
+<div class="layout">
+	<h2>메뉴 보이기/감추기</h2>
+	
+	<div class="btn_box">
+		<form>
+			<!-- 클릭 시 메뉴 테이블 보이기 -->
+			<!-- <input type="button" value="메뉴 보이기" onclick="myMenu1()"> -->
+			<input type="button" value="메뉴 보이기" onclick="myMenu(1)">
+			
+			<!-- 클릭 시 메뉴 테이블 감추기 -->
+			<!-- <input type="button" value="메뉴 감추기" onclick="myMenu2()"> -->
+			<input type="button" value="메뉴 감추기" onclick="myMenu(2)">
+			
+			<!-- 
+				버튼 위에 마우스 커서를 올려놓으면 메뉴 테이블이 보이고
+				다시 버튼 위에 머물면 마우스 커서가 버튼 영역을 빠져나가면
+				메뉴 테이블 감추기
+			 -->
+			 <input type="button" value="메뉴 보이기/감추기" onmouseover="myMenu(1)" onmouseout="myMenu(2)">
+		</form>
+	</div>
+	
+	<div id="menuTable">
+		<table>
+			<tr>
+				<td>JAVA 기초</td>
+			</tr>
+			<tr>
+				<td>오라클 중급</td>
+			</tr>
+			<tr>
+				<td>JSP 고급</td>
+			</tr>
+			<tr>
+				<td>Servlet 활용</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+</body>
+</html>
 ```
+
+### 3.3.34.1. js/myMenu.js
+``` javascript
+/**
+ * myMenu.js
+ */
+/*
+function myMenu1()
+{
+	
+}
+
+function myMenu2()
+{
+	
+}
+*/
+
+function myMenu(status)
+{
+	//**자바와는 다르게 자바스크립트에서는 매개변수가 없어도 실행가능**
+	// 확인
+	//alert("함수 호출~!!");
+	
+	//alert(status);
+	
+	var menu = document.getElementById("menuTable");
+	
+	if(status==1)
+	{
+		//alert("1번 확인");
+		
+		// 스타일 제어
+		menu.style.display="block";
+	}
+	else
+	{
+		//alert("2번 확인");
+		
+		// 스타일 제어
+		menu.style.display="none";
+	}
+}
+```
+
 
 ### 3.3.35.
 ``` html
