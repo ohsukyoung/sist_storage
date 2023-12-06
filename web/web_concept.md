@@ -4072,19 +4072,286 @@ http://localhost:3306/WebApp04/jsptest001.jsp
 ```
 ※ 원격 접속인 경우 localhost(127.0.0.1) 대신 목적지 서버의 IP Adress 를 작성해야 한다.
 
+## 5.6. ○ jsp 구성 요소
+### 5.6.1. 디렉티브(지시어)
+- 페이지에 대한 설정 정보 지정. 클래스 속성을 변경.
+<%@  %>
 
+· Page
+페이지에 대한 기본 정보 입력 (생성하는 문서의 타입, 출력 버퍼의 크기, 에러 페이지 등)
+현재 문서를 나타내는 객체
+page 디렉티브는 JSP 페이지와 관련된 속성을 정의하고 이 속성들은 웹 컨테이너에 정보를 제공한다.
+또한, 한 페이지에 page 디렉티브는 여러 번 등장 할 수 있고 위치도 관계 없다.
+하지만 보통 페이지 상단에 기술한다.
 
+주요속성
+- language: 스크립트 코드에서 사용되는 프로그래밍 언어 지정
+- contentType: 생성할 문서 타입
+- import: 사용할 자바 클래스 지정
+- session: 세션 사용 여부 지정
+- buffer: 출력 버퍼 크기 지정
+- autoFlush: 출력 버퍼가 다 채워졌을 경우 자동으로 버퍼에 있는 데이터를 비우게 만들지의 여부 지정
+- info: 페이지에 대한 설명
+- errPage: 실행 도중 에러 발생 시 보여줄 페이지 지정
+- pageEncoding: 페이지 자체의 캐릭터 인코딩 지정
 
+· tablib
+태그 라이브러리(tag library)
+사용자가 만든 태그 모음(사용자가 직접 기능 설정)
+
+· include
+다른 문서를 포함하는 기능
+여러 JSP 페이지에서 공통적으로 포함하는 내용이 있을 때 이러한 내용을 매번 반복해서 입력하지 않고 
+별도의 파일에 저장해 두었다가 JSP 파일에 삽입되도록 하는 것 -> 생산성 향상
+include 디렉티브 처리 과정은
+정적으로 include 지시자를 사용한 JSP 페이지가 컴파일 되는 과정에서 include 되는 JSP 페이지 소스 내용을 그대로 포함해서 컴파일 한다.
+즉, 복사& 붙여넣기 방시그올 두 개의 파일을 하나로 구성한 후 같이 변화되고 컴파일 된다.
+
+### 5.6.2. 스크립트 요소
+- 스크립트 릿(Scriptlet)... 스크립 릿...스크립틀릿...
+JSP에 자바 코드를 기술
+<% %>
+
+JSP 문서 내에 JAVA 코드를 기술하는 부분이기 때문에 오로지 자바 코드만 올 수 있다.
+스크립트 릿에 선언되 변수는 지역 변수의 성격을 가지게 되며
+(서블릿 안에 있는 service() 메소드 안에 선언된 변수이므로...)
+자바에서 메소드 내에 선언된 변수라고 할 수 있다.
+
+- 표현식(Expression)
+HTML 문서 결과값이 포함시키고자 할 때 사용
+<%= %>
+(즉, 브라우저에 등장시킬 수 있는 영역)
+
+- 선언부(Declaration)
+스크립트릿이나 표현식에서 사용할 수 있는 함수 작성 시 사용.
+<%! %>
+
+스크립트 릿이나 표션식에서 사용할 수 있는 변수나 메소드를 정의하는
+부분이기 때문에 선언부에서 선언된 변수는 서블릿으로 변환되는 과정에서
+멤버 변수의 입장을 취하게 되며 전역 변수의 성격을 가진다.
+또한, 『_jspInit()』, 『_jspDestory()』 와 같은 생명주기 운영을 위해 메소드를 재정의 할 수 있다.
+
+## 5.7. 코드
+### 5.7.1. jsptest001.jsp_디렉티브 영역, 스크립 릿 영역
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/a2582513-2000-49f0-b7f3-d93d6c3efee1)
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!-- ** 디렉티브영역, page, 텍스트로 작성된 html, utf-8 ** -->
+
+<!-- **
+	생긴모양은 html과 유사하지만, 다른 문법!
+	- html) 만들어서 전달하면 끝
+	- jsp) 각 상황에 맞춰 만들어진 설계서를 기준으로 새롭게 만듦
+** -->
+<%
+	//Scriptlet(스크립트릿) 영역
+	
+	/* 자바가 오기 때문에, 라인단위 주석-블럭단위 주석사용 가능 */
+	String name = "김지민";
+	name += "은 홍길동이 아니다.";
+	
+	int result = 10 + 20;
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jsptest001.jsp</title>
+</head>
+<body>
+
+<div>
+	<h1>JSP 관찰하기</h1>
+	<hr>
+</div>
+
+<div>
+	<h2><%=name %></h2>
+	<h2><%=result %></h2>
+</div>
+
+</body>
+</html>
+```
+### 5.7.2. jsptest002.jsp_『out』 출력 스트림, 『out.println』-> 띄어쓰기,『\n』-> 띄어쓰기,『<br>』 -> 개행
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/f76599ae-0c04-4659-b0d2-16089d0d5ec2)
+
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<% 
+	// 스크립트 영역-> JSP 에서 JAVA 코드를 기술하는(사용하는) 영역
+	int a= 10, b=5, c;
+	c = a + b;
+	
+	//-- 스크립 릿 영역에서 수행된 자바 코드의 실행 결과는
+	//	 표현식에 의해 HTML 브라우저 영역에 출력된다.
+
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jsptest002.jsp</title>
+</head>
+<body>
+<div>
+	<h1>JSP 관찰하기</h1>
+	<hr>
+</div>
+
+<div>
+	<!-- 표현식 -->
+	<h2>합) <%=a %> + <%=b %> = <%=c %></h2>
+</div>
+<%
+	// 스크립 릿 영역
+	
+	//※ 『out』 은 내장 객체로서 출력 스트림이다.
+	out.print("1) 합: " + a + "+" + b + "="+ c);
+	out.println("2) 합: " + a + "+" + b + "="+ c);
+	out.println("3) 합: " + a + "+" + b + "="+ c);
+	/* ** print, println은 HTML document 영역에서 만들어지므로 개행되지 않음 ** */
+
+	out.println("<br></br>");
+	out.println("4) 합" + a + "+" + b + "="+ c);
+	out.println("5) 합" + a + "+" + b + "="+ c + "<br>");
+	/* ** out.println -> 띄어쓰기 됨  ** */
+	
+	out.println("<br></br>");
+	
+	String str = String.format("6) 합: %d + %d = %d", a, b, c);
+	out.print(str);
+	out.print(str);
+	
+	out.println("<br></br>");
+
+	/* ** \n -> 띄어쓰기됨 ** */
+	str = String.format("7) 합: %d + %d = %d\n", a, b, c);
+	out.print(str);
+	out.print(str);
+	
+	out.println("<br></br>");
+
+	/* ** <br> -> 개행됨 ** */
+	str = String.format("8) 합: %d + %d = %d<br>", a, b, c);
+	out.print(str);
+	out.print(str);
+	
+%>
+
+</body>
+</html>
+```
+
+### 5.7.3. jsptest003.jsp_『_jspInit()』 메소드, 『_jspDestroy()』 메소드, 『_jspService()』 메소드
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/46532a6f-4d0b-4e05-85f2-2c35817ca2cf)
+
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%!
+	// ○ 선언부 영역 -> 함수 정의가 가능한 영역
+	
+	// 선언부에서 선언한 변수 a
+	int a = 10;
+	
+	// 선언부에서 정의한 함수 sum()
+	int sum(int x)
+	{
+		int s=0;
+		for (int i=1; i<=x; i++)
+			s += i;
+		return s;
+	}
+
+%>
+<%
+	// ○ 스크립 릿 영역
+	
+	// 스크립릿 영역에서 선언한 변수 b
+	int b=0;
+
+	a++;
+	b++;
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jsptest003.jsp</title>
+</head>
+<body>
+<div>
+	<h1>JSP 관찰하기</h1>
+	<hr>
+</div>
+
+<div>
+	<h2>변수의 값 확인</h2>
+	<h3>a: <%=a %></h3>
+	<h3>b: <%=b %></h3>
+</div>
+
+<!-- 
+	※ 요청한 페이지(jsptest003.jsp)의 결과를 확인한 후 새로고침을 반복해 보면..
+		a 변수(선언부에 선언한 변수) 값만 계속 증가하는 것을 확인할 수 있다.
+		a 변수 갑산 계속 증가하는 이유를 확인하기 위해서는
+		서블릿(survlet) 코드를 분석해 보아야 한다.
+		
+		즉, jsptest003.jsp 의 서블릿 코드를 분석해야 한다.
+		
+		- 경로
+		C:\WebStudy\.metadata\.plugins\org.eclipse.wst.server.core
+					\tmp0\work\Catalina\localhost\WebApp04\org\apache\jsp
+		-----------								  --------
+		workspace								  project
+		
+		- 파일
+			jsptest003_jsp.java
+			------------	----
+			jsp 파일명		서블릿(servlet)의 확장자 -> 컴파일 이전
+			
+	   ==>> 변수 a는 클래스(jsptest003_jsp)의 전역변수로 선어뇐 것을 확인할 수 있다.
+			이는 객체가 소멸되기 전까지는 계속 값이 유지된다는 것을 의미한다.
+			변수 b는 메소드(jsptest002_jsp 클래스의 _jspService() 메소드) 내의
+			지역변수로 선언된 것을 확인할 수 있다.
+			
+			『_jspInit()』 메소드와 『_jspDestroy()』 메소드는
+			서비스가 시작될 때와 끝날 때 한 번씩만 실행되는 메소드이다.
+			반면.. 『_jspService()』 메소드는
+			브라우저에 의해 페이지가요청될 때 마다 매번 실행되는 메소드이다.
+			
+			이로 인해 변수 b는 페이지에 대한 요청이 발생할 때 마다
+			새롭게 초기화 되는 과정을 거치게 되는 것이다.
+			
+			JSP 페이지의 스크립릿 영역에서 선언된 모든 변수는
+			이 『_jspService()』 메소드의 지역변수가 된다.
+			
+			또한, JSP페이지의 선언부영역에서 선언된 모든 변수는
+			클래스의 번역변수(인스턴스 변수)가 된다.
+			
+			JSP 페이지에서 메소드 정의 시
+			스크립릿 영역 내부에서는 정의할 수 없다.
+			서블릿으로 변환되는 과정에서
+			메소드 내부에 또 다른 메소드가 다시 정의되는 상황이 되어버리기때문에
+			문법적으로 잘못된 표현이 되는 것이다.
+			
+			선언부는.. 비록 사용빈도가 낮지만..
+			메소드는 선언부 내부에서만 정의할 수 있는 것이다.
+		
+ -->
+</body>
+</html>
+```
+
+### 5.7.4.
+``` html
+```
 
 ------------------------------------------------
 
-### 3.3.34.
-``` html
-```
 
-### 3.3.35.
-``` html
-```
 
 ### 3.3.36.
 ``` html
