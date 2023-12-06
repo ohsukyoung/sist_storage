@@ -4345,8 +4345,112 @@ HTML 문서 결과값이 포함시키고자 할 때 사용
 </html>
 ```
 
-### 5.7.4.
+### 5.7.4. jsptest004.java_서블릿 관련 실습
+``` java
+/* ==================
+	Test004.java
+	- Servlet 실습
+=================== */
+
+// 현재... 자바의 기본 클래스 Test004
+// 이를... Servlet 으로 구성하는 방법
+
+// GenericServlet 을 상속받는 클래스로 설계 -> Servlet
+
+package com.test;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+//import javax.servlet.Servlet;
+
+//public class Test004 implements Servlet
+//public abstract class Test004 extends GenericServlet
+public class Test004 extends GenericServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// GenericServlet 의 추상메소드 재정의~!!!
+	@Override
+	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException
+	{
+		// **request-> 요청객체**
+		// **response-> 응답객체**
+		
+		// 요청에 대한 응답 방법
+		response.setContentType("text/html; charset=UTF-8");
+		
+		try
+		{
+			// 출력 스트림 구성
+			PrintWriter out = response.getWriter();
+			
+			out.print("<html>");
+			out.print("<head>");
+			out.print("<title>");
+			out.print("Test004.java");
+			out.print("</title>");
+			out.print("</head>");
+			
+			out.print("<body>");
+			out.print("<div>");
+			out.print("<h1>");
+			out.print("서블릿 관련 실습");
+			out.print("</h1>");
+			out.print("<hr>");
+			out.print("</div>");
+			
+			out.print("<div>");
+			out.print("<h2>");
+			out.print("GenericServlet 클래스를 이용한 서블릿 테스트");
+			out.print("</h2>");
+			out.print("</div>");
+
+			out.print("</body>");
+
+			out.print("</html>");
+			
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+	}
+
+}
+```
+
+#### 5.7.4.1. web.xml
 ``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>WebApp04</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- **Servlet 과 Servlet-mapping이 같은 이름이어야 함** -->
+  <servlet>
+  	<servlet-name>Test004</servlet-name>				<!-- ** 매핑을 구분하기 위한 이름 ** -->
+  	<servlet-class>com.test.Test004</servlet-class>		<!-- ** Serlvet 클래스 이름 ** -->
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>Test004</servlet-name>
+  	<url-pattern>/test004</url-pattern>					<!-- ** Serlvet 대응하는 URL ** -->
+  </servlet-mapping>
+  
+</web-app>
 ```
 
 ------------------------------------------------
