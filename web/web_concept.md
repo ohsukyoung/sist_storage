@@ -226,6 +226,28 @@ for (var n=0; n<arr.length; n++)
 
 <br>
 
+### 3.5.5. ○ 자바스크립트에서의 날짜 데이터
+Date 객체는 날짜와 시간 작업을 하는데 사용되는 가장 기본적인 자바스크립트 내장 객체이다.
+``` javascript
+var now = new Date();
+now.toString();
+now.toLocaleString();
+now.toLocaleDateString();
+now.toLocaleTimeString();
+now.getFullYear();
+now.getMonth()+1;		//-- check~!!!(월 단위는 자바에서처럼 0부터 시작된다.)
+now.getDate();
+```
+※ 주의
+``` javascript
+	var userDate1 = new Date("2023/11/15");	//--(O)
+	var userDate2 = new Date(2023,11,15);	//--(O)
+	var userDate3 = new Date(Nov, 15, 2023);//--(O)
+	var userDate4 = new Date("2023-11-15");	//--(X)
+	var userDate5 = new Date("20231115");	//--(X)
+```
+<br>
+
 ## 3.3. 코드
 ### 3.3.1. Test001.html_자바스크립트 코드 선언, 도큐먼트에 스크립트로 출력(document.write("출력내용"))
 ``` javascript
@@ -3542,7 +3564,7 @@ function myMenu(status)
 ```
 
 
-### 3.3.35. ■■■ 웹 기초 내용 정리 ■■■
+### 3.3.35. Test035.html_■■■ 웹 기초 내용 정리 ■■■
 ``` html
 ```
 
@@ -3594,9 +3616,10 @@ function objTest()
 	// 2) 방법2
 	var arr = [new Blog("블로그 개설", "2023-11-15")
 			 , new Blog("블로그 레이아웃 구성", "2023-11-16")
-			 , new Blog("생성자 이용한 객체 생성", "223-11-17")];
+			 , new Blog("생성자 이용한 객체 생성", "2023-11-17")];
 	
-	str = "<table border='1' class='table'>";
+	//str = "<table border='1' class='table'>";
+	str = "<table class='table'>";
 	str += "<tr><th>제목</th><th>날짜</th></tr>";
 	
 	for (var i = 0; i < arr.length; i++)
@@ -3637,13 +3660,320 @@ function objTest()
 </html>
 ```
 
-### 3.3.37.
+### 3.3.37. Test037.html_자바스크립트 객체(사용자 정의 객체)-(2)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8230d812-b21f-4cef-882c-eab631664143)
+
 ``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test037.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	th{text-align: left;}
+</style>
+
+<script type="text/javascript">
+function objTest()
+{
+	// 확인
+	//alert("함수 호출");
+	
+	// 사용자 정의 객체
+	// Test036.html 에서 마찬가지로 사용자 정의 객체 구성
+	// 단, 차이점 확인~!!! check~!!!
+	function Blog(b,d)
+	{
+		// 주요 속성 구성
+		this.body = b;
+		this.date = d;
+		
+		// 날짜 출력용 함수 정의
+		this.userLocalString = function()
+		{
+			return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+		};
+	}
+	
+	// 객체 생성
+	var blog = new Blog("블로그 개설", "2023-11-15");
+	var str = blog.body + " / " + blog.date;
+	
+	// 확인
+	//alert(str);
+	//--==>> 블로그 개설 / 2023-11-15
+	
+	// Test036.html 에서 마찬가지로
+	// 사용자 정의 객체 여러 개를 자바 스크립트 배열 구조에 저장.
+	// 단, 차이점 확인~!!! check~!!!
+	// -> 자바스크립트 내장 객체 활용
+	var arr = [new Blog("블로그 개설", new Date("2023/11/15"))
+			 , new Blog("블로그 레이아웃 구성", new Date("2023/11/16"))
+			 , new Blog("생성자 이용한 객체 생성", new Date("2023/11/17"))];
+	
+	/* 
+	○ 자바스크립트에서의 날짜 데이터
+	Date 객체는 날짜와 시간 작업을 하는데 사용되는 가장 기본적인 자바스크립트 내장 객체이다.
+	
+	var now = new Date();
+	now.toString();
+	now.toLocaleString();
+	now.toLocaleDateString();
+	now.toLocaleTimeString();
+	now.getFullYear();
+	now.getMonth()+1;		//-- check~!!!(월 단위는 자바에서처럼 0부터 시작된다.)
+	now.getDate();
+	
+	※ 주의
+		var userDate1 = new Date("2023/11/15");	//--(O)
+		var userDate2 = new Date(2023,11,15);	//--(O)
+		var userDate3 = new Date(Nov, 15, 2023);//--(O)
+		var userDate4 = new Date("2023-11-15");	//--(X)
+		var userDate5 = new Date("20231115");	//--(X)
+	
+	*/
+	
+	str = "<table>";
+	str += "<tr><th>제목</th><th>날짜</th></tr>"
+	
+	// Test036.html-- check~!!!
+	/* for (var i = 0; i < arr.length; i++)
+	{
+		str += "<tr>";
+		str += "<td>" + arr[i].body + "</td>"
+		str += "<td>" + arr[i].date + "</td>" ;
+		str += "</tr>";
+	} */
+	
+	for (var i = 0; i < arr.length; i++)
+	{
+		str += "<tr>";
+		str += "<td>" + arr[i].body + "</td>";
+		//str += "<td>" + arr[i].date + "</td>";
+		str += "<td>" + arr[i].userLocalString() + "</td>";
+		str += "</tr>";		
+	}
+	str += "</table>";
+	
+	var result = document.getElementById("result");
+	
+	result.innerHTML = str;
+	
+}
+</script>
+</head>
+<body class="section">
+<div>
+	<h1>자바스크립트 활용</h1>
+</div>
+
+<div class="layout">
+	<h2>자바스크립트 객체(사용자 정의 객체)-(2)</h2>
+	
+	<div class="btn_box">
+		<input type="button" value="사용자 정의 객체" class="btn control" onclick="objTest()">
+	</div>
+	
+	<div>
+		<div id="result"></div>
+	</div>
+</div>
+</body>
+</html>
+```
+#### 3.3.37.1. css/main.css
+``` css
+@charset "UTF-8";
+
+/* main.css */
+
+*{font-faimily: 맑은 고딕; color: #343;}
+body, p, div, span, input, table, th, td, select {font-size: 18px;}
+.control {border: 1px solid gray;border-radius: 3px;}
+.table {border-collapse: collapse; width: 100%;}
+.table th, .table td{border: 1px solid gray; border-left: 0px; border-right: 0px; padding: 3px; line-height: 150%;}
+.table th{font-weight: bold; background-color:#eee;}
+.btn{font-weight: bold;}
+.btn:hober{color:white;background-color: #787;}
+.btn:active{color:orange;}
+
 ```
 
-### 3.3.38.
+### 3.3.38. Test038.html_사용자 정의 객체 및 프로토타입 활용
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/faf4f252-023e-451f-89a5-235cdc64a051)
+
 ``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test038.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<style type="text/css">
+	table{width: 100%;}
+	th{text-align: left;}
+	#uName{width: 150px;}
+	#uContent{width: 100%;}
+	#btn{width: 100%;}
+</style>
+
+<script type="text/javascript">
+	// 자바스크립트 배열 객체 구성
+	var boardArray = new Array();
+	
+	// 사용자 정의 객체 구성(-> 생성자 함수 정의)
+	/* **
+	객체를 구성한다 -> 
+		- 자바는 클래스로 만들어짐
+		- 자바스크립트는 함수의 형태로 만들어짐
+			따라서, 자바스크립트에서는 객체의 경우 첫 글자를 대문자로 만들기로 암묵적으로 약속함
+	this ->
+		- 자바는 클래스를 찾아감
+		- 자바스크립트는 해당 함수가 돌아가는 그 자체..?
+	** */
+	function Board(uName,uContent)
+	{
+		this.userName = uName;
+		this.content = uContent;
+		this.writeDay = new Date();
+	};
+		
+	// 프로토타입 구성을 통해... 사용자 정의 함수(기능, 동작) 정의
+	//Board.prototype.userLocalString = function(){ };
+	Board.prototype.userLocalString = function()
+	{ 
+		return this.writeDay.getFullYear() + "-"
+				+ (this.writeDay.getMonth()+1) + "-"
+				+ this.writeDay.getDate() + " "
+				+ this.writeDay.getHours() + ":"
+				+ this.writeDay.getMinutes() + ":"
+				+ this.writeDay.getSeconds();
+				
+		// 시 -> getHours()
+		// 분 -> getMinutes()
+		// 초 -> getSeconds()
+	};
+	
+	// 글쓰기 버튼이 클릭되었을 때 호출되어 기능하는 함수
+	function protoTest()
+	{
+		// 확인
+		//alert("함수 호출~!!!");
+		
+		var uName = document.getElementById("uName").value;
+		var uContent = document.getElementById("uContent").value;
+		
+		var len = boardArray.length;
+		
+		// 확인
+		//alert(len);
+		//--==>> 현재 시점에서 테스트시... -> 0
+		
+		boardArray[len] = new Board(uName, uContent);
+		
+		// 확인
+		//alert(len);
+		//--==>> 작성이 이루어질 때마다... -> +1
+		
+		// 내용 출력 -> 출력 함수 호출
+		print(len);
+	}
+	
+	// 내용 출력 함수 정의
+	function print(idx)
+	{
+		// 확인
+		//var strTemp = boardArray[idx].content;
+		//alert(strTemp);
+		var uNameTxt = boardArray[idx].userName;
+		var uContentTxt = boardArray[idx].content;
+		var num = idx+1;
+		var date = boardArray[idx].userLocalString();
+		
+		var trNode = document.createElement("tr");
+		trNode.appendChild(createTdNode(num));
+		trNode.appendChild(createTdNode(uNameTxt));
+		trNode.appendChild(createTdNode(uContentTxt));
+		trNode.appendChild(createTdNode(date));
+				
+		var tableNode = document.getElementById("bbsTable");
+		tableNode.appendChild(trNode);
+		
+	}
+	
+	// td 노드를 생성 및 반환 함수 정의
+	function createTdNode(val)
+	{
+		var textNode = document.createTextNode(val);
+		var tdNode = document.createElement("td");
+		tdNode.appendChild(textNode);
+		
+		return tdNode;
+	}
+	
+</script>
+
+</head>
+<body class="section">
+<div>
+	<h1>자바스크립트 활용</h1>
+</div>
+
+<div class="layout">
+	<p>사용자 정의 객체 및 프로토타입 활용</p>
+	
+	<div>
+		<form>
+			<!-- 입력 폼을 구성하는 레이아웃 테이블 -> 나중에 div로 구성해 볼 것 -->
+			<div class="table_box">
+				<table class="table">
+					<tr>
+						<th>작성자</th>
+						<td><input type="text" id="uName" class="txt"></td>
+					</tr>
+					<tr>
+						<th>내용</th>
+						<td><input type="text" id="uContent" class="txt"></td>
+					</tr>
+					<tr>
+						<th colspan="2"><input type="button" value="글쓰기" class="btn" onclick="protoTest()"></th>
+					</tr>
+				</table>
+			</div>
+			
+			<!-- 내용을 리스트 형식으로 볼 수 있도록 구성하는 레이아웃 테이블 -->
+			<div class="table_box">
+				<table class="table table_box" id="bbsTable">
+					<tr>
+						<th>번호</th><th>작성자</th><th>내용</th><th>작성일</th>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</div>
+</div>
+
+</body>
+</html>
 ```
+
+<br>
+
+# 4. 웹 어플리케이션
+## 4.1. 
+## 4.2. 
+## 4.3. 
+
+
+
+
+
+
+------------------------------------------------
 
 ### 3.3.34.
 ``` html
