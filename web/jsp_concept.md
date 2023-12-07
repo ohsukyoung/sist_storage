@@ -941,19 +941,414 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 
 #### 5.7.8.1. RadioSelect.jsp_radio, select 데이터 전송
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RadioSelect.jsp</title>
+
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 03</h1>
+	<hr>
+	<p>RadioSelect.jsp -> RadioSelectOk.jsp</p>
+</div>
+
+<div class="layout">
+	<h2>radio, select 데이터 전송</h2>
+	
+	<form action="/WebApp05/RadioSelectOk.jsp" method="get">
+	<!-- ** 보내는 값이 많을 때 get적합하지X, post 적합O ** -->
+	<!-- ** 
+		- 한글 전송시 -> 글씨 깨짐
+		  ㄴ보내주는 파일과, 받는 파일을 모두 UTF-8로 해주었으나,
+			서블릿(리퀘스트)에서 중간변형으로 인해 글씨가 깨짐
+			
+			request 객체에 대해 문자에 대한 인코딩 셋팅 필요
+			ex) request.setCharacterEncoding("UTF-8"); -> RadioSelectOk.jsp에 작성됨	
+	 ** -->
+		<div class="input_box" style="display: inline-block;">
+			<ul>
+				<li>
+					<span class="tit">이름</span><input type="text" name="name" class="txt">
+				</li>
+				<li>
+					<span class="tit">성별</span>
+					<label><input type="radio" name="gender" value="M">남자</label>
+					<label><input type="radio" name="gender" value="F">여자</label>
+				</li>
+				<li>
+					<span class="tit">전공</span>
+					<select name="major">
+						<option value="국문학">국문학</option>
+						<option value="영문학">영문학</option>
+						<option value="컴퓨터공학">컴퓨터공학</option>
+						<option value="수학">수학</option>
+						<option value="신문방송학">신문방송학</option>
+						<option value="경영학">경영학</option>
+					</select>
+				</li>
+				<li>
+					<span class="tit">취미</span>
+					<select name="hobby" size="7" multiple="multiple">
+						<option value="영화감상">영화감상</option>
+						<option value="음악감상">음악감상</option>
+						<option value="공원산책">공원산책</option>
+						<option value="배낭여행">배낭여행</option>
+						<option value="스노클링">스노클링</option>
+						<option value="암벽등반">암벽등반</option>
+						<option value="종이접기">종이접기</option>
+					</select>
+				</li>
+			</ul>
+		</div>
+		<div class="btn_box">
+			<input type="submit" value="내용 전송" class="btn control">
+		</div>
+	</form>
+</div>
+
+</body>
+</html>
 ```
 #### 5.7.8.2. RadioSelectOk.jsp_radio, select 데이터 전송
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 스크립릿 영역
+	
+	// 이전 페이지(RadioSelect.jsp)로 부터 데이터 수신
+	// -> name
+	
+	// 한글 깨짐 방지 처리	
+	request.setCharacterEncoding("UTF-8");				// check~!!!
+	
+	String nameStr = request.getParameter("name");			//-- 텍스트박스... 단일값 수신
+	String genderStr = request.getParameter("gender");		//-- 라디오버튼... 단일값 수신
+	String majorStr = request.getParameter("major");		//-- 선택상자... 단일값 수신
+	//String hobbyStr = request.getParameter("hobby");
+	String[] hobbyArr = request.getParameterValues("hobby");//-- 선택상자... 다중 데이터 수신
+	//-- 다중 선택이 가능한 선택자일 경우...
+	// 『getParameterValues()』로 데이터 수신
+	// -> 배열 반환
+	
+	// name 수신 및 처리 -> 특이사항 없음
+	
+	// gender 수신 및 처리
+	String gender = "";
+	if(genderStr.equals("M"))
+		gender = "남자";
+	else if(genderStr.equals("F"))
+		gender = "여자";
+	else
+		gender = "확인불가";
+	
+	// major 수신 및 처리 -> 특이사항 없음~!!!
+	
+	// hobby 수신 및 처리
+	String hobby = "";
+	if(hobbyArr != null)
+	{
+		for(String item : hobbyArr)
+			hobby += "[" + item + "]";
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RadioSelectOk.jsp</title>
+</head>
+
+<body class="section">
+
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 03</h1>
+	<hr>
+	<p>RadioSelect.jsp -> RadioSelectOk.jsp</p>
+</div>
+
+<div class="layout">
+	<h2>radio, select 데이터 전송</h2>
+	<ul>
+		<li><span class="tit">이름: </span><%=nameStr %></li>
+		<li><span class="tit">성별: </span><%=genderStr %>(<%=gender %>)</li>
+		<li><span class="tit">전공: </span><%=majorStr %></li>
+		<li><span class="tit">취미: </span><%=hobby %></li>
+	</ul>
+	
+</div>
+</body>
+</html>
 ```
 <br>
 
-### 5.7.9. []
+### 5.7.9. [checkbox 데이터 전송]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/882d217e-3801-40c1-b494-9703270fc9c8)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/04b548f3-bd7c-404d-9d18-f095fd032e4d)
 
-#### 5.7.9.1. .jsp
+
+#### 5.7.9.1. CheckBox.jsp_checkbox 데이터 전송
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CheckBox.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 04</h1>
+	<hr>
+	<p>CheckBox.jsp -> CheckBoxOk.jsp</p>
+</div>
+
+<div class="layout">
+	<h2>checkbox, textarea 데이터 전송</h2>
+	
+	<form action="/WebApp05/CheckBoxOk.jsp" method="post">
+		<div class="input_box" style="display: inline-block;">
+			<ul>
+				<li>
+					<span class="tit">이름</span><input type="text" name="name" class="txt">
+				</li>
+				<li>
+					<span class="tit">메모</span><textarea name="meno" rows="5" cols="30"></textarea>
+				</li>
+				<li style="display:flex;">
+					<span class="tit">이상형</span>
+					<div>
+						<label><input type="checkbox" name="checkGruop" value="조휴일">조휴일</label>
+						<label><input type="checkbox" name="checkGruop" value="유재석">유재석</label>
+						<label><input type="checkbox" name="checkGruop" value="류진">류진</label>
+						<label><input type="checkbox" name="checkGruop" value="정우성">정우성</label>
+						<label><input type="checkbox" name="checkGruop" value="차은우">차은우</label>
+						<br>
+						
+						<label><input type="checkbox" name="checkGruop" value="카리나">카리나</label>
+						<label><input type="checkbox" name="checkGruop" value="서강준">서강준</label>
+						<label><input type="checkbox" name="checkGruop" value="박은빈">박은빈</label>
+						<label><input type="checkbox" name="checkGruop" value="고윤정">고윤정</label>
+					</div>
+				</li>
+			</ul>
+			<div class="btn_box"><input type="submit" value="전송하기" class="btn control"></div>
+		</div>
+	</form>
+</div>
+
+</body>
+</html>
+
 ```
-#### 5.7.9.2. .jsp
+#### 5.7.9.2. CheckBoxOk.jsp_checkbox 데이터 전송
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 스크립릿 영역
+	
+	// 이전 페이지(CheckBox.jsp)로부터 데이터 수신
+	//-> name, memo, checkGroup
+	
+	// 한글 깨짐 방지 처리
+	//**request.getParameter 다음에 하면 적용 안됨~!!!**
+	request.setCharacterEncoding("UTF-8");
+
+	// 이름 데이터 수신
+	String name = request.getParameter("name");
+	
+	// 메모 데이터 수신			check~!!!
+	//**textarea의 개행은 <**
+	String memo = request.getParameter("meno");
+	//memo = memo.replace("\n","<br>");
+	memo.replaceAll("\n","<br>");
+	// ** 정규표현식으로 구성된 문자도 replace 가능 **
+	//-- JDK 1.5 이후부터 『replaceAll()』 메소드 사용 가능
+	//	『replaceAll()』 을 통해 처리한 결과를 다시 memo 변수에 대입
+	//	"안녕하세요\n반갑습니다.\n이윤수입니다."
+	//	-> "안녕하세요<br>반갑습니다.<br>이윤수입니다."
+	
+	// 이상형 데이터 수신
+	//String checkGroup = request.getParameter("checkGroup");		//(x)
+	
+	// ※ 같은 name 속성의 값을 가진 데이터 여러 개를 받는 경우(즉, 다중 데이터로 수신하는 경우)
+	//	  이를 배열로 처리해야 한다. -> 『getParameterValues()』
+
+	String[] checkGroup = request.getParameterValues("checkGruop");
+	// ※ 배열 데이터를 수신하여 처리할 경우..
+	//	수신된 데이터가 전혀 없는 경우
+	// 배열의 값 자체가 null이 되어버리기 때문에
+	// null 에 대한 확인(검사) 과정이 필요하다.		check~!!!
+	
+	String str = "";
+	if(checkGroup != null)
+	{
+		for(String item: checkGroup)
+				str += "["+ item + "]";
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CheckBoxOk.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 04</h1>
+	<hr>
+	<p>CheckBox.jsp -> CheckBoxOk.jsp</p>
+</div>
+
+<div class="layout">
+	<h2>checkbox, textarea 데이터 전송</h2>
+
+	<ul>
+		<li><span class="tit">이름: </span><%=name %></li>
+		<li><span class="tit">메모: </span><%=memo %></li>
+		<li><span class="tit">이상형:</span><%=str %></li>
+	</ul>
+</div>
+
+</body>
+</html>
+```
+
+<br>
+
+### 5.7.10. [JSP를 이용한 데이터 송수신 실습 05]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e7f49e2c-cbbe-42a5-bff4-d146fef87033)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8d8f11e7-8abf-4e40-8beb-157ee46822f2)
+
+
+#### 5.7.10.1. Table.jsp_JSP를 이용한 데이터 송수신 실습 05
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Table.jsp</title>
+
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 05</h1>
+	<hr>
+	<p>Table.jsp -> TableOk.jsp</p>
+</div>
+
+<div class="layout">
+	
+	<form action="/WebApp05/TableOk.jsp">
+		<table style="max-width:500px;width:100%;">
+			<tr>
+				<th>가로</th>
+				<td><input type="text" name="su1" class="txt"></td>
+			</tr>
+			<tr>
+				<th>세로</th>
+				<td><input type="text" name="su2" class="txt"></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button type="submit" class="btn control" style="width:280px;">결과 확인</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+</body>
+</html>
+```
+#### 5.7.10.2. TableOk.jsp_ JSP를 이용한 데이터 송수신 실습 05
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	int su1 = Integer.parseInt(request.getParameter("su1"));
+	int su2 = Integer.parseInt(request.getParameter("su2"));
+	int num = 1;
+	
+	/*  [다른사람이 푼 방법] */
+	String result = "";
+	if((su1*su2)!=0){
+		result += "<table>";
+		for(int i=0; i<su2; i++)
+		{
+			result += "<tr>";
+			for(int j=0; j<su1; j++)
+			{
+				result += "<td>" + (num++) + "</td>";
+			}
+			result += "</tr>";
+		}
+		result += "</table>";
+	}
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TableOk.jsp</title>
+
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 05</h1>
+	<hr>
+	<p>Table.jsp -> TableOk.jsp</p>
+</div>
+
+<div class="layout">
+
+	<!-- [내가 푼 방법] -->
+	<%-- <%
+	if((su1*su2)!=0){
+	%>
+	<table>
+		<%
+		for(int i=0; i<su2; i++)
+		{%>
+			<tr>
+			<%
+			for(int j=0; j<su1; j++)
+			{%>
+				<td>
+					<%=num++ %>
+				</td>
+			<%}%>
+			</tr>
+		<%
+		}%>
+	</table>
+	<%
+	} 
+	%> --%>
+	
+	<!-- [다른사람이 푼 방법] -->
+	<%=result %>
+	
+</body>
+</html>
 ```
 
 ------------------------------------------------
