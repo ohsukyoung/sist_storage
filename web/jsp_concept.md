@@ -126,8 +126,86 @@ HTML 문서 결과값이 포함시키고자 할 때 사용
 멤버 변수의 입장을 취하게 되며 전역 변수의 성격을 가진다.
 또한, 『_jspInit()』, 『_jspDestory()』 와 같은 생명주기 운영을 위해 메소드를 재정의 할 수 있다.
 
-## 5.7. 코드
-### 5.7.1. jsptest001.jsp_디렉티브 영역, 스크립 릿 영역
+## 5.7. JSP 데이터 송수신 실습
+``` html
+ex) Aaa.html    -> Bbb.jsp
+    Aaa.html    -> Bbb.java(Servlet)
+    Aaa.jsp     -> Bbb.jsp
+    Aaa.jsp     -> Bbb.java(Servlet)
+```
+- Aaa 페이지에서는 <form> 태그 및 action, method 속성 필요  
+	<input> 이나 <button> 태그의 type="submit" 속성 필요  
+- Bbb 페이지에서는 request 객체의 getParameter() 메소드나  
+	getParameterValues() 메소드 필요  
+### 5.7.1. request 내부 객체
+request 내부 객체는 웹 브라우저에서 JSP(또는 Servlet) 페이지로 전달되는 정보의 모임으로 HTTP 헤더와 HTTP 바디로 구성되며  
+, 웹 컨테이너는 요청된 HTTP 메세지를 통해 HttpServletRequest 객체 타입인 request 객체로 사용된다.  
+즉, request 객체는 웹 브라우저가 JSP(또는 Servlet) 페이지로 보내진 내용에 대한 정보를 갖고 있는 내부 객체인 것이다.
+
+### 5.7.2. String getParameter(name)
+이름이 name인 파라미터에 할당된 값을 반환하며, 지정된 파라미터 값이 없으면 null을 반환한다.
+
+### 5.7.3. String[] getparmaeterVlaues(name)
+이름이 name인 파라미터의 모든 값을 String 배열로 반환한다. 주로 checkbox 등 동일한 이름을 사용하는 form 태그의 값을 반환받기 위해 사용한다.
+
+### 5.7.4. void setCharacterEncoding(encode)
+전송된 데이터의 문자 인코딩 방식을 지정한다.
+
+<br>
+
+## 5.8. GET 방식과 POST 방식(데이터 전송 및 페이지 요청 방식)
+### 5.8.1. ○ GET 방식
+``` html
+ex) https://n.news.naver.com/article/661/0000034464?cds=news_media_pc&type=editn
+
+        가. https://n.news.naver.com/article/661/0000034464 ?    -> 요청 페이지
+        나. cds=news_media_pc & type=editn                       -> 전송 데이터
+``` 
+- GET 방식은 엽서를 보내는 방식과 유사한 전송 및 요청 방식
+- 주소 + 데이터 (모두 노출)
+- 전송할 데이터를 문자열 형태(Query String) 로 URL 뒤에 인수를 붙여서 전송을 수행하는 방법(방식)이다.
+- URL 뒤에 인수로 붙어있는 내용을 누구나 볼 수 있고 이로인해 보안성이 취야하다고 할 수 있다.
+- 또한, GET 방식은 보낼 수 있는 데이터 량에 한계가 있기 때문에(과거) 많은 데이터를 보내는 경우 
+  일정 크기 이상에서는 잘림 현상이 발생한다.(길이 제한을 가진다는 의미이다. URL 최대 길이 2048char)
+- 특히나 <form>태그에서의 GET 방식은 서버로 데이터를 전송하는 과정에서 서버 처리가 지연될 경우  
+	중복해서 요청이 이루어지는 문제가 발생할 수 있다는 단점을 가지고 있다.
+- 형식 및 구조
+``` html
+	『URL주소?속성=데이터&속성=데이터&...』
+	『URL주소?name=value1&tel=value2&...』
+```
+- GET 방식은 select 적 성격(성향)을 가지고 있다.
+서버에서 데이터를 가지고 와서 보여준다거나 하는 용도로 주로 사용한다.  
+서버의 갑이나 상태를 바꾸는 용도로는 사용하지 않는다. 즉, 단순 페이지 요청에 많이 사용된다는 것이다.  
+- GET 방식의 장점은 여러가지 형태를 통해 간편한 데이터 전송이 가능하다는 것이다.
+POST 방식처럼 form 태그를 사용하여 전송도 하고, 링크에 직접 걸어 사용해도 되고, 주소창에 직접 입력해도 된다.  
+``` html
+	ex)
+	<a href="http://url?키=값&키=값">
+	<form action="http://url?키=값&키=값">
+	window.open(href="http://url?키=값&키=값");
+	window.location.href="http://url?키=값&키=값";
+	window.location.replace("http://url?키=값&키=값");
+```
+### 5.8.2. ○ POST 방식
+``` html
+ex) http://localhost:3306/WebApp05/jsptest005.jsp
+```
+
+- 주소만 노출, 데이터는 숨김
+- <form> 태그에서 method 속성을 "post"로 설정해서 요청
+- 파일의 형태로 전송되기 때문에 URL 상에서는 내용이 나타나지 않는다. 이로 인해 GET 방식에 비해 보안성이 높다고 할 수 있다.
+- POST 방식은 HTTP body 안에 숨겨져서 전송된다.
+- GET 방식처럼 URL 뒷부분에 추가해서 보내는 것이 아니라 HTTP body 안에 넣어서 보내기 때문에 GET 방식에서 발생할 수 있는 보안성 문제를 어느정도 해결할 수 있다.
+- GET 방식ㅇ 비해 대용량의 데이터를 전송할 때 사용한다.
+- <form> 태그를 이용해서 submit 하는 일반적인 형태가 POST 방식이다.
+- POST 방식은 서버의 값이나 상태를 바꾸기 위해 주로사 용한다. 글쓰기를 하게 되면 글의 내용이 데이터베이스에 저장되고  
+수정을 하게 되면 데이터베이스에 수정된 값이 적용될 수 있도록 처리하는 구성인 것이다.
+
+<br>
+
+## 5.9. 코드
+### 5.9.1. jsptest001.jsp_디렉티브 영역, 스크립 릿 영역
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/a2582513-2000-49f0-b7f3-d93d6c3efee1)
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
@@ -168,7 +246,7 @@ HTML 문서 결과값이 포함시키고자 할 때 사용
 </body>
 </html>
 ```
-### 5.7.2. jsptest002.jsp_『out』 출력 스트림, 『out.println』-> 띄어쓰기,『\n』-> 띄어쓰기,『<br>』 -> 개행
+### 5.9.2. jsptest002.jsp_『out』 출력 스트림, 『out.println』-> 띄어쓰기,『\n』-> 띄어쓰기,『<br>』 -> 개행
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/f76599ae-0c04-4659-b0d2-16089d0d5ec2)
 
 ``` html
@@ -239,7 +317,7 @@ HTML 문서 결과값이 포함시키고자 할 때 사용
 </html>
 ```
 
-### 5.7.3. jsptest003.jsp_『_jspInit()』 메소드, 『_jspDestroy()』 메소드, 『_jspService()』 메소드
+### 5.9.3. jsptest003.jsp_『_jspInit()』 메소드, 『_jspDestroy()』 메소드, 『_jspService()』 메소드
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/46532a6f-4d0b-4e05-85f2-2c35817ca2cf)
 
 ``` html
@@ -340,7 +418,7 @@ HTML 문서 결과값이 포함시키고자 할 때 사용
 </html>
 ```
 
-### 5.7.4. jsptest004.java_서블릿 관련 실습
+### 5.9.4. jsptest004.java_서블릿 관련 실습
 ``` java
 /* ==================
 	Test004.java
@@ -420,7 +498,7 @@ public class Test004 extends GenericServlet
 }
 ```
 
-#### 5.7.4.1. web.xml
+#### 5.9.4.1. web.xml
 ``` html
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
@@ -450,9 +528,9 @@ public class Test004 extends GenericServlet
 
 <br>
 
-### 5.7.5. [HttpServlet 관련 실습]
+### 5.9.5. [HttpServlet 관련 실습]
 
-#### 5.7.5.1. jsptest005.html_HttpServlet 관련 실습(HttpServlet 을 상속받는 클래스로 설계)
+#### 5.9.5.1. jsptest005.html_HttpServlet 관련 실습(HttpServlet 을 상속받는 클래스로 설계)
 - >**스크립트제어-> id 속성, 서버제어-> name 속성**
 
 - ※ form 태그의 action 속성은 제이터 전송 및 페이지 요청을 해야하는 대상 페이지를 등록하는 기능을 수행.
@@ -527,7 +605,7 @@ public class Test004 extends GenericServlet
 </html>
 ```
 
-#### 5.7.5.2. Test005.java_요청받은 내용을 응답(출력스크림 구성)
+#### 5.9.5.2. Test005.java_요청받은 내용을 응답(출력스크림 구성)
 ``` html
 /* ==================
 	Test005.java
@@ -620,7 +698,7 @@ public class Test005 extends HttpServlet
 	}
 }
 ```
-#### 5.7.5.3. web.xml_ jsp와 java를 servlet을 통해 연결
+#### 5.9.5.3. web.xml_ jsp와 java를 servlet을 통해 연결
 ``` html
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
@@ -663,7 +741,7 @@ public class Test005 extends HttpServlet
 
 </web-app>
 ```
-#### 5.7.5.4. ResponseSample.html_HTML 코드 작성을 위한 샘플
+#### 5.9.5.4. ResponseSample.html_HTML 코드 작성을 위한 샘플
 ``` html
 <!DOCTYPE html>
 <html>
@@ -690,11 +768,11 @@ public class Test005 extends HttpServlet
 
 <br>
 
-### 5.7.6. [JSP를 이용한 데이터 송수신 실습 01]
+### 5.9.6. [JSP를 이용한 데이터 송수신 실습 01]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/326337d8-a76b-4590-b108-168264be3244)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/bc8a3c57-7d1c-4844-87f3-bbe170470bba)
 
-#### 5.7.6.1. Hap.jsp_JSP를 이용한 데이터 송수신 실습 01
+#### 5.9.6.1. Hap.jsp_JSP를 이용한 데이터 송수신 실습 01
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -739,7 +817,7 @@ public class Test005 extends HttpServlet
 </body>
 </html>
 ```
-#### 5.7.6.2. HapOk.jsp_JSP를 이용한 데이터 송수신 실습 01
+#### 5.9.6.2. HapOk.jsp_JSP를 이용한 데이터 송수신 실습 01
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <% 
@@ -799,11 +877,11 @@ public class Test005 extends HttpServlet
 
 <br>
 
-### 5.7.7. [JSP를 이용한 데이터 송수신 실습 02]
+### 5.9.7. [JSP를 이용한 데이터 송수신 실습 02]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/007b1ada-dadf-484b-887d-e83358bd545f)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/6fff8b6b-67b1-41f4-94ae-acd78b2b3b94)
 
-#### 5.7.7.1. Gugudan.jsp_JSP를 이용한 데이터 송수신 실습 02
+#### 5.9.7.1. Gugudan.jsp_JSP를 이용한 데이터 송수신 실습 02
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -845,7 +923,7 @@ public class Test005 extends HttpServlet
 </body>
 </html>
 ```
-#### 5.7.7.2. GugudanOk.jsp_JSP를 이용한 데이터 송수신 실습 02
+#### 5.9.7.2. GugudanOk.jsp_JSP를 이용한 데이터 송수신 실습 02
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -933,13 +1011,13 @@ public class Test005 extends HttpServlet
 ```
 <br>
 
-### 5.7.8. [radio, select 데이터 전송]
+### 5.9.8. [radio, select 데이터 전송]
 // 한글 깨짐 방지 처리
 request.setCharacterEncoding("UTF-8"); // check~!!!
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/4e792111-3132-497d-a2d8-f5585244190b)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/3d2c33ad-ee4d-4a91-a5bf-e1f827eb2dc8)
 
-#### 5.7.8.1. RadioSelect.jsp_radio, select 데이터 전송
+#### 5.9.8.1. RadioSelect.jsp_radio, select 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1016,7 +1094,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.7.8.2. RadioSelectOk.jsp_radio, select 데이터 전송
+#### 5.9.8.2. RadioSelectOk.jsp_radio, select 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1088,12 +1166,12 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 ```
 <br>
 
-### 5.7.9. [checkbox 데이터 전송]
+### 5.9.9. [checkbox 데이터 전송]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/882d217e-3801-40c1-b494-9703270fc9c8)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/04b548f3-bd7c-404d-9d18-f095fd032e4d)
 
 
-#### 5.7.9.1. CheckBox.jsp_checkbox 데이터 전송
+#### 5.9.9.1. CheckBox.jsp_checkbox 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1150,7 +1228,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 
 ```
-#### 5.7.9.2. CheckBoxOk.jsp_checkbox 데이터 전송
+#### 5.9.9.2. CheckBoxOk.jsp_checkbox 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1228,12 +1306,12 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 
 <br>
 
-### 5.7.10. [JSP를 이용한 데이터 송수신 실습 05]
+### 5.9.10. [JSP를 이용한 데이터 송수신 실습 05]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e7f49e2c-cbbe-42a5-bff4-d146fef87033)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8d8f11e7-8abf-4e40-8beb-157ee46822f2)
 
 
-#### 5.7.10.1. Table.jsp_JSP를 이용한 데이터 송수신 실습 05
+#### 5.9.10.1. Table.jsp_JSP를 이용한 데이터 송수신 실습 05
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1276,7 +1354,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.7.10.2. TableOk.jsp_ JSP를 이용한 데이터 송수신 실습 05
+#### 5.9.10.2. TableOk.jsp_ JSP를 이용한 데이터 송수신 실습 05
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1355,12 +1433,12 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 
 
 
-### 5.7.. []
+### 5.9.. []
 
-#### 5.7..1. .jsp
+#### 5.9..1. .jsp
 ``` html
 ```
-#### 5.7..2. .jsp
+#### 5.9..2. .jsp
 ``` html
 ```
 
