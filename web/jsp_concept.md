@@ -448,6 +448,252 @@ public class Test004 extends GenericServlet
 </web-app>
 ```
 
+<br>
+
+### 5.7.5. [HttpServlet 관련 실습]
+
+#### 5.7.5.1. jsptest005.html_HttpServlet 관련 실습(HttpServlet 을 상속받는 클래스로 설계)
+- >**스크립트제어-> id 속성, 서버제어-> name 속성**
+
+- ※ form 태그의 action 속성은 제이터 전송 및 페이지 요청을 해야하는 대상 페이지를 등록하는 기능을 수행.
+(생략 시 데이터 전송 및 페이지 요청을 하게 되는 대상은 자기 자신)
+
+- ※ form 태그의 method 속성은 데이터 전송 및 페이지 요청에 대한 방식
+(생략 시 데이터 전송 및 페이지 요청을 하게 되는 방식은 get)
+
+- ※ submit 액션 -> form 데이터 전송 및 페이지 요청
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jsptest005.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+<div>
+	<h1>JSP 관찰하기</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<h2>HttpServlet 관련 실습</h2>
+	
+	<!-- ※ 입력 컨트롤을 활용하여 서버로 데이터를 전송하기 위해서는 form 필요 -->
+	<!-- ※ form 태그의 action 속성은 제이터 전송 및 페이지 요청을 해야하는 대상 페이지를 등록하는 기능을 수행.
+			(생략 시 데이터 전송 및 페이지 요청을 하게 된느 대상은 자기 자신) -->
+	<!-- ※ form 태그의 method 속성은 데이터 전송 및 페이지 요청에 대한 방식
+			(생략 시 데이터 전송 및 페이지 요청을 하게 되는 방식은 get) -->
+	<form action="/WebApp04/login" method="get">
+		<!-- ** action="" -> 내가 나 자신을 참조(ex. 내가 전송, 내가 받아 갱신) ** -->
+		<!-- ** method="" -> get 방식으로 처리 ** -->
+		<table>
+			<tr>
+				<th>아이디</th>
+				<td>
+					<!-- name 속성 check~!!! -->
+					<!-- **스크립트제어-> id 속성, 서버제어-> name 속성** -->
+					<input type="text" name="userId" size="10" maxlength="10" class="txt">
+				</td>
+			</tr>
+			<tr>
+				<th>패스워드</th>
+				<td>
+					<!-- name 속성 check~!!! -->
+					<input type="password" name="userPwd" size="10" class="txt">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<!-- ※ submit 액션 -> form 데이터 전송 및 페이지 요청 -->
+					<input type="submit"  value="로그인" class="btn control">
+					<input type="reset"  value="다시입력" class="btn control">
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<!-- **
+	http://localhost:3306/WebApp04/jsptest005.jsp?userId=super&userPwd=1234
+	ㄴ '?' 앞 -> 요청하는 페이지
+	ㄴ '?' 뒤 -> 응답 내용(& 형태로 결합됨)
+** -->
+
+
+
+</body>
+</html>
+```
+
+#### 5.7.5.2. Test005.java_요청받은 내용을 응답(출력스크림 구성)
+``` html
+/* ==================
+	Test005.java
+	- Servlet 실습
+=================== */
+
+// 현재... 자바의 기본 클래스 Test004
+// 이를... Servlet 으로 구성하는 방법
+
+// HttpServlet 을 상속받는 클래스로 설계 -> Servlet
+// ** HttpServlet이 가장 일반적인 방법 **
+// ** HttpServlet api -> https://docs.oracle.com/javaee%2F7%2Fapi%2F%2F/javax/servlet/http/HttpServlet.html **
+
+/* **
+우리가 페이지를 요청하는 것이 아니라, servlet(서블릿 컨테이너) 이 요청하는 것
+ㄴ 사용자가 get 방식 -> 서블릿 doGet
+ㄴ 사용자가 post 방식-> 서블릿 doPost
+ ** */
+package com.test;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Test005 extends HttpServlet
+// ** 추상클래스이지만, 내부적으로 추상메소드를 가지고 있지 않음 **
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		// request -> 요청 객체
+		String id = request.getParameter("userId");
+		// ** request 객체로부터 userId를 꺼내서 쓸 것이다. **
+		String pwd = request.getParameter("userPwd");
+		
+		response.setContentType("text/html; charset=UTF-8");
+		
+		String str="아이디:" + id + ", 패스워드: " + pwd;
+		
+		
+		// 응답을 출력 스트림으로 구성하기 위한 준비
+		PrintWriter out = response.getWriter();
+		
+		// 출력 스트림을 활용해서 페이지 렌더링
+		out.print("<!DOCTYPE html>");
+		out.print("<html>");
+		out.print("<head>");
+		out.print("<meta charset=\"UTF-8\">"); 
+		// ** 이중따옴표 처리: "UTF-8" -> \"UTF-8\" **
+		out.print("<title>Test005.java</title>");
+		out.print("</head>");
+		out.print("<body>");
+		out.print("");
+		out.print("<div>");
+		out.print("	<h1>서블릿 관련 실습</h1>");
+		out.print("	<hr>");
+		out.print("</div>");
+		out.print("");
+		out.print("<div>");
+		out.print("	<h2>HttpServlet 클래스를 활용한 서블릿 테스트</h2>");
+		out.print("	");
+		out.print("	<p>" + str + "</p>");
+		out.print("</div>");
+		out.print("");
+		out.print("</body>");
+		out.print("</html>");
+	}
+}
+```
+#### 5.7.5.3. web.xml_ jsp와 java를 servlet을 통해 연결
+``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>WebApp04</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- *************************************************************************************** -->
+
+  <!-- **Servlet 과 Servlet-mapping이 같은 이름이어야 함** -->
+  <servlet>
+  	<servlet-name>Test004</servlet-name>				<!-- ** 매핑을 구분하기 위한 이름 ** -->
+  	<servlet-class>com.test.Test004</servlet-class>		<!-- ** Serlvet 클래스 이름 ** -->
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>Test004</servlet-name>
+  	<url-pattern>/test004</url-pattern>					<!-- ** Serlvet 대응하는 URL ** -->
+  </servlet-mapping>
+  
+  <!-- *************************************************************************************** -->
+  
+  <servlet>
+  	<servlet-name>Test005</servlet-name>
+  	<servlet-class>com.tets.Test005</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>Test005</servlet-name>
+  	<url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  
+  <!-- *************************************************************************************** -->
+
+</web-app>
+```
+#### 5.7.5.4. ResponseSample.html_HTML 코드 작성을 위한 샘플
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test005.java</title>
+</head>
+<body>
+
+<div>
+	<h1>서블릿 관련 실습</h1>
+	<hr>
+</div>
+
+<div>
+	<h2>HttpServlet 클래스를 활용한 서블릿 테스트</h2>
+	
+	<p> </p>
+</div>
+
+</body>
+</html>
+```
+
+### 5.7.6. [HttpServlet 관련 실습]
+
+#### 5.7.6.1.
+#### 5.7.6.2.
+#### 5.7.6.3.
+
 ------------------------------------------------
 
 
