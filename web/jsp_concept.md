@@ -688,19 +688,285 @@ public class Test005 extends HttpServlet
 </html>
 ```
 
-### 5.7.6. [HttpServlet 관련 실습]
+<br>
 
-#### 5.7.6.1.
-#### 5.7.6.2.
-#### 5.7.6.3.
+### 5.7.6. [JSP를 이용한 데이터 송수신 실습 01]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/326337d8-a76b-4590-b108-168264be3244)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/bc8a3c57-7d1c-4844-87f3-bbe170470bba)
+
+#### 5.7.6.1. Hap.jsp_JSP를 이용한 데이터 송수신 실습 01
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hap.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 01</h1>
+	<hr>
+	<p>Hap.jsp -> HapOk.jsp</p>
+</div>
+
+<div class="layout">
+	<!-- ※ <form> 의 action 속성 시정 시 『HapOk.jsp』 로 지정해도 되고
+			『/WebApp05/HapOk.jsp』 형태로 지정해도 된다.
+			단, 『/HapOk.jsp』로 지정하면 안된다. -->
+	<form action="/WebApp05/HapOk.jsp" method="post">
+	<!-- <form action="HapOk.jsp"> -->
+		<div class="input_box">
+			<ul>
+				<li>정수1 <input type="text" name="su1" class="txt"></li>
+				<li>정수2 <input type="text" name="su2" class="txt"></li>
+			</ul>			
+		</div>
+		<div class="btn_box">
+			<input type="submit" value="결과 확인" class="btn control">
+		</div>
+	</form>
+	<!-- ① form 내부에 구성한 데이터들을 『HapOk.jsp』 로 전송하겠다. -> su1, su2 -->
+	<!-- ② 『HapOk.jsp』 페이지를 요청하겠다.
+			 -> 내가 보내는 데이터들을 받고~ 나를 그 페이지와 만날 수 있게해다오~!!! -->
+	
+</div>
+
+
+</body>
+</html>
+```
+#### 5.7.6.2. HapOk.jsp_JSP를 이용한 데이터 송수신 실습 01
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<% 
+	// 스크립릿 영역
+	
+	// 이전 페이지(Hap.jsp)로부터 넘어온 데이터 수신 -> su1, su2
+	String str1 = request.getParameter("su1");
+	String str2 = request.getParameter("su2");
+	
+	int sum=0;
+	
+	try
+	{
+		int n1 = Integer.parseInt(str1);
+		int n2 = Integer.parseInt(str2);
+		
+		sum = n1 + n2;
+	}
+	catch(Exception e)
+	{
+		// 예외 발생 시...
+		// 클라이언트의 브라우저 화면에 출력되지 않고
+		// 서버의 콘솔 창에 오류 메세지가 나오도록 구성하는 코드
+		System.out.println(e.toString());
+		
+		// 예외 발생 시...
+		// 해당 내용을 서버 log 기록으로 남기는 처리...
+		getServletContext().log("오류: " + e.toString());
+		
+		// ...
+		
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HapOk.jsp</title>
+</head>
+<body>
+	
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 01</h1>
+	<hr>
+	<p>Hap.jsp -> HapOk.jsp</p>
+</div>
+	
+<div>
+	<!-- <h2>결과: 10</h2> -->
+	<h2>결과: <%=sum %></h2>
+</div>
+
+	
+</body>
+</html>
+```
+
+<br>
+
+### 5.7.7. [JSP를 이용한 데이터 송수신 실습 02]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/007b1ada-dadf-484b-887d-e83358bd545f)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/6fff8b6b-67b1-41f4-94ae-acd78b2b3b94)
+
+#### 5.7.7.1. Gugudan.jsp_JSP를 이용한 데이터 송수신 실습 02
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Gugudan.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 02</h1>
+	<hr>
+	<p>Gugudan.jsp -> GugudanOk.jsp</p>
+</div>
+
+<div class="layout">
+	<form action="/WebApp05/GugudanOk.jsp" method="post">
+		<table class="table">
+			<tr>
+				<th>원하는 단 입력</th>	
+				<td>
+					<input type="text" name="dan" class="txt">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="submit" value="결과 확인" class="btn control" style="width: 100%;">
+				</td>
+			</tr>
+		</table>
+	</form>
+
+</div>
+
+</body>
+</html>
+```
+#### 5.7.7.2. GugudanOk.jsp_JSP를 이용한 데이터 송수신 실습 02
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// [ 내가 푼 풀이 ] ==============================================
+	// 스크립릿 영역
+	/* int dan = 0;
+	String result = "";
+
+	try
+	{
+		dan = Integer.parseInt(request.getParameter("dan"));
+		
+		
+		for(int i=1; i<=9; i++)
+		{
+			// System.out.println(dan + " * " + i + " = " + dan*i);
+			result += (dan + " * " + i + " = " + dan*i+"<br>");
+		}
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}; */
+	
+
+	// [ 함께 푼 풀이 ] ==============================================
+	// 이전 페이지(Gugudan.jsp)로 부터 데이터 수신 -> dan
+	String danStr = request.getParameter("dan");
+	int n=0;
+	
+	try
+	{
+		n = Integer.parseInt(danStr);
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>GugudanOk.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>JSP를 이용한 데이터 송수신 실습 02</h1>
+	<hr>
+	<p>Gugudan.jsp -> GugudanOk.jsp</p>
+</div>
+	<div class="layout">
+<!-- 	// [ 내가 푼 풀이 ] ============================================== -->
+		<%-- 
+		<div class="info_box">결과: <%=dan%> 단</div>
+		<div class="result_box"><%=result%></div>
+		 --%>
+<!-- html 주석문: 브라우저에게 가시적으로 보지 않도록 안내 -> 소스코드보기로 보여짐 -->
+<%-- JSP 주석문: sevlet container 가 인식하지 못하는 영역 --%>
+		
+<!-- 	// [ 함께 푼 풀이 ] ============================================== -->
+<%-- 방법1 --%>
+<%-- <%
+	for(int i=1; i<=9; i++)
+	{
+		// System.out.println(dan + " * " + i + " = " + dan*i);
+		out.print(n + " * " + i + " = " + (n*i)+"<br>");
+	}
+%> --%>
+
+
+<%-- 방법2 --%>
+  <%for(int i=1; i<=9; i++)
+	{%>
+		<%=n%> * <%=i%> = <%=(n*i)%> <br>
+  <%}%>
+	</div>
+</body>
+</html>
+```
+<br>
+
+### 5.7.8. [radio, select 데이터 전송]
+// 한글 깨짐 방지 처리
+request.setCharacterEncoding("UTF-8"); // check~!!!
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/4e792111-3132-497d-a2d8-f5585244190b)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/3d2c33ad-ee4d-4a91-a5bf-e1f827eb2dc8)
+
+#### 5.7.8.1. RadioSelect.jsp_radio, select 데이터 전송
+``` html
+```
+#### 5.7.8.2. RadioSelectOk.jsp_radio, select 데이터 전송
+``` html
+```
+<br>
+
+### 5.7.9. []
+
+#### 5.7.9.1. .jsp
+``` html
+```
+#### 5.7.9.2. .jsp
+``` html
+```
 
 ------------------------------------------------
 
 
 
-### 3.3.36.
+### 5.7.. []
+
+#### 5.7..1. .jsp
 ``` html
 ```
-
+#### 5.7..2. .jsp
+``` html
+```
 
 
