@@ -1429,6 +1429,140 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 ```
 
+### 5.9.11. [디렉티브/ WebApp06]
+
+#### 5.9.11.1. Test001.jsp_page 디렉티브 buffer 속성 및 autoFlush 실습
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!-- **
+	과거 리소스 소모 효율성이 중요했으나, 현재는 기술발달로 리소스 소모보다 시간이 중요해졌음
+	- buffer: 출력내용만 담아지는 것은 아님.제어해야할 데이터를 **임시로 담아둘 기억공간**
+	- autoFlush: 버퍼가 가득 차면 자동으로 보내줄지, 안보내줄지 ** -->
+
+<%-- <%@ page buffer="8kb" autoFlush="true" %> 기본값--%>
+<%-- <%@ page buffer="1kb" autoFlush="false" %> 일 경우 에럽 발생--%>
+<%-- <%@ page buffer="1kb" autoFlush="true" %> 일 경우 정상 처리 --%>
+<%@ page buffer="10kb" autoFlush="false" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test001.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>page 디렉티브 buffer 속성 및 autoFlush 실습</h1>
+	<hr>
+	<!-- **
+	page 디렉티브는 건드릴 일이 거의 없지만, 출력을 제어하는 형태로 속성을 제어할 때가 있음
+	** -->
+</div>
+
+<div class="layout">
+	<h2>반복문 구성</h2>
+	
+	<%
+	for (int i=1; i<=1000; i++)
+	{
+	%>1234<%
+	}
+	%>
+</div>
+
+</body>
+</html>
+```
+#### 5.9.11.2. Test002.jsp_include 디렉티브 실습
+- 여러 JSP 페이지에서 공통적으로 포함하는 내용이 있을 때 이러한 내용을 매번 입력하지 않고 별도의 파일을 저장해 두었다가 JSP 파일에 삽입하도록 하는 것이 include 디렉티브 이다.
+- include 지시어는 JSP에서 서블릿 코드를 생성할 때 텍스트나 코드를 JSP 파일 안으로 포함시키며 포함되는 파일의 내용은 include 지시어가 있는 위치에 삽입된다.
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test002.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>include 디렉티브 실습</h1>
+	<hr>
+	<p>여러 JSP 페이지에서 공통적으로 포함하는 내용이 있을 때
+	이러한 내용을 매번 입력하지 않고 별도의 파일을 저장해 두었다가
+	JSP 파일에 삽입하도록 하는 것이 include 디렉티브 이다.</p>
+	<p>include 지시어는 JSP에서 서블릿 코드를 생성할 때
+	텍스트나 코드를 JSP 파일 안으로 포함시키며
+	포함되는 파일의 내용은 include 지시어가 있는 위치에 삽입된다.</p>
+</div>
+
+
+<div class="layout">
+	<div>	
+		<%@ include file="Test003.jsp"%>
+	</div>
+	<div>
+		<h2><%=str %></h2>
+		<h2><%=name %></h2>
+	</div>
+</div>
+</body>
+</html>
+```
+#### 5.9.11.3. Test003.jsp_include 디렉티브와 관련한 실습 진행중
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	String str = "include 디렉티브와 관련한 실습 진행중";
+	String name="이름";
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test003.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<p>Test002.jsp 와는 다른 독립적인 페이지</p>
+	<p>include 테스트 중</p>
+</div>
+
+<div class="layout">
+
+</div>
+</body>
+</html>
+```
+
+### 5.9.12. []
+
+#### 5.9.12.1. .jsp
+``` html
+```
+#### 5.9.12.2. .jsp
+``` html
+```
+
+### 5.9.13. []
+
+#### 5.9.13.1. .jsp
+``` html
+```
+#### 5.9.13.2. .jsp
+``` html
+```
+
 ------------------------------------------------
 
 
