@@ -1545,24 +1545,1051 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 ```
 
-### 5.9.12. []
+### 5.9.12. [이름과 성적 데이터를 입력받는 html 페이지]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/537c4fbd-8b1a-41e4-81c4-87a6226143f1)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/ac2992b1-470e-421b-a27a-240823cf174f)
 
-#### 5.9.12.1. Receive01.jsp_데이터 송수신 실습 01
+#### 5.9.12.1. Sand01.html_데이터 송수신 실습 01
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sand02.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+ 
+</head>
+<body class="section">
+<!-- 
+  ○ 데이터 송수신 실습 02
+	- 이름과 성적 데이터를 입력받는 html 페이지를 구성한다.
+		
+		이름		[ textbox ] 	<- 박가영
+		국어점수	[ textbox ] 	<- 90
+		영어점수	[ textbox ] 	<- 80
+		수학점수	[ textbox ] 	<- 70
+		
+		<전송> <취소>
+	- 내용 입력 후 전송 버튼 클릭시
+		『박가영님, 성적처리가 완료되었습니다.
+		회원님의 점수는 국어:90점, 영어:80점, 수학: 70점 입니다.
+		총점은 240점, 평균은 80.0 입니다.』
+		라는 내뇽을 출력하는 JSP 페이지(Receive02.jsp)를 구성하여
+		데이터를 전달할 수 있도록 한다.
+		
+	- 사용자 최초 요청 주소는
+	http://localhost:3306/WepApp07/Send02.html로 한다.
+	
+ ○ Send02.html
+  	Recive02.jsp
+  	
+  	(~11:15)
+ -->
+<div>
+	<h1>데이터 송수신 실습 02</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<form action="Receive02.jsp" method="post">
+		<ul>
+			<li>
+				<span class="tit">이름</span>
+				<input type="text" name="userName">
+			</li>
+			<li>
+				<span class="tit">국어점수</span>
+				<input type="text" name="userKor">
+			</li>
+			<li>
+				<span class="tit">영어점수</span>
+				<input type="text" name="userEng">
+			</li>
+			<li>
+				<span class="tit">수학점수</span>
+				<input type="text" name="userMat">
+			</li>
+		</ul>
+		<div class="btn_box">
+			<button type="submit" class="btn">전송</button>
+			<button type="reset" class="btn">취소</button>
+		</div>
+	</form>
+</div>
+ 
+</body>
+</html>
+```
+#### 5.9.12.2. Receive01.jsp_데이터 송수신 실습 01
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 스크립릿 영역
+ 
+	// 이전 페이지(Send02.html)로 부터 넘어온 데이터 수신
+	// -> userName, kor, eng, mat
+	request.setCharacterEncoding("UTF-8");
+ 
+	String name = request.getParameter("userName");
+	/* 내가 푼 풀이 ======================================= */
+	int[] scores = new int[3];
+	scores[0] = Integer.parseInt(request.getParameter("userKor"));
+	scores[1] = Integer.parseInt(request.getParameter("userEng"));
+	scores[2] = Integer.parseInt(request.getParameter("userMat"));
+	
+	int tot = 0;
+	
+	for(int item : scores)
+		tot += item;
+	
+	double avg = (double)(tot) / scores.length;
+	// **소수점 이하 처리1) Math 함수 & 나누기(/)**
+	//avg = Math.floor(avg * 10)/ 10.0;
+	// **소수점 이하 처리2) format**
+	String avgTxt = String.format("%.1f", avg);
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Receive02.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	.info_box span{font-weight:bold;}
+</style>
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 02</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<h2>가입 확인</h2>
+	<div class="info_box">
+	『<span><%= name %></span>님, 성적처리가 완료되었습니다.<br>
+		회원님의 점수는 국어:<span><%=scores[0] %></span>점
+					, 영어:<span><%=scores[1] %></span>점
+					, 수학: <span><%=scores[2] %></span>점 입니다.<br>
+		총점은 <span><%=tot %></span>점, 평균은 <span><%=avgTxt %></span> 입니다.』
+	</div>
+</div>
+ 
+</body>
+</html>
+```
+
+### 5.9.13. [이름과 성적 데이터를 입력받는 html 페이지]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e359ec7e-21ff-4a9a-a2a4-d43153ab5daa)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/cd79a7e5-5226-4939-9204-037bb13c3fbd)
+
+#### 5.9.13.1. Send02.html_데이터 송수신 실습 02
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sand02.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+ 
+</head>
+<body class="section">
+<!-- 
+  ○ 데이터 송수신 실습 02
+	- 이름과 성적 데이터를 입력받는 html 페이지를 구성한다.
+		
+		이름		[ textbox ] 	<- 박가영
+		국어점수	[ textbox ] 	<- 90
+		영어점수	[ textbox ] 	<- 80
+		수학점수	[ textbox ] 	<- 70
+		
+		<전송> <취소>
+	- 내용 입력 후 전송 버튼 클릭시
+		『박가영님, 성적처리가 완료되었습니다.
+		회원님의 점수는 국어:90점, 영어:80점, 수학: 70점 입니다.
+		총점은 240점, 평균은 80.0 입니다.』
+		라는 내뇽을 출력하는 JSP 페이지(Receive02.jsp)를 구성하여
+		데이터를 전달할 수 있도록 한다.
+		
+	- 사용자 최초 요청 주소는
+	http://localhost:3306/WepApp07/Send02.html로 한다.
+	
+ ○ Send02.html
+  	Recive02.jsp
+  	
+  	(~11:15)
+ -->
+<div>
+	<h1>데이터 송수신 실습 02</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<form action="Receive02.jsp" method="post">
+		<ul>
+			<li>
+				<span class="tit">이름</span>
+				<input type="text" name="userName">
+			</li>
+			<li>
+				<span class="tit">국어점수</span>
+				<input type="text" name="userKor">
+			</li>
+			<li>
+				<span class="tit">영어점수</span>
+				<input type="text" name="userEng">
+			</li>
+			<li>
+				<span class="tit">수학점수</span>
+				<input type="text" name="userMat">
+			</li>
+		</ul>
+		<div class="btn_box">
+			<button type="submit" class="btn">전송</button>
+			<button type="reset" class="btn">취소</button>
+		</div>
+	</form>
+</div>
+ 
+</body>
+</html>
+```
+#### 5.9.13.2. Receive02.jsp _데이터 송수신 실습 02
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+ 
+	String name = request.getParameter("userName");
+	int[] scores = new int[3];
+	scores[0] = Integer.parseInt(request.getParameter("userKor"));
+	scores[1] = Integer.parseInt(request.getParameter("userEng"));
+	scores[2] = Integer.parseInt(request.getParameter("userMat"));
+	
+	int tot = 0;
+	
+	for(int item : scores)
+		tot += item;
+	
+	double avg = (double)(tot) / scores.length;
+	avg = Math.floor(avg * 10)/ 10.0;
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Receive02.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+ 
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 02</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<h2>가입 확인</h2>
+	<div class="info_box">
+	『<span><%= name %></span>님, 성적처리가 완료되었습니다.<br>
+		회원님의 점수는 국어:<span><%=scores[0] %></span>점
+					, 영어:<span><%=scores[1] %></span>점
+					, 수학: <span><%=scores[2] %></span>점 입니다.<br>
+		총점은 <span><%=tot %></span>점, 평균은 <span><%=avg %></span> 입니다.』
+	</div>
+</div>
+ 
+</body>
+</html>
+```
+
+
+### 5.9.14. [두 개의 정수와 연산자를 입력받는 html 페이지]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/d1dde9a2-1852-4237-990c-ae3a318a8900)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/28819f73-0c88-447a-8943-13108a239126)
+
+#### 5.9.14.1. Send03.html_데이터 송수신 실습 03
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Send03.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+<!-- 
+	○ 데이터 송수신 실습 03
+	- 두 개의 정수와 연산자를 입력받는 html 페이지를 구성한다.
+	
+							select
+		정수1 [ textbox ] [ 더하기 ▼ ] 정수2 [ textbox ]
+				  ↑		 빼기				  ↑
+				  45 		곱하기				  32
+				  			나누기
+				  			
+		< 결과 확인 >  < 취소 > -> button
+		
+	- 데이터 입력 및 선택 후 결과 확인 버튼 클릭 시
+		『입력하신 45와(과) 32의 연산 결과는 77 입니다.』
+		라는 내용을 출력하는 JSP 페이지(Receive03.jsp)를 구성하여
+		데이터를 전달할 수 있도록 한다.
+	
+	- 사용자의 최초 요청 주소는
+		http://localhost:3306/WebApp07/Send03.html 로 한다.
+		
+	○ Send03.html
+	   Receive03.jsp
+	   
+	   (~12:25)
+ -->
+<div>
+	<h1>데이터 송수신 실습 03</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<form action="Receive03.jsp" method="post">
+	<!-- **get에서 넘겨주는 데이터가 특수문자 인 경우 링크상에 문제가 있을 수 있으므로
+		, post형식을 취하거나 특수문자로 문제가 생기는지(링크 등) 확인할것** -->
+		<div class="inpub_box">
+			정수1 <input type="text" name="num1" style="width:60px">
+			<select name="operation">
+				<option value="+">더하기</option>
+				<option value="-">빼기</option>
+				<option value="*">곱하기</option>
+				<option value="/">나누기</option>
+			</select>
+			정수2 <input type="text" name="num2" style="width:60px">
+		</div>
+		<div class="btn_box">
+			<button type="submit" class="btn">전송</button>
+			<button type="reset" class="btn">취소</button>
+		</div>
+	</form>
+</div>
+</body>
+</html>
+```
+#### 5.9.14.2. Receive03.jsp _데이터 송수신 실습 03
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 스크립릿 영역
+	
+	// 이전 페이지(Send03.html)로 부터 넘어온 데이터 수신
+	// -> num1, num2, op
+	String num1Str = request.getParameter("num1");
+	String num2Str = request.getParameter("num2");
+	String op = request.getParameter("operation");
+ 
+	String result = "";
+	
+	int num1 = 0;
+	int num2 = 0;
+	
+	try
+	{
+		num1 = Integer.parseInt(num1Str);
+		num2 = Integer.parseInt(num2Str);
+		
+		switch(op)
+		{
+			case ("+"): result=String.valueOf(num1 + num2); break;
+			case ("-"): result=String.valueOf(num1 - num2); break;
+			case ("*"): result=String.valueOf(num1 * num2); break;
+			case ("/"): result=String.format("%.1f", num1 / (double)num2); break;
+		}
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Receive03.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	.info_box span{font-weight: bold;}
+</style>
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 03</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<div class="info_box">
+		<!-- 『입력하신 <span>45</span>와(과) <span>32</span>의 연산 결과는 <span>77</span> 입니다.』 -->
+		『입력하신 <span><%=num1 %></span>와(과) <span><%=num2 %></span>의 
+		연산(<span><%=op %></span>) 결과는 <span><%=result %></span> 입니다.』
+		 
+	</div>
+</div>
+</body>
+</html>
+```
+
+
+### 5.9.15. [회원 가입과 관련한 기본 정보를 입력받는 html 페이지]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/50eaca82-4aec-4aca-b942-e03d5daf313c)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/58112152-afad-4385-bce8-e12409ccf919)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/cb923124-d24f-470d-8f90-f34ac183f3ef)
+
+#### 5.9.15.1. Send04.html_데이터 송수신 실습 04
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Send04.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	/* 메세지 */
+	ul.input_box > li{display:flex;}
+	.input_area{display:flex;flex-direction: column;}
+	.msg{display:none;padding-top: 4px;color: blue;}
+</style>
+ 
+</head>
+<body class="section">
+<!-- 
+	○ 데이터 송수신 실습 04
+		- 회원 가입과 관련한 기본 정보를 입력받는 html 페이지를 작성한다.
+		
+		- 입력된 데이터를 서버로 전송하기 전에
+		(즉, 클라이언트 측에서 작성한 내용을 서버에 제출하기 전에)
+		입력 데이터에 대한 기본적인 검사 과정을
+		자바스크립트를 활용하여 추가할 수 있도록 한다.
+		
+		아이디(*)	[ textbox ] 
+		패스워드(*) [ textbox ] 
+		이름(*)		[ textbox ] 
+		전화번호(*)	[ textbox ] 
+		
+		성별		●여자 ○남자
+		
+		지역 [ 서울 ▼ ] 
+				대전
+				광주
+				대구
+		
+		수강과목 □자바기초 □오라클중급 □JDBC심화 □JSP활용
+		
+		< 회원 가입 >  < 취소 >
+		
+		- 필수 입력 항목(*)을 포함한 입력 내용을 구성한 후
+			회원 가입 버튼 클릭 시
+			회원 입력 정보들의 내용을 출력하는 JSP 페이지(Receive04.jsp)를 구성하여
+			데이터를 전달할 수 있도록 한다.
+			
+		- 사용자의 최초 요청 주소는
+			http://localhost:3306/WebApp07/Send04.html 로 한다.
+			
+	○ Send04.html
+		Receive04.jsp
+ -->
+<div>
+	<h1>데이터 송수신 실습 04</h1>
+	<hr>
+</div>
+ 
+<div class="layout">	
+	<!-- [함께 푼 방법] ======================= -->
+	<!-- *****①,②***** -->
+	<!-- <form action="Receive04.jsp" method="post" name="memeberForm"> -->
+	
+	<!-- *****③***** -->
+	<!-- <form action="Receive04.jsp" method="post" id="memeberForm"> -->
+	
+	<!-- *****④***** -->
+	<!-- ※ form 태그의 『onsubmit』: submit 액션이 발생할 경우
+			이 때 호출되는 자바스크립트 함수에서
+			return true; 할 경우... Receive04.jsp 로 제어권이 넘어가게 되며
+			return false; 할 경우... Receive04.jsp 로 제어권이 넘어가지 않는다.	 -->
+			
+	<!-- <form action="Receive04.jsp" method="post" onsubmit="return true;"> -->
+	<!-- <form action="Receive04.jsp" method="post" onsubmit="return false;"> -->
+	<!-- <form action="Receive04.jsp" method="post" onsubmit="functionTest()"> -->
+	<!-- <form action="Receive04.jsp" method="post" onsubmit="return functionTest();"> -->
+	<form action="Receive04.jsp" method="post" onsubmit="return formCheck();">
+		<ul class="input_box" style="display:inline-block;">
+			<li style="color: blue;">
+				<span>-&nbsp;『*』: 필수값</span>
+			</li>
+			<li>
+				<span class="tit">아이디(*)</span>
+				<div class="input_area">
+					<input type="text" name="userId" id="userId">
+					<span class="msg" id="idMsg">아이디를 입력하세요.</span>
+				</div>
+			</li>
+			<li>
+				<span class="tit">패스워드(*)</span>
+				<div class="input_area">
+					<input type="password" name="userPwd" id="userPwd">
+					<span class="msg" id="pwdMsg">패스워드를 입력하세요.</span>
+				</div>
+			</li>
+			<li>
+				<span class="tit">이름(*)</span>
+				<div class="input_area">
+					<input type="text" name="userName" id="userName">
+					<span class="msg" id="nameMsg">이름을 입력하세요.</span>
+				</div>
+			</li>
+			<li>
+				<span class="tit">전화번호(*)</span>
+				<div class="input_area">
+					<input type="text" name="userTel" id="userTel">
+					<span class="msg" id="telMsg">전화번호를 입력하세요.</span>
+				</div>
+			</li>
+			<li>
+				<span class="tit">성별</span>
+				<label><input type="radio" name="userGender" value="F" checked>여자</label>
+				<label><input type="radio" name="userGender" value="M">남자</label>
+			</li>
+			<li>
+				<span class="tit">지역</span>
+				<select name="userCity">
+					<option value="">===선택===</option>
+					<option value="서울">서울</option>
+					<option value="대전">대전</option>
+					<option value="광주">광주</option>
+					<option value="대구">대구</option>
+				</select>
+			</li>
+			<li>
+				<span class="tit">수강과목</span>
+				<label><input type="checkbox" name="userSubject" value="자바기초" id="check1">자바기초</label>
+				<label><input type="checkbox" name="userSubject" value="오라클중급" id="check2">오라클중급</label>
+				<label><input type="checkbox" name="userSubject" value="JDBC심화" id="check3">JDBC심화</label>
+				<label><input type="checkbox" name="userSubject" value="JSP활용" id="check4">JSP활용</label>
+			</li>
+		</ul>
+		<div class="btn_box">
+			<!-- [내가 푼 방법] ======================= -->
+			<!-- *****①,②***** -->
+			<!-- <button type="button" class="btn control" onclick="functionTest()">회원 가입</button> -->
+			<!-- *****③***** -->
+			<!-- <button type="button" class="btn control" onclick="functionTest()">회원 가입</button> -->
+			<!-- *****④***** -->
+			<button type="submit" class="btn control">회원 가입</button> <!-- **button type 미지정시 submit** -->
+			<!-- **onclick -> click이라는 이벤트가 발생 했을 때..** -->
+			
+			<!-- [함께 푼 방법] ======================= -->
+			<button type="reset" class="btn control">취소</button>
+		</div>
+	</form>
+</div>
+ 
+<script type="text/javascript">
+/* [내가 푼 방법] ======================= */
+/* function strCheck()
+{
+	var userId = document.getElementById("userId").value;
+	var userPwd = document.getElementById("userPwd").value;
+	var userName = document.getElementById("userName").value;
+	var userId = document.getElementById("userTel").value;
+	
+	if(userId == "" || userPwd=="" || userName=="" || userId==""){
+		alert("필수 값을 입력해주세요.");
+		return 	false;
+	}else
+		return true;
+	
+} */
+ 
+/* [함께 푼 방법] ======================= */
+function functionTest()
+{
+	//확인
+	alert("함수 호출~!!!")
+	
+	var userId = document.getElementById("userId").value;
+	
+	// submit 방법 ①
+	//document.forms[0].submit();
+	// submit 방법 ②
+	//memeberForm.submit();
+	// submit 방법 ③
+	//document.getElementById("memeberForm").submit();
+	
+	//return true;
+	return false;
+}
+ 
+function formCheck()
+{
+	//return false;	//-- 현재 페이지에 그대로 남아있음
+	//return true;	//-- 요청 페이지로 제어권 이전
+	
+	// 문서의 내용 점검 -> 통과(적합) -> return true;
+	// -> submit 액션 처리로 제어권 넘김
+	// 문서의 내용 점검 -> 반려(부적합) -> return false;
+	// -> submit 액션 처리로 제어권을 넘기지 않고 현재 페이지에 분류
+	
+	// 점검사항 체크...
+	// -> 문제 발생(발견) 					-> return false;
+	// -> 문제 발생하지 않음(발견되지 않음)	-> return true;
+	
+	var userId = document.getElementById("userId");
+	var userPwd = document.getElementById("userPwd");
+	var userName = document.getElementById("userName");
+	var userTel = document.getElementById("userTel");
+	
+	var idMsg = document.getElementById("idMsg");
+	var pwdMsg = document.getElementById("pwdMsg");
+	var nameMsg = document.getElementById("nameMsg");
+	var telMsg = document.getElementById("telMsg");
+	
+	// form 내부의 컨트롤에 대한 값을 변경하고 이 함수를 다시 호출할 때 마다
+	// 기존 안내되었던 ㅇ러 메세지를 지우고 다시 확인할 수 있도록 처리
+	idMsg.style.display = "none";
+	pwdMsg.style.display = "none";
+	nameMsg.style.display = "none";
+	telMsg.style.display = "none";
+	
+	// submit 방법 ④
+	if(userId.value == "")		//-- 아이디가 입력되지 않은 상황
+	{
+		alert("아이디가 입력되지 않은 상황");
+		idMsg.style.display = "inline";
+		userId.focus();
+		return 	false;
+	}
+	
+	if(userPwd.value == "")		//-- 패스워드가 입력되지 않은 상황
+	{
+		alert("패스워드가 입력되지 않은 상황");
+		pwdMsg.style.display = "inline";
+		userPwd.focus();
+		return 	false;
+	}
+	
+	if(userName.value == "")	//-- 이름이 입력되지 않은 상황
+	{
+		alert("이름이 입력되지 않은 상황");
+		nameMsg.style.display = "inline";
+		userName.focus();
+		return 	false;
+	}
+	
+	if(userTel.value == "")		//-- 전화번호가 입력되지 않은 상황
+	{
+		alert("전화번호가 입력되지 않은 상황");
+		telMsg.style.display = "inline";
+		userTel.focus();
+		return 	false;
+	}
+	
+	return true;
+}
+ 
+</script>
+</body>
+</html>
+```
+#### 5.9.15.2. Receive04.jsp_데이터 송수신 실습 04
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 스트립릿 영역
+	
+	// 이전 페이지(Send04.html)로 부터 넘어온 데이터 수신
+	//-> userId, userPw, userName, userTel, userGender, userCity, userSubject
+	
+	request.setCharacterEncoding("UTF-8");
+	
+	String userId = request.getParameter("userId");
+	String userPwd = request.getParameter("userPwd");
+	String userName = request.getParameter("userName");
+	String userTel = request.getParameter("userTel");
+	
+	String userGender = request.getParameter("userGender");
+	String userCity = request.getParameter("userCity");
+	
+	//String userSubject = request.getParameter("userSubject");
+	
+	//check~!!!
+	String[] userSubjectArr = request.getParameterValues("userSubject");
+	
+	String genderStr = "";
+	if(userGender.equals("F"))
+		genderStr="여성";
+	else if(userGender.equals("M"))
+		genderStr="남성";
+	else
+		genderStr="";
+	
+	String userSubjectStr = "";
+	if(userSubjectArr != null)
+	{
+		for(String item :userSubjectArr)
+			userSubjectStr+="[" + item + "] ";
+	};
+	
+	// ※ 추후에는 수신된 데이터를... 
+	//		쿼리문을 통해 DB에 입력하는 처리 과정 등이 포함될 것임을 염두하며 작업 진행
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Receive04.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	.info_box span{font-weight: bold;}
+</style>
+</head>
+<body class="section">
+<div>
+	<h1>데이터 송수신 실습 04</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<h2>가입 승인 내역</h2>
+	<div class="info_box">
+		<ul>
+			<li><span class="tit">아이디(*): </span><%=userId %></li>
+			<li><span class="tit">패스워드(*): </span><%=userPwd %></li>
+			<li><span class="tit">이름(*): </span><%=userName %></li>
+			<li><span class="tit">전화번호(*): </span><%=userTel %></li>
+			<li><span class="tit">성별: </span><%=genderStr %></li>
+			<li><span class="tit">지역: </span><%=userCity %></li>
+			<li><span class="tit">수강과목: </span><%=userSubjectStr %></li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>
+```
+
+
+### 5.9.16. [구구단 결과를 출력하는 JSP(Receive05.jsp)]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8bf07065-0bc3-4bc2-9446-60d45ad95b52)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/55123adf-6384-4592-83d5-7f5b1ec15719)
+
+#### 5.9.16.1. Send05.html_데이터 송수신 실습 05
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>send05.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+<!-- 
+	○ 데이터 송수신 실습 05
+		- 구구단 결과를 출력하는 JSP(Receive05.jsp)를 구성한다.
+		- 원하는 단수를 입력받아 화면에 출력해주는 형태의 페이지로 구현한다.
+		- 단, submit 버튼 없이 이벤트 처리를 할 수 있도록 한다.
+		
+					selectbox
+		단 수 선택 [ -- 선택 -- ▼ ]
+						 1단
+						 2단
+						 3단
+						  :
+						 9단
+					 
+		- select 선택 시
+			해당 단의 구구단 내용을 출력하는 JSP 페이지(Receive05.jsp)로 데이터를 전달하여 내요을 구성할 수 있도록 한다.
+			
+		- 사용자 최초 요청 페이지 주소는
+			http://localhost:3306/WebApp07/Send05.html 로 한다.
+			
+	○ Send05.html
+		Receive05.jsp 
+ -->
+<div>
+	<h1>데이터 송수신 실습 05</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<form action="Receive05.jsp" method="post" name="danForm">
+		<div>
+			<span class="tit">단 수 선택</span>
+			<!-- [내가 푼 풀이]: onclick 사용 ========================= -->
+			<!-- <select name="danNum" id="danNum" onclick="danResult()" > -->
+			
+			<!-- [함께 푼 풀이]: onclick 사용 ========================= -->
+			<select name="dan" id="dan" onchange="formChange(this.form)" >
+				<option value="">==선택==</option>
+				<option value="1">1단</option>
+				<option value="2">2단</option>
+				<option value="3">3단</option>
+				<option value="4">4단</option>
+				<option value="5">5단</option>
+				<option value="6">6단</option>
+				<option value="7">7단</option>
+				<option value="8">8단</option>
+				<option value="9">9단</option>
+			</select>
+		</div>
+		<!-- <button type="submit">전송</button> -->
+	</form>
+</div>
+<script type="text/javascript">
+/* [내가 푼 풀이]: onclick 사용 ========================= */
+var danOrigin = 0;
+ 
+function danResult()
+{
+	var danNum = document.getElementById("dan").value;
+	
+	if(danNum!="" && (danOrigin != danNum))
+	{
+		danForm.submit();
+		danOrigin = danNum;
+	}
+}
+/* [함께 푼 풀이]: onclick 사용 ========================= */
+function formChange(obj)
+{
+	//확인
+	alert(obj);
+	//--==>> [object HTMLFormElement]
+	
+	//※ obj 변수(이 함수의 매개변수)에는 form 객체가 저장되어 있다.
+	//	필요에 따라 전송하기 전에 검증 절차를 추가하는 것이 가능하다.
+	
+	obj.submit();
+	//-- 『폼객체.submit()』
+	//	함수 호출을 통해 form 객체의 데이터를 서버로 전송하는 것이 가능하다.
+}
+</script>
+ 
+</body>
+</html>
+```
+#### 5.9.16.2. Receive05.jsp_ 데이터 송수신 실습 05
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지로(Send05.html)로 부터 넘어온 데이터 수신
+	// -> dan
+ 
+	String danStr = request.getParameter("dan");
+	
+	int dan = 0;
+	String result ="";
+			
+	try
+	{
+		dan = Integer.parseInt(danStr);
+		
+		
+		for(int i=1; i<= 9; i++)
+		{
+			result += String.format("%d * %d = %d <br>", dan, i, dan*i);
+		}
+		
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Receive05.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 05</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<h2>구구단 출력</h2>
+	<div class="info_box">
+		<%=result %>
+		 
+	</div>
+</div>
+</body>
+</html>
+```
+
+
+### 5.9.17. [이전 페이지(SendAndReceive06.jsp -> 자기자신)로부터 넘어온 데이터 수신]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/3939aa38-80c5-474a-9d7e-0363ee7afb0d)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/292e7bb3-7839-4ee2-951a-edec2955f02f)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/5b7feaf6-d22c-46a8-b96f-6d498e95b710)
+
+#### 5.9.17.1. SendAndReceive06.jsp_데이터 송수신 실습 06
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지(SendAndReceive06.jsp -> 자기자신)로부터 넘어온 데이터 수신
+	// -> userInput
+	
+	request.setCharacterEncoding("UTF-8");
+	
+	String temp = "";
+	temp = request.getParameter("userInput");
+	
+	if(temp == null)
+		temp = "없음";
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SendAndReceive06.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 06</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+ 
+	<!-- <form action="Test9999.jsp" method="post"> 
+		<div class="input_box">
+			<span class="tit">입력</span>
+			<input type="text" id="userInput" name="userInput" class="txt">
+		</div>
+		
+		<div class="btn_box">
+			<button type="submit" class="btn control">테스트</button>
+			<button type="reset" class="btn control">취소</button>
+		</div>
+	</form> -->
+ 
+	<!-- [post 버전] ================================================ -->
+	<!-- **form의 action 속성값 없음
+		 -> 요청하는 주소 자기자신, 내가 전달하는 데이터도 자기자신에게 보내는 것
+	** -->
+	
+	<!-- <form action="" method="post"> 
+		<div class="input_box">
+			<span class="tit">입력</span>
+			<input type="text" id="userInput" name="userInput" class="txt">
+		</div>
+		
+		<div class="btn_box">
+			<button type="submit" class="btn control">테스트</button>
+			<button type="reset" class="btn control">취소</button>
+		</div>
+	</form> -->
+	
+	<!-- [get 버전] ================================================ -->
+	<!-- <form action="" method="get"> 
+		<div class="input_box">
+			<span class="tit">입력</span>
+			<input type="text" id="userInput" name="userInput" class="txt">
+		</div>
+		
+		<div class="btn_box">
+			<button type="submit" class="btn control">테스트</button>
+			<button type="reset" class="btn control">취소</button>
+		</div>
+	</form> -->
+	
+	<!-- [action="" 없는 버전] ================================================ -->
+	<!-- <form method="get"> 
+		<div class="input_box">
+			<span class="tit">입력</span>
+			<input type="text" id="userInput" name="userInput" class="txt">
+		</div>
+		
+		<div class="btn_box">
+			<button type="submit" class="btn control">테스트</button>
+			<button type="reset" class="btn control">취소</button>
+		</div>
+	</form> -->
+	
+	<!-- [action="",  method="" 없는 버전] ================================================ -->
+	<form> 
+		<div class="input_box">
+			<span class="tit">입력</span>
+			<input type="text" id="userInput" name="userInput" class="txt">
+		</div>
+		
+		<div class="btn_box">
+			<button type="submit" class="btn control">테스트</button>
+			<button type="reset" class="btn control">취소</button>
+		</div>
+		
+	</form>
+	<!-- check~!!! -->
+	<!-- ※ form 의 action 속성을 『action=""』와 같이 구성하거나
+			action 속성을 생략하여 『<form method="post"』와 같이 구성하게 되면
+			페이지 요청 및 데이터 전송에 대한 수신처 페이지는 자기 자신이 된다.
+	
+	 -->
+</div>
+ 
+<div>
+	<h2>수신된 데이터 확인</h2>
+	<h3> -> <%=temp %></h3>
+</div>
+ 
+</body>
+</html>
+```
+
+### 5.9.18. []
+
+#### 5.9.18.1. .jsp_데이터 송수신 실습 02
 ``` html
 ```
-#### 5.9.12.2. .jsp_데이터 송수신 실습 01
+#### 5.9.18.2. .jsp_데이터 송수신 실습 02
 ``` html
 ```
 
-### 5.9.13. []
+### 5.9.19. []
 
-#### 5.9.13.1. .jsp_데이터 송수신 실습 02
+#### 5.9.19.1. .jsp_데이터 송수신 실습 02
 ``` html
 ```
-#### 5.9.13.2. .jsp_데이터 송수신 실습 02
+#### 5.9.19.2. .jsp_데이터 송수신 실습 02
 ``` html
 ```
 
+### 5.9.20. []
+
+#### 5.9.20.1. .jsp_데이터 송수신 실습 02
+``` html
+```
+#### 5.9.20.2. .jsp_데이터 송수신 실습 02
+``` html
+```
 ------------------------------------------------
 
 
