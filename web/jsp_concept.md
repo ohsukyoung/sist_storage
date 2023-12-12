@@ -204,8 +204,8 @@ ex) http://localhost:3306/WebApp05/jsptest005.jsp
 
 <br>
 
-## 5.9. 코드
-### 5.9.1. jsptest001.jsp_디렉티브 영역, 스크립 릿 영역
+## 5.10. 코드
+### 5.10.1. jsptest001.jsp_디렉티브 영역, 스크립 릿 영역
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/a2582513-2000-49f0-b7f3-d93d6c3efee1)
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
@@ -246,7 +246,7 @@ ex) http://localhost:3306/WebApp05/jsptest005.jsp
 </body>
 </html>
 ```
-### 5.9.2. jsptest002.jsp_『out』 출력 스트림, 『out.println』-> 띄어쓰기,『\n』-> 띄어쓰기,『<br>』 -> 개행
+### 5.10.2. jsptest002.jsp_『out』 출력 스트림, 『out.println』-> 띄어쓰기,『\n』-> 띄어쓰기,『<br>』 -> 개행
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/f76599ae-0c04-4659-b0d2-16089d0d5ec2)
 
 ``` html
@@ -317,7 +317,7 @@ ex) http://localhost:3306/WebApp05/jsptest005.jsp
 </html>
 ```
 
-### 5.9.3. jsptest003.jsp_『_jspInit()』 메소드, 『_jspDestroy()』 메소드, 『_jspService()』 메소드
+### 5.10.3. jsptest003.jsp_『_jspInit()』 메소드, 『_jspDestroy()』 메소드, 『_jspService()』 메소드
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/46532a6f-4d0b-4e05-85f2-2c35817ca2cf)
 
 ``` html
@@ -418,7 +418,7 @@ ex) http://localhost:3306/WebApp05/jsptest005.jsp
 </html>
 ```
 
-### 5.9.4. jsptest004.java_서블릿 관련 실습
+### 5.10.4. jsptest004.java_서블릿 관련 실습
 ``` java
 /* ==================
 	Test004.java
@@ -498,7 +498,7 @@ public class Test004 extends GenericServlet
 }
 ```
 
-#### 5.9.4.1. web.xml
+#### 5.10.4.1. web.xml
 ``` html
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
@@ -528,9 +528,9 @@ public class Test004 extends GenericServlet
 
 <br>
 
-### 5.9.5. [HttpServlet 관련 실습]
+### 5.10.5. [HttpServlet 관련 실습]
 
-#### 5.9.5.1. jsptest005.html_HttpServlet 관련 실습(HttpServlet 을 상속받는 클래스로 설계)
+#### 5.10.5.1. jsptest005.html_HttpServlet 관련 실습(HttpServlet 을 상속받는 클래스로 설계)
 - >**스크립트제어-> id 속성, 서버제어-> name 속성**
 
 - ※ form 태그의 action 속성은 제이터 전송 및 페이지 요청을 해야하는 대상 페이지를 등록하는 기능을 수행.
@@ -605,7 +605,7 @@ public class Test004 extends GenericServlet
 </html>
 ```
 
-#### 5.9.5.2. Test005.java_요청받은 내용을 응답(출력스크림 구성)
+#### 5.10.5.2. Test005.java_요청받은 내용을 응답(출력스크림 구성)
 ``` html
 /* ==================
 	Test005.java
@@ -698,7 +698,7 @@ public class Test005 extends HttpServlet
 	}
 }
 ```
-#### 5.9.5.3. web.xml_ jsp와 java를 servlet을 통해 연결
+#### 5.10.5.3. web.xml_ jsp와 java를 servlet을 통해 연결
 ``` html
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
@@ -741,7 +741,7 @@ public class Test005 extends HttpServlet
 
 </web-app>
 ```
-#### 5.9.5.4. ResponseSample.html_HTML 코드 작성을 위한 샘플
+#### 5.10.5.4. ResponseSample.html_HTML 코드 작성을 위한 샘플
 ``` html
 <!DOCTYPE html>
 <html>
@@ -768,11 +768,11 @@ public class Test005 extends HttpServlet
 
 <br>
 
-### 5.9.6. [JSP를 이용한 데이터 송수신 실습 01]
+### 5.10.6. [JSP를 이용한 데이터 송수신 실습 01]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/326337d8-a76b-4590-b108-168264be3244)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/bc8a3c57-7d1c-4844-87f3-bbe170470bba)
 
-#### 5.9.6.1. Hap.jsp_JSP를 이용한 데이터 송수신 실습 01
+#### 5.10.6.1. Hap.jsp_JSP를 이용한 데이터 송수신 실습 01
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -817,7 +817,7 @@ public class Test005 extends HttpServlet
 </body>
 </html>
 ```
-#### 5.9.6.2. HapOk.jsp_JSP를 이용한 데이터 송수신 실습 01
+#### 5.10.6.2. HapOk.jsp_JSP를 이용한 데이터 송수신 실습 01
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <% 
@@ -877,11 +877,11 @@ public class Test005 extends HttpServlet
 
 <br>
 
-### 5.9.7. [JSP를 이용한 데이터 송수신 실습 02]
+### 5.10.7. [JSP를 이용한 데이터 송수신 실습 02]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/007b1ada-dadf-484b-887d-e83358bd545f)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/6fff8b6b-67b1-41f4-94ae-acd78b2b3b94)
 
-#### 5.9.7.1. Gugudan.jsp_JSP를 이용한 데이터 송수신 실습 02
+#### 5.10.7.1. Gugudan.jsp_JSP를 이용한 데이터 송수신 실습 02
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -923,7 +923,7 @@ public class Test005 extends HttpServlet
 </body>
 </html>
 ```
-#### 5.9.7.2. GugudanOk.jsp_JSP를 이용한 데이터 송수신 실습 02
+#### 5.10.7.2. GugudanOk.jsp_JSP를 이용한 데이터 송수신 실습 02
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1011,13 +1011,13 @@ public class Test005 extends HttpServlet
 ```
 <br>
 
-### 5.9.8. [radio, select 데이터 전송]
+### 5.10.8. [radio, select 데이터 전송]
 // 한글 깨짐 방지 처리
 request.setCharacterEncoding("UTF-8"); // check~!!!
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/4e792111-3132-497d-a2d8-f5585244190b)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/3d2c33ad-ee4d-4a91-a5bf-e1f827eb2dc8)
 
-#### 5.9.8.1. RadioSelect.jsp_radio, select 데이터 전송
+#### 5.10.8.1. RadioSelect.jsp_radio, select 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1094,7 +1094,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.9.8.2. RadioSelectOk.jsp_radio, select 데이터 전송
+#### 5.10.8.2. RadioSelectOk.jsp_radio, select 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1166,12 +1166,12 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 ```
 <br>
 
-### 5.9.9. [checkbox 데이터 전송]
+### 5.10.9. [checkbox 데이터 전송]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/882d217e-3801-40c1-b494-9703270fc9c8)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/04b548f3-bd7c-404d-9d18-f095fd032e4d)
 
 
-#### 5.9.9.1. CheckBox.jsp_checkbox 데이터 전송
+#### 5.10.9.1. CheckBox.jsp_checkbox 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1228,7 +1228,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 
 ```
-#### 5.9.9.2. CheckBoxOk.jsp_checkbox 데이터 전송
+#### 5.10.9.2. CheckBoxOk.jsp_checkbox 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1306,12 +1306,12 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 
 <br>
 
-### 5.9.10. [JSP를 이용한 데이터 송수신 실습 05]
+### 5.10.10. [JSP를 이용한 데이터 송수신 실습 05]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e7f49e2c-cbbe-42a5-bff4-d146fef87033)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8d8f11e7-8abf-4e40-8beb-157ee46822f2)
 
 
-#### 5.9.10.1. Table.jsp_JSP를 이용한 데이터 송수신 실습 05
+#### 5.10.10.1. Table.jsp_JSP를 이용한 데이터 송수신 실습 05
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1354,7 +1354,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.9.10.2. TableOk.jsp_ JSP를 이용한 데이터 송수신 실습 05
+#### 5.10.10.2. TableOk.jsp_ JSP를 이용한 데이터 송수신 실습 05
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1429,9 +1429,9 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 ```
 
-### 5.9.11. [디렉티브/ WebApp06]
+### 5.10.11. [디렉티브/ WebApp06]
 
-#### 5.9.11.1. Test001.jsp_page 디렉티브 buffer 속성 및 autoFlush 실습
+#### 5.10.11.1. Test001.jsp_page 디렉티브 buffer 속성 및 autoFlush 실습
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!-- **
@@ -1476,7 +1476,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.9.11.2. Test002.jsp_include 디렉티브 실습
+#### 5.10.11.2. Test002.jsp_include 디렉티브 실습
 - 여러 JSP 페이지에서 공통적으로 포함하는 내용이 있을 때 이러한 내용을 매번 입력하지 않고 별도의 파일을 저장해 두었다가 JSP 파일에 삽입하도록 하는 것이 include 디렉티브 이다.
 - include 지시어는 JSP에서 서블릿 코드를 생성할 때 텍스트나 코드를 JSP 파일 안으로 포함시키며 포함되는 파일의 내용은 include 지시어가 있는 위치에 삽입된다.
 ``` html
@@ -1515,7 +1515,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.9.11.3. Test003.jsp_include 디렉티브와 관련한 실습 진행중
+#### 5.10.11.3. Test003.jsp_include 디렉티브와 관련한 실습 진행중
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1545,11 +1545,11 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 ```
 
-### 5.9.12. [이름과 성적 데이터를 입력받는 html 페이지]
+### 5.10.12. [이름과 성적 데이터를 입력받는 html 페이지]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/537c4fbd-8b1a-41e4-81c4-87a6226143f1)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/ac2992b1-470e-421b-a27a-240823cf174f)
 
-#### 5.9.12.1. Sand01.html_데이터 송수신 실습 01
+#### 5.10.12.1. Sand01.html_데이터 송수신 실습 01
 ``` html
 <!DOCTYPE html>
 <html>
@@ -1621,7 +1621,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.9.12.2. Receive01.jsp_데이터 송수신 실습 01
+#### 5.10.12.2. Receive01.jsp_데이터 송수신 실습 01
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1683,11 +1683,11 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 ```
 
-### 5.9.13. [이름과 성적 데이터를 입력받는 html 페이지]
+### 5.10.13. [이름과 성적 데이터를 입력받는 html 페이지]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e359ec7e-21ff-4a9a-a2a4-d43153ab5daa)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/cd79a7e5-5226-4939-9204-037bb13c3fbd)
 
-#### 5.9.13.1. Send02.html_데이터 송수신 실습 02
+#### 5.10.13.1. Send02.html_데이터 송수신 실습 02
 ``` html
 <!DOCTYPE html>
 <html>
@@ -1759,7 +1759,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.9.13.2. Receive02.jsp _데이터 송수신 실습 02
+#### 5.10.13.2. Receive02.jsp _데이터 송수신 실습 02
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1812,11 +1812,11 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 ```
 
 
-### 5.9.14. [두 개의 정수와 연산자를 입력받는 html 페이지]
+### 5.10.14. [두 개의 정수와 연산자를 입력받는 html 페이지]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/d1dde9a2-1852-4237-990c-ae3a318a8900)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/28819f73-0c88-447a-8943-13108a239126)
 
-#### 5.9.14.1. Send03.html_데이터 송수신 실습 03
+#### 5.10.14.1. Send03.html_데이터 송수신 실습 03
 ``` html
 <!DOCTYPE html>
 <html>
@@ -1880,7 +1880,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.9.14.2. Receive03.jsp _데이터 송수신 실습 03
+#### 5.10.14.2. Receive03.jsp _데이터 송수신 실습 03
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1948,12 +1948,12 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 ```
 
 
-### 5.9.15. [회원 가입과 관련한 기본 정보를 입력받는 html 페이지]
+### 5.10.15. [회원 가입과 관련한 기본 정보를 입력받는 html 페이지]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/50eaca82-4aec-4aca-b942-e03d5daf313c)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/58112152-afad-4385-bce8-e12409ccf919)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/cb923124-d24f-470d-8f90-f34ac183f3ef)
 
-#### 5.9.15.1. Send04.html_데이터 송수신 실습 04
+#### 5.10.15.1. Send04.html_데이터 송수신 실습 04
 ``` html
 <!DOCTYPE html>
 <html>
@@ -2209,7 +2209,7 @@ function formCheck()
 </body>
 </html>
 ```
-#### 5.9.15.2. Receive04.jsp_데이터 송수신 실습 04
+#### 5.10.15.2. Receive04.jsp_데이터 송수신 실습 04
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -2287,11 +2287,11 @@ function formCheck()
 ```
 
 
-### 5.9.16. [구구단 결과를 출력하는 JSP(Receive05.jsp)]
+### 5.10.16. [구구단 결과를 출력하는 JSP(Receive05.jsp)]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8bf07065-0bc3-4bc2-9446-60d45ad95b52)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/55123adf-6384-4592-83d5-7f5b1ec15719)
 
-#### 5.9.16.1. Send05.html_데이터 송수신 실습 05
+#### 5.10.16.1. Send05.html_데이터 송수신 실습 05
 ``` html
 <!DOCTYPE html>
 <html>
@@ -2387,7 +2387,7 @@ function formChange(obj)
 </body>
 </html>
 ```
-#### 5.9.16.2. Receive05.jsp_ 데이터 송수신 실습 05
+#### 5.10.16.2. Receive05.jsp_ 데이터 송수신 실습 05
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -2442,12 +2442,12 @@ function formChange(obj)
 ```
 
 
-### 5.9.17. [이전 페이지(SendAndReceive06.jsp -> 자기자신)로부터 넘어온 데이터 수신]
+### 5.10.17. [이전 페이지(SendAndReceive06.jsp -> 자기자신)로부터 넘어온 데이터 수신]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/3939aa38-80c5-474a-9d7e-0363ee7afb0d)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/292e7bb3-7839-4ee2-951a-edec2955f02f)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/5b7feaf6-d22c-46a8-b96f-6d498e95b710)
 
-#### 5.9.17.1. SendAndReceive06.jsp_데이터 송수신 실습 06
+#### 5.10.17.1. SendAndReceive06.jsp_데이터 송수신 실습 06
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -2564,42 +2564,781 @@ function formChange(obj)
 </html>
 ```
 
-### 5.9.18. []
+### 5.10.18. SendAndReceive07_1.html_데이터 송수신 실습 07_달력을 출력하는 JSP 페이지
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/c48a18f7-e5e1-47dc-8777-be65e64c6285)
 
-#### 5.9.18.1. .jsp_데이터 송수신 실습 02
+``` html
+<%@page import="java.util.Calendar"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 자기 자신 페이지(SendAndReceive07.jsp)로 부터 넘어온 데이터 수신
+	// -> year, month
+	String sYear = request.getParameter("year");
+	String sMonth = request.getParameter("month");
+ 
+	// Calendar 객체 생성
+	//java.util.Calendar cal = java.util.Calendar.getInstance();
+	Calendar cal = Calendar.getInstance();
+	
+	// 현재 년, 월, 일 확인
+	int nowYear = cal.get(Calendar.YEAR);			//-- 2023
+	int nowMonth = cal.get(Calendar.MONTH)+1;		//-- 12
+	int nowDay = cal.get(Calendar.DAY_OF_MONTH);	//-- 11
+	
+	// 표시할 달력의 년, 월 구성 -> 페이지 최초 요청을 감안한 코드
+	int selectYear = nowYear;
+	int selectMonth = nowMonth;
+	
+	// 페이지에 대한 요청이 최초 요청이 아닐 경우
+	// Line 6~7 을 통해 수신한 데이터로 표시할 달력의 년,월 구성
+	if(sYear != null || sMonth != null)
+	{
+		selectYear = Integer.parseInt(sYear);
+		selectMonth = Integer.parseInt(sMonth);
+	}
+	
+	// 테스트
+	//out.print("<h1>selectYear: " + selectYear + "</h1>");
+	//out.print("<h1>selectMonth: " + selectMonth + "</h1>");
+	
+	// 확인한 날짜로 년도 select option 구성
+	// <option value="2013">2013</option>
+	//						 :
+	// <option value="2023" selected="selected">2023</option>
+	// <option value="2033">2033</option>
+	
+	String yOptions = "";
+	for(int year=(selectYear-10); year<=(selectYear+10); year++)	// 2012 ~2033
+	{
+		// 관찰1
+		// "<option value="+2013+">"+2013+"</option>"
+		// "<option value=2013>2013</option>"
+		//yOptions += "<option value='"+year+"'>"+year+"</option>";
+		
+		// 관찰2
+		//if(year==nowYear)
+		//	yOptions += "<option value='"+year+"' selected='selected'>"+year+"</option>";
+		//else
+		//	yOptions += "<option value='"+year+"'>"+year+"</option>";
+		
+		// 상황1. 페이지 최초 요청일 때		-> sYear는 null		/ 현재 년도와 옵션이 같을 때 -> selected(O)
+		// 상황2. 페이지 최초 요청이 아닐 때-> sYear는 null 아님/ 선택 년도와 옵션이 같을 때 -> selected(O)
+		// 상황3. 나머지
+		// **오늘 날짜,오늘 년월을 표시할 수 있도록 구성**
+		if (sYear==null && year==nowYear)
+			yOptions +="<option value='" + year +"' selected='selected'>"+ year + "</option>";
+		else if (sYear!=null && year==Integer.parseInt(sYear))
+			yOptions +="<option value='" + year +"' selected='selected'>"+ year + "</option>";
+		else
+			yOptions += "<option value='"+year+"'>"+year+"</option>";
+		
+	}
+	
+	// --------------------------------------------------------------------------------
+	
+	// 확인한 날짜로 월 select option 구성
+	//<option vlaue="1">1</option>
+	//				  :
+	//<option vlaue="12" selected="selected">12</option>
+	
+	String mOptions="";
+	for(int month=1; month<=12; month++)
+	{
+		// 관찰1
+		//mOptions += "<option vlaue='" + month + "'>" + month + "</option>";
+		
+		// 관찰2
+		//if(month==nowMonth)
+		//	mOptions += "<option vlaue='" + month + "' selected='selected'>" + month + "</option>";
+		//else
+		//	mOptions += "<option vlaue='" + month + "'>" + month + "</option>";
+		
+		// 상황1. 페이지 최초 요청일 때	   -> sMonth는 null		/ 현재 월과 옵션이 같을 때 -> selected(O)
+		// 상황2. 페이지 최초 요청 아닐 때 -> sMonth는 null 아님/ 현재 월과 옵션이 같을 때 -> selected(O)
+		// 상황3. 나머지
+		
+		if(sMonth==null && month==nowMonth)
+			mOptions += "<option vlaue='" + month + "' selected='selected'>" + month + "</option>";
+		else if (sMonth!=null && month==Integer.parseInt(sMonth))
+			mOptions += "<option vlaue='" + month + "' selected='selected'>" + month + "</option>";
+		else
+			mOptions += "<option vlaue='" + month + "'>" + month + "</option>";
+	}
+	
+	// 그려야 할 달력의 1일이 무슨 요일인지 확인 필요
+	// (만년 달력)
+	//	각자~!!!
+	
+	// --------------------------------------------------------------------------------
+	
+	String calendar = "";
+	
+	// 0단계. 윤년
+	// 각 달의 마지막 날짜 배열 구성
+	int[] months = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	//			   1   2   3   4   5   6   7   8   9  10  11  12
+	
+	// 윤년인지 평년인지 확인
+	if(selectYear%4==0 && selectYear%100!=0 || selectYear%1400==0)
+		months[1] = 29;
+	
+	int nalsu=0;
+	
+	// 1단계. 현재 년도 -> 입력받은 년도 이전 년도까지의 날 수 계산
+	nalsu = (selectYear-1)*365 + (selectYear-1)/4 - (selectYear-1)/100 + (selectYear-1)/400;
+	
+	// 2단계. 현재 월 -> 입력받은 월의 이전 월까지 날 수 추가
+	//int day=0;
+	for(int i=0; i<(selectMonth-1); i++)
+	{
+		nalsu +=months[i];
+	}
+	
+	nalsu ++;	// + 1
+	
+	// 3단계. 해당 년-해당 월의 첫날 요일 구하기
+	String[] weekNames = {"일","월","화","수","목","금","토"};
+	int week = nalsu%7;
+	
+	//System.out.println(week);
+	
+	// 4단계. 해당 년-해당 월 마지막 날짜 구하기
+	int lastDay = months[selectMonth-1];
+	
+	// 달력 그리기 --------------------------------------------------------------------------------
+ 
+	// 5단계. 해당 년-해당 월 기준 달력구성(출력, 그리기)
+	String calStr = "";
+	//calStr = "<table border='1'>";
+	calStr = "<table>";
+	
+	// 요일 이름 발생
+	calStr += "<tr>";
+	for(int i=0; i<weekNames.length; i++)
+	{
+		if(i==0)	 // -- 일요일
+			calStr += "<th style='color:red;'>" + weekNames[i] + "</th>";
+		else if(i==6)//-- 토요일
+			calStr += "<th style='color:blue;'>" + weekNames[i] + "</th>";
+		else		//-- 평일
+			calStr += "<th>" + weekNames[i] + "</th>";
+	}
+	calStr += "</tr>";
+	
+	// 빈 칸 공백 td 발생
+	calStr += "<tr>";
+	for(int i=1; i<=week; i++)
+	{
+		calStr += "<td></td>";
+		
+	}
+	
+	// 날짜 td 발생
+	for(int i=1; i<=lastDay; i++)
+	{
+		week++;		//-- 날짜가 하루씩 찍힐 때 마다(구성이 이루어질 때 마다)
+					//-- 요일도 함께 1씩 증가할 수 있도록 처리
+					
+		//calStr += "<td>"+ i +"</td>";
+		
+		if(selectYear==nowYear && selectMonth==nowMonth && i==nowDay && week%7==0)	// 토요일인 오늘
+			calStr += "<td class='nowSat'>"+ i +"</td>";
+		else if(selectYear==nowYear && selectMonth==nowMonth && i==nowDay && week%7==1)	// 일요일인 오늘
+			calStr += "<td class='nowSun'>"+ i +"</td>";
+		else if(selectYear==nowYear && selectMonth==nowMonth && i==nowDay)	// 평일인 오늘
+			calStr += "<td class='now'>"+ i +"</td>";
+		else if(week%7==0)	// 오늘이 아닌 토요일
+			calStr += "<td class='sat'>"+ i +"</td>";
+		else if(week%7==1)	// 오늘이 아닌 일요일
+			calStr += "<td class='sun'>"+ i +"</td>";
+		else	// 오늘이 아닌 평일
+			calStr += "<td>"+ i +"</td>";
+			
+		if(week%7==0)
+			calStr += "</tr><tr>";	
+			
+				
+	}
+	
+	// 빈 칸 공백 td 발생
+	for(int i=0; i<=week; i++,week++)
+	{
+		if(week%7==0)
+			break;
+		
+		calStr += "<td></td>";
+	}
+	
+	if(week%7!=0)
+		calStr += "</tr>";
+	
+	
+	
+	calStr += "</table>";				//-- end table
+ 
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SendAndReceive07.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	td{text-align: right;}
+	td.sun {color: red;}
+	td.sat {color: blue;}
+	td.now {background-color: #aef7f7; font-weight:bold;} /* 평일인 오늘 */
+	td.nowSat {background-color: #aef7f7; font-weight: bold; color: blue;} /* 토요일인 오늘 */
+	td.nowSat {background-color: #aef7f7; font-weight: bold; color: red;} /* 일요일인 오늘 */
+</style>
+ 
+</head>
+<body class="section">
+<%-- <%=nowYear %>
+<%=nowMonth %>
+<%=nowDay %> --%>
+<!-- 
+	○ 데이터 송수신 실습07
+	
+		- 달력을 출력하는 JSP 페이지를 구성한다.
+		- 페이지 레이아웃은 연도와 월을 입력받아 화면에 출력해주는 형태의 페이지로 구성한다.
+		- 단, submit 버튼 없이 이벤트 처리할 수 있도록 한다.
+		- 전송한 내용을 스스로 수신해서 출력해주는 형태의 페이지로 구성한다.
+		- 연도 선택 기본 구성은 현재 연도를 기준으로 이전 10년, 이후 10년 으로 구성한다.
+		(기본적으로 만년 달력 형태로 구성하는데 현재의 연, 월은 달력 객체로부터 확인할 수 있도록 한다.)
+		- 월 선택 기본 구성은 1월 부터 12월 까지로 구성한다.
+		
+		  2013
+			:
+		[ 2023 ▼ ] 년 [ 12 ▼ ] 월	-> 현재 년도, 현재 월
+			:
+		  2033
+		  
+		 ----------------------------
+		 ----------------------------
+		 ----------------------------
+		 ----------------------------
+		 
+		- 연도 select 나 월 select 의 내용이 변화되면 해당 연 월의 달력을 출력해주는 형태의 페이지로 구성한다.
+		- 사용자 최초 요청 주소는
+		http://localhost:3306/WebApp07/SendAndReceive07.jsp
+		
+	○ SendAndReceive07.jsp
+	
+ -->
+ 
+<div>
+	<h1>데이터 송수신 실습 07</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<div class="input_box" style="display: inline-block;">
+		<form action="" method="get">
+		<!-- <form action="" method="post"> -->
+			<select id="year" name="year" onchange="formCalendar(this.form)">
+				<!-- <option value="2013">2013</option>
+				<option value="2014">2014</option>
+				<option value="2015">2015</option>
+				<option value="2016">2016</option>
+				<option value="2017">2017</option>
+				<option value="2018">2018</option>
+				<option value="2019">2019</option>
+				<option value="2020">2020</option>
+				<option value="2021">2021</option>
+				<option value="2022">2022</option>
+				<option value="2023" selected="selected">2023</option>
+				<option value="2024">2024</option>
+				<option value="2025">2025</option>
+				<option value="2026">2026</option>
+				<option value="2027">2027</option>
+				<option value="2028">2028</option>
+				<option value="2029">2029</option>
+				<option value="2030">2030</option>
+				<option value="2031">2031</option>
+				<option value="2032">2032</option>
+				<option value="2033">2033</option> -->
+				<%=yOptions %>
+			</select> 년
+			
+			<select id="month" name="month" onchange="formCalendar(this.form)">
+				<!-- <option vlaue="1">1</option>
+				<option vlaue="2">2</option>
+				<option vlaue="3">3</option>
+				<option vlaue="4">4</option>
+				<option vlaue="5">5</option>
+				<option vlaue="6">6</option>
+				<option vlaue="7">7</option>
+				<option vlaue="8">8</option>
+				<option vlaue="9">9</option>
+				<option vlaue="10">10</option>
+				<option vlaue="11">11</option>
+				<option vlaue="12" selected="selected">12</option> -->
+				<%=mOptions %>
+			</select> 월
+		</form>
+	</div>
+	
+	<div class="result_box">
+		<!-- 달력을 그리게 될 지점 -->
+		<%=calStr %>
+	</div>
+	
+</div>
+ 
+<script type="text/javascript">
+function formCalendar(obj)
+{
+	// 유효성 검사가 필요한 경우 삽입할 수 있는 영역~!!!
+	
+	// ...
+	
+	obj.submit();
+}
+</script>
+ 
+</body>
+</html>
+```
+
+### 5.10.19. SendAndReceive08.jsp_데이터 송수신 실습 08_달력을 출력하는 JSP 페이지
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/5d37885b-3129-458b-b159-773f37bdcdda)
+
+``` html
+<%@page import="java.util.Calendar"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+ 
+	// Calender 객체 생성
+	Calendar cal = Calendar.getInstance();
+	
+	// 오늘 날짜 가져오기
+	int nowYear = cal.get(Calendar.YEAR);
+	int nowMonth = cal.get(Calendar.MONTH)+1;
+	//int nowDay = cal.get(Calendar.DAY_OF_MONTH);
+	
+	// 이전 페이지(SendAndReceive08)로 부터 넘어온 데이터 수신
+	// -> year, month
+	String strYear = request.getParameter("year");
+	String strMonth = request.getParameter("month");
+	
+	
+	// 표시할 달력의 년, 월
+	
+	int year = nowYear;
+	int month = nowMonth;
+	
+	if(strYear != null)
+		year = Integer.parseInt(strYear);
+	if(strMonth != null)
+		month = Integer.parseInt(strMonth);
+	
+	// 이전과 이후 구성
+	int preYear = year;
+	int preMonth = month-1;
+	
+	if(preMonth < 1)
+	{
+		preYear = year-1;
+		preMonth = 12;
+	}
+	
+	int nextYear = year;
+	int nextMonth = month+1;
+	
+	if(nextMonth > 12)
+	{
+		nextYear = year+1;
+		nextMonth = 1;
+	}
+	
+	
+	// ---------------------------- calender
+	String calendar = "";
+	
+	// 0단계. 윤년
+	// 각 달의 마지막 날짜 배열 구성
+	int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	//			   1   2   3   4   5   6   7   8   9  10  11  12
+	
+	// 윤년인지 평년인지 확인
+	if(year%4==0 && year%100!=0 || year%1400==0)
+		days[1] = 29;
+	
+	//System.out.println(lastDays[1]);
+	
+	// 1단계. 총 날짜수
+	int total=0;
+	total = (year-1)*365 + (year-1)/4 - (year-1)/100 + (year-1)/400;
+	//total = (nowYear-1)*365 + ((nowYear-1)/4) - ((nowYear-1)/100) + ((nowYear-1)/400);
+	
+	// 2단계. 해당 년-1월-1일 ~ 해당 월-1일 까지 총 날짜수 구해서 1 더하기
+	//int day=0;
+	for(int i=0; i<(month-1); i++)
+	{
+		total +=days[i];
+	}
+	total +=1;
+	
+	// 3단계. 해당 년-해당 월의 첫날 요일 구하기
+	String[] weeks = {"일","월","화","수","목","금","토","일"};
+	int weekIdx = total%7;
+	//System.out.println(nowYear+"년"+nowMonth+"월"+":"+weeks[weekIdx]);
+	
+	// 4단계. 해당 년-해당 월 마지막 날짜 구하기
+	int lastDay = days[12-1];
+	//System.out.println(nowMonth);
+	
+	// 5단계. 해당 년-해당 월 기준 달력구성(출력, 그리기)
+	String tBody = "";
+	String td = "";
+	
+	for(int i=0;i<weekIdx;i++)
+	{
+		td += "<td></td>";
+	}
+	
+	int k=0;
+	for(k=1;k<=lastDay;k++)
+	{
+		td += "<td>"+k+"</td>";
+		
+		if((k+weekIdx)%7==0)
+		{
+			tBody += "<tr>"+td+"</tr>";
+			td = "";
+		}
+	}
+	
+	if(((weekIdx-1)+k)%7!=0)
+	{
+		for(int i=((weekIdx-1)+k)%7; i<7; i++)
+		{
+			td += "<td></td>";
+		}
+	}
+	tBody += "<tr>"+td+"</tr>";
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SendAndReceive08.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+<!-- 
+	○ 데이터 송수신 실습 08
+	
+	- 달력을 출력하는 JSP 페이지를 구성한다.
+	- 전송한 내용을 수신해서 출력해주는 형태의 단독 페이지로 구성한다.
+	- submit 버튼 없이 이벤트 처리를 한다.
+	
+	◀ 2023년 12월 ▶
+	
+	-------------------------
+	-------------------------
+	-------------------------
+	-------------------------
+	
+	- 『◀』 이나 『▶』 클릭 시
+		해당 년 월의 달력을 출력해주는 형태의 페이지로 구현한다.
+		
+	- 사용자 최초 요청 주소는
+	http://localhost:3306/WebApp07/SendAndReceive08.jsp 로 한다.
+	
+	○ SendAndReceive08.jsp
+ -->
+ 
+<div>
+	<h1>데이터 송수신 실습 08</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<div class="input_box" style="display: inline-block;">
+		<form action="" method="get">
+			<a href="SendAndReceive08.jsp?year=<%=preYear %>&month=<%=preMonth %>">◀</a>&nbsp;&nbsp;
+			<%-- <%=nowYear %>년 --%>
+			<%=year %>년
+			<%-- <%=nowMonth %>월 --%>
+			<%=month %>월
+			&nbsp;&nbsp;<a href="SendAndReceive08.jsp?year=<%=nextYear %>&month=<%=nextMonth %>">▶</a>
+		</form>
+	</div>
+	<div class="result_box">
+		<table id="calendar" name="calendar">
+			<thead>
+				<tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>
+			</thead>
+			<tbody>			
+				<%=tBody %>
+			</tbody>
+		</table>
+	</div>
+</div>
+ 
+<script type="text/javascript">
+/* function changeCalendar(obj, btn)
+{
+	if(btn == 1)
+	{
+		//console.log("왼쪽");
+		obj.submit();
+	}else if(btn==2)
+	{
+		obj.submit();
+		//console.log("오른쪽");
+		
+	}else
+	{
+		
+	}
+} */
+ 
+</script>
+ 
+</body>
+</html>
+```
+
+
+### 5.10.20. [포워딩과 리다이렉트]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/898915c5-e3c4-456a-a058-814ef4770a10)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/414dd208-f23d-4e54-a77d-abb840d60f79)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/1bd56ba2-7cdf-4179-9693-77d961b51bd2)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/9c11cefc-ec7c-4459-a0c2-a0b2b4ebf026)
+
+#### 5.10.20.1. Send09.jsp_포워딩과 리다이렉트
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Send09.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 09</h1>
+	<hr>
+</div>
+ 
+<!-- Send09.jsp -> Send09_re.jsp	-> Receive09.jsp -->
+<!-- Send09.jsp -> Send09_for.jsp	-> Receive09.jsp -->
+ 
+<!-- 사용자 최초 요청 페이지 -->
+<!-- http://localhost:3306/WebApp07/Send09.jsp -->
+ 
+<div>
+	<h2>포워딩 및 리다이렉트</h2>
+</div>
+ 
+<div class="layout">
+	<!-- action 처리 에 대한 분기~!!! -->
+	<form action="" method="post" id="testForm">
+		<div class="input_box" style="display:inline-block;">
+			이름
+			<input type="text" name="userName" class="txt">
+		</div>
+ 
+		<div class="btn_box">
+			<button type="submit" class="btn" style="width: 150px;" onclick="this.form.action='Send09_re.jsp'">리다이렉트</button>
+			<button type="submit" class="btn" style="width: 150px;" onclick="this.form.action='Send09_for.jsp'">포워드</button>
+			
+			
+		</div>		
+	</form>
+</div>
+ 
+</body>
+</html>
+```
+#### 5.10.20.2. Send09_re.jsp_포워딩과 리다이렉트
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// ①이전 페이지(Send-9.jsp)로 부터 넘어온 데이터 수신
+	// -> userName
+	
+	request.setCharacterEncoding("UTF-8");
+ 
+	String userName = request.getParameter("userName");
+	
+	// ② 이페이지에서 수행한 추가 작업
+	request.setAttribute("message", "반갑습니다.");
+	//-- request 객체의 key(message)의 값 안에
+	//	"반갑습니다."를 value로 넣는 작업 수행
+	
+	// ※
+	// ③ 리다이렉트
+	response.sendRedirect("Receive09.jsp");
+%>
+ 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Send09_re.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 09</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<h2>리다이렉트</h2>
+</div>
+ 
+<div>
+	<!-- <p>이름: 홍길동</p> -->
+	<p>이름: <%=userName %></p>
+</div>
+ 
+</body>
+</html>
+```
+#### 5.10.20.3. Send09_for.jsp_포워딩과 리다이렉트
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// ① 이전 페이지(Send09.jsp)로 부터 넘어온 데이터 수신
+	// -> userName
+	request.setCharacterEncoding("UTF-8");
+	
+	String userName = request.getParameter("userName");
+	
+	// ② 이 페이지에서 수행한 추가 작업
+	request.setAttribute("message", "안녕하세요.");
+	//-- request 객체의 키 값(message)에 값을 넣는 작업
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Send09_for.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 09</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<h2>리다이렉트</h2>
+</div>
+ 
+<div>
+	<!-- <p>이름: 홍길동</p> -->
+	<p>이름: <%=userName %></p>
+</div>
+ 
+<!-- ③ 포워드 -->
+<jsp:forward page="Receive09.jsp"></jsp:forward>
+<!-- **포워딩 처리를 위한 태그** -->
+ 
+</body>
+</html>
+```
+#### 5.10.20.4. Receive09.jsp_포워딩과 리다이렉트
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지로(Send09_re.jsp)또는 Send09_for.jsp) 부터 넘어온 데이터 수신
+	// -> userName, message
+ 
+	request.setCharacterEncoding("UTF-8");
+	
+	String userName = request.getParameter("userName");
+	
+	String message = (String)request.getAttribute("message"); //**리턴 오브젝트형**
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Receive09.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 09</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<h2>최종 수신 페이지(Receive09.jsp)</h2>
+</div>
+ 
+<div>
+	<p>이름: <%=userName %></p>
+	<p>내용: <%=message %></p>
+</div>
+</body>
+</html>
+```
+
+### 5.10.21. []
+
+#### 5.10.21.1. .jsp_데이터 송수신 실습 02
 ``` html
 ```
-#### 5.9.18.2. .jsp_데이터 송수신 실습 02
+#### 5.10.21.2. .jsp_데이터 송수신 실습 02
 ``` html
 ```
 
-### 5.9.19. []
+### 5.10.22. []
 
-#### 5.9.19.1. .jsp_데이터 송수신 실습 02
+#### 5.10.22.1. .jsp_데이터 송수신 실습 02
 ``` html
 ```
-#### 5.9.19.2. .jsp_데이터 송수신 실습 02
+#### 5.10.22.2. .jsp_데이터 송수신 실습 02
 ``` html
 ```
 
-### 5.9.20. []
+### 5.10.23. []
 
-#### 5.9.20.1. .jsp_데이터 송수신 실습 02
+#### 5.10.23.1. .jsp_데이터 송수신 실습 02
 ``` html
 ```
-#### 5.9.20.2. .jsp_데이터 송수신 실습 02
+#### 5.10.23.2. .jsp_데이터 송수신 실습 02
+``` html
+```
+
+### 5.10.24. []
+
+#### 5.10.24.1. .jsp_데이터 송수신 실습 02
+``` html
+```
+#### 5.10.24.2. .jsp_데이터 송수신 실습 02
 ``` html
 ```
 ------------------------------------------------
 
 
 
-### 5.9.. []
+### 5.10.. []
 
-#### 5.9..1. .jsp
+#### 5.10..1. .jsp
 ``` html
 ```
-#### 5.9..2. .jsp
+#### 5.10..2. .jsp
 ``` html
 ```
 
