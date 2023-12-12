@@ -3332,39 +3332,1107 @@ function formCalendar(obj)
 </html>
 ```
 
-### 5.10.21. []
+### 5.10.21. [■ 포워딩 / 리다이렉트 관련 중요한 실습(forward 처리) ■]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/fc0ecc99-4a9c-466f-a803-ebc2e6f570dc)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/ccef45a1-a7ea-4ea4-858a-96cbbfaa966a)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/5660ea3f-37fb-44ce-a4f0-5140370d9cae)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/4e34682b-c20d-4f54-ab2f-492406ae0ceb)
 
-#### 5.10.21.1. .jsp_데이터 송수신 실습 02
+#### 5.10.21.1. Send10.jsp_사용자 최초 요청 페이지
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Send10.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 10</h1>
+	<hr>
+</div>
+ 
+<!-- ■■■ 포워딩 / 리다이렉트 관련 중요한 실습 ■■■ -->
+ 
+<!-- ① 사용자 최초 요청 페이지 -->
+<!-- 	사칙 연산 수행을 위한 정수 입력 페이지 구성 -->
+<!-- 	연산자를 함께 입력받을 수 있도록 처리 -->
+<!-- 	정수1/ 정수2/ 연산자 -->
+<!-- 	http://localhost:3306/WebApp07/Send10.jsp -->
+ 
+<!-- ② 연산 전용 페이지 -->
+<!-- 	스크립트 코드만 존재 (+ jsp:forward 액션 태그) -->
+<!-- 	-> 추후 이 코드를 독립적인 java로 분리 -> Servlet으로 구성할 예정 -->
+<!-- 	http://localhost:3306/WebApp07/Forward10.jsp -->
+ 
+<!-- ③ 최종 결과 출력 페이지 -->
+<!-- 	연산 전용 페이지에서 처리한 결과를 넘겨받아 클라이언트와 대면할 페이지로 구성 -->
+<!-- 	-> 추후 이 페이지는 jsp view 페이지의 역할을 수행할 예정 -->
+<!-- 	http://localhost:336/WebApp07/Receive10.jsp -->
+ 
+<div class="layout">
+	<!-- JSP 액션 태그 활용하여 forward 처리하는 페이지로...  -->
+	<!-- <form action="Forward10.jsp" method="post"> -->
+ 
+	<!-- JSP 액션 태그 없이 forward 처리하는 페이지로 ... -->
+	<form action="Forward10_1.jsp" method="post">
+		<div>
+			정수1
+			<input type="text" name="num1" class="txt" style="width: 60px;">
+			
+			<select name="calResult">
+				<option selected="selected">연산선택</option>
+				<option value="1">더하기</option>
+				<option value="2">빼기</option>
+				<option value="3">곱하기</option>
+				<option value="4">나누기</option>
+			</select>
+			정수2
+			<input type="text" name="num2" class="txt" style="width: 60px;">
+			
+			<button type="submit" class="btn control">확인</button>
+		</div>
+	</form>
+</div>
+ 
+</body>
+</html>
+```
+#### 5.10.21.2. Forward10.jsp_연산 전용 페이지
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// Forward10.jsp
+	
+	// 이전 페이지(Send10.jsp)로 부터 넘어온 데이터 수신
+	// -> num1, calResult, num2
+	
+	String num1Str = request.getParameter("num1");
+	String num2Str = request.getParameter("num2");
+	String calResult = request.getParameter("calResult");
+	
+	int num1 = 0;
+	int num2 = 0;
+	String result = "";
+	
+	try
+	{
+		num1 = Integer.parseInt(num1Str);
+		num2 = Integer.parseInt(num2Str);
+		
+		if(calResult.equals("1"))		// 더하기
+			result = String.format("%d + %d = %d", num1, num2, (num1+num2));
+		else if (calResult.equals("2")) // 빼기
+			result = String.format("%d - %d = %d", num1, num2, (num1-num2));
+		else if (calResult.equals("3"))	// 곱하기
+			result = String.format("%d * %d = %d", num1, num2, (num1*num2));
+		else if (calResult.equals("4"))	// 나누기
+			result = String.format("%d / %d = %.1f", num1, num2, (num1/num2));
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	// 요청에 내용 추가
+	request.setAttribute("resultStr", result);
+	// **파라미터값에는 요청한 내용 뿐 아니라 get 한 모든 내용 처리 가능**
+	// **맵 자료구조. 객체의 형태로 가져옴**
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Forward10.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<!-- JSP 액션 태그를 활용한 forward 처리 -->
+<jsp:forward page="Receive10.jsp"></jsp:forward>
+ 
+</body>
+</html>
+```
+#### 5.10.21.3. Forward10_1.jsp_연산 전용 페이지
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>	<!-- **JSP라는 정체성. 지우면 안됨** -->
+<%
+	// Forward10.jsp
+	
+	// 이전 페이지(Send10.jsp)로 부터 넘어온 데이터 수신
+	// -> num1, calResult, num2
+	
+	String num1Str = request.getParameter("num1");
+	String num2Str = request.getParameter("num2");
+	String calResult = request.getParameter("calResult");
+	
+	int num1 = 0;
+	int num2 = 0;
+	String result = "";
+	
+	try
+	{
+		num1 = Integer.parseInt(num1Str);
+		num2 = Integer.parseInt(num2Str);
+		
+		if(calResult.equals("1"))		// 더하기
+			result = String.format("%d + %d = %d", num1, num2, (num1+num2));
+		else if (calResult.equals("2")) // 빼기
+			result = String.format("%d - %d = %d", num1, num2, (num1-num2));
+		else if (calResult.equals("3"))	// 곱하기
+			result = String.format("%d * %d = %d", num1, num2, (num1*num2));
+		else if (calResult.equals("4"))	// 나누기
+			result = String.format("%d / %d = %.1f", num1, num2, (num1/num2));
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	// 요청에 내용 추가
+	request.setAttribute("resultStr", result);
+	// **파라미터값에는 요청한 내용 뿐 아니라 get 한 모든 내용 처리 가능**
+	// **맵 자료구조. 객체의 형태로 가져옴**
+	
+	// check~!!!
+	RequestDispatcher dispatcher = request.getRequestDispatcher("Receive10.jsp");
+	dispatcher.forward(request,response);
+	
+	/* ==========================================================================
+	■■■ 『RequestDispatcher』 인터페이스 ■■■
+	// **서블릿 컨테이너가 쓰는 도구**
+	
+	※ 이 인터페이스는 『forward()』와 『include()』 만 있다.  
+	
+	※ 처리 과정 및 개념  
+	
+		일반적으로 HttpSevlet 을 상속받는 클래스... 서블릿  
+		
+		이렇게 작성된 클래스 내부에는  
+		실제 요청을 서비스 하는 『doGet()』과 『doPost()』 메소드가 정의되어 있으며 (service()메소드가 이들의 상위 메소드)  
+		
+		**SevletConatiner** 는 **『HttpSevlet』의 인스턴스를 생성**하고	**『init()』 메소드를 실행**해주고,  
+		이 메소드에 의해 매핑된 URL에 (페이지 요청 방식에 따라) **doGet()과 doPost() 중 선택하여 메소드를 호출**해주고(실행시켜주고)  
+		Container 가 종료될 때 **『distroy()』 메소드를 호출**해주고, 관련된 처리 과정이 마무리 된다.  
+		
+		즉, SevletConatiner 가  
+		inint()		-> 처음  
+		seveice()	-> 중간중간 요청이 있을 때마다  
+		destroy()	-> 마지막  
+		메소드를 호출한다.(절대 우리가 직접 호출하는 것이 아니다~!!!)  
+		
+		결국 『HttpSevlet』은 하나의 인스턴스만 생성되어 멀티 스레딩으로 돌아가게 된다.  
+		// **스레드: 하나의 작업단위,**   
+		// **멀티스레드: 처음에 연사람A, 다음사람이 열고 수정B, A가 닫으면 순서가 꼬일 수 있으므로 규칙을 만들어 무결성을 해치지 않는게 중요**  
+		// **ㄴ 멀티 스레드 세이프티 vs. 멀티 스레드 언세이프티**		
+		
+		이렇게 구성되는 『HttpSevlet』의 상속된 클래스의 인스턴스는 스레드에 안전하게 설계(스레드 세이프티)되어야 하고  
+		따라서 스레드에 안전하게 설계되지 않은 경우 상위 클래스를 마구 접근하게 되어 에러가 발생할 수 밖에 없다.  
+		
+		이와 같은 이유로 환경 설정이나 J2EE 서비스에 관한 내용은 『ServletContext』 에서 할 수 있게 된다.  
+		(※ ServeletContext : 서블릿에 대한 환경, 상태 등을 설정할 수 있는 객체)  
+		이 『ServeletContext』는 『getServletContext()』로만 받을 수 있다.  
+		그렇기 때문에 이 『getServletContext()』는 동기화가 제대로 구현되어 있을 것이라고 예측할 수 있다.  
+		그 이유는 멀티 스레드가 안전하게 설계(세이프티)되어 있어야  
+		우리가 『ServeltContext』의 『setAttribute()』나 『getAttribute()』를 스레드 걱정없이 마음대로 읽고 쓸 수 있기 때문이다.  
+		
+		『SevletContext』의 또 다른 커다란 기능 중 하나는  
+		다른 서블릿 인스턴스를 가져올 수 있다거나 서블릿 환경 설정값을 가져올 수 있는 기능이다.  
+		
+		**『RequestDispatcher』** 역시 그 기능 중의 하나이다.  
+		사전적인 의미로는... 요청을 제공하는 **도구**. 즉, 요청을 보내주는 **인터페이스**이다.  
+		
+		현재... 요청을 다른 서블릿(혹은 JSP)으로 보내야하는 상황.  
+		그런데, 위에 언급한 바와 같이 서블릿의 인스턴스는 하나만 생성되고 이것이 멀티 스레딩으로 돌아가고 있다.  
+		
+		그렇기 때문에 새로운 서블릿을 그 서블릿을 실행하는 거산으로는 안되고  
+		이미 돌아가고 있는 서블릿 인스턴스의 스레드를 하나 더 추가해야 한다.  
+		이것은 서블릿 개발자가 처리해야 할 영역을 벗어났기 때문에 이 일은 『Dispatcher』가 대신 수행해 준다는 것이다.  
+		
+		하지만 이 『Dispatcher』는  
+		『HttpServletRequest』,『HttpSevletResponse』를 생성해 줄 수 없다.  
+		그렇기 때문에 『Dispatcher』가 생성해준 새로운 서블릿 스레드를 실행시키기위해 『doGet()』이나 『doPost()』를 호출해야 한다.
+		
+		이와 같은 이유로 『dispatcher.forward(request, response);』구문을 통해 request 와 response 를 넘겨주는 것이다.
+		
+		
+	============================================================================= */
+	
+%>
+```
+
+#### 5.10.21.4. Receive10.jsp_최종 결과 출력 페이지
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지(Forward10.jsp)로 부터 넘어온 데이터 수신
+	// -> resultStr
+	
+	// **setAttribute 한 내용은 무조건 getAttribute 한다. 모든 것을 담을 수 있으므로 Object 형**
+	String result = (String)request.getAttribute("resultStr");	// 다운캐스팅
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Receive10.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 10</h1>
+	<hr>
+</div>
+ 
+<div>
+	<!-- <h2>연산 결과: 235</h2> -->
+	<h2>연산 결과: <%=result %></h2>
+</div>
+ 
+</body>
+</html>
+```
+
+### 5.10.22. [■ 포워딩 / 리다이렉트 관련 중요한 실습( redirect 처리)■]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/dd28973b-a568-48c6-81d9-3bd80616e9e5)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/ce1759df-397b-4488-a6b3-7b0cc16e38dc)
+
+#### 5.10.22.1. Send11.jps_사용자 최초 요청 페이지
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Send11.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 11</h1>
+	<hr>
+</div>
+ 
+<!-- ■■■ 포워딩 / 리다이렉트 관련 중요한 실습 ■■■ -->
+ 
+<!-- ① 사용자 최초 요청 페이지 -->
+<!-- 	사칙 연산 수행을 위한 정수 입력 페이지 구성 -->
+<!-- 	연산자를 함께 입력받을 수 있도록 처리 -->
+<!-- 	정수1/ 정수2/ 연산자 -->
+<!-- 	http://localhost:3306/WebApp07/Send11.jsp -->
+ 
+<!-- ② 연산 전용 페이지 -->
+<!-- 	스크립트 코드만 존재 (response.sendRedirect() 메소드 포함) -->
+<!-- 	-> 추후 이 코드를 독립적인 java로 분리 -> Servlet으로 구성할 예정 -->
+<!-- 	http://localhost:3306/WebApp07/Forward11.jsp -->
+ 
+<!-- ③ 최종 결과 출력 페이지 -->
+<!-- 	연산 전용 페이지에서 처리한 결과를 넘겨받아 클라이언트와 대면할 페이지로 구성 -->
+<!-- 	-> 추후 이 페이지는 jsp view 페이지의 역할을 수행할 예정 -->
+<!-- 	http://localhost:336/WebApp07/Receive11.jsp -->
+ 
+<div class="layout">
+ 
+	<!-- redirect 처리하는 페이지로 ... -->
+	<form action="Forward11.jsp" method="post">
+		<div>
+			정수1
+			<input type="text" name="num1" class="txt" style="width: 60px;">
+			
+			<select name="calResult">
+				<option selected="selected">연산선택</option>
+				<option value="1">더하기</option>
+				<option value="2">빼기</option>
+				<option value="3">곱하기</option>
+				<option value="4">나누기</option>
+			</select>
+			정수2
+			<input type="text" name="num2" class="txt" style="width: 60px;">
+			
+			<button type="submit" class="btn control">확인</button>
+		</div>
+	</form>
+</div>
+ 
+</body>
+</html>
+```
+#### 5.10.22.2. Forward11.js_연산 전용 페이지
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// Redirect11.jsp
+	
+	// 이전 페이지(Send11.jsp)로 부터 넘어온 데이터 수신
+	// 	-> num1, calResult, num2
+	int num1 = Integer.parseInt(request.getParameter("num1"));
+	int num2 = Integer.parseInt(request.getParameter("num2"));
+	String op = request.getParameter("calResult");
+	
+	// 연산 처리
+	String str ="";
+	if (op.equals("1"))
+		str += String.format("%d", (num1+num2));
+	else if(op.equals("2"))
+		str += String.format("%d", (num1-num2));
+	else if(op.equals("3"))
+		str += String.format("%d", (num1*num2));
+	else if(op.equals("4"))
+		str += String.format("%.1f", (num1/(double)num2));
+	
+	// check~!!!
+	// 사용자에게 요청할 페이지를 안내
+	//response.sendRedirect("Receive11.jsp");
+	
+	// check~!!!
+	// 결과 데이터 재전송 -> sendRedirect() 메소드 사용
+	// ※ response 객체의 중요 메소드 중 하나인 
+	// 『sendRedirect(String location)』: 지정된 URL(location)로 요청을 재전송한다.
+	//		즉, 사용자가 다시 해당 요청을 수행할 수 있도록 한내한다.
+	response.sendRedirect("Receive11.jsp?num1="+num1+"&num2="+num2+"&op="+op+"&str="+str);
+	//-- 클라이언트에 Receive11.jsp 페이지를 다시 요청할 수 있도록 안내~!!!
+	//	이에 더하여... get 방식의 요청 URL 구성을 통해 넘길 데이터 처리~!!!
+	
+%>
+```
+#### 5.10.22.3. Receive11.jsp_최종 결과 출력 페이지
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지(Redirect11.jsp)로 부터 넘어온 데이터와 수신
+	// 『Receive11.jsp?num1=27&num2=27&op=4&str1.0』와 같은 형태~!!! check~!!!
+	//-- 직접 Redirect11.jsp 로 부터 데이터를 넘겨받는 것이 아니라
+	//	클라이언트가 새로운 요청을 하는 과정에서 넘긴 값을 수신하게 되는 개념~!!! check~!!!
+	
+	String num1 = request.getParameter("num1");
+	String num2 = request.getParameter("num2");
+	String op = request.getParameter("op");
+	String str = request.getParameter("str");
+	
+	if(op.equals("1"))
+		op = "+";
+	else if(op.equals("2"))
+		op = "-";
+	else if(op.equals("3"))
+		op = "*";
+	else if(op.equals("4"))
+		op = "/";
+	
+	String strResult = String.format("%s %s %s = %s", num1, op, num2, str);
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Receive11.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터 송수신 실습 11</h1>
+	<hr>
+</div>
+ 
+<div>
+	<!-- <h2>연산 결과: 223</h2> -->
+	<h2>연산 결과: <%=strResult %></h2>
+</div>
+ 
+</body>
+</html>
+```
+
+### 5.10.23. Test001.jsp_ 데이터베이스 연결 실습
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/9b0b41bb-119b-4641-b965-701c86b29b84)
+``` html
+<%@page import="java.sql.Connection"%>
+<%@page import="com.util.DBConn"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	String str = "";
+
+	try
+	{
+		Connection conn = DBConn.getConnection();
+		
+		if(conn != null)
+			str += "데이터베이스 연결 성공~!!!";
+	}
+	catch(Exception e)
+	{
+		//System.out.println(e.toString());
+		
+		str += e.toString();
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test001.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>데이터베이스 연결 실습</h1>
+	<hr>
+</div>
+
+<div>
+	<!-- <h2>확인결과 : 데이터베이스 연결 성공~!!!</h2> -->
+	<h2>확인결과 : <%=str %></h2>
+</div>
+
+</body>
+</html>
+```
+
+### 5.10.24. [데이터베이스 연결 및 데이터 처리]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/29ed8371-f396-4237-b8d1-c83804bb4157)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/fa9bc74c-b379-4deb-b5dc-c061b3533799)
+
+#### 5.10.24.1. WebApp08_scott.sql
+``` sql
+SELECT USER
+FROM DUAL;
+--==>> SCOTT
+
+SELECT *
+FROM TAB;
+
+
+-- 휴지통 비우기
+PURGE RECYCLEBIN;
+--==>> RECYCLEBIN이(가) 비워졌습니다.
+
+SELECT *
+FROM TAB;
+
+-- 기존 테이블 제거
+DROP TABLE TBL_MEMBER;
+--==>> Table TBL_MEMBER이(가) 삭제되었습니다.
+
+--------------------------------------------------------------------------------
+
+--○ 실습 테이블 생성(TBL_MEMVER)
+CREATE TABLE TBL_MEMBER
+( SID NUMBER
+, NAME  VARCHAR2(30)
+, TEL   VARCHAR2(40)
+, CONSTRAINT MEMBER_SID_PK PRIMARY KEY(SID)
+);
+--==>> Table TBL_MEMEBER이(가) 생성되었습니다.
+
+
+--○ 시퀀스 생성 (MEMBERSEQ)
+CREATE SEQUENCE MEMBERSEQ
+NOCACHE;
+--==>> Sequence MEMBERSEQ이(가) 생성되었습니다.
+
+
+--○ 데이터 입력 쿼리문 구성
+INSERT INTO TBL_MEMBER(SID,NAME, TEL)
+VALUES(MEMBERSEQ.NEXTVAL, '문정환', '010-1111-1111');
+--> 한줄구성
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '문정환', '010-1111-1111')
+;
+
+--○ 샘플 데이터 추가 입력
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '정한울', '010-2222-2222')
+;
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '최혜인', '010-3333-3333')
+;
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '길현욱', '010-4444-4444')
+;
+
+
+--○ 테이블 전체 조회 쿼리문 구성(리스트 확인)
+SELECT SID, NAME, TEL
+FROM TBL_MEMBER
+ORDER BY SID;
+--> 한줄 구성
+SELECT SID, NAME, TEL FROM TBL_MEMBER ORDER BY SID
+;
+--==>>
+/*
+1	문정환	010-1111-1111
+2	정한울	010-2222-2222
+3	최혜인	010-3333-3333
+4	길현욱	010-4444-4444
+*/
+
+--○ 인원 수 확인 쿼리문 구성
+SELECT COUNT(*) AS COUNT
+FROM TBL_MEMBER;
+--> 한줄 구성
+SELECT COUNT(*) AS COUNT FROM TBL_MEMBER
+;
+--==>> 4
+
+--○ 커밋
+COMMIT;
+--==>> 커밋 완료.
+```
+
+#### 5.10.24.2. Test002.jsp_데이터베이스 연결 및 데이터 처리
+``` html
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="com.util.DBConn"%>
+<%@page import="java.sql.Connection"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	/* **현재는 String을 쓰지만, 나중에는 String Buffer나, Stringbuilder 써야함** */
+
+	// 결과값 변수
+	String str ="";
+
+	// 데이터베이스 연결
+	Connection conn = DBConn.getConnection();
+	
+	// 쿼리문 준비(select)
+	String sql = "SELECT SID, NAME, TEL FROM TBL_MEMBER ORDER BY SID";
+	
+	// 작업 객체 실행 및 쿼리문 실행
+	Statement stmt = conn.createStatement();
+	
+	ResultSet rs  = stmt.executeQuery(sql);
+	
+	// 결과 ResultSet 에 대한 처리 -> 반복문 구성
+	str += "<table class ='table' style='width: 100%;'>";
+	str += "<tr>";
+	str += "<th id='numTitle'>번호</th>";
+	str += "<th id='nameTitle'>이름</th>";
+	str += "<th id='telTitle'>전화번호</th>";
+	str += "</tr>";
+	
+	while(rs.next())
+	{
+		str += "<tr>";
+		str += "<td>"+rs.getString("SID")+"</td>";
+		str += "<td>"+rs.getString("NAME")+"</td>";
+		str += "<td>"+rs.getString("TEL")+"</td>";
+		str += "</tr>";
+			
+	}
+	str += "</table>";
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test002.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	input {width: 200px;}
+	button {width: 208px; height: 50px; font-weight: bold;}
+	#numTitle {width: 50px;}
+	#nameTitle {width: 100px;}
+	#telTitle {width: 160px;}
+	.errMsg {font-weight: small; color: red;}
+	.table tr:not(first-child){text-align: center;}
+</style>
+
+</head>
+<body class="section">
+
+<script type="text/javascript">
+// 필수 입력 항목 (-> 이름)에 대한 기본적인 입력 화면
+function formCheck()
+{
+	//alert('함수 호출~!!!');
+	
+	var uName = document.getElementById("userName");
+	var uErr = document.getElementBId("nameErr");
+	
+	nameErr.style.display = "none";
+	
+	if(uName.value=="")
+	{
+		nameErr.style.display="inline";
+		return false;
+	}
+	
+	return false;
+}
+</script>
+
+<div>
+	<h1>데이터베이스 연결 및 데이터 처리</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<!-- 데이터 입력 -->
+	<form class="_box" action="MemberInsert.jsp" method="post" onsubmit="return formCheck()">
+		<table style="background:white;">
+			<tr>
+				<th>이름(*)</th>
+				<td>
+					<input type="text" id="userName" name="userName" class="txt">
+					<span class="errMsg" id="nameErr">이름을 입력해야 합니다.</span>	
+				</td>
+			</tr>
+			<tr>
+				<th>전화번호</th>
+				<td><input type="text" id="userTel" name="userTel" class="txt"></td>
+			</tr>
+			<tr>
+				<th></th>
+				<td><button type="submit" id="btnAdd" class="btn control">데이터 추가</button></td>
+			</tr>
+		</table>
+	</form>
+	
+	<div  class="result_box">
+	<%=str %>
+	<!-- 처리결과 -->
+		<!-- <table class ="table" style="width: 100%;">
+			<tr>
+				<th id="numTitle">번호</th>
+				<th id="nameTitle">이름</th>
+				<th id="telTitle">전화번호</th>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>박나영</td>
+				<td>010-5555-5555</td>
+			</tr>
+			<tr>
+				<td>6</td>
+				<td>정현욱</td>
+				<td>010-6666-6666</td>
+			</tr>
+		</table> -->
+	</div>
+</div>
+
+</body>
+</html>
+```
+#### 5.10.24.3. Memberinsert.jsp_이전 페이지(Test002.jsp)로 부터 넘어온 데이터 수신
+``` html
+<%@page import="java.sql.Statement"%>
+<%@page import="com.util.DBConn"%>
+<%@page import="java.sql.Connection"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// MemberInsert.jsp
+	
+	// 이전 페이지(Test002.jsp)로 부터 넘어온 데이터 수신
+	// -> userName, userTel
+	
+	// 한글 깨짐 방지 처리
+	request.setCharacterEncoding("UTF-8");
+	
+	String uName = request.getParameter("userName");
+	String uTel = request.getParameter("userTel");
+	
+	// 데이터베이스 연결
+	Connection conn = DBConn.getConnection();
+	
+	// 쿼리문 준비(insert)
+	String sql = String.format("INSERT INTO TBL_MEMBER(SID, NAME, TEL)"
+			+ " VALUES(MEMBERSEQ.NEXTVAL, '%s', '%s')", uName, uTel);
+	
+	// DB 액션 처리 -> 작업 객체 생성 및 쿼리문 수행
+	Statement stmt = conn.createStatement();
+	int result = 0;
+	result = stmt.executeUpdate(sql);
+	
+	stmt.close();
+	DBConn.close();
+	
+	if(result <1)
+	{
+		// 입력 액션 처리가 정상적으로 이루어지지 않은 경우
+		response.sendRedirect("Error.jsp");
+		//-- 내가 잘 아는 에러 페이지 소개시켜줄게..
+	}
+	else
+	{
+		// 입력 액션 처리가 정상저긍로 이루어진 경우
+		response.sendRedirect("Test002.jsp");
+		//-- 이 페이지로 오기 전에 네가 머물던 리스트 페이지 주소를 새롭게 다시 요청해서 찾아가봐~!!!
+		//	네가 입력하려는 내용이 추가된 상태로 리스트의 내용이 바뀌어 있을거야...
+	}
+	
+%>
+```
+
+### 5.10.25. [이름, 국어점수, 영어점수, 수학점수를 입력받아 총점과 평균을 계산하여 리스트를 출력]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/d9fd8210-9ae4-4d51-9802-202a0040eb2a)
+
+#### 5.10.25.1. WebApp09_scott.sql
+``` sql
+SELECT USER
+FROM DUAL;
+--==>> SCOTT
+
+--○ 기존 테이블 제거
+DROP TABLE TBL_SCORE;
+--==>>Table TBL_SCORE이(가) 삭제되었습니다.
+
+--○ 실습 테이블 생성(TBL_SCORE)
+CREATE TABLE TBL_SCORE
+( SID   NUMBER
+, NAME  VARCHAR2(30)
+, KOR   NUMBER(3)
+, ENG   NUMBER(3)
+, MAT   NUMBER(3)
+);
+--==>> Table TBL_SCORE이(가) 생성되었습니다.
+
+--○ 생성된 테이블에 제약조건 추가
+ALTER TABLE TBL_SCORE
+ADD CONSTRAINT SCORE_SID_PK PRIMARY KEY(SID);
+--==>> Table TBL_SCORE이(가) 변경되었습니다.
+
+ALTER TABLE TBL_SCORE
+ADD CONSTRAINT SCORE_KOR_CK CHECK(KOR BETWEEN 0 AND 100);
+--==>> Table TBL_SCORE이(가) 변경되었습니다.
+
+ALTER TABLE TBL_SCORE
+ADD CONSTRAINT SCORE_ENG_CK CHECK(ENG BETWEEN 0 AND 100);
+--==>> Table TBL_SCORE이(가) 변경되었습니다.
+
+ALTER TABLE TBL_SCORE
+ADD CONSTRAINT SCORE_MAT_CK CHECK(MAT BETWEEN 0 AND 100);
+--==>> Table TBL_SCORE이(가) 변경되었습니다.
+
+
+--○ 기존 시퀀스 제거
+DROP SEQUENCE SCORESEQ;
+--==>> Sequence SCORESEQ이(가) 삭제되었습니다.
+
+
+--○ 실습 관련 시퀀스 다시 생성
+CREATE SEQUENCE SCORESEQ
+NOCACHE;
+--==>> Sequence SCORESEQ이(가) 생성되었습니다.
+
+
+--○ 리스트 조회 쿼리문 구성
+--     (번호, 이름, 국어점수, 영어점수, 수학점수, 총점, 평균)
+SELECT SID, NAME, KOR , ENG, MAT
+    , (KOR+ENG+MAT) AS TOT
+    , (KOR+ENG+MAT)/3 AS AVG
+FROM TBL_SCORE
+ORDER BY SID;
+--==>> 한 줄 구성
+SELECT SID, NAME, KOR , ENG, MAT , (KOR+ENG+MAT) AS TOT , (KOR+ENG+MAT)/3 AS AVG FROM TBL_SCORE ORDER BY SID;
+
+
+--○ 데이터 입력 쿼리문 구성
+INSERT INTO TBL_SCORE(SID, NAME, KOR, ENG, MAT)
+VALUES(SCORESEQ.NEXTVAL, '임하성', 90, 80, 70);
+--==> 한 줄 구성
+INSERT INTO TBL_SCORE(SID, NAME, KOR, ENG, MAT) VALUES(SCORESEQ.NEXTVAL, '임하성', 90, 80, 70)
+;
+--==>> 1 행 이(가) 삽입되었습니다.
+
+
+--○ 샘플 데이터 추가 입력
+INSERT INTO TBL_SCORE(SID, NAME, KOR, ENG, MAT) VALUES(SCORESEQ.NEXTVAL, '이윤수', 80, 70, 60);
+--==>> 1 행 이(가) 삽입되었습니다.
+
+
+--○ 확인
+SELECT *
+FROM TBL_SCORE;
+--==>>
+/*
+1	임하성	90	80	70
+2	이윤수	80	70	60
+*/
+
+
+--○ 커밋
+COMMIT;
+--==>> 커밋 완료.
+```
+#### 5.10.25.2. ScoreList.jsp
+``` html
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="com.util.DBConn"%>
+<%@page import="java.sql.Connection"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	String str ="";
+	
+	Connection conn = DBConn.getConnection();
+	
+	String sql = "SELECT SID, NAME, KOR , ENG, MAT "
+			+ ", (KOR+ENG+MAT) AS TOT , (KOR+ENG+MAT)/3 AS AVG FROM TBL_SCORE ORDER BY SID";
+	
+	Statement stmt = conn.createStatement();
+	
+	ResultSet rs  = stmt.executeQuery(sql);
+	
+	/* <table>
+	<tr>
+		<th>번호</th><th>이름</th><th>국어점수</th><th>영어점수</th><th>수학점수</th><th>총점</th><th>평균</th>
+	<tr>
+	<tr>
+		<td>1</td><td>임하성</td><td>90</td><td>60</td><td>70</td><td>xxx</td><td>xx.x</td>
+	</tr>
+</table> */
+	
+	str += "<table class ='table' style='width: 100%;'>";
+	str += "<tr>";
+	str += "<th>번호</th><th>이름</th><th>국어점수</th><th>영어점수</th><th>수학점수</th><th>총점</th><th>평균</th>";
+	str += "</tr>";
+	
+	while(rs.next())
+	{
+		str += "<tr>";
+		str += "<td>"+rs.getString("SID")+"</td>";
+		str += "<td>"+rs.getString("NAME")+"</td>";
+		str += "<td>"+rs.getString("KOR")+"</td>";
+		str += "<td>"+rs.getString("ENG")+"</td>";
+		str += "<td>"+rs.getString("MAT")+"</td>";
+		str += "<td>"+rs.getString("TOT")+"</td>";
+		str += "<td>"+String.format("%.1f",rs.getDouble("AVG"))+"</td>";
+		str += "</tr>";
+			
+	}
+	str += "</table>";
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ScoreList.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	[id^="err"] {display:none;}
+</style>
+</head>
+<body class="section">
+
+<script type="text/javascript">
+function scoreInsert()
+{
+	var uName = document.getElementById("userName");
+	var korStr = document.getElementById("userKor");
+	var engStr = document.getElementById("userEng");
+	var matStr = document.getElementById("userMat");
+	
+	var uKor = Number(korStr);
+	var uEng = Number(engStr);
+	var uMat = Number(matStr);
+	
+	var eName = document.getElementById("errName");
+	var eKor = document.getElementById("errKor");
+	var eEng = document.getElementById("errEng");
+	var eMat = document.getElementById("errMat");
+	
+	eName.style.display = "none";
+	eName.style.display = "none";
+	eName.style.display = "none";
+	eName.style.display = "none";
+	
+	/* -------------------------------------------- */
+	
+	if(uName.value == "" || uName.value == null)
+	{
+		eName.style.display = "inline";
+		
+		return false;
+	}
+		
+	if(uKor.value<0 || uKor.value>100 || korStr.value== "")
+	{	
+		eKor.style.display = "inline";
+		return false;
+	}
+	
+	 if(uEng.value<0 || uEng.value>100 || engStr.value== "")
+	{	
+		eEng.style.display = "inline";
+		return false;
+	}
+	
+	if(uMat.value<0 || uMat.value>100 || matStr.value== "")
+	{	
+		eMat.style.display = "inline";
+		return false;
+	}
+	
+	return true;
+}
+</script>
+
+<!-- ○ WebApp09
+	
+	- 여러 명의 이름, 국어점수, 영어점수, 수학점수를 입력받아
+		총점과 평균을 계산하여 리스트를 출력해줄 수 있는 프로그램을 구현한다.
+	- 리스트 출력 시 번호 오름 차순 정렬하여 출력할 수 있도록 한다.
+	- 데이터베이스 연동하여 처리한다.(TBL_SCORE, SCORESEQ 활용)
+	- 즉, 성적처리 프로그램을 데이터베이스 연동하여 JSP로 구성할 수 있도록 한다.
+	
+	데이터베이스 연결 및 데이터 처리
+	---------------------------------------------------
+	성적 처리
+	
+	이름(*)		[ textbox ] -> 이름 입력 확인
+	국어점수	[ textbox ] -> 0~100 사이의 정수가 입력되었는지 확인
+	영어점수	[ textbox ] -> 0~100 사이의 정수가 입력되었는지 확인
+	수학점수	[ textbox ] -> 0~100 사이의 정수가 입력되었는지 확인
+
+	< 성적 추가 > 		-> button
+	
+	번호	이름	국어점수	영어점수	수학점수	총점	평균
+	1		임하성	90			80			70			xxx		xx.x
+	2		이윤수	90			80			70			xxx		xx.x
+	
+	○ WebApp09_scott.sql
+		ScoreList.jsp
+		ScoreInsert.jsp -> 사용자 안만남
+		com.util.DBConn.java
+
+ -->
+ 
+<div>
+	<h1>성적 리스트를 출력 프로그램</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<form action="ScoreInsert.jsp" method="post" onsubmit="return scoreInsert()">
+		<table>
+			<tr>
+				<th>이름(*)</th>
+				<td>
+					<input type="text" id="userName" name="userName">
+					<span id="errName">이름을 입력해주세요.</span>
+				</td>
+			</tr>
+			<tr>
+				<th>국어점수</th>
+				<td>
+					<input type="text" id="userKor" name="userKor">
+					<span id="errKor">국어점수(0~100)</span>
+				</td>
+			</tr>
+			<tr>
+				<th>영어점수</th>
+				<td>
+					<input type="text" id="userEng" name="userEng">
+					<span id="errEng">영어점수(0~100)</span>
+				</td>
+			</tr>
+			<tr>
+				<th>수학점수</th>
+				<td>
+					<input type="text" id="userMat" name="userMat">
+					<span id="errMat">수학점수(0~100)</span>
+				</td>
+			</tr>
+		</table>
+		<div class="btn_box">
+			<button type="submit" id="resultBtn" name="resultBtn" class="btn">성적 추가</button>
+		</div>
+	</form>
+	<div class="result_box">
+		<!-- <table>
+			<tr>
+				<th>번호</th><th>이름</th><th>국어점수</th><th>영어점수</th><th>수학점수</th><th>총점</th><th>평균</th>
+			<tr>
+			<tr>
+				<td>1</td><td>임하성</td><td>90</td><td>60</td><td>70</td><td>xxx</td><td>xx.x</td>
+			</tr>
+		</table> -->
+		<%=str %>
+	</div>
+</div>
+
+</body>
+</html>
+```
+#### 5.10.25.3. ScoreInsert.jsp
+``` html
+<%@page import="java.sql.Statement"%>
+<%@page import="com.util.DBConn"%>
+<%@page import="java.sql.Connection"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	//ScoreInsert.jsp
+	
+	request.setCharacterEncoding("UTF-8");
+
+	String uName = request.getParameter("userName");
+	int uKor = Integer.parseInt(request.getParameter("userKor"));
+	int uEng = Integer.parseInt(request.getParameter("userEng"));
+	int uMat = Integer.parseInt(request.getParameter("userMat"));
+	
+	Connection conn = DBConn.getConnection();
+	
+	String sql = String.format("INSERT INTO TBL_SCORE(SID, NAME, KOR, ENG, MAT)"
+			+ " VALUES(SCORESEQ.NEXTVAL, '%s', %d, %d, %d)",uName, uKor, uEng, uMat);
+	
+	Statement stmt = conn.createStatement();
+	int result = 0;
+	result = stmt.executeUpdate(sql);
+	
+	stmt.close();
+	DBConn.close();
+	
+	if(result <1)
+	{
+		response.sendRedirect("Error.jsp");
+	}
+	else
+	{
+		response.sendRedirect("ScoreList.jsp");
+	}
+
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ScoreInsert.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	
+</body>
+</html>
+```
+
+### 5.10.26. []
+
+#### 5.10.26.1. .jsp
 ``` html
 ```
-#### 5.10.21.2. .jsp_데이터 송수신 실습 02
+#### 5.10.26.2. .jsp
 ``` html
 ```
 
-### 5.10.22. []
+### 5.10.27. []
 
-#### 5.10.22.1. .jsp_데이터 송수신 실습 02
+#### 5.10.27.1. .jsp
 ``` html
 ```
-#### 5.10.22.2. .jsp_데이터 송수신 실습 02
-``` html
-```
-
-### 5.10.23. []
-
-#### 5.10.23.1. .jsp_데이터 송수신 실습 02
-``` html
-```
-#### 5.10.23.2. .jsp_데이터 송수신 실습 02
-``` html
-```
-
-### 5.10.24. []
-
-#### 5.10.24.1. .jsp_데이터 송수신 실습 02
-``` html
-```
-#### 5.10.24.2. .jsp_데이터 송수신 실습 02
+#### 5.10.27.2. .jsp
 ``` html
 ```
 ------------------------------------------------
