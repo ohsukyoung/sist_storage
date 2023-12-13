@@ -4863,7 +4863,7 @@ function formCheck()
 </html>
 ```
 
-### 5.11.2. [성적 리스트 출력 프로그램(ver.2)]
+### 5.11.3. [성적 리스트 출력 프로그램(ver.2)]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/668ccd72-dd1c-4e2c-bee4-4f0f26494118)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/748a4330-b31c-4b5d-9f19-3c03c12af2ea)
 
@@ -4940,7 +4940,7 @@ public class ScoreDTO
 	}
 }
 ```
-#### 5.11.2.3. ScoreDAO.Java
+#### 5.11.3.3. ScoreDAO.Java
 ``` java
 package com.test;
  
@@ -5034,7 +5034,7 @@ public class ScoreDAO
 	}
 }
 ```
-#### 5.11.2.4. ScoreList.jsp
+#### 5.11.3.4. ScoreList.jsp
 ``` html
 <%@page import="com.test.ScoreDTO"%>
 <%@page import="com.test.ScoreDAO"%>
@@ -5191,7 +5191,7 @@ function scoreInsert()
 </body>
 </html>
 ```
-#### 5.11.2.5. ScoreInsert.jsp
+#### 5.11.3.5. ScoreInsert.jsp
 ``` html
 <%@page import="com.test.ScoreDTO"%>
 <%@page import="com.test.ScoreDAO"%>
@@ -5242,9 +5242,9 @@ function scoreInsert()
 %>
 ```
 
-### 5.11.2. [회원 성적 관리 및 출력 페이지(ver.2)]
+### 5.11.4. [회원 성적 관리 및 출력 페이지(ver.2)]
 
-#### 5.11.3.1. WebApp12_scott.sql
+#### 5.11.4.1. WebApp12_scott.sql
 ``` sql
 SELECT USER
 FROM DUAL;
@@ -5544,22 +5544,22 @@ SELECT COUNT(*) AS COUNT FROM TBL_MEMBERSCORE WHERE SID=1
 -- 1이 나올 경우 -> 성적 처리 됨
 -- 0이 나올 경우 -> 성적 처리 되지 않음
 ```
-#### 5.11.3.2. MemberDAO.java
+#### 5.11.4.2. MemberDAO.java
 ``` java
 ```
-#### 5.11.2.3. MemberDTO.java
+#### 5.11.4.3. MemberDTO.java
 ``` java
 ```
-#### 5.11.2.4. MemberinserForm.jsp
+#### 5.11.4.4. MemberinserForm.jsp
 ``` html
 ```
-#### 5.11.2.5. ScoreInsert.jsp
+#### 5.11.4.5. ScoreInsert.jsp
 ``` html
 ```
-#### 5.11.2.5. ScoreInsert.jsp
+#### 5.11.4.5. ScoreInsert.jsp
 ``` html
 ```
-#### 5.11.2.5. ScoreInsert.jsp
+#### 5.11.4.5. ScoreInsert.jsp
 ``` html
 ```
 
