@@ -4075,10 +4075,11 @@ function formCheck()
 %>
 ```
 
-### 5.10.25. [이름, 국어점수, 영어점수, 수학점수를 입력받아 총점과 평균을 계산하여 리스트를 출력]
+## 5.11. JSP, JAVA, SQL 통합
+### 5.11.1. [이름, 국어점수, 영어점수, 수학점수를 입력받아 총점과 평균을 계산하여 리스트를 출력]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/d9fd8210-9ae4-4d51-9802-202a0040eb2a)
 
-#### 5.10.25.1. WebApp09_scott.sql
+#### 5.11.1.1. WebApp09_scott.sql
 ``` sql
 SELECT USER
 FROM DUAL;
@@ -4166,7 +4167,7 @@ FROM TBL_SCORE;
 COMMIT;
 --==>> 커밋 완료.
 ```
-#### 5.10.25.2. ScoreList.jsp
+#### 5.11.1.2. ScoreList.jsp
 ``` html
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
@@ -4367,7 +4368,7 @@ function scoreInsert()
 </body>
 </html>
 ```
-#### 5.10.25.3. ScoreInsert.jsp
+#### 5.11.1.3. ScoreInsert.jsp
 ``` html
 <%@page import="java.sql.Statement"%>
 <%@page import="com.util.DBConn"%>
@@ -4419,24 +4420,1204 @@ function scoreInsert()
 </html>
 ```
 
-### 5.10.26. []
+### 5.11.2. [데이터베이스 연동 회원관리 실습]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/c002fc3c-c4c4-4dcd-8434-e569400c20d3)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/743af3f7-cfb0-400f-8da0-fe9a61f80bf9)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/9f82e9a0-4231-4d3b-b74d-e5cff6db6f30)
 
-#### 5.10.26.1. .jsp
+
+#### 5.11.2.1. WebApp10_scott.sql
+``` sql
+SELECT USER
+FROM DUAL;
+--==>> SCOTT
+ 
+SELECT *
+FROM TAB;
+ 
+PERGE RECYCLEBIN;
+ 
+SELECT *
+FROM TBL_MEMBER;
+ 
+DESC TBL_MEMBER;
+--==>>
+/*
+이름   널?       유형           
+---- -------- ------------ 
+SID  NOT NULL NUMBER       
+NAME          VARCHAR2(30) 
+TEL           VARCHAR2(40) 
+*/
+ 
+TRUNCATE TABLE TBL_MEMBER;
+--==>> Table TBL_MEMBER이(가) 잘렸습니다.
+ 
+DROP SEQUENCE MEMBERSEQ;
+--==>> Sequence MEMBERSEQ이(가) 삭제되었습니다.
+ 
+CREATE SEQUENCE MEMBERSEQ
+NOCACHE;
+--==>> Sequence MEMBERSEQ이(가) 생성되었습니다.
+ 
+INSERT INTO TBL_MEMBER(SID,NAME,TEL) VALUES(MEMBERSEQ.NEXTVAL, '강혜성', '010-1111-1111');
+INSERT INTO TBL_MEMBER(SID,NAME,TEL) VALUES(MEMBERSEQ.NEXTVAL, '김동민', '010-2222-2222');
+INSERT INTO TBL_MEMBER(SID,NAME,TEL) VALUES(MEMBERSEQ.NEXTVAL, '이주형', '010-3333-3333');
+INSERT INTO TBL_MEMBER(SID,NAME,TEL) VALUES(MEMBERSEQ.NEXTVAL, '엄재용', '010-4444-4444');
+INSERT INTO TBL_MEMBER(SID,NAME,TEL) VALUES(MEMBERSEQ.NEXTVAL, '김지민', '010-5555-5555');
+--==>> 1 행 이(가) 삽입되었습니다.*5
+ 
+SELECT SID, NAME, TEL
+FROM TBL_MEMBER
+ORDER BY SID;
+--==>> 
+/*
+1	강혜성	010-1111-1111
+2	김동민	010-2222-2222
+3	이주형	010-3333-3333
+4	엄재용	010-4444-4444
+5	김지민	010-5555-5555
+*/
+ 
+COMMIT;
+--==>> 커밋 완료.
+ 
+--○ 인원 수확인 쿼리문 구성
+SELECT COUNT(*) AS COUNT
+FROM TBL_MEMBER;
+--> 한 줄 구성
+SELECT COUNT(*) AS COUNT FROM TBL_MEMBER
+;
+--==>> 5
+```
+#### 5.11.2.2. MemberDAO.java
+``` java
+/* ==========================================
+	MemberDAO.java
+	- 데이터베이스 엑션 처리 전용 객체 활용
+=============================================*/
+package com.test;
+ 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+ 
+import com.util.DBConn;
+ 
+public class MemberDAO
+{
+	// 주요 속성 구성
+	private Connection conn;
+ 
+	/*
+	 * public Connection getConn() { return conn; }
+	 */
+	
+	
+	// 데이터베이스 연결 -> 생성자 형태로 정의
+	public MemberDAO() throws ClassNotFoundException, SQLException
+	{
+		conn = DBConn.getConnection();
+	}
+	
+	// 데이터 입력 메소드 정의
+	public int add(MemberDTO dto) throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "INSERT INTO TBL_MEMBER(SID,NAME,TEL)"
+				+ " VALUES(MEMBERSEQ.NEXTVAL, ?, ?)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, dto.getName());
+		pstmt.setString(2, dto.getTel());
+		
+		result = pstmt.executeUpdate();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 데이터 출력 메소드 정의
+	public ArrayList<MemberDTO> lists() throws SQLException
+	{
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		
+		String sql = "SELECT SID, NAME, TEL FROM TBL_MEMBER ORDER BY SID";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			MemberDTO dto = new MemberDTO();
+			
+			dto.setSid(rs.getString("SID"));
+			dto.setName(rs.getString("NAME"));
+			dto.setTel(rs.getString("TEL"));
+			
+			result.add(dto);
+		}
+		
+		rs.close();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 전체 인원 수 확인을 위한 메소드 정의
+	public int count() throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "SELECT COUNT(*) AS COUNT FROM TBL_MEMBER";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		if(rs.next())
+			result = rs.getInt("COUNT");
+		
+		rs.close();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 데이터베이스 연결 종료 담당 메소드 정의
+	public void close() throws SQLException
+	{
+		DBConn.close();
+	}
+}
+```
+#### 5.11.2.3. MemberDTO.java
+``` java
+/* ==========================================
+	MemberDTO.java
+	- 데이터 보관 및 전송 객체 활용
+=============================================*/
+package com.test;
+ 
+public class MemberDTO
+{
+	// 주요 속성 구성
+	private String sid, name, tel;
+	//-- TBL_MEMBER 컬럼 구조
+ 
+	// getter / setter 구성
+	public String getSid()
+	{
+		return sid;
+	}
+ 
+	public void setSid(String sid)
+	{
+		this.sid = sid;
+	}
+ 
+	public String getName()
+	{
+		return name;
+	}
+ 
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+ 
+	public String getTel()
+	{
+		return tel;
+	}
+ 
+	public void setTel(String tel)
+	{
+		this.tel = tel;
+	}
+	
+	
+}
+```
+#### 5.11.2.4. Memberinsert.jsp
+``` html
+<%@page import="com.test.MemberDTO"%>
+<%@page import="com.test.MemberDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// MemberInsert.jsp
+	//-- 데이터 입력 액션 처리 페이지
+	
+	// 이전 페이지(MemberList.jsp)로부터 넘어온 데이터 수신
+	//-> userName, userTel
+	
+	request.setCharacterEncoding("UTF-8");
+	//-- 한글 데이터가 깨지지 않도록 인코딩 설정
+	
+	// 위 코드를 수행한 후 데이터 수신
+	String userName = request.getParameter("userName");
+	String userTel = request.getParameter("userTel");
+	
+	MemberDAO dao = null;
+	
+	try
+	{
+		dao = new MemberDAO();
+		// MemberDTO 구성
+		MemberDTO member = new MemberDTO();
+		member.setName(userName);
+		member.setTel(userTel);
+		
+		// dao 의 add() 메소드 호출 -> insert 쿼리문 수행
+		dao.add(member);
+		
+		// 필요하다면 add()메소드의 반환값을 받아
+		// insert 액션의 정상 처리 여부 확인 후 추가 코드 구성 가능~!!!
+		
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	// URL 주소가 적혀있는 쪽지를 사용자에게 전달
+	//-> 이 주소를 다시 요청해서 찾아갈 수 있도록 하세요~!!!
+	//	(그럼 입력값이 반영된 결과물을 확인할 수 있다.)
+	response.sendRedirect("MemberList.jsp");
+	
+	// 아래 보여주는 페이지는 모두 삭제
+%>
+```
+#### 5.11.2.5. MemberList.jsp
+``` html
+<%@page import="com.test.MemberDTO"%>
+<%@page import="com.test.MemberDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	StringBuffer str = new StringBuffer();
+	MemberDAO dao = null;
+	
+	String memberCount = "<span id='memberCount'>전체 인원 수 : ";	// 5명</span>
+	
+	try
+	{
+		dao = new MemberDAO();
+		
+		memberCount += dao.count() + "명</span>";
+		str.append("<table>");
+		str.append("<tr><th>번호</th><th>이름</th><th>전화번호</th></tr>");
+		
+		// MemberDAO의 lists() 메소드 호출
+		//-- 반복문을 통해 <table> 하위 엘리먼트 생성
+		for(MemberDTO member: dao.lists())
+		{
+			str.append("<tr>");
+			str.append("<td>"+member.getSid()+"</td>");
+			str.append("<td>"+member.getName()+"</td>");
+			str.append("<td>"+member.getTel()+"</td>");
+		}
+		str.append("</table>");
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			// 데이터 베이스 연결 종료
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MemberList.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style>
+	.errMsg {display:none; color:red;}
+</style>
+ 
+<script type="text/javascript">
+function formCheck()
+{
+	//확인
+	//alert("함수 호출~!!!");
+	
+	var userName = document.getElementById("userName");
+	var userMsg = document.getElementById("nameMsg");
+	
+	nameMsg.style.display = "none";
+	
+	if(userName.value == "")
+	{
+		nameMsg.style.display = "inline";
+		userName.focus();
+		return false;
+	}
+	
+	//return false;
+	return true;
+}
+</script>
+ 
+</head>
+<body class="section">
+ 
+<div>
+	<h1>데이터베이스 연동 회원관리 실습</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<p>DAO, DTO 개념 적용</p>
+	<form class="tbl_box" action="MemberInsert.jsp" method="post" onsubmit="return formCheck();">
+		<table>
+			<tr>
+				<th>이름(*)</th>
+				<td>
+					<input type="text" id="userName" name="userName" class="txt">
+					<span class="errMsg" id="nameMsg">이름을 입력해야 합니다.</span>
+				</td>
+			</tr>
+			<tr>
+				<th>전화번호</th>
+				<td>
+					<input type="text" id="userTel" name="userTel" class="txt">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button type="submit" id="btnAdd" class="btn" style="width: 200px;">회원 추가</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<!-- <div class="tbl_box">
+		<span id="memberCount">전체 인원 수 : 5명</span><br><br>
+		<table>
+			<tr>
+				<th>번호</th><th>이름</th><th>전화번호</th>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>고길동</td>
+				<td>010-1111-1111</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>둘리</td>
+				<td>010-2222-2222</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>도우너</td>
+				<td>010-3333-3333</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>희동이</td>
+				<td>010-4444-4444</td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>마이콜</td>
+				<td>010-5555-5555</td>
+			</tr>
+		</table>
+	</div> -->
+	<!-- 전체 인원수 확인 -->
+	<%=memberCount %>
+	
+	<!-- 번호 이름 전화번호 항목에 대한 리스트 구성 -->
+	<%=str.toString() %>
+</div>
+ 
+ 
+ 
+</body>
+</html>
+```
+
+### 5.11.2. [성적 리스트 출력 프로그램(ver.2)]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/668ccd72-dd1c-4e2c-bee4-4f0f26494118)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/748a4330-b31c-4b5d-9f19-3c03c12af2ea)
+
+
+#### 5.11.3.1. WebApp11_scott.sql
+>> 9와 동일<<
+#### 5.11.3.2. ScoreDTO.Java
+``` java
+package com.test;
+ 
+public class ScoreDTO
+{
+	// 주요 속성 구성
+	private String name;
+	private int sid, kor, eng, mat, tot;
+	private double avg;
+	
+	// getter / setter 구성
+	public String getName()
+	{
+		return name;
+	}
+	public int getSid()
+	{
+		return sid;
+	}
+	public void setSid(int sid)
+	{
+		this.sid = sid;
+	}
+	public int getTot()
+	{
+		return tot;
+	}
+	public void setTot(int tot)
+	{
+		this.tot = tot;
+	}
+	public double getAvg()
+	{
+		return avg;
+	}
+	public void setAvg(double avg)
+	{
+		this.avg = avg;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	public int getKor()
+	{
+		return kor;
+	}
+	public void setKor(int kor)
+	{
+		this.kor = kor;
+	}
+	public int getEng()
+	{
+		return eng;
+	}
+	public void setEng(int eng)
+	{
+		this.eng = eng;
+	}
+	public int getMat()
+	{
+		return mat;
+	}
+	public void setMat(int mat)
+	{
+		this.mat = mat;
+	}
+}
+```
+#### 5.11.2.3. ScoreDAO.Java
+``` java
+package com.test;
+ 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+ 
+import com.util.DBConn;
+ 
+public class ScoreDAO
+{
+	private Connection conn;
+	
+	public ScoreDAO() throws ClassNotFoundException, SQLException
+	{
+		conn = DBConn.getConnection();
+	}
+	
+	public int add(ScoreDTO dto) throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "INSERT INTO TBL_SCORE(SID, NAME, KOR, ENG, MAT)"
+				+ " VALUES(SCORESEQ.NEXTVAL, ?, ?, ?, ?)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1,dto.getName());
+		pstmt.setInt(2, dto.getKor());
+		pstmt.setInt(3, dto.getEng());
+		pstmt.setInt(4, dto.getMat());
+		
+		result = pstmt.executeUpdate();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	public ArrayList<ScoreDTO> lists() throws SQLException
+	{
+		ArrayList<ScoreDTO> result = new ArrayList<ScoreDTO>();
+		
+		String sql = "SELECT SID, NAME, KOR , ENG, MAT"
+				+ " , (KOR+ENG+MAT) AS TOT"
+				+ " , (KOR+ENG+MAT)/3 AS AVG"
+				+ " FROM TBL_SCORE ORDER BY SID";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		ResultSet rs = pstmt.executeQuery(); 
+		
+		while(rs.next())
+		{
+			ScoreDTO score = new ScoreDTO();
+			
+			score.setSid(rs.getInt("SID"));
+			score.setName(rs.getString("NAME"));
+			score.setKor(rs.getInt("KOR"));
+			score.setEng(rs.getInt("ENG"));
+			score.setMat(rs.getInt("MAT"));
+			score.setTot(rs.getInt("TOT"));
+			score.setAvg(rs.getDouble("AVG"));
+			
+			result.add(score);
+		}
+		
+		rs.close();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	public int count() throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "SELECT COUNT(*) AS COUNT FROM TBL_SCORE";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		
+		result = pstmt.executeUpdate();
+		
+		return result;
+	}
+	
+	public void close() throws SQLException
+	{
+		DBConn.close();
+	}
+}
+```
+#### 5.11.2.4. ScoreList.jsp
+``` html
+<%@page import="com.test.ScoreDTO"%>
+<%@page import="com.test.ScoreDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	StringBuffer str = new StringBuffer();
+	ScoreDAO dao = null;
+ 
+	try
+	{
+		dao = new ScoreDAO();
+		
+		// 출력
+		str.append("<table>");
+		str.append("<tr><th>번호</th><th>이름</th><th>국어점수</th><th>영어점수</th><th>수학점수</th><th>총점</th><th>평균</th><tr>");
+		
+		for(ScoreDTO score : dao.lists())
+		{
+			str.append("<tr>");
+			str.append("<td>"+score.getSid()+"</td>");			
+			str.append("<td>"+score.getName()+"</td>");			
+			str.append("<td>"+score.getKor()+"</td>");			
+			str.append("<td>"+score.getEng()+"</td>");			
+			str.append("<td>"+score.getMat()+"</td>");			
+			str.append("<td>"+score.getTot()+"</td>");			
+			str.append("<td>"+String.format("%.1f",score.getAvg())+"</td>");			
+			str.append("</tr>");			
+		}
+		str.append("</table>");
+		
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ScoreList.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+function scoreInsert()
+{
+	//확인
+	//alert("연결 성공");
+	
+	var userName 	= document.getElementById("userName");
+	var userKor 	= document.getElementById("userKor");
+	var userEng 	= document.getElementById("userEng");
+	var userMat 	= document.getElementById("userMat");
+	
+	var kor = Number(userKor.value);
+	var eng = Number(userEng.value);
+	var mat = Number(userMat.value);
+	
+	var errName	= document.getElementById("errName");
+	var errKor	= document.getElementById("errKor");
+	var errEng	= document.getElementById("errEng");
+	var errMat	= document.getElementById("errMat");
+	
+	errName.style.display = "none";
+	errKor.style.display = "none";
+	errEng.style.display = "none";
+	errMat.style.display = "none";
+	
+	if(userName.value=="")
+	{
+		errName.style.display = "inline";
+		return false;
+	}
+	
+	if(userKor.value=="" || kor<0 || kor>100)
+	{
+		errKor.style.display = "inline";
+		return false;
+	}
+ 
+	if(userEng.value=="" || eng<0 || eng>100)
+	{
+		errEng.style.display = "inline";
+		return false;
+	}
+ 
+	if(userMat.value=="" || mat<0 || mat>100)
+	{
+		errMat.style.display = "inline";
+		return false;
+	}
+	
+	//return false;
+	return true;
+}
+</script>
+</head>
+<body class="section">
+ 
+<div>
+	<h1>성적 리스트를 출력 프로그램</h1>
+	<hr>
+</div>
+ 
+<div class="layout">
+	<form action="ScoreInsert.jsp" method="post" onsubmit="return scoreInsert()">
+		<table>
+			<tr>
+				<th>이름(*)</th>
+				<td>
+					<input type="text" id="userName" name="userName">
+					<span id="errName" class="errMsg">이름을 입력해주세요.</span>
+				</td>
+			</tr>
+			<tr>
+				<th>국어점수</th>
+				<td>
+					<input type="text" id="userKor" name="userKor">
+					<span id="errKor" class="errMsg">국어점수(0~100)</span>
+				</td>
+			</tr>
+			<tr>
+				<th>영어점수</th>
+				<td>
+					<input type="text" id="userEng" name="userEng">
+					<span id="errEng" class="errMsg">영어점수(0~100)</span>
+				</td>
+			</tr>
+			<tr>
+				<th>수학점수</th>
+				<td>
+					<input type="text" id="userMat" name="userMat">
+					<span id="errMat" class="errMsg">수학점수(0~100)</span>
+				</td>
+			</tr>
+		</table>
+		<div class="btn_box">
+			<button type="submit" id="resultBtn" name="resultBtn" class="btn">성적 추가</button>
+		</div>
+	</form>
+	<div class="result_box">
+		<!-- <table>
+			<tr>
+				<th>번호</th><th>이름</th><th>국어점수</th><th>영어점수</th><th>수학점수</th><th>총점</th><th>평균</th>
+			<tr>
+			<tr>
+				<td>1</td><td>임하성</td><td>90</td><td>60</td><td>70</td><td>xxx</td><td>xx.x</td>
+			</tr>
+		</table> -->
+		<%=str %>
+	</div>
+</div>
+ 
+</body>
+</html>
+```
+#### 5.11.2.5. ScoreInsert.jsp
+``` html
+<%@page import="com.test.ScoreDTO"%>
+<%@page import="com.test.ScoreDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+ 
+	String userName = request.getParameter("userName"); 
+	String userKor = request.getParameter("userKor");
+	String userEng = request.getParameter("userEng");
+	String userMat = request.getParameter("userMat");
+	
+	int kor = Integer.parseInt(userKor);
+	int eng = Integer.parseInt(userEng);
+	int mat = Integer.parseInt(userMat);
+	
+	// 입력
+	ScoreDAO dao = null;
+	try
+	{
+		dao = new ScoreDAO();
+		
+		ScoreDTO dto = new ScoreDTO();
+		dto.setName(userName);
+		dto.setKor(kor);
+		dto.setEng(eng);
+		dto.setMat(mat);
+		
+		dao.add(dto);
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	response.sendRedirect("ScoreList.jsp");
+%>
+```
+
+### 5.11.2. [회원 성적 관리 및 출력 페이지(ver.2)]
+
+#### 5.11.3.1. WebApp12_scott.sql
+``` sql
+SELECT USER
+FROM DUAL;
+--==>> SCOTT
+ 
+ 
+--○ 기존 테이블 삭제
+DROP TABLE TBL_MEMBER;
+--==>>Table TBL_MEMBER이(가) 삭제되었습니다.
+ 
+ 
+--○ 테이블 생성(TBL_MEMBER)
+CREATE TABLE TBL_MEMBER
+( SID   NUMBER
+, NAME  VARCHAR2(30)    NOT NULL
+, TEL   VARCHAR2(30)
+, CONSTRAINT MEMBER_SID_PK PRIMARY KEY(SID)
+);
+--==>>Table TBL_NUMBER이(가) 생성되었습니다.
+ 
+ 
+--○ 기존 시퀀스 제거
+DROP SEQUENCE MEMBERSEQ;
+--==>> Sequence MEMBERSEQ이(가) 삭제되었습니다.
+ 
+ 
+--○ 시퀀스 생성
+CREATE SEQUENCE MEMBERSEQ
+NOCACHE;
+--==>>Sequence MEMBERSEQ이(가) 생성되었습니다.
+ 
+ 
+--○ 샘플 데이터 입력(TBL_MEMBER)
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '노은하', '010-1111-1111');
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '박가영', '010-2222-2222');
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '채다선', '010-3333-3333');
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '김수환', '010-4444-4444');
+INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '김다슬', '010-5555-5555');
+--==>> 1 행 이(가) 삽입되었습니다. * 5
+ 
+ 
+SELECT SID, NAME, TEL
+FROM TBL_MEMBER
+ORDER BY SID;
+--> 한 줄 구성
+SELECT SID, NAME, TEL FROM TBL_MEMBER ORDER BY SID
+;
+--==>
+/*
+1	노은하	010-1111-1111
+2	박가영	010-2222-2222
+3	채다선	010-3333-3333
+4	김수환	010-4444-4444
+5	김다슬	010-5555-5555
+*/
+ 
+ 
+--○ 인원수 확인
+SELECT COUNT(*) AS COUNT
+FROM TBL_MEMBER;
+--> 한 줄 구성
+SELECT COUNT(*) AS COUNT FROM TBL_MEMBER
+;
+--==>> 5
+ 
+ 
+--○ 커밋
+COMMIT;
+ 
+ 
+--○ 회원 정보 검색(SID)
+SELECT SID, NAME, TEL
+FROM TBL_MEMBER
+WHERE SID=1;
+--> 한 줄 구성
+SELECT SID, NAME, TEL FROM TBL_MEMBER WHERE SID=1
+;
+--==>> 1	노은하	010-1111-1111
+ 
+ 
+--○ 업데이트
+UPDATE TBL_MEMBER
+SET NAME='노은하', TEL='010-1100-1100'
+WHERE SID=1;
+--> 한 줄 구성
+UPDATE TBL_MEMBER SET NAME='노은하', TEL='010-1100-1100' WHERE SID=1
+;
+--==>> 1 행 이(가) 업데이트되었습니다.
+ 
+ 
+--○ 롤백
+ROLLBACK;
+ 
+ 
+--○ 회원 정보 삭제
+DELETE
+FROM TBL_MEMBER
+WHERE SID=1;
+--> 한 줄 구성
+DELETE FROM TBL_MEMBER WHERE SID=1
+;
+ 
+ 
+--○ 롤백
+ROLLBACK;
+ 
+ 
+--○ 기존 테이블 제거
+DROP TABLE TBL_SCORE;
+ 
+ 
+--------------------------------------------------------------------------------
+--○ 테이블 생성(TBL_MEMBERSCORE)
+CREATE TABLE TBL_MEMBERSCORE
+( SID NUMBER
+, KOR NUMBER(3)
+, ENG NUMBER(3)
+, MAT NUMBER(3)
+, CONSTRAINT MEMBERSCORE_SID_PK PRIMARY KEY(SID)
+, CONSTRAINT MEMBERSCORE_KOR_CK CHECK(KOR BETWEEN 0 AND 100)
+, CONSTRAINT MEMBERSCORE_ENG_CK CHECK(ENG BETWEEN 0 AND 100)
+, CONSTRAINT MEMBERSCORE_MAT_CK CHECK(MAT BETWEEN 0 AND 100)
+, CONSTRAINT MEMBERSCORE_SID_FK FOREIGN KEY(SID)
+             REFERENCES TBL_MEMBER(SID)
+);
+--==>> Table TBL_MEMBERSCORE이(가) 생성되었습니다.
+ 
+ 
+--○ 샘플 데이터 입력
+INSERT INTO TBL_MEMBERSCORE(SID, KOR, ENG, MAT) VALUES(1, 90, 80, 70);
+INSERT INTO TBL_MEMBERSCORE(SID, KOR, ENG, MAT) VALUES(2, 80, 70, 60);
+--==>> 1 행 이(가) 삽입되었습니다. *2
+ 
+ 
+--○ 확인
+SELECT SID, KOR, ENG, MAT
+FROM TBL_MEMBERSCORE
+ORDER BY SID;
+--> 한 줄 구성
+SELECT SID, KOR, ENG, MAT FROM TBL_MEMBERSCORE ORDER BY SID
+;
+--==>>
+/*
+1	90	80	70
+2	80	70	60
+*/
+ 
+ 
+--○ 커밋
+COMMIT;
+ 
+ 
+--○ 입력된 성적 데이터 갯수 확인
+SELECT COUNT(*) AS COUNT
+FROM TBL_MEMBERSCORE;
+--> 한 줄 구성
+SELECT COUNT(*) AS COUNT FROM TBL_MEMBERSCORE
+;
+--==> 2
+ 
+ 
+--○ 성적 데이터 수정
+UPDATE TBL_MEMBERSCORE
+SET KOR=91, ENG=81, MAT=71
+WHERE SID=1;
+--> 한 줄 구성
+UPDATE TBL_MEMBERSCORE SET KOR=91, ENG=81, MAT=71 WHERE SID=1
+;
+--==>> 1 행 이(가) 업데이트되었습니다.
+ 
+ 
+--○ 확인
+SELECT *
+FROM TBL_MEMBERSCORE;
+--==>>
+/*
+1	91	81	71
+2	80	70	60
+*/
+ 
+ 
+--○ 커밋
+COMMIT;
+--==>> 커밋 완료.
+ 
+ 
+--○ 성적 데이터 삭제
+DELETE
+FROM TBL_MEMBERSCORE
+WHERE SID=1;
+--> 한 줄 구성
+DELETE FROM TBL_MEMBERSCORE WHERE SID=1
+;
+--==>> 1 행 이(가) 삭제되었습니다.
+ 
+ 
+--○ 롤백
+ROLLBACK;
+--==>> 롤백 완료.
+ 
+ 
+--○ 전체 리스트 조회 쿼리문 구성
+SELECT M.SID, M.NAME, M.TEL
+    , S.KOR, S.ENG, S.MAT
+FROM TBL_MEMBER M, TBL_MEMBERSCORE S
+WHERE M.SID = S.SID;
+--==>>
+/*
+1	노은하	010-1111-1111	91	81	71
+2	박가영	010-2222-2222	80	70	60
+*/
+ 
+ 
+--○ 전체 리스트 조회 쿼리문 구성 -> 개선 -> LEFT JOIN
+SELECT M.SID, M.NAME, M.TEL
+    , S.KOR, S.ENG, S.MAT
+FROM TBL_MEMBER M, TBL_MEMBERSCORE S
+WHERE M.SID = S.SID(+);
+--==>>
+/*
+1	노은하	010-1111-1111	91	81	71
+2	박가영	010-2222-2222	80	70	60
+3	채다선	010-3333-3333	(NULL) (NULL) (NULL)
+4	김수환	010-4444-4444	(NULL) (NULL) (NULL)	
+5	김다슬	010-5555-5555	(NULL) (NULL) (NULL)
+*/
+ 
+ 
+--○ 전체 리스트 조회 쿼리문 구성 -> 개선 -> LEFT JOIN -> 개선 -> NVL()
+SELECT M.SID, M.NAME, M.TEL
+    , NVL(S.KOR, -1) AS KOR
+    , NVL(S.ENG, -1) AS ENG
+    , NVL(S.MAT, -1) AS MAT
+FROM TBL_MEMBER M, TBL_MEMBERSCORE S
+WHERE M.SID = S.SID(+);
+--==>>
+/*
+1	노은하	010-1111-1111	91	81	71
+2	박가영	010-2222-2222	80	70	60
+3	채다선	010-3333-3333	-1	-1	-1
+4	김수환	010-4444-4444	-1	-1	-1
+5	김다슬	010-5555-5555	-1	-1	-1
+*/
+ 
+ 
+--○ 전체 리스트 조회 전용 뷰 생성(VIEW_MEMBERSCORE)
+CREATE OR REPLACE VIEW VIEW_MEMBERSCORE
+AS
+SELECT M.SID, M.NAME, M.TEL
+    , NVL(S.KOR, -1) AS KOR
+    , NVL(S.ENG, -1) AS ENG
+    , NVL(S.MAT, -1) AS MAT
+FROM TBL_MEMBER M, TBL_MEMBERSCORE S
+WHERE M.SID = S.SID(+);
+--==>> View VIEW_MEMBERSCORE이(가) 생성되었습니다.
+ 
+ 
+--○ 생성한 뷰(VIEW_MEMBERSCORE)를 활용한 리스트 조회
+SELECT SID, NAME, KOR, MAT
+    , (KOR+ENG+MAT) AS TOT
+    , (KOR+ENG+MAT)/3 AS AVG
+    , RANK() OVER(ORDER BY (KOR+ENG+MAT) DESC) AS RANK
+FROM VIEW_MEMBERSCORE
+ORDER BY SID;
+--> 한 줄 구성
+SELECT SID, NAME, KOR, MAT, (KOR+ENG+MAT) AS TOT, (KOR+ENG+MAT)/3 AS AVG, RANK() OVER(ORDER BY (KOR+ENG+MAT) DESC) AS RANK FROM VIEW_MEMBERSCORE ORDER BY SID
+;
+--==>>
+/*
+1	노은하	91	71	243	81	1
+2	박가영	80	60	210	70	2
+3	채다선	-1	-1	-3	-1	3
+4	김수환	-1	-1	-3	-1	3
+5	김다슬	-1	-1	-3	-1	3
+*/
+ 
+ 
+--○ 생성한 뷰(VIEW_MEMBERSCORE)를 활용한 번호 검색
+SELECT SID, NAME, KOR, ENG, MAT
+FROM VIEW_MEMBERSCORE
+WHERE SID=1;
+--> 한 줄 구성
+SELECT SID, NAME, KOR, ENG, MAT FROM VIEW_MEMBERSCORE WHERE SID=1
+;
+ 
+--==>> 1	노은하	91	81	71
+ 
+ 
+--○ 참조 데이터 레코드 수 확인
+SELECT COUNT(*) AS COUNT
+FROM TBL_MEMBERSCORE
+WHERE SID=1;
+--> 한 줄 구성
+SELECT COUNT(*) AS COUNT FROM TBL_MEMBERSCORE WHERE SID=1
+;
+--==>> 1
+-- 1이 나올 경우 -> 성적 처리 됨
+-- 0이 나올 경우 -> 성적 처리 되지 않음
+```
+#### 5.11.3.2. MemberDAO.java
+``` java
+```
+#### 5.11.2.3. MemberDTO.java
+``` java
+```
+#### 5.11.2.4. MemberinserForm.jsp
 ``` html
 ```
-#### 5.10.26.2. .jsp
+#### 5.11.2.5. ScoreInsert.jsp
+``` html
+```
+#### 5.11.2.5. ScoreInsert.jsp
+``` html
+```
+#### 5.11.2.5. ScoreInsert.jsp
 ``` html
 ```
 
-### 5.10.27. []
-
-#### 5.10.27.1. .jsp
-``` html
-```
-#### 5.10.27.2. .jsp
-``` html
-```
 ------------------------------------------------
+
+### 5.11.2. []
+
+#### 5.11.3.1. WebApp11_scott.sql
+``` sql
+```
+#### 5.11.3.2. ScoreDTO.Java
+``` java
+```
+#### 5.11.2.3. ScoreDAO.Java
+``` java
+```
+#### 5.11.2.4. ScoreList.jsp
+``` html
+```
+#### 5.11.2.5. ScoreInsert.jsp
+``` html
+```
+
+### 5.11.3. []
+
+#### 5.11.3.1. .jsp
+``` html
+```
+#### 5.11.3.2. .jsp
+``` html
+```
+
+### 5.11.4. []
+
+#### 5.11.4.1. .jsp
+``` html
+```
+#### 5.11.4.2. .jsp
+``` html
+```
+
+### 5.11.5. []
+
+#### 5.11.5.1. .jsp
+``` html
+```
+#### 5.11.5.2. .jsp
+``` html
+```
+
+### 5.11.6. []
+
+#### 5.11.6.1. .jsp
+``` html
+```
+#### 5.11.6.2. .jsp
+``` html
+```
 
 
 
