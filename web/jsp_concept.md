@@ -5249,13 +5249,13 @@ function scoreInsert()
 SELECT USER
 FROM DUAL;
 --==>> SCOTT
- 
- 
+
+
 --○ 기존 테이블 삭제
 DROP TABLE TBL_MEMBER;
 --==>>Table TBL_MEMBER이(가) 삭제되었습니다.
- 
- 
+
+
 --○ 테이블 생성(TBL_MEMBER)
 CREATE TABLE TBL_MEMBER
 ( SID   NUMBER
@@ -5264,19 +5264,19 @@ CREATE TABLE TBL_MEMBER
 , CONSTRAINT MEMBER_SID_PK PRIMARY KEY(SID)
 );
 --==>>Table TBL_NUMBER이(가) 생성되었습니다.
- 
- 
+
+
 --○ 기존 시퀀스 제거
 DROP SEQUENCE MEMBERSEQ;
 --==>> Sequence MEMBERSEQ이(가) 삭제되었습니다.
- 
- 
+
+
 --○ 시퀀스 생성
 CREATE SEQUENCE MEMBERSEQ
 NOCACHE;
 --==>>Sequence MEMBERSEQ이(가) 생성되었습니다.
- 
- 
+
+
 --○ 샘플 데이터 입력(TBL_MEMBER)
 INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '노은하', '010-1111-1111');
 INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '박가영', '010-2222-2222');
@@ -5284,8 +5284,8 @@ INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '채다선', '0
 INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '김수환', '010-4444-4444');
 INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, '김다슬', '010-5555-5555');
 --==>> 1 행 이(가) 삽입되었습니다. * 5
- 
- 
+
+
 SELECT SID, NAME, TEL
 FROM TBL_MEMBER
 ORDER BY SID;
@@ -5300,8 +5300,8 @@ SELECT SID, NAME, TEL FROM TBL_MEMBER ORDER BY SID
 4	김수환	010-4444-4444
 5	김다슬	010-5555-5555
 */
- 
- 
+
+
 --○ 인원수 확인
 SELECT COUNT(*) AS COUNT
 FROM TBL_MEMBER;
@@ -5309,12 +5309,12 @@ FROM TBL_MEMBER;
 SELECT COUNT(*) AS COUNT FROM TBL_MEMBER
 ;
 --==>> 5
- 
- 
+
+
 --○ 커밋
 COMMIT;
- 
- 
+
+
 --○ 회원 정보 검색(SID)
 SELECT SID, NAME, TEL
 FROM TBL_MEMBER
@@ -5323,8 +5323,8 @@ WHERE SID=1;
 SELECT SID, NAME, TEL FROM TBL_MEMBER WHERE SID=1
 ;
 --==>> 1	노은하	010-1111-1111
- 
- 
+
+
 --○ 업데이트
 UPDATE TBL_MEMBER
 SET NAME='노은하', TEL='010-1100-1100'
@@ -5333,12 +5333,12 @@ WHERE SID=1;
 UPDATE TBL_MEMBER SET NAME='노은하', TEL='010-1100-1100' WHERE SID=1
 ;
 --==>> 1 행 이(가) 업데이트되었습니다.
- 
- 
+
+
 --○ 롤백
 ROLLBACK;
- 
- 
+
+
 --○ 회원 정보 삭제
 DELETE
 FROM TBL_MEMBER
@@ -5346,16 +5346,16 @@ WHERE SID=1;
 --> 한 줄 구성
 DELETE FROM TBL_MEMBER WHERE SID=1
 ;
- 
- 
+
+
 --○ 롤백
 ROLLBACK;
- 
- 
+
+
 --○ 기존 테이블 제거
 DROP TABLE TBL_SCORE;
- 
- 
+
+
 --------------------------------------------------------------------------------
 --○ 테이블 생성(TBL_MEMBERSCORE)
 CREATE TABLE TBL_MEMBERSCORE
@@ -5371,14 +5371,14 @@ CREATE TABLE TBL_MEMBERSCORE
              REFERENCES TBL_MEMBER(SID)
 );
 --==>> Table TBL_MEMBERSCORE이(가) 생성되었습니다.
- 
- 
+
+
 --○ 샘플 데이터 입력
 INSERT INTO TBL_MEMBERSCORE(SID, KOR, ENG, MAT) VALUES(1, 90, 80, 70);
 INSERT INTO TBL_MEMBERSCORE(SID, KOR, ENG, MAT) VALUES(2, 80, 70, 60);
 --==>> 1 행 이(가) 삽입되었습니다. *2
- 
- 
+
+
 --○ 확인
 SELECT SID, KOR, ENG, MAT
 FROM TBL_MEMBERSCORE
@@ -5391,12 +5391,12 @@ SELECT SID, KOR, ENG, MAT FROM TBL_MEMBERSCORE ORDER BY SID
 1	90	80	70
 2	80	70	60
 */
- 
- 
+
+
 --○ 커밋
 COMMIT;
- 
- 
+
+
 --○ 입력된 성적 데이터 갯수 확인
 SELECT COUNT(*) AS COUNT
 FROM TBL_MEMBERSCORE;
@@ -5404,8 +5404,8 @@ FROM TBL_MEMBERSCORE;
 SELECT COUNT(*) AS COUNT FROM TBL_MEMBERSCORE
 ;
 --==> 2
- 
- 
+
+
 --○ 성적 데이터 수정
 UPDATE TBL_MEMBERSCORE
 SET KOR=91, ENG=81, MAT=71
@@ -5414,8 +5414,8 @@ WHERE SID=1;
 UPDATE TBL_MEMBERSCORE SET KOR=91, ENG=81, MAT=71 WHERE SID=1
 ;
 --==>> 1 행 이(가) 업데이트되었습니다.
- 
- 
+
+
 --○ 확인
 SELECT *
 FROM TBL_MEMBERSCORE;
@@ -5424,13 +5424,13 @@ FROM TBL_MEMBERSCORE;
 1	91	81	71
 2	80	70	60
 */
- 
- 
+
+
 --○ 커밋
 COMMIT;
 --==>> 커밋 완료.
- 
- 
+
+
 --○ 성적 데이터 삭제
 DELETE
 FROM TBL_MEMBERSCORE
@@ -5439,13 +5439,13 @@ WHERE SID=1;
 DELETE FROM TBL_MEMBERSCORE WHERE SID=1
 ;
 --==>> 1 행 이(가) 삭제되었습니다.
- 
- 
+
+
 --○ 롤백
 ROLLBACK;
 --==>> 롤백 완료.
- 
- 
+
+
 --○ 전체 리스트 조회 쿼리문 구성
 SELECT M.SID, M.NAME, M.TEL
     , S.KOR, S.ENG, S.MAT
@@ -5456,8 +5456,8 @@ WHERE M.SID = S.SID;
 1	노은하	010-1111-1111	91	81	71
 2	박가영	010-2222-2222	80	70	60
 */
- 
- 
+
+
 --○ 전체 리스트 조회 쿼리문 구성 -> 개선 -> LEFT JOIN
 SELECT M.SID, M.NAME, M.TEL
     , S.KOR, S.ENG, S.MAT
@@ -5471,8 +5471,8 @@ WHERE M.SID = S.SID(+);
 4	김수환	010-4444-4444	(NULL) (NULL) (NULL)	
 5	김다슬	010-5555-5555	(NULL) (NULL) (NULL)
 */
- 
- 
+
+
 --○ 전체 리스트 조회 쿼리문 구성 -> 개선 -> LEFT JOIN -> 개선 -> NVL()
 SELECT M.SID, M.NAME, M.TEL
     , NVL(S.KOR, -1) AS KOR
@@ -5488,8 +5488,8 @@ WHERE M.SID = S.SID(+);
 4	김수환	010-4444-4444	-1	-1	-1
 5	김다슬	010-5555-5555	-1	-1	-1
 */
- 
- 
+
+
 --○ 전체 리스트 조회 전용 뷰 생성(VIEW_MEMBERSCORE)
 CREATE OR REPLACE VIEW VIEW_MEMBERSCORE
 AS
@@ -5500,8 +5500,8 @@ SELECT M.SID, M.NAME, M.TEL
 FROM TBL_MEMBER M, TBL_MEMBERSCORE S
 WHERE M.SID = S.SID(+);
 --==>> View VIEW_MEMBERSCORE이(가) 생성되었습니다.
- 
- 
+
+
 --○ 생성한 뷰(VIEW_MEMBERSCORE)를 활용한 리스트 조회
 SELECT SID, NAME, KOR, MAT
     , (KOR+ENG+MAT) AS TOT
@@ -5510,18 +5510,18 @@ SELECT SID, NAME, KOR, MAT
 FROM VIEW_MEMBERSCORE
 ORDER BY SID;
 --> 한 줄 구성
-SELECT SID, NAME, KOR, MAT, (KOR+ENG+MAT) AS TOT, (KOR+ENG+MAT)/3 AS AVG, RANK() OVER(ORDER BY (KOR+ENG+MAT) DESC) AS RANK FROM VIEW_MEMBERSCORE ORDER BY SID
+SELECT SID, NAME, KOR, ENG, MAT, (KOR+ENG+MAT) AS TOT, (KOR+ENG+MAT)/3 AS AVG, RANK() OVER(ORDER BY (KOR+ENG+MAT) DESC) AS RANK FROM VIEW_MEMBERSCORE ORDER BY SID
 ;
 --==>>
 /*
-1	노은하	91	71	243	81	1
-2	박가영	80	60	210	70	2
-3	채다선	-1	-1	-3	-1	3
-4	김수환	-1	-1	-3	-1	3
-5	김다슬	-1	-1	-3	-1	3
+1	노은하	91	81	71	243	81	1
+2	박가영	80	70	60	210	70	2
+3	채다선	-1	-1	-1	-3	-1	3
+4	김수환	-1	-1	-1	-3	-1	3
+5	김다슬	-1	-1	-1	-3	-1	3
 */
- 
- 
+
+
 --○ 생성한 뷰(VIEW_MEMBERSCORE)를 활용한 번호 검색
 SELECT SID, NAME, KOR, ENG, MAT
 FROM VIEW_MEMBERSCORE
@@ -5529,10 +5529,10 @@ WHERE SID=1;
 --> 한 줄 구성
 SELECT SID, NAME, KOR, ENG, MAT FROM VIEW_MEMBERSCORE WHERE SID=1
 ;
- 
+
 --==>> 1	노은하	91	81	71
- 
- 
+
+
 --○ 참조 데이터 레코드 수 확인
 SELECT COUNT(*) AS COUNT
 FROM TBL_MEMBERSCORE
@@ -5543,6 +5543,7 @@ SELECT COUNT(*) AS COUNT FROM TBL_MEMBERSCORE WHERE SID=1
 --==>> 1
 -- 1이 나올 경우 -> 성적 처리 됨
 -- 0이 나올 경우 -> 성적 처리 되지 않음
+
 ```
 #### 5.11.4.2. MemberDAO.java
 ``` java
@@ -5550,17 +5551,53 @@ SELECT COUNT(*) AS COUNT FROM TBL_MEMBERSCORE WHERE SID=1
 #### 5.11.4.3. MemberDTO.java
 ``` java
 ```
-#### 5.11.4.4. MemberinserForm.jsp
+#### 5.11.4.4. MemberScoreDAO.java
+``` java
+```
+#### 5.11.4.5. MemberScoreDTO.java
+``` java
+```
+
+#### 5.11.4.6. MemberDelete.jsp
 ``` html
 ```
-#### 5.11.4.5. ScoreInsert.jsp
+#### 5.11.4.7. MemberInsert.jsp
 ``` html
 ```
-#### 5.11.4.5. ScoreInsert.jsp
+#### 5.11.4.8. MemberInsertForm.jsp
 ``` html
 ```
-#### 5.11.4.5. ScoreInsert.jsp
+#### 5.11.4.9. MemberScoreDelete.jsp
 ``` html
+```
+#### 5.11.4.10. MemberScoreInsert.jsp
+``` html
+```
+#### 5.11.4.11. MemberScoreInsertForm.jsp
+``` html
+```
+#### 5.11.4.12. MemberScoreSelect.jsp
+``` html
+```
+
+#### 5.11.4.13. MemberScoreUpdate.jsp
+``` html
+```
+#### 5.11.4.14. MemberScoreUpdateForm.jsp
+``` html
+```
+```
+#### 5.11.4.15. MemberUpdate.jsp
+``` html
+```
+```
+#### 5.11.4.16. MemberUpdateForm.jsp
+``` html
+```
+```
+#### 5.11.4.17. Notice.jsp
+``` html
+```
 ```
 
 ------------------------------------------------
