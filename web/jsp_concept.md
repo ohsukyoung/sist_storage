@@ -5547,57 +5547,1771 @@ SELECT COUNT(*) AS COUNT FROM TBL_MEMBERSCORE WHERE SID=1
 ```
 #### 5.11.4.2. MemberDAO.java
 ``` java
+/* =================================================
+	MemberDAO.java
+	- 데이터베이스 액션 처리 전용 클래스
+		(TBL_MEMBER 테이블 전용 DAO)
+==================================================== */
+package com.test;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import com.util.DBConn;
+
+public class MemberDAO
+{
+	// 주요 속성 구성
+	private Connection conn;
+	
+	// 데이터베이스 연결 담당 메소드
+	public Connection connection() throws ClassNotFoundException, SQLException
+	{
+		conn = DBConn.getConnection();
+		return conn;
+	}
+	
+	// 데이터 입력 담당 메소드
+	public int add(MemberDTO dto) throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "INSERT INTO TBL_MEMBER(SID, NAME, TEL) VALUES(MEMBERSEQ.NEXTVAL, ?, ?)";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, dto.getName());
+		pstmt.setString(2, dto.getTel());
+		
+		result = pstmt.executeUpdate();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 회원 리스트 전체 출력 담당 메소드
+	public ArrayList<MemberDTO> lists() throws SQLException
+	{
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		
+		String sql = "SELECT SID, NAME, TEL FROM TBL_MEMBER ORDER BY SID";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			MemberDTO dto = new MemberDTO();
+			dto.setSid(rs.getString("SID"));
+			dto.setName(rs.getString("NAME"));
+			dto.setTel(rs.getString("TEL"));
+			
+			result.add(dto);
+		}
+		
+		rs.close();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 전체 회원 수 확인 담당 메소드
+	public int count() throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "SELECT COUNT(*) AS COUNT FROM TBL_MEMBER";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		while(rs.next())
+		{
+			result = rs.getInt("COUNT");
+		}
+		rs.close();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 데이터베이스 연결 종료(해제) 담당 메소드
+	public void close() throws SQLException
+	{
+		DBConn.close();
+	}
+	
+	
+	// 메소드 추가
+	// 번호 검색 담당 메소드(번호를 통해 회원 데이터 조회)
+	//-- 현재... 번호(sid)는 TBL_MEMBER 테이블에서 식별자의 역할을 수행할 수 있으며
+	//	이로 인해 번호를 통한 검색 결과는 한 명의 회원일 수 밖에 없기 때문에 반환 자료형은 MemberDTO로 구성한다.
+	public MemberDTO searchMember(String sid) throws SQLException
+	// 여러가지를 검색한 결과는 -> ArrayList
+	// 한가지만 얻어낼 것이므로 
+	{
+		MemberDTO result = new MemberDTO();
+		
+		String sql = "SELECT SID, NAME, TEL FROM TBL_MEMBER WHERE SID=?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(sid));
+		
+		ResultSet rs = pstmt.executeQuery();
+		while(rs.next())
+		{
+			result.setSid(rs.getString("SID"));
+			result.setName(rs.getString("NAME"));
+			result.setTel(rs.getString("TEL"));
+		}
+		rs.close();
+		pstmt.close();		
+		
+		return result;
+	}
+	
+	// 메소드 추가
+	// 회원 데이터 수정 담당 메소드
+	public int modify(MemberDTO member) throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "UPDATE TBL_MEMBER SET NAME=?, TEL=? WHERE SID=?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, member.getName());
+		pstmt.setString(2, member.getTel());
+		pstmt.setInt(3, Integer.parseInt(member.getSid()));
+		
+		result = pstmt.executeUpdate();
+		
+		pstmt.close();		
+		
+		return result;
+	}
+	
+	// 메소드 추가
+	// 회원 데이터 삭제 담당 메소드
+	public int remove(String sid) throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "DELETE FROM TBL_MEMBER WHERE SID=?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(sid));
+		
+		result = pstmt.executeUpdate();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 메소드 추가
+	// 자식 테이블의 참조 데이터 레코드 수 확인
+	public int refCount(String sid) throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "SELECT COUNT(*) AS COUNT FROM TBL_MEMBERSCORE WHERE SID=?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(sid));
+		ResultSet rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			result = rs.getInt("COUNT");
+		}
+		rs.close();
+		pstmt.close();
+		
+		return result;
+	}
+	
+
+}
 ```
 #### 5.11.4.3. MemberDTO.java
 ``` java
+/* =================================================
+	MemberScoreDTO.java
+	- 객체 전용(데이터 보관 및 전송) -> JAVA Bean
+==================================================== */
+package com.test;
+
+public class MemberDTO
+{
+	// 주요 속성(프로퍼티 구성)
+	private String sid, name, tel;	//-- 번호, 이름, 전화번호
+
+	// getter / setter 구성
+	public String getSid()
+	{
+		return sid;
+	}
+
+	public void setSid(String sid)
+	{
+		this.sid = sid;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getTel()
+	{
+		return tel;
+	}
+
+	public void setTel(String tel)
+	{
+		this.tel = tel;
+	}
+	
+	
+}
+
 ```
 #### 5.11.4.4. MemberScoreDAO.java
 ``` java
+/* =================================================
+	MemberScoreDAO.java
+	- 데이터베이스 액션 처리 전용 클래스
+		(TBL_MEMBERSCORE 테이블 전용 DAO)
+==================================================== */
+
+package com.test;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import com.util.DBConn;
+
+public class MemberScoreDAO
+{
+	// 주요 속성 구성
+	private Connection conn;
+	
+	// 데이터베이스 연결 담당 메소드
+	public Connection connection() throws ClassNotFoundException, SQLException
+	{
+		conn = DBConn.getConnection();
+		return conn;
+	}
+	
+	// 데이터 입력 담당 메소드(성적 데이터 입력)
+	public int add(MemberScoreDTO dto) throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "INSERT INTO TBL_MEMBERSCORE(SID, KOR, ENG, MAT) VALUES(?, ?, ?, ?)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(dto.getSid()));
+		pstmt.setInt(2, dto.getKor());
+		pstmt.setInt(3, dto.getEng());
+		pstmt.setInt(4, dto.getMat());
+		
+		result = pstmt.executeUpdate();
+		pstmt.close();		
+		
+		return result;
+	}
+	
+	// 성적 전체 리스트 출력 담당 메소드(성적 데이터 전체 출력)
+	public ArrayList<MemberScoreDTO> lists() throws SQLException
+	{
+		ArrayList<MemberScoreDTO> result = new ArrayList<MemberScoreDTO>();
+		
+		String sql ="SELECT SID, NAME, KOR, ENG, MAT"
+				+ ", (KOR+ENG+MAT) AS TOT"
+				+ ", (KOR+ENG+MAT)/3 AS AVG"
+				+ ", RANK() OVER(ORDER BY (KOR+ENG+MAT) DESC) AS RANK"
+				+ " FROM VIEW_MEMBERSCORE ORDER BY SID";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			MemberScoreDTO score =  new MemberScoreDTO();
+			score.setSid(rs.getString("SID"));
+			score.setName(rs.getString("NAME"));
+			score.setKor(rs.getInt("KOR"));
+			score.setEng(rs.getInt("ENG"));
+			score.setMat(rs.getInt("MAT"));
+			score.setTot(rs.getInt("TOT"));
+			score.setAvg(rs.getDouble("AVG"));
+			score.setRank(rs.getInt("RANK"));
+			
+			result.add(score);
+		}
+		rs.close();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 데이터베이스 연결 종료 해제
+	public void close() throws SQLException
+	{
+		DBConn.close();
+	}
+	
+	// 메소드 추가
+	// 번호 검색 담당 메소드
+	public MemberScoreDTO search(String sid) throws SQLException
+	{
+		MemberScoreDTO result = new MemberScoreDTO();
+		
+		String sql = "SELECT SID, NAME, KOR, ENG, MAT FROM VIEW_MEMBERSCORE WHERE SID=?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(sid));
+		ResultSet rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			result.setSid(rs.getString("SID"));
+			result.setName(rs.getString("NAME"));
+			result.setKor(rs.getInt("KOR"));
+			result.setEng(rs.getInt("ENG"));
+			result.setMat(rs.getInt("MAT"));
+		}
+		rs.close();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 메소드 추가
+	// 성적 데이터 수정 담당 메소드
+	public int modify(MemberScoreDTO dto) throws SQLException
+	{
+		int result = 0;
+		
+		String sql="UPDATE TBL_MEMBERSCORE SET KOR=?, ENG=?, MAT=? WHERE SID=?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, dto.getKor());
+		pstmt.setInt(2, dto.getEng());
+		pstmt.setInt(3, dto.getMat());
+		pstmt.setInt(4, Integer.parseInt(dto.getSid()));
+		
+		result = pstmt.executeUpdate();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	// 메소드 추가
+	// 성적 데이터 삭제 담당 메소드
+	public int remove(String sid) throws SQLException
+	{
+		int result = 0;
+		
+		String sql = "DELETE FROM TBL_MEMBERSCORE WHERE SID=?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(sid));
+		result = pstmt.executeUpdate();
+		pstmt.close();
+		
+		return result;
+	}
+	
+	
+	
+}
+
 ```
 #### 5.11.4.5. MemberScoreDTO.java
 ``` java
-```
+/* =================================================
+	MemberScoreDTO.java
+	- 객체 전용(데이터 보관 및 전송) -> JAVA Bean
+==================================================== */
+package com.test;
 
+public class MemberScoreDTO
+{
+	// VIEW_MEMBERSCORE 조회 항목을 기준으로
+	// 프로퍼티(property) 구성
+	private String sid, name;	//-- 번호, 이름
+	private int kor, eng, mat;	//-- 국어점수, 영어점수, 수학점수
+	private int tot, rank;		//-- 총점, 석차(등수)
+	private double avg;			//-- 평균
+	
+	// getter / setter 구성
+	public String getSid()
+	{
+		return sid;
+	}
+	public void setSid(String sid)
+	{
+		this.sid = sid;
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	public int getKor()
+	{
+		return kor;
+	}
+	public void setKor(int kor)
+	{
+		this.kor = kor;
+	}
+	public int getEng()
+	{
+		return eng;
+	}
+	public void setEng(int eng)
+	{
+		this.eng = eng;
+	}
+	public int getMat()
+	{
+		return mat;
+	}
+	public void setMat(int mat)
+	{
+		this.mat = mat;
+	}
+	public int getTot()
+	{
+		return tot;
+	}
+	public void setTot(int tot)
+	{
+		this.tot = tot;
+	}
+	public int getRank()
+	{
+		return rank;
+	}
+	public void setRank(int rank)
+	{
+		this.rank = rank;
+	}
+	public double getAvg()
+	{
+		return avg;
+	}
+	public void setAvg(double avg)
+	{
+		this.avg = avg;
+	}
+	
+	
+}
+
+```
 #### 5.11.4.6. MemberDelete.jsp
 ``` html
+<%@page import="com.test.MemberDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// MemberDelete.jsp
+	
+	// 이전 페이지(MemberSelect.jsp)로 부터 넘어온 데이터 수신
+	// -> sid
+	
+	String sid = request.getParameter("sid");
+	
+	MemberDAO dao = new MemberDAO();
+	
+	String strAddr = "";
+	
+	try
+	{
+		dao.connection();
+		
+		//dao.remove(sid);
+		
+		// 참조 레코드 수 확인
+		int checkCount = dao.refCount(sid);
+		//-- TBL_MEMBER 테이블에서 제거하고자 하는 데이터의 SID 를 참조하는 TBL_MEMBERSCORE 테이블 내의 데이터 갯수 확인
+		//	(현재는 0 or 1)
+		
+		if(checkCount==0)	//-- 제거 가능
+		{
+			dao.remove(sid);
+			strAddr = "MemberSelect.jsp";
+		}else				//-- 제거 불가
+		{
+			//dao.remove(sid);
+			strAddr = "Notice.jsp";
+			//-- TBL_MEMBERSCORE 테이블의 데이터가 TBL_MEMBER 테이블의 SID 를 참조하고 있는 경우(성적이 이미 나온 경우)로,
+			//	삭제가 불가능한 상황
+			//-- 제거하지 못하는 사유를 안내하는 페이지로 이동 + 리스트로 돌아가기 기능 추가
+		}
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	// check~!!!
+	// 사용자가 다시 요청해야 할 페이지 안내
+	response.sendRedirect(strAddr);
+	
+// 나머지 보여주는 코드 모두 제거
+%>
+
 ```
 #### 5.11.4.7. MemberInsert.jsp
 ``` html
+<%@page import="com.test.MemberDTO"%>
+<%@page import="com.test.MemberDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// MemberInsert.jsp
+	//-- 데이터베이스의 테이블(TBL_MEMBER)에 회원 데이터 추가 액션 처리 수행
+	//	... 이후 ... 클라이언트가 다시 리스트 페이지(MemberSelect.jsp)를 요청할 수 있도록 안내
+	
+	// 이전 페이지로(MemberInserForm.jsp)로 부터 넘어온 데이터 수신
+	//-> uName, uTel
+	
+	request.setCharacterEncoding("UTF-8");
+	String uName = request.getParameter("uName");
+	String uTel = request.getParameter("uTel");
+	
+	MemberDAO dao = new MemberDAO();
+	
+	try
+	{
+		// 데이터베이스 연결
+		dao.connection();
+		
+		// MemberDTO 객체 생성 및 속성 구성(->add() 메소드 호출을 위해 필요)
+		MemberDTO member = new MemberDTO();
+		member.setName(uName);
+		member.setTel(uTel);
+		
+		// insert 쿼리문을 수행하는 dao의 add() 메소드 호출
+		dao.add(member);
+		
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			// 데이터베이스 연결 종료
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	// check~!!!
+	// 클라이언트가 MemberSelect.jsp 페이지를 다시 요청할 수 있도록 안내
+	response.sendRedirect("MemberInsertForm.jsp");
+%>
+
 ```
 #### 5.11.4.8. MemberInsertForm.jsp
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MemberInsertForm.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/MemberScore.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript">
+// 입력하기 버튼 클릭시 호출되는 자바스크립트 함수
+function memberSubmit()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	var memberForm = document.getElementById("memberForm");
+	
+	var uName = document.getElementById("uName");
+	var nameMsg = document.getElementById("nameMsg");
+	
+	nameMsg.style.display = "none";
+	
+	if(uName.value=="")
+	{
+		nameMsg.style.display="inline";
+		uName.focus();
+		return;
+	}
+	
+	// form 을 직접 지정하여 submit 액션 수행
+	memberForm.submit();
+}
+function memberReset()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	var memberForm = document.getElementById("memberForm");
+	var uName = document.getElementById("uName");
+	var nameMsg = document.getElementById("nameMsg");
+	
+	nameMsg.style.display = "none";
+	
+	// form 을 직접 지정하여 reset 액션 수행
+	memberForm.reset();
+	
+	uName.focus();
+}
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>회원 <span style="color: #FF8F8F;">명단</span> 관리
+		 및 <span style="color: #508D69;">입력</span> 페이지</h1>
+</div>
+
+<div class="layout">
+	<div class="btn_box">
+		<a href="MemberSelect.jsp"><button type="button">회원 명단 관리</button></a>
+	</div>
+	
+	<div>
+		<!-- 회원 데이터 입력 폼 구성 -->
+		<form action="MemberInsert.jsp" method="post" id="memberForm">
+			<table class="table">
+				<tr>
+					<th style="width: 150px;">이름(*)</th>
+					<td>
+						<input type="text" id="uName" name="uName">
+					</td>
+					<td>
+						<span class="errMsg" id="nameMsg">이름을 입력해야 합니다.</span>
+					</td>
+				</tr>
+				<tr>
+					<th>전화번호</th>
+					<td>
+						<input type="text" id="uTel" name="uTel">
+					</td>
+					<td></td>
+				</tr>
+			</table>
+			
+			<div class="btn_box">
+				<a href="javascript:memberSubmit();"><button type="button">입력하기</button></a>
+				<a href="javascript:memberReset();"><button type="button">취소하기</button></a>
+				<a href="MemberSelect.jsp"><button type="button">목록으로</button></a>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+</body>
+</html>
 ```
 #### 5.11.4.9. MemberScoreDelete.jsp
 ``` html
+<%@page import="com.test.MemberScoreDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// MemberScoreDelete.jsp
+	
+	// 이전 페이지(MemberScoreSelect.jsp)로 부터 넘어온 데이터 수신
+	// -> sid
+	
+	String sid = request.getParameter("sid");
+	
+	MemberScoreDAO dao = new MemberScoreDAO();
+	
+	try
+	{
+		dao.connection();
+		
+		dao.remove(sid);
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}	
+	}
+	
+	response.sendRedirect("MemberScoreSelect.jsp");
+%>
+
 ```
 #### 5.11.4.10. MemberScoreInsert.jsp
 ``` html
+<%@page import="com.test.MemberScoreDTO"%>
+<%@page import="com.test.MemberScoreDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// MemberScoreInsert.jsp
+	
+	// 이전 페이지(MemberScoreInsertForm.jsp)로 부터 넘어온 데이터 수신
+	// -> kor, eng, mat + sid
+	
+	String sid = request.getParameter("sid");
+	String kor = request.getParameter("kor");
+	String eng = request.getParameter("eng");
+	String mat = request.getParameter("mat");
+	
+	// MemberScoreDAO 인스턴스 생성
+	MemberScoreDAO dao = new MemberScoreDAO();
+	
+	try
+	{
+		// 데이터베이스 연결
+		dao.connection();
+		
+		// MemberScoreDTO 객체 구성 -> add() 메소드의 매개변수
+		MemberScoreDTO score = new MemberScoreDTO();
+		score.setSid(sid);
+		score.setKor(Integer.parseInt(kor));
+		score.setEng(Integer.parseInt(eng));
+		score.setMat(Integer.parseInt(mat));
+		
+		
+		// dao 의 add() 메소드 호출 -> 데이터 입력(insert 쿼리문 수행)
+		// -> MemberScoreDT0 매개변수 필요
+		dao.add(score);
+		
+		// 위의 메소드가 반환하는 값에 따른 결과 분기 코드 삽입 가능~!!!
+		
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			// 데이터베이스 연결 종료
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	// 클라이언트가 새로운 페이지를 요청 할 수 있도록 안내
+	response.sendRedirect("MemberScoreSelect.jsp");	
+
+// 아래 보여주는 코드 모두 제거
+%>
+
 ```
 #### 5.11.4.11. MemberScoreInsertForm.jsp
 ``` html
+<%@page import="com.test.MemberScoreDTO"%>
+<%@page import="com.test.MemberScoreDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지로(MemberScorSelect.jsp)부터 넘어온 데이터 수신
+	// -> sid
+	
+	String sid = request.getParameter("sid");
+	String name = "";
+	
+	// name 을 조회하기 위해 dao 인스턴스 생성
+	MemberScoreDAO dao = new MemberScoreDAO();
+	
+	try
+	{
+		// 데이터베이스 연결
+		dao.connection();
+		
+		// 수신한 sid 를 활용하여 name 얻어내기
+		MemberScoreDTO score = dao.search(sid);
+		name = score.getName();
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());		
+	}
+	finally
+	{
+		try
+		{
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());		
+		}
+	}
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MemberScoreInsertForm.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/MemberScore.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript">
+// 입력하기 버튼 클릭시 호출되는 자바스크립트 함수
+function memberScoreSubmit()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	var memberScoreForm = document.getElementById("memberScoreForm");
+	
+	var kor = document.getElementById("kor");
+	var eng = document.getElementById("eng");
+	var mat = document.getElementById("mat");
+	
+	var korMsg = document.getElementById("korMsg");
+	var engMsg = document.getElementById("engMsg");
+	var matMsg = document.getElementById("matMsg");
+	
+	korMsg.style.display = "none";
+	engMsg.style.display = "none";
+	matMsg.style.display = "none";
+	
+	
+	if(kor.value=="" || isNaN(kor.value) || Number(kor.value)<0 || Number(kor.value)>100)
+	{
+		korMsg.style.display ="inline";
+		kor.focus();
+		return;
+	}
+	if(eng.value=="" || isNaN(eng.value) || Number(eng.value)<0 || Number(eng.value)>100)
+	{
+		engMsg.style.display ="inline";
+		eng.focus();
+		return;
+	}
+	if(mat.value=="" || isNaN(mat.value) || Number(mat.value)<0 || Number(mat.value)>100)
+	{
+		matMsg.style.display ="inline";
+		mat.focus();
+		return;
+	}
+	
+	memberScoreForm.submit();
+}// end memberScoreForm.submit()
+
+function memberScoreReset()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	var memberScoreForm = document.getElementById("memberScoreForm");
+	var kor = document.getElementById("kor");
+	
+	var korMsg = document.getElementById("korMsg");
+	var engMsg = document.getElementById("engMsg");
+	var matMsg = document.getElementById("matMsg");
+	
+	korMsg.style.display="none";
+	engMsg.style.display="none";
+	matMsg.style.display="none";
+	
+	memberScoreForm.reset();
+	
+	kor.focus();
+}
+
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>회원 <span style="color: #62c8eb;">성적</span> 관리
+		 및 <span style="color: #508D69;">입력</span> 페이지</h1>
+</div>
+
+<div class="layout">
+	<div class="btn_box">
+		<a href="MemberScoreSelect.jsp"><button type="button">회원 성적 관리</button></a>
+	</div>
+	
+	<div>
+		<!-- 성적 데이터 입력 폼 구성 -->
+		<form action="MemberScoreInsert.jsp?sid=<%=sid %>" method="post" id="memberScoreForm">
+			<table class="table">
+				<tr>
+					<th>번호</th>
+					<td><%=sid %></td>	<!-- 1 -->
+					<td></td>
+				</tr>
+				<tr>
+					<th style="width: 150px;">이름(*)</th>
+					<td>
+						<%=name %>		<!-- 문정환 -->
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>국어점수</th>
+					<td>
+						<input type="text" id="kor" name="kor">
+					</td>
+					<td>
+						<span class="errMsap" id="korMsg" style="display:none;color: #FF8F8F;">0~100 사이의 국어점수 입력</span>
+					</td>
+				</tr>
+				<tr>
+					<th>영어점수</th>
+					<td>
+						<input type="text" id="eng" name="eng">
+					</td>
+					<td>
+						<span class="errMsap" id="engMsg" style="display:none;color: #FF8F8F;">0~100 사이의 영어점수 입력</span>
+					</td>
+				</tr>
+				<tr>
+					<th>수학점수</th>
+					<td>
+						<input type="text" id="mat" name="mat">
+					</td>
+					<td>
+						<span class="errMsap" id="matMsg" style="display:none;color: #FF8F8F;">0~100 사이의 수학점수 입력</span>
+					</td>
+				</tr>
+			</table>
+			
+			<div class="btn_box">
+				<a href="javascript:memberScoreSubmit();"><button type="button">입력하기</button></a>
+				<a href="javascript:memberScoreReset();"><button type="button">취소하기</button></a>
+				<a href="MemberScoreSelect.jsp"><button type="button">목록으로</button></a>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+</body>
+</html>
 ```
 #### 5.11.4.12. MemberScoreSelect.jsp
 ``` html
+<%@page import="com.test.MemberScoreDTO"%>
+<%@page import="com.test.MemberScoreDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	StringBuffer str = new StringBuffer();
+	MemberScoreDAO dao = new MemberScoreDAO();
+	
+	try
+	{
+		// 데이터베이스 연결
+		dao.connection();
+		
+		str.append("<table class='table'>");
+		str.append("	<tr>");
+		str.append("		<th class='numTh'>번호</th>");
+		str.append("		<th class='nameTh'>이름</th>");
+		str.append("		<th>국어점수</th><th>영어점수</th><th>수학점수</th>");
+		str.append("		<th>총점</th><th>평균</th><th>석차</th>");
+		str.append("		<th>성적처리</th>");
+		str.append("	</tr>");
+		
+		for(MemberScoreDTO score: dao.lists())
+		{
+			str.append("	<tr>");
+			str.append("		<td>"+score.getSid()+"</td>");
+			str.append("		<td>"+score.getName()+"</td>");
+			str.append("		<td>"+score.getKor()+"</td>");
+			str.append("		<td>"+score.getEng()+"</td>");
+			str.append("		<td>"+score.getMat()+"</td>");
+			str.append("		<td>"+score.getTot()+"</td>");
+			str.append("		<td>"+String.format("%.2f",score.getAvg())+"</td>");
+			str.append("		<td>"+score.getRank()+"</td>");
+			
+			// 성적 처리 항목(입력, 수정, 삭제)
+			/* 
+			str.append("		<td>");
+			str.append("			<button type='button' class='btn01'>입력</button>");
+			str.append("			<button type='button' class='btn01'>수정</button>");
+			str.append("			<button type='button' class='btn01'>삭제</button>");
+			str.append("		</td>");
+			str.append("	</tr>");
+			 */
+			 
+			if(score.getKor()==-1 && score.getEng()==-1 && score.getMat()==-1)
+			{
+				str.append("		<td>");
+				str.append("			<a href='MemberScoreInsertForm.jsp?sid="+score.getSid()+"'><button type='button' class='btn01'>입력</button></a>");
+				str.append("			<button type='button' class='btn01' disabled='disabled'>수정</button>");
+				str.append("			<button type='button' class='btn01' disabled='disabled'>삭제</button>");
+				str.append("		</td>");
+				str.append("	</tr>");
+			}
+			else
+			{
+				str.append("		<td>");
+				str.append("			<button type='button' class='btn01' disabled='disabled'>입력</button>");
+				str.append("			<a href='MemberScoreUpdateForm.jsp?sid="+score.getSid()+"'><button type='button' class='btn01'>수정</button></a>");
+				str.append("			<a href='javascript:memberScoreDelete("+score.getSid() +", \"" + score.getName()+"\")'><button type='button' class='btn01'>삭제</button></a>");
+				str.append("		</td>");
+				str.append("	</tr>");
+			}
+		}
+		str.append("</table>");
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			// 데이터베이스 연결 종료
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MemberScoreSelect.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/MemberScore.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+function memberScoreDelete(sid, name)
+{
+	// 확인
+	//alert("함수 연결");
+	
+	//alert("번호: "+ sid + ",이름:" + name);
+	
+	//※ name 을 문자열로 넘기는 과정에서 따옴표 주의할것~!!!
+	
+	var res = confirm("번호: "+ sid + ",이름:" + name + "\n이 회원의 정보를 정말 삭제하시겠습니까?");
+
+	if(res)
+		window.location.href="MemberScoreDelete.jsp?sid="+sid;
+}
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>회원 <span style="color: #62c8eb;">성적</span> 관리 및 출력 페이지</h1>
+</div>
+
+<div class="layout">
+	<div class="btn_box">
+		<a href="MemberSelect.jsp"><button type="button">회원 명단 관리</button></a>
+	</div>
+</div>
+
+<!-- 번호 이름 국어점수 영어점수 수학점수 총점 평균 석차		성적처리 -->
+<!-- 														입력 수정 삭제 -->
+<!-- <table>
+	<tr>
+		<th class='numTh'>번호</th>
+		<th class='nameTh'>이름</th>
+		<th>국어점수</th><th>영어점수</th><th>수학점수</th>
+		<th>총점</th><th>평균</th><th>석차</th>
+		<th>성적처리</th>
+	</tr>
+	<tr>
+		<td>"+score.getSid()+"</td>
+		<td>"+score.getName()+"</td>
+		<td>"+score.getKor()+"</td>
+		<td>"+score.getEng()+"</td>
+		<td>"+score.getMat()+"</td>
+		<td>"+score.getTot()+"</td>
+		<td>"+score.getAvg()+"</td>
+		<td>"+score.getRank()+"</td>
+		<td>
+			<button type='button' class='btn01'>입력</button>
+			<button type='button' class='btn01'>수정</button>
+			<button type='button' class='btn01'>삭제</button>
+		</td>
+	</tr>
+</table> -->
+<%=str.toString() %>
+
+</body>
+</html>
 ```
 
 #### 5.11.4.13. MemberScoreUpdate.jsp
 ``` html
+<%@page import="com.test.MemberScoreDAO"%>
+<%@page import="com.test.MemberScoreDTO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// MemberScoreUpdate.jsp
+	
+	// 이전 페이지로(MemberScoreUpdateForm.jsp)부터 넘어온 데이터 수신
+	// -> sid, kor, eng, mat
+	
+	String sid = request.getParameter("sid");
+	String korStr = request.getParameter("kor");
+	String engStr = request.getParameter("eng");
+	String matStr = request.getParameter("mat");
+	
+	int kor = Integer.parseInt(korStr);
+	int eng = Integer.parseInt(korStr);
+	int mat = Integer.parseInt(korStr);
+	
+	// MemberScoreDAO 인스턴스 생성
+	MemberScoreDAO dao = new MemberScoreDAO();
+	
+	try
+	{
+		dao.connection();
+		
+		MemberScoreDTO member = new MemberScoreDTO();
+		member.setSid(sid);
+		member.setKor(kor);
+		member.setEng(eng);
+		member.setMat(mat);
+		
+		dao.modify(member);
+		
+		// 위 메소드 호출 결과 반환값을 활용한 분기 처리 가능~!!!
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+	
+	// 변경된 URL로 다시 요청할 수 있도록 안내
+	response.sendRedirect("MemberScoreSelect.jsp");
+%>
 ```
 #### 5.11.4.14. MemberScoreUpdateForm.jsp
 ``` html
+<%@page import="com.test.MemberScoreDTO"%>
+<%@page import="com.test.MemberScoreDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지로(MemberScoreSelect.jsp)부터 넘어온 데이터 수신
+	// -> sid
+	
+	String sid = request.getParameter("sid");
+	String name = "";
+	int kor = 0;
+	int eng = 0;
+	int mat = 0;
+	
+	// name 을 조회하기 위해 dao 인스턴스 생성
+	MemberScoreDAO dao = new MemberScoreDAO();
+	
+	try
+	{
+		// 데이터베이스 연결
+		dao.connection();
+		
+		// 수신한 sid 를 활용하여 name 및 각 과목의 점수 얻어내기
+		MemberScoreDTO score = dao.search(sid);
+		name = score.getName();
+		kor = score.getKor();
+		eng = score.getEng();
+		mat = score.getMat();
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());		
+	}
+	finally
+	{
+		try
+		{
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());		
+		}
+	}
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MemberScoreUpdateForm.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/MemberScore.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript">
+// 입력하기 버튼 클릭시 호출되는 자바스크립트 함수
+function memberScoreSubmit()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	var memberScoreForm = document.getElementById("memberScoreForm");
+	
+	var kor = document.getElementById("kor");
+	var eng = document.getElementById("eng");
+	var mat = document.getElementById("mat");
+	
+	var korMsg = document.getElementById("korMsg");
+	var engMsg = document.getElementById("engMsg");
+	var matMsg = document.getElementById("matMsg");
+	
+	korMsg.style.display = "none";
+	engMsg.style.display = "none";
+	matMsg.style.display = "none";
+	
+	
+	if(kor.value=="" || isNaN(kor.value) || Number(kor.value)<0 || Number(kor.value)>100)
+	{
+		korMsg.style.display ="inline";
+		kor.focus();
+		return;
+	}
+	if(eng.value=="" || isNaN(eng.value) || Number(eng.value)<0 || Number(eng.value)>100)
+	{
+		engMsg.style.display ="inline";
+		eng.focus();
+		return;
+	}
+	if(mat.value=="" || isNaN(mat.value) || Number(mat.value)<0 || Number(mat.value)>100)
+	{
+		matMsg.style.display ="inline";
+		mat.focus();
+		return;
+	}
+	
+	memberScoreForm.submit();
+}// end memberScoreForm.submit()
+
+function memberScoreReset()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	var memberScoreForm = document.getElementById("memberScoreForm");
+	var kor = document.getElementById("kor");
+	
+	var korMsg = document.getElementById("korMsg");
+	var engMsg = document.getElementById("engMsg");
+	var matMsg = document.getElementById("matMsg");
+	
+	korMsg.style.display="none";
+	engMsg.style.display="none";
+	matMsg.style.display="none";
+	
+	memberScoreForm.reset();
+	
+	kor.focus();
+}
+
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>회원 <span style="color: #62c8eb;">성적</span> 관리
+		 및 <span style="color: #508D69;">수정</span> 페이지</h1>
+</div>
+
+<div class="layout">
+	<div class="btn_box">
+		<a href="MemberScoreSelect.jsp"><button type="button">회원 성적 관리</button></a>
+	</div>
+	
+	<div>
+		<!-- 성적 데이터 입력 폼 구성 -->
+		<form action="MemberScoreUpdate.jsp?sid=<%=sid %>" method="post" id="memberScoreForm">
+			<table class="table">
+				<tr>
+					<th>번호</th>
+					<td><%=sid %></td>	<!-- 1 -->
+					<td></td>
+				</tr>
+				<tr>
+					<th style="width: 150px;">이름(*)</th>
+					<td>
+						<%=name %>		<!-- 문정환 -->
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>국어점수</th>
+					<td>
+						<input type="text" id="kor" name="kor" value="<%=kor%>" style="text-align:center;">
+					</td>
+					<td>
+						<span class="errMsap" id="korMsg" style="display:none;color: #FF8F8F;">0~100 사이의 국어점수 입력</span>
+					</td>
+				</tr>
+				<tr>
+					<th>영어점수</th>
+					<td>
+						<input type="text" id="eng" name="eng" value="<%=eng%>" style="text-align:center;">
+					</td>
+					<td>
+						<span class="errMsap" id="engMsg" style="display:none;color: #FF8F8F;">0~100 사이의 영어점수 입력</span>
+					</td>
+				</tr>
+				<tr>
+					<th>수학점수</th>
+					<td>
+						<input type="text" id="mat" name="mat" value="<%=mat%>" style="text-align:center;">
+					</td>
+					<td>
+						<span class="errMsap" id="matMsg" style="display:none;color: #FF8F8F;">0~100 사이의 수학점수 입력</span>
+					</td>
+				</tr>
+			</table>
+			
+			<div class="btn_box">
+				<a href="javascript:memberScoreSubmit();"><button type="button">수정하기</button></a>
+				<a href="javascript:memberScoreReset();"><button type="button">취소하기</button></a>
+				<a href="MemberScoreSelect.jsp"><button type="button">목록으로</button></a>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+</body>
+</html>
 ```
-```
-#### 5.11.4.15. MemberUpdate.jsp
+#### 5.11.4.15. MemberSelect.jsp
 ``` html
+<%@page import="com.test.MemberDTO"%>
+<%@page import="com.test.MemberDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	StringBuffer str = new StringBuffer();
+	MemberDAO dao = new MemberDAO();
+	
+	try
+	{
+		dao.connection();
+		
+		str.append("<table class='table'>");
+		str.append("		<tr>");
+		str.append("			<th style='width: 50px'>번호</th>");
+		str.append("			<th style='width: 50px'>이름</th>");
+		str.append("			<th style='width: 50px'>전화번호</th>");
+		str.append("			<th style='width: 50px'>관리</th>");
+		str.append("		</tr>");
+		
+		for(MemberDTO member:dao.lists())
+		{
+			str.append("		<tr>");
+			str.append("			<td>"+ member.getSid() +"</td>");
+			str.append("			<td>"+ member.getName() +"</td>");
+			str.append("			<td>"+ member.getTel() +"</td>");
+			str.append("			<td>");
+			str.append("				<a href='MemberUpdateForm.jsp?sid="+ member.getSid() +"'>");
+			str.append("					<button type='button' class='btn01'>수정</button>");
+			str.append("				</a>");
+			
+			/* str.append("				<a href='javascript:memberDelete("+member.getSid()+","+member.getName()+");'>"); */
+			str.append("				<a href='javascript:memberDelete("+member.getSid()+", \""+member.getName()+"\");'>");
+			
+			// memberDelete(1, '노은하');
+			// ※ 자바스크립트에서 사용할 수 있는 따옴표의 종류
+			//		①"" ②'' ③\"\"
+			//		일반적으로 따옴표가 두 번 중첩되어 사용하게 되면 ①과 ②를 사용하면 된다.
+			//		하지만, 따옴표가 세 번 중첩되어 사용될 경우 ③ escape를 사용해야 한다.
+			
+			str.append("					<button type='button' class='btn01'>삭제</button>");
+			str.append("				</a>");
+			str.append("			</td>");
+			str.append("		</tr>");
+		}
+		str.append("</table>");
+		
+	}               		
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			//DBConn.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MemberSelect.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/MemberScore.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+function memberDelete(sid, name)
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	// 확인
+	//alert("번호:"+ sid +",이름:"+name);
+	
+	var res = confirm("번호:"+ sid +",이름:"+name+"\n이 회원의 정보를 정말 삭제하시겠습니까?");
+	
+	// 확인
+	//alert(res);
+	//-- confirm() 함수를 통해 호출되는 창은 사용자의 의사표현 결과에 따라 true(확인)또는 false(취소)를 반환하게 된다.
+	
+	if(res)
+		window.location.href="MemberDelete.jsp?sid="+sid;
+}
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>회원 <span style="color: #FF8F8F;">명단</span> 관리 및 출력 페이지</h1>
+</div>
+
+<div class="layout">
+	<div class="btn_box">
+		<a href="MemberScoreSelect.jsp"><button type="button">회원 성적 관리</button></a>
+		<a href="MemberInsertForm.jsp"><button type="button">신규 회원 등록</button></a>
+	</div>
+	
+	<!-- 리스트 출력 -->
+	<!-- <table class="table">
+		<tr>
+			<th style="width: 50px">번호</th>
+			<th style="width: 50px">이름</th>
+			<th style="width: 50px">전화번호</th>
+			<th style="width: 50px">관리</th>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>희동이</td>
+			<td>010-1111-1111</td>
+			<td>
+				<a><button type="button" class="btn01">수정</button></a>
+				<a><button type="button" class="btn01">삭제</button></a>
+			</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>도우너</td>
+			<td>010-2222-2222</td>
+			<td>
+				<a><button type="button" class="btn01">수정</button></a>
+				<a><button type="button" class="btn01">삭제</button></a>
+			</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>마이콜</td>
+			<td>010-3333-3333</td>
+			<td>
+				<a><button type="button" class="btn01">수정</button></a>
+				<a><button type="button" class="btn01">삭제</button></a>
+			</td>
+		</tr>
+	</table> -->
+	<%=str.toString() %>
+</div>
+
+</body>
+</html>
 ```
-```
-#### 5.11.4.16. MemberUpdateForm.jsp
+#### 5.11.4.16. MemberUpdate.jsp
 ``` html
+<%@page import="com.test.MemberDAO"%>
+<%@page import="com.test.MemberDTO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	//MemberUpdate.jsp
+	
+	// 이전 페이지로(MemberUpdateForm.jsp)로 부터 넘어온 데이터 수신
+	//-> sid, uName, uTel
+	
+	request.setCharacterEncoding("UTF-8");
+	
+	String sid = request.getParameter("sid");
+	String name = request.getParameter("uName");
+	String tel = request.getParameter("uTel");
+	
+	MemberDAO dao = new MemberDAO();
+	
+	try
+	{
+		dao.connection();
+		
+		MemberDTO member = new MemberDTO();
+		member.setSid(sid);
+		member.setName(name);
+		member.setTel(tel);
+		
+		dao.modify(member);
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());
+	}
+	finally
+	{
+		try
+		{
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}	
+	}
+	
+	// 클라이언트에 MemberSelect.jsp 페이지를 다시 요청할 수 있도록 안내~!!!
+	response.sendRedirect("MemberSelect.jsp");
+	
+// 이후 보여지는 페이지 구성 모두 삭제
+%>
 ```
-```
-#### 5.11.4.17. Notice.jsp
+#### 5.11.4.17. MemberUpdateForm.jsp
 ``` html
+<%@page import="com.test.MemberDTO"%>
+<%@page import="com.test.MemberDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지(MemberSelect.jsp)로부터 넘어온 데이터 수신
+	// -> sid
+	
+	// 수신한 sid 를 가지고 회원 데이터 조회
+	// 조회해서 얻어낸 데이터를 폼에 구성
+	
+	String sid = request.getParameter("sid");
+	String name = "";
+	String tel = "";
+	
+	MemberDAO dao = new MemberDAO();
+	
+	try
+	{
+		// 데이터 베이스 연결
+		dao.connection();
+		
+		MemberDTO member = dao.searchMember(sid);
+		name = member.getName();
+		tel = member.getTel();
+	}
+	catch(Exception e)
+	{
+		System.out.println(e.toString());		
+	}
+	finally
+	{
+		try
+		{
+			dao.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MemberUdpateForm.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/MemberScore.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript">
+// 입력하기 버튼 클릭시 호출되는 자바스크립트 함수
+function memberSubmit()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	var memberForm = document.getElementById("memberForm");
+	
+	var uName = document.getElementById("uName");
+	var nameMsg = document.getElementById("nameMsg");
+	
+	nameMsg.style.display = "none";
+	
+	if(uName.value=="")
+	{
+		nameMsg.style.display="inline";
+		uName.focus();
+		return;
+	}
+	
+	// form 을 직접 지정하여 submit 액션 수행
+	memberForm.submit();
+}
+function memberReset()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	var memberForm = document.getElementById("memberForm");
+	var uName = document.getElementById("uName");
+	var nameMsg = document.getElementById("nameMsg");
+	
+	nameMsg.style.display = "none";
+	
+	// form 을 직접 지정하여 reset 액션 수행
+	memberForm.reset();
+	
+	uName.focus();
+}
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>회원 <span style="color: #FF8F8F;">명단</span> 관리
+		 및 <span style="color: #61A3BA;">수정</span> 페이지</h1>
+</div>
+
+<div class="layout">
+	<div class="btn_box">
+		<a href="MemberSelect.jsp"><button type="button">회원 명단 관리</button></a>
+	</div>
+	
+	<div>
+		<!-- 회원 데이터 수정 폼 구성 -->
+		<!-- <form action="MemberUpdate.jsp" method="post" id="memberForm"> -->
+		<!-- 방법 ③: get 방식으로 주소에서 sid 넘김 -->
+		<form action="MemberUpdate.jsp?sid=<%=sid %>" method="post" id="memberForm">
+			<table class="table">
+				<tr>
+					<th>번호</th>
+					<!-- <td>1</td> -->
+					<td>
+						<%=sid %>
+						<!-- **번호(sid)를 submit 시 넘기는 방법 3가지** -->
+						<!-- 방법 ①: type="hidden" 사용 -->
+						<input type="hidden" name="sid" value="<%=sid%>">
+						<!-- 방법 ②: disabled 사용 -->
+						<%-- <input type="text" name="sid" value="<%=sid%>" disabled="disabled"> --%>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th style="width: 150px;">이름(*)</th>
+					<td>
+						<input type="text" id="uName" name="uName" value="<%=name %>">
+					</td>
+					<td>
+						<span class="errMsg" id="nameMsg">이름을 입력해야 합니다.</span>
+					</td>
+				</tr>
+				<tr>
+					<th>전화번호</th>
+					<td>
+						<input type="text" id="uTel" name="uTel" value="<%=tel %>">
+					</td>
+					<td></td>
+				</tr>
+			</table>
+			
+			
+			
+			<div class="btn_box">
+				<a href="javascript:memberSubmit();"><button type="button">수정하기</button></a>
+				<a href="javascript:memberReset();"><button type="button">취소하기</button></a>
+				<a href="MemberSelect.jsp"><button type="button">목록으로</button></a>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+</body>
+</html>
 ```
+#### 5.11.4.18. Notice.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Notice.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div class="layout">
+	<div class="result_box">
+		해당 회원의 정보를 삭제하기 위해서는 <br>
+		등록된 성적 정보를 먼저 삭제해야 합니다.<br><br>
+		
+		<a href="MemberSelect.jsp" style="color:blue;">▶리스트로 돌아가기</a>
+	</div>
+</div>
+</body>
+</html>
 ```
 
 ------------------------------------------------
