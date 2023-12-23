@@ -1,10 +1,11 @@
-# 5. JSP(Java Server Page)
+# 5. 
 
-## 5.1. JSP(Java Server Pages): 웹 프로그램 작성 언어의 한 종류
-## 5.2. JSP(Java Server Pages)는 동적(Dynamic)인 웹 페이지를 비교적 간단히 만들 수 있는 방법을 제공하는
+## 5.1. JSP(Java Server Page)
+### 5.1.1. JSP(Java Server Pages): 웹 프로그램 작성 언어의 한 종류
+### 5.1.2. JSP(Java Server Pages)는 동적(Dynamic)인 웹 페이지를 비교적 간단히 만들 수 있는 방법을 제공하는
     자바를 기반으로 하고 있는 스크립트(Server Side Script)로
     자바 엔터프라이즈 어플리케이션에서 UI(User Interface) 영역을 담당하고 있다.
-## 5.3. JSP(Java Server Pages)는 자바의 서버 환경에서 사용하는 스크립트 방식의 언어로 단일 스레디로 클라이언트의 요청에 서비스한다.
+### 5.1.3. JSP(Java Server Pages)는 자바의 서버 환경에서 사용하는 스크립트 방식의 언어로 단일 스레디로 클라이언트의 요청에 서비스한다.
     요청이 있을 때마다... 즉, 객체가 생성될 때 마다...
     프로세스를 생성하는 기존의 CGI와 는 달리 하나의 메모리를 공유하면서 서비스되는 원리를 갖고 있다.
     이러한 원리는 서버측 부하를 줄여주며, JSP 내부에는 보여준느 코드만 작성하고 직접 작업하는 부분은 자바 빈으로 구성하여 둘을 분리할 수 있다.
@@ -15,7 +16,7 @@
     브라우저(IE, CR, FF 등) <-----------> 웹서버(톰캣), 오라클
     요청 <----------------------------> 응답(HTML 웹 페이지)
 ```
-## 5.4. JSP 실행 구조
+## 5.2. JSP 실행 구조
     1단계. 웹클라이언트에서 웹 서버에 웹 프로그램(페이지) 요청.
 
     2단계. 웹 서버에서 웹 클라이언트가 요청한 JSP 프로그램(페이지) 로드.
@@ -29,7 +30,7 @@
 
     6단계. 웹 클라이언트는 응답받은 HTML Document 를 브라우저에서 웹 페이지 형태로 출력
 
-## 5.5. 이클립스 JSP 개발 환경 구축
+## 5.3. 이클립스 JSP 개발 환경 구축
 1) 프로젝트(new) 생성 시 『Dynamic Web Project』 선택
 2) 프로젝트 명 입력 시 식별자 작성 규칙을 준수
 원래 규칙에 따르면 『JspTest001.jsp』와 같이 명명해야 하지만,
@@ -67,8 +68,8 @@ http://localhost:3306/WebApp04/jsptest001.jsp
 ```
 ※ 원격 접속인 경우 localhost(127.0.0.1) 대신 목적지 서버의 IP Adress 를 작성해야 한다.
 
-## 5.6. ○ jsp 구성 요소
-### 5.6.1. 디렉티브(지시어)
+## 5.4. ○ jsp 구성 요소
+### 5.4.1. 디렉티브(지시어)
 - 페이지에 대한 설정 정보 지정. 클래스 속성을 변경.
 <%@  %>
 
@@ -102,7 +103,7 @@ include 디렉티브 처리 과정은
 정적으로 include 지시자를 사용한 JSP 페이지가 컴파일 되는 과정에서 include 되는 JSP 페이지 소스 내용을 그대로 포함해서 컴파일 한다.
 즉, 복사& 붙여넣기 방시그올 두 개의 파일을 하나로 구성한 후 같이 변화되고 컴파일 된다.
 
-### 5.6.2. 스크립트 요소
+### 5.4.2. 스크립트 요소
 - 스크립트 릿(Scriptlet)... 스크립 릿...스크립틀릿...
 JSP에 자바 코드를 기술
 <% %>
@@ -126,7 +127,7 @@ HTML 문서 결과값이 포함시키고자 할 때 사용
 멤버 변수의 입장을 취하게 되며 전역 변수의 성격을 가진다.
 또한, 『_jspInit()』, 『_jspDestory()』 와 같은 생명주기 운영을 위해 메소드를 재정의 할 수 있다.
 
-## 5.7. JSP 데이터 송수신 실습
+## 5.5. JSP 데이터 송수신 실습
 ``` html
 ex) Aaa.html    -> Bbb.jsp
     Aaa.html    -> Bbb.java(Servlet)
@@ -137,24 +138,24 @@ ex) Aaa.html    -> Bbb.jsp
 	<input> 이나 <button> 태그의 type="submit" 속성 필요  
 - Bbb 페이지에서는 request 객체의 getParameter() 메소드나  
 	getParameterValues() 메소드 필요  
-### 5.7.1. request 내부 객체
+### 5.5.1. request 내부 객체
 request 내부 객체는 웹 브라우저에서 JSP(또는 Servlet) 페이지로 전달되는 정보의 모임으로 HTTP 헤더와 HTTP 바디로 구성되며  
 , 웹 컨테이너는 요청된 HTTP 메세지를 통해 HttpServletRequest 객체 타입인 request 객체로 사용된다.  
 즉, request 객체는 웹 브라우저가 JSP(또는 Servlet) 페이지로 보내진 내용에 대한 정보를 갖고 있는 내부 객체인 것이다.
 
-### 5.7.2. String getParameter(name)
+### 5.5.2. String getParameter(name)
 이름이 name인 파라미터에 할당된 값을 반환하며, 지정된 파라미터 값이 없으면 null을 반환한다.
 
-### 5.7.3. String[] getparmaeterVlaues(name)
+### 5.5.3. String[] getparmaeterVlaues(name)
 이름이 name인 파라미터의 모든 값을 String 배열로 반환한다. 주로 checkbox 등 동일한 이름을 사용하는 form 태그의 값을 반환받기 위해 사용한다.
 
-### 5.7.4. void setCharacterEncoding(encode)
+### 5.5.4. void setCharacterEncoding(encode)
 전송된 데이터의 문자 인코딩 방식을 지정한다.
 
 <br>
 
-## 5.8. GET 방식과 POST 방식(데이터 전송 및 페이지 요청 방식)
-### 5.8.1. ○ GET 방식
+## 5.6. GET 방식과 POST 방식(데이터 전송 및 페이지 요청 방식)
+### 5.6.1. ○ GET 방식
 ``` html
 ex) https://n.news.naver.com/article/661/0000034464?cds=news_media_pc&type=editn
 
@@ -187,7 +188,7 @@ POST 방식처럼 form 태그를 사용하여 전송도 하고, 링크에 직접
 	window.location.href="http://url?키=값&키=값";
 	window.location.replace("http://url?키=값&키=값");
 ```
-### 5.8.2. ○ POST 방식
+### 5.6.2. ○ POST 방식
 ``` html
 ex) http://localhost:3306/WebApp05/jsptest005.jsp
 ```
@@ -204,8 +205,8 @@ ex) http://localhost:3306/WebApp05/jsptest005.jsp
 
 <br>
 
-## 5.9. ■ 포워딩(Forwarding)과 리다이렉트(Redirect) ■
-### 5.9.1. ○ 포워딩(Forwarding, 포워드)
+## 5.7. ■ 포워딩(Forwarding)과 리다이렉트(Redirect) ■
+### 5.7.1. ○ 포워딩(Forwarding, 포워드)
 ``` html
 /* ** 
 mbc.co.kr -> -> -> imbc.kr
@@ -219,7 +220,7 @@ mbc.co.kr -> -> -> imbc.kr
 따라서 클라이언트는 포워딩이 발생한 사실을 알지 못하는 것이다.  
 포워딩은 클라이언트와 통신 없이 서버에서만 처리되기 때문에 리다이렉트보다 나은 성능을 갖는다고 할 수 있다.  
 
-### 5.9.2. ○ 리다이렉트(Redirect, 리다이렉팅, 리디렉션)
+### 5.7.2. ○ 리다이렉트(Redirect, 리다이렉팅, 리디렉션)
 ``` html
 /* ** 
 문제상황 발생 -> 요청후 종결됨!
@@ -242,19 +243,35 @@ mbc.co.kr -> -> -> imbc.kr
 다시 그에 대한 응바을 받은 클라이언트가 새로운 요청을 하게끔 만들어야 하는 경우에는 리다이렉트를 사용해야 한다.  
 <br>
 
-## 5.10.  ■ Servlet(서블릿) ■
-### 5.10.0. 웹 어플리케이션을 구축하기 위한 웹 프로그램을 구성하는 언어의 한 종류.
+## 5.8. JAVA Bean(자바 빈)
+
+<br>
+
+## 5.9. 쿠키(Cookie)와 세션
+
+<br>
+
+## 5.10. Emmet(에밋)
+
+<br>
+
+## 5.11. JSP 액션 태그(JSP Action Tag)
+
+<br>
+
+## 5.12.  ■ Servlet(서블릿) ■
+### 5.12.0. 웹 어플리케이션을 구축하기 위한 웹 프로그램을 구성하는 언어의 한 종류.
 (JAVA 기반)
 
-### 5.10.1. JSP 에서 정적인 부분을 담당하고, Servlet 에서는 동적인 처리를 위한 부분으로 사용되어 보다 효율적인 웹 어플리케이션을 구축할 수 있다.
+### 5.12.1. JSP 에서 정적인 부분을 담당하고, Servlet 에서는 동적인 처리를 위한 부분으로 사용되어 보다 효율적인 웹 어플리케이션을 구축할 수 있다.
 - JSP 	→ 단점. MVC 패턴을 적용하기 힘들다.
 - Servlet → 단점. 웹 페이지(view) 작성이 번거롭고 복잡하다. (불편)
 - Servlet + JSP → MVC 패턴 적용 및 웹 페이지(view)를 보다 편리하게 작성.
 					단점. 구조가 복잡해지게 된다.
 
-### 5.10.2. JSP 는 내부적으로 Web Container 가 Servlet 으로 변경시켜준다.
+### 5.12.2. JSP 는 내부적으로 Web Container 가 Servlet 으로 변경시켜준다.
 
-### 5.10.3. WEB-INF 는 환경 설정 파일이 저장되는 곳
+### 5.12.3. WEB-INF 는 환경 설정 파일이 저장되는 곳
 (→ 외부에서는 접근 불가 / 금지)  check~!!!
 - lib : 라이브러리 파일을 저장(ojdbc.jar, jstil.jar 등) 
 - J2EE
@@ -270,28 +287,496 @@ mbc.co.kr -> -> -> imbc.kr
 * .ear : jar + war  
 web.xml : context path 의 환경 설정  
 
-### 5.10.4. 『init()』 과 『destory()』는 단 한 번 호출되며
+### 5.12.4. 『init()』 과 『destory()』는 단 한 번 호출되며
 『service()』는 클라이언트의 요청이 있을 때 마다 호출된다.
 이제는 JSP를 『service()』 메소드 내부에 코딩하는 것과 같다.
 
-### 5.10.5. 『GenericServlet』 이나 『HttpServlet』을 활용한다.
+### 5.12.5. 『GenericServlet』 이나 『HttpServlet』을 활용한다.
 
-### 5.10.6. URL 패턴을 지정하는 방법은 크게 3 가지 이다.
+### 5.12.6. URL 패턴을 지정하는 방법은 크게 3 가지 이다.
 - 『/a』
 - 『/*』
 - 『.do』
 
-### 5.10.7. web.xml 을 수정하면 서버를 꼭 재구동한 이후에 실행해야 한다.
+### 5.12.7. web.xml 을 수정하면 서버를 꼭 재구동한 이후에 실행해야 한다.
 
-### 5.10.8. 지금까지는
+### 5.12.8. 지금까지는
 JSP(입력) → JSP(처리, 결과) 였으나  
 JSP 와 함께 Servelet 을 다루게 된 이후에는  
 JPS(입력) → Servlet(결과를 위한 처리) → JSP(결과) 방식으로 구성된다.  
 
 <br>
 
-## 5.11.  코드
-### 5.11. 1. jsptest001.jsp_디렉티브 영역, 스크립 릿 영역
+## 5.12. ■ EL(Express Language)과 JSTL(JSP Standard Tag Library) ■
+>- JSP 에서 표현식 쓰는 것:                  <%= 표현식%> 
+                                              ↓  1. 아래의 형태로 대체 될 것
+                                              ↓  2. 제이쿼리 선택자 운용방식과 비슷함'$(선택자)'
+>- EL 을 쓰는데 있어서 가장 많이 사용하는 것: "${aName}"
+
+### 5.12.1. ○ EL(Expression Language: 표현 언어)
+
+EL 은 JSTL 1.0 스펙에서 잠깐 소개되었다가 JSP 2.0 부터 공식적으로 포함되었으며 JSP 페이지에서 사용되는 자바 코드를 대신해서 액션 태그 엘리먼트의 속성에 값을 지정하는 역할을 한다.
+예를 들어, <someTags:aTag> 액션 태그 엘리먼트의 속성은 attribute 이고 속성값은 <% pageContent.getAttribute("aName")%> 인 경우
+
+<someTags:aTag attribute="<% pageContent.getAttribute("aName")%>"> 의 방식으로 표현하지만
+
+표현 언어(EL)에서는 다음과 같이 표현한다.
+<someTags:aTag attribute="${aName}">
+
+
+### 5.12.2. ○ JSTL(JSP Standard Tag Library)
+
+JSP 에서는 XML 처럼 사용자가 태그를 정의해서 사용하는 것이 가능하며 이와 같은 사용자 정의 태그를 커스텀 태그라고 하는데 이들 중 자주 사용하는 것을 표준으로 만들어 놓은 것이 JSTL 이다.
+
+JSP Standard Tag Libray(JSTL)는 일반적으로 웹 어플리케이션 기능인 반복(iteration)과 조건, 데이터 관리, 포맷, XML 조작, 데이터베이스 액세스를 구현하는 커스텀 태그 라이브러리 모음이다.
+
+JSP 의 스크립트와 HTML 코드를 혼용하여 사용하면 개발의 편의성을 제공하긴 하지만 코드의 복잡성을 증대시키는 문제가 있다.
+이와 같은 문제를 해결하기 위해 로직 부분의 JSP 코드를 태그로 대치시켜 HTML 과 같은 태그로 이루어진 코딩 방법이 제시되었다.
+
+JSTL 은 JSP 로직을 담당하는 부분인 if, for, while, DB 처리 등과 관련된 표준 커스텀 태그를 제공함으로써 코드를 간결하고 가독성이 좋도록 하며
+데이터 포맷, 반복 콘텐트 또는 조건 콘텐트와 같은 전형적인 표현 레이어를 위한 표준 구현을 제공하기 때문에 JSP작성자들이 어플리케이션 개발에 집중하는데 도움이 된다.
+
+JPS(JSTL) 작성 시 주의할 점은
+액션 태그도 그렇지만 JSTL 커스텀 태그도 XML 기반에서 작성되었기 때문에 모든 태그는 시작 태그와 종료 태그의 쌍으로 이루어져야 한다는 것이다.
+
+기존의 컨텍스트에서 JSTL을 사용하기 위해서는 웹 어플리케이션의 WEB-INF/lib 디렉터리에 필요한 라이브러리를 복사하여 붙여넣으면 된다.
+JSTL 의 주된 라이브러리 파일은 jstl.jar, standard.jar 파일이고, jaxen-full.jar, sxpath.jar, jaxp-api.jar 파일이 필요하다.
+이 파일들을 적재하고 컨텍스트를 리로드한다.
+
+- JSTL 을 사용하기 위한 환경 설정  
+    · 『https://jakarta.apache.org/』 에 접속  
+    · 왼편에 구성된 메뉴 목록들 중 『Taglibs』 클릭  
+        → 『https://tomcat.apache.org/taglibs/』  
+    · 왼편에 구성된 메뉴 목록들 중 『Standard』 클릭  
+        → 『https://tomcat.apache.org/taglibs/standard/』  
+    · 본문의 내용 중 『Standard 1.1』 항목의 『download』 클릭  
+        → 『https://archive.apache.org/dist/jakarta/taglibs/standard/』  
+    · 본문의 내용 중 『binaries/』 클릭  
+        → 『https://archive.apache.org/dist/jakarta/taglibs/standard/binaries/』  
+    · 본문의 내용 중 『jakarta-taglibs-standard-1.1.2.zip 2004-10-25 20:57  933K』 클릭  
+        → 다운로드 대화창 → 파일 다운로드 및 저장  
+        → 다운로드 완료 및 압축 해제  
+
+    이후...(압축 해제 후)...
+    『C:\Downloads\12_JSTL\jakarta-taglibs-standard-1.1.2\lib』 디렉터리 안에 있는 『jstl.jar』파일과 『standard.jar』파일
+    이렇게 두 개의 jar 파일을 현재 작업할(작업중인) 프로젝트의 『WebContent > WEB-INF > lib』 경로에 복사하여 붙여넣기 한다.
+
+    다음으로 ...
+    이클립스 환경 설정(Window > preferences) 클릭
+    → Web 항목 > JSP Files > Editer > Templates 접근
+
+    리스트 항목들 중 (체크박스는 건드리지 말고...)
+    new JSP Files(html5) 항목 선택 후 수정(Edit 버튼 클릭)
+
+    이어 열리는 대화창에서
+    최초 디렉티브(page) 아래에 다음과 같은 내용 추가
+    `『<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>』`
+
+- JSP 사용
+
+    JSTL 은 태생이 커스텀 태그이기 때문에 JSP 와 밀접한 관계가 있다.
+    application, session, request, response, pageContext 등의
+    내장 객체에 쉽게 접근하며, 그 외에도 파리미터, 쿠키, 헤더 등을 
+    복잡한 코드를 사용하지 않고 쉽게 직관적으로 사용할 수 있다.
+    또한, 기본저인 연산이나 객체 비교 등을 『.equals()』메소드 등을
+    사용하는 태신 『==』와 같이 쉽게 구현하였으며,
+    조건, 반복, 이동에 따른 태그를 지원하기 때문에 태그만으로도 반복 기능을 구현할 수 있다.
+
+    JSTL 의 처리 영역은 크게 4가지로 나누어진다.
+    core,           format,  xml,      sql
+    (기본 핵심 기능) (형식화) (xml처리) (sql처리)
+
+
+### 5.12.3. ※ 주요 분류 및 종류
+
+○ Core  
+    - 기능: 변수지원, 흐름제어, URL처리 등  
+    - 접두어(Prefix) : c  
+    - URI : http://java.sun.com/jsp/jstl/core  
+
+○ XML  
+    - 기능: XML 코어, 흐름제어, XML 변환  
+    - 접두어(Prefix) : x  
+    - URI : http://java.sun.com/jsp/jstl/xml  
+
+○ 국제화(형식화)  
+    - 기능: 지역, 메세지 형식, 숫자 및 날짜 형식 등  
+    - 접두어(Prefix) : fmt  
+    - URI : http://java.sun.com/jsp/jstl/fmt  
+
+○ 데이터베이스  
+    - 기능: SQL 지원  
+    - 접두어(Prefix) : sql  
+    - URI : http://java.sun.com/jsp/jstl/sql  
+
+○ Functions  
+    - 기능: 컬렉션처리, String처리 등   
+    - 접두어(Prefix) : fn  
+    - URI : http://java.sun.com/jsp/jstl/functions  
+
+
+
+### 5.12.4. ※ JSTL에 taglib 추가
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>  
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>  
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>  
+
+<br>
+
+## 5.13. ■ DBCP(DataBase Connection Pool) ■
+
+### 5.13.1. ○ 커넥션 풀(Connection Pool) 기법이란,   
+데이터베이스와 연결된 커넥션을 미리 만들어 풀(pool)속에 저장해 두고 있다가
+필요할 때에 커넥션을 풀에서 꺼내어 가져다 쓰고 다시 풀에 반환하는 기법을 말한다.
+
+### 5.13.2. ○ 데이터베이스를 연결하기 위한 커넥션(Connection)은 객체이다.
+이 객체는 새롭게 만들어지는 과정에서 많은 시스템 자원을 요구하게 된다.
+객체가 메모리에 할당되고, 객체에 사용할 여러 자원들에 대한 초기화 작업 
+그리고 객체가 더 이상 필요하지 않게 되었을 때 메모리를 회수하는 과정 등에서 많은 비용이 발생하고 요구되는 것이다.
+
+
+### 5.13.3. ○ JSP 페이지를 생성할 때 마다 커넥션을 생성해서 사용하게 되면 
+커넥션을 생성하고 닫는데 많은 시스템 자원을 요구하게 되기 때문에 
+동시 접속자수가 많은 웹사이트의 경우 전체 성능을 떨어뜨리는 원인이 될 수 있다.
+이러한 성능 저하 문제를 해결하기 위해 사용하는 일반적인 방식이 커넥션 풀(Connection Poll)기법인 것이다.
+
+
+### 5.13.4. ○ DBCP를 사용하기 위해서는 기본적으로 세 개의 패키지가 필요하다.
+- Jakarta-Commons DBCP 1.2.1 (commons-dbcp-1.2.1.jar)
+- Jakarta-Commons Collections 3.1 (commons-collections-3.1.jar)
+- Jakarta-Commons Pool 1.2 (common-pool-1.2.jar)
+
+
+### 5.13.5. ※ 하지만, 톰캣 6.x 부터 톰캣 서버 내부에 기본적으로 탑재되어 제공되기 때문에
+(경로: Tomcat Root/lib 또는 Tomcat Root/common/lib)
+(파일: tomcat-dbcp.jar)
+다른 파일을 추가하거나 변경하지 않아도 무방하다.
+
+
+### 5.13.6. ○ 실습 환경 설정
+1. Eclipse > Project Explorer > servers > Tomcat ... > context.xml
+    파일 접근 및 열기
+2. 해당 파일의 맨 아래에 즉, 『</Context>』 닫히기 전에...
+
+``` html
+    <Resource name="jdbc/myOracle" auth="Container"
+                type="javax.sql.DataSource"
+                driverClassName="oracle.jdbc.drifer.OracleDriver"
+                url="jdbc:oracle:thin:@localhost:1521:xe"
+                username="사용자계정명" password="계정패스워드"
+                maxActive="20" maxIdle="10" maxWait="-1">
+    </Resource>
+```
+내용을 추가한다.
+
+-name
+    : 리소스 식별을 위한 이름
+- auth
+    : 해당 리소스를 사용하게 되는 주체
+- type
+    : 리소스의 타입(패키지 경로 포함)
+- driverClassName
+    : 사용할 JDBC Driver 의 클래스 이름
+- url
+    : JDBC Driver 에 의해 연결할 Connection 에 대한 URL
+- username
+    : Connection 을 연결할 사용자 이름(오라클 사용자)
+- password
+    : Connection 을 연결할 사용자 이름에 대한 비밀번호(오라클 암호)
+- maxActive
+    : Connection Pool 이 제공할 최대 Connection 의 갯수
+    (사이트 최대 커넥션 사용량을 기준으로 지정. 동시 접속자 수를 감안하여 지정.)
+- maxIdle
+    : 사용되지 않고 풀(pool)에 저장할 수 있는 최대 Connection 의 갯수
+- maxWait
+    : 대기시간. 단위는 1/1000ch.
+    0 보다 작게 설정한 경우 무한히(응답을 받을 때 까지) 대기.
+
+
+<br>
+
+## 5.14. ■ 모델2 기반의 MVC 패턴 ■
+
+>- 디자인패턴: 여러 경우에 적용하는 공식(알고리즘)
+>- 나중에 우리가 Spring 이라는 프레임워크에 들어가게 되면
+어떤 생성문에 객체를 생성하는 것이 아니라,
+컨테이너 안에서 조절하는 것 -> 의존성 주입(의존 객체 주입) -> 안에 부품을 결합시키는 것과 똑같음
+
+### 5.14.1. ○ 개요
+MVC 패턴에서 MVC는 각각 Model, View, Controller 를 의미하는 것으로
+Model 은 데이터 또는 기본 기능(업무 로직)을 말하며,
+View 는 유저 인터페이스를 말한다.
+이 두가지는 시스템 개발에 있어서 반드시 필요한 부분이다.
+
+MVC 패턴은 C 패턴이라고 불러도 괜찮을 만큼
+한 마디로 말해 Controller 라는 레이어 계층을 두는 것이 가장 중요하다.
+즉, Graphical User Interface 를 활용하는 과정에서
+Model 과 View 계층 사이에
+Controller 계층을 만들어 사용할 수 있도록 하는 것이다.
+
+이렇게... 필수적인 두 계층 사이에
+필수적이지 않은 다른 계층을 두는 이유는
+두 계층(Model 과 View)이 직접적으로 결합되는 것을 막는 것으로
+Controller 계층은 Model 계층과 View 계층 사이에서 결합을 막아준다.
+Model 과 View의 직접적인 결합은 이 둘을 함께 바뀌도록 만들어 버린다.
+이것을 Controller 계층이 막아준다는 것이다.
+따라서... Controller 계층의 로직은 간단하게 설계해야 한다.
+
+### 5.14.2. ○ Web Application 에서의 MVC 구조
+
+JSP 는 로직과 프리젠테이션을 알맞게 구분하기 위해
+Model2 구조를 지원하고 있으며,
+Model2 구조의 개념과 구현 방법, 장단점 등을 이해하고
+적용시키는 것이 중요하다.
+
+- Model1 구조
+    모델1 구조는 일반적으로 JSP 페이지만으로 구성되어 있는 구조를 말한다.
+    즉, JSP 페이지에서 동적인 부분(로직 부분)은 스크립릿으로 처리하고
+    그 외 나머지 부분은 템플릿으로 처리하는 구조인 것이다.
+    모델1과 모델2의 가장 큰 차이점은
+    클라이언트 요청의 진입 지점이 다르다는 것이다.
+
+    · 장점
+        개발 시간이 단축된다.
+        단순한 페이지의 흐름을 바탕으로 MVC 구조에 대한
+        추가적인 이해가 필요하지 않다.
+
+    · 단점
+        HTML, Javascript, JSP 로직이 한 페이지에 작성되어
+        어플리케이션이 복잡해질수록 유지보수가 힘들어진다. (거의 불가능)
+        디자이너와 개발자 사이에 밀접하고 원활한 소통이 요구된다.
+
+- Model2 구조
+    모델2구조는 JSP 와 Servlet 그리고 JavaBean 컴포넌트를 함께 사용하며,
+    모델2에서 클라이언트 요청의 진입하는 지점은 컨트롤러이며,
+    대부분의 웹 어플리케이션의 컨트롤러는 Servlet 이 담당한다.
+
+    · 장점
+        로직과 프리젠테이션의 분리로 인해 어플리케이션이 명로해지고
+        유지보수나 확장이 용이하다.
+        디자이너와의 작업이 분리되어 있기 때문에
+        업무 진행이 원활하고 책임의 소재가 명확하다.
+
+    · 단점
+        개발 초기에 아키텍처 디자인을 위한 분석... 구성... 등의
+        시간 소요로 개발 기간이 전체적으로 늘어난다.
+        MVC 구조에 대한개발자들의 이해를 필요로하며,
+        이에 대한 이유로 사전 교육 기간등이 소요될 수 있다.
+
+
+### 5.14.3. ※ MVC(Model2) 구조
+
+- 모델(Model)
+    비즈니스 로직과 관련된 부분만 처리
+    데이터베이스 관련 로직 구현
+    Java Beans
+
+- 뷰(View)
+    사용자에게 알맞은 화면을 보여주는 역할을 수행
+    JSP
+
+- 컨트롤러(Controller)
+    어플리케이션의 흐름 제어나 사용자의 요청 구현
+    사용자 인증, 보안 설정, 전체 어플리케이션에 공통으로 영향을 주는 요소 구현
+    사용자의 요청에 대해 알맞은 모델 사용
+    사용자에게 보여줄 뷰 선택
+    Servlet
+
+
+### 5.14.4. ※ MVC(Model2) 구현
+
+- JSP 기반의 웹 어플리케이션에서 Controller 에 포함되어야 할 작업
+    · 웹 브라우저(클라이언트)의 요청을 받는다.
+    · 웹 브라우저(클라이언트)가 요구하는 작업을 분석한다.
+    · 요청한 작업을 처리하는 비즈니스 로직을 수행하는
+        모델(Model:JavaBean)을 사용한다.
+    · 처리 결과를 request 또는 session 에 저장한다.
+    · 적절한 뷰(View:JSP)를 선택하여
+        해당 뷰로 포워딩(forwarding)한다.
+
+- JSP 기반의 웹 어플리케이션에서 View 에 포함되어야 할 작업
+    · 서블릿(Servlet)에서 dispatcher.forwarding(request, response)로
+        해당 JSP 페이지와 request, response 를 공유한 경우
+        해당 JSP 페이지에서 request.getAttribute("result")와 같은 기능을 사용하여
+        결과를 화면에 표시할 수 있도록 처리한다.
+
+- JSP 기반의 웹 어플리케이션에서 Model 에 포함되어야 할 작업
+    · 컨트롤러(Controller)의 요청을 받는다.
+    · 비즈니스 로직을 처리한다.
+    · 처리한 비즈니스 로직의 결과를 컨트롤러(Controller)로 반환한다.
+
+-------------------------------------------------------------------------------------------------
+
+
+### 5.14.5. ○ MVC 관련 실습1
+
+- prj : WebApp24  
+    · web.xml           → URL 매핑  
+    · MVCBegin.Java     → Controllder 역할 (서블릿 클래스)    
+    · MVCBegin.jsp      → View 역할 (JSP 페이지)
+
+- 사용자 최초 요청 주소
+    http://localhost:3306/WebApp24/mvcbegin
+
+-------------------------------------------------------------------------------------------------
+
+
+### 5.14.6. ○ MVC 관련 실습2
+
+- prj : WebApp25  
+    · web.xml            → URL 매핑  
+    · MVCTest01.Java     → Controllder 역할 (서블릿 클래스)  
+    · MVCTest01.jsp      → View 역할 (JSP 페이지)  
+
+- 사용자 최초 요청 주소
+    http://localhost:3306/WebApp25/mvctest01
+
+-------------------------------------------------------------------------------------------------
+
+
+### 5.14.7. ○ MVC 관련 실습3
+
+- prj : WebApp25  
+    · web.xml            → URL 매핑  
+    · MVCTest02.Java     → Controllder 역할 (서블릿 클래스)  
+    · MVCTest02Model.java  → Model 역할 (일반 자바 클래스)                ++  
+    · MVCTest02.jsp      → View 역할 (JSP 페이지)  
+
+- 사용자 최초 요청 주소
+    http://localhost:3306/WebApp25/mvctest02
+
+-------------------------------------------------------------------------------------------------
+
+
+### 5.14.8. ○  폼(form) 데이터 전송 및 수신 과정 비교
+
+※ MVC 패턴 적용 이전 단계와 MVC 패턴 적용 이후 단계를
+    반드시 비교하여 이해할 수 있도록 할 것
+
+- A  
+    · prj: WebApp26  
+
+    · HelloSend01.html  
+    · HelloReceive01.jsp  
+
+    · 사용자 최초 요청 주소
+    http://localhost:3306/WebApp26/HelloSend01.html
+
+- B  
+    · prj: WebApp27  
+
+    · HelloSend02.html  
+    · HelloReceive02.jsp  
+    · web.xml  
+
+    · 사용자 최초 요청 주소
+    http://localhost:3306/WebApp27/HelloSend02.html
+
+- C  
+    · prj: WebApp28  
+
+    · HelloSend03.html  
+    · HelloSend03Controller.java  
+    · HelloReceive03.jsp  
+    · HelloReceive03Controller.java  
+    · HelloReceive03Model.java  
+    · web.xml  
+
+    · 사용자 최초 요청 주소
+    http://localhost:3306/WebApp28/hello
+        
+
+
+<br>
+
+## 5.15. jQuery(제이쿼리)
+>- 자바스크립트로 가능한 문법은 제이쿼리로 가능하고, 제이쿼리로 가능한 것은 자바스크립트로 가능하다.
+>- 자바스크립트로 가능하다면 왜 쓸까? -> 제이쿼리가 자바스크립트보다 축약해서 작성 가능
+
+○ 개요
+
+- jQuery 는 빠르고 간결한 Javascript Library
+- HTML Document traversing, 이벤트 처리, 애니메이션,
+    AJAX 를 단순화 하여 빠른 웹 개발을 가능하게 한다.
+- CSS 규격 지원: CSS 1 ~ 3 와 기본 XPath 지원.
+- 다양한 브라우저 지원.
+- 경량 파일(약 90kb 수준의 파일 크기)
+- John Resig 에 의해 개발.
+
+○ jQuery 를 사용함으로써 얻을 수 있는 장점
+
+- HTML 과 DOM, CSS 의 변경이 간편하다.
+- 이벤트 처리가 편하다.
+- 애니메이션과 같은 각종 효과를 적용하기 쉽다.
+- AJAX, JSON 과 같은 처리가 간편하다.
+- 브라우저 호환성을 해결할 수 있다.
+
+○ jQuery 다운로드 및 라이브러라 포함
+
+- jQuery 다운로드
+    http://jquery.com/
+
+- jQuery 를 사용하기 위한 라이브러리 포함
+    1. 로컬 PC 저장소에 물리적으로 존재할 때
+        (즉, 제이쿼리 파일을 다운로드 받은 경우,
+        특정 디렉터리 안에 들어있을 때 그 경로까지 지정해주어야 한다.)
+        <script type="text/javascript" src="jquery.x.x.x.js"></script>
+    2. CDN으로 경로 지정
+        <script type="text/javascript" src="http://code.jquery.com/jquery.x.x.x.js"></script>
+
+- jQuery UI 를 사용하기 위한 CSS 및 라이브러리 포함
+    <link rel="stylesheet" href="jquery-ui.css"></link>
+    <script type="text/javascript" src="jquery.x.x.x.js"></script>
+    <script type="text/javascript" src="jquery-ui-.x.x.x.custon.min.js"></script>
+    또는
+    <link rel="stylesheet" href="http://code.jquery.com/ui/.....css"></link>
+    <script type="text/javascript" src="http://code.jquery.com/ui/.....js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/...-ui.js"></script>
+
+○ jQuery 의 사용 방법(2가지)
+
+1. http://jquery.com/ 에서 파일을 다운로드하여 사용하는 방법
+    ※ 다운로드 받을 수 있는 종류
+        - 『production』 버전
+            : 소스를 압축(불필요한 공백 및 개행 제거)해서 웹 서버에서 빠르게 실행할 수 있도록 경량화/최소화 한 버전.
+        - 『development』 버전
+            : 테스트나 디버깅 또는 코드에 대한 분석을 위해
+                압축을 하지 않고 가독성을 높인 버전.
+                (공백 및 개행 처리가 되어있음.)
+
+2. CDN(Content Delivery Network) 을 통해 사용하는 방법
+    별도의 파일을 다운로드 받을 필요 없이
+    『<script type="text/javascript" 
+                src="http://code.jquery.com/jquery-x.x.x.js"></script>』
+    와 같은 구문을 통해 참조하여 포함시킨다.
+
+○ jQuery 참조 및 학습 사이트
+- http://try.jquery.com/
+- http://learn.jquery.com/
+- http://www.w3schools.com/jquery/
+
+<br>
+
+## 5.17. 
+
+<br>
+
+## 5.18. 
+
+<br>
+
+## 5.19. 
+
+<br>
+
+## 5.20. 
+
+<br>
+
+## 5.21.  코드
+### 5.21. 1. jsptest001.jsp_디렉티브 영역, 스크립 릿 영역
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/a2582513-2000-49f0-b7f3-d93d6c3efee1)
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
@@ -332,7 +817,7 @@ JPS(입력) → Servlet(결과를 위한 처리) → JSP(결과) 방식으로 �
 </body>
 </html>
 ```
-### 5.11. 2. jsptest002.jsp_『out』 출력 스트림, 『out.println』-> 띄어쓰기,『\n』-> 띄어쓰기,『<br>』 -> 개행
+### 5.21. 2. jsptest002.jsp_『out』 출력 스트림, 『out.println』-> 띄어쓰기,『\n』-> 띄어쓰기,『<br>』 -> 개행
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/f76599ae-0c04-4659-b0d2-16089d0d5ec2)
 
 ``` html
@@ -403,7 +888,7 @@ JPS(입력) → Servlet(결과를 위한 처리) → JSP(결과) 방식으로 �
 </html>
 ```
 
-### 5.11. 3. jsptest003.jsp_『_jspInit()』 메소드, 『_jspDestroy()』 메소드, 『_jspService()』 메소드
+### 5.21. 3. jsptest003.jsp_『_jspInit()』 메소드, 『_jspDestroy()』 메소드, 『_jspService()』 메소드
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/46532a6f-4d0b-4e05-85f2-2c35817ca2cf)
 
 ``` html
@@ -504,7 +989,7 @@ JPS(입력) → Servlet(결과를 위한 처리) → JSP(결과) 방식으로 �
 </html>
 ```
 
-### 5.11. 4. jsptest004.java_서블릿 관련 실습
+### 5.21. 4. jsptest004.java_서블릿 관련 실습
 ``` java
 /* ==================
 	Test004.java
@@ -584,7 +1069,7 @@ public class Test004 extends GenericServlet
 }
 ```
 
-#### 5.11. 4.1. web.xml
+#### 5.21. 4.1. web.xml
 ``` html
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
@@ -614,9 +1099,9 @@ public class Test004 extends GenericServlet
 
 <br>
 
-### 5.11. 5. [HttpServlet 관련 실습]
+### 5.21. 5. [HttpServlet 관련 실습]
 
-#### 5.11. 5.1. jsptest005.html_HttpServlet 관련 실습(HttpServlet 을 상속받는 클래스로 설계)
+#### 5.21. 5.1. jsptest005.html_HttpServlet 관련 실습(HttpServlet 을 상속받는 클래스로 설계)
 - >**스크립트제어-> id 속성, 서버제어-> name 속성**
 
 - ※ form 태그의 action 속성은 제이터 전송 및 페이지 요청을 해야하는 대상 페이지를 등록하는 기능을 수행.
@@ -691,7 +1176,7 @@ public class Test004 extends GenericServlet
 </html>
 ```
 
-#### 5.11. 5.2. Test005.java_요청받은 내용을 응답(출력스크림 구성)
+#### 5.21. 5.2. Test005.java_요청받은 내용을 응답(출력스크림 구성)
 ``` html
 /* ==================
 	Test005.java
@@ -784,7 +1269,7 @@ public class Test005 extends HttpServlet
 	}
 }
 ```
-#### 5.11. 5.3. web.xml_ jsp와 java를 servlet을 통해 연결
+#### 5.21. 5.3. web.xml_ jsp와 java를 servlet을 통해 연결
 ``` html
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
@@ -827,7 +1312,7 @@ public class Test005 extends HttpServlet
 
 </web-app>
 ```
-#### 5.11. 5.4. ResponseSample.html_HTML 코드 작성을 위한 샘플
+#### 5.21. 5.4. ResponseSample.html_HTML 코드 작성을 위한 샘플
 ``` html
 <!DOCTYPE html>
 <html>
@@ -854,11 +1339,11 @@ public class Test005 extends HttpServlet
 
 <br>
 
-### 5.11. 6. [JSP를 이용한 데이터 송수신 실습 01]
+### 5.21. 6. [JSP를 이용한 데이터 송수신 실습 01]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/326337d8-a76b-4590-b108-168264be3244)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/bc8a3c57-7d1c-4844-87f3-bbe170470bba)
 
-#### 5.11. 6.1. Hap.jsp_JSP를 이용한 데이터 송수신 실습 01
+#### 5.21. 6.1. Hap.jsp_JSP를 이용한 데이터 송수신 실습 01
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -903,7 +1388,7 @@ public class Test005 extends HttpServlet
 </body>
 </html>
 ```
-#### 5.11. 6.2. HapOk.jsp_JSP를 이용한 데이터 송수신 실습 01
+#### 5.21. 6.2. HapOk.jsp_JSP를 이용한 데이터 송수신 실습 01
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <% 
@@ -963,11 +1448,11 @@ public class Test005 extends HttpServlet
 
 <br>
 
-### 5.11. 7. [JSP를 이용한 데이터 송수신 실습 02]
+### 5.21. 7. [JSP를 이용한 데이터 송수신 실습 02]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/007b1ada-dadf-484b-887d-e83358bd545f)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/6fff8b6b-67b1-41f4-94ae-acd78b2b3b94)
 
-#### 5.11. 7.1. Gugudan.jsp_JSP를 이용한 데이터 송수신 실습 02
+#### 5.21. 7.1. Gugudan.jsp_JSP를 이용한 데이터 송수신 실습 02
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1009,7 +1494,7 @@ public class Test005 extends HttpServlet
 </body>
 </html>
 ```
-#### 5.11. 7.2. GugudanOk.jsp_JSP를 이용한 데이터 송수신 실습 02
+#### 5.21. 7.2. GugudanOk.jsp_JSP를 이용한 데이터 송수신 실습 02
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1097,13 +1582,13 @@ public class Test005 extends HttpServlet
 ```
 <br>
 
-### 5.11. 8. [radio, select 데이터 전송]
+### 5.21. 8. [radio, select 데이터 전송]
 // 한글 깨짐 방지 처리
 request.setCharacterEncoding("UTF-8"); // check~!!!
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/4e792111-3132-497d-a2d8-f5585244190b)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/3d2c33ad-ee4d-4a91-a5bf-e1f827eb2dc8)
 
-#### 5.11. 8.1. RadioSelect.jsp_radio, select 데이터 전송
+#### 5.21. 8.1. RadioSelect.jsp_radio, select 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1180,7 +1665,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.11. 8.2. RadioSelectOk.jsp_radio, select 데이터 전송
+#### 5.21. 8.2. RadioSelectOk.jsp_radio, select 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1252,12 +1737,12 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 ```
 <br>
 
-### 5.11. 9. [checkbox 데이터 전송]
+### 5.21. 9. [checkbox 데이터 전송]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/882d217e-3801-40c1-b494-9703270fc9c8)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/04b548f3-bd7c-404d-9d18-f095fd032e4d)
 
 
-#### 5.11. 9.1. CheckBox.jsp_checkbox 데이터 전송
+#### 5.21. 9.1. CheckBox.jsp_checkbox 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1314,7 +1799,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 
 ```
-#### 5.11. 9.2. CheckBoxOk.jsp_checkbox 데이터 전송
+#### 5.21. 9.2. CheckBoxOk.jsp_checkbox 데이터 전송
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1392,12 +1877,12 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 
 <br>
 
-### 5.11. 10. [JSP를 이용한 데이터 송수신 실습 05]
+### 5.21. 10. [JSP를 이용한 데이터 송수신 실습 05]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e7f49e2c-cbbe-42a5-bff4-d146fef87033)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8d8f11e7-8abf-4e40-8beb-157ee46822f2)
 
 
-#### 5.11. 10.1. Table.jsp_JSP를 이용한 데이터 송수신 실습 05
+#### 5.21. 10.1. Table.jsp_JSP를 이용한 데이터 송수신 실습 05
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -1440,7 +1925,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.11. 10.2. TableOk.jsp_ JSP를 이용한 데이터 송수신 실습 05
+#### 5.21. 10.2. TableOk.jsp_ JSP를 이용한 데이터 송수신 실습 05
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1515,9 +2000,9 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 ```
 
-### 5.11. 11. [디렉티브/ WebApp06]
+### 5.21. 11. [디렉티브/ WebApp06]
 
-#### 5.11. 11.1. Test001.jsp_page 디렉티브 buffer 속성 및 autoFlush 실습
+#### 5.21. 11.1. Test001.jsp_page 디렉티브 buffer 속성 및 autoFlush 실습
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!-- **
@@ -1562,7 +2047,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.11. 11.2. Test002.jsp_include 디렉티브 실습
+#### 5.21. 11.2. Test002.jsp_include 디렉티브 실습
 - 여러 JSP 페이지에서 공통적으로 포함하는 내용이 있을 때 이러한 내용을 매번 입력하지 않고 별도의 파일을 저장해 두었다가 JSP 파일에 삽입하도록 하는 것이 include 디렉티브 이다.
 - include 지시어는 JSP에서 서블릿 코드를 생성할 때 텍스트나 코드를 JSP 파일 안으로 포함시키며 포함되는 파일의 내용은 include 지시어가 있는 위치에 삽입된다.
 ``` html
@@ -1601,7 +2086,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.11. 11.3. Test003.jsp_include 디렉티브와 관련한 실습 진행중
+#### 5.21. 11.3. Test003.jsp_include 디렉티브와 관련한 실습 진행중
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1631,11 +2116,11 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 ```
 
-### 5.11. 12. [이름과 성적 데이터를 입력받는 html 페이지]
+### 5.21. 12. [이름과 성적 데이터를 입력받는 html 페이지]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/537c4fbd-8b1a-41e4-81c4-87a6226143f1)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/ac2992b1-470e-421b-a27a-240823cf174f)
 
-#### 5.11. 12.1. Sand01.html_데이터 송수신 실습 01
+#### 5.21. 12.1. Sand01.html_데이터 송수신 실습 01
 ``` html
 <!DOCTYPE html>
 <html>
@@ -1707,7 +2192,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.11. 12.2. Receive01.jsp_데이터 송수신 실습 01
+#### 5.21. 12.2. Receive01.jsp_데이터 송수신 실습 01
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1769,11 +2254,11 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </html>
 ```
 
-### 5.11. 13. [이름과 성적 데이터를 입력받는 html 페이지]
+### 5.21. 13. [이름과 성적 데이터를 입력받는 html 페이지]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e359ec7e-21ff-4a9a-a2a4-d43153ab5daa)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/cd79a7e5-5226-4939-9204-037bb13c3fbd)
 
-#### 5.11. 13.1. Send02.html_데이터 송수신 실습 02
+#### 5.21. 13.1. Send02.html_데이터 송수신 실습 02
 ``` html
 <!DOCTYPE html>
 <html>
@@ -1845,7 +2330,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.11. 13.2. Receive02.jsp _데이터 송수신 실습 02
+#### 5.21. 13.2. Receive02.jsp _데이터 송수신 실습 02
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -1898,11 +2383,11 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 ```
 
 
-### 5.11. 14. [두 개의 정수와 연산자를 입력받는 html 페이지]
+### 5.21. 14. [두 개의 정수와 연산자를 입력받는 html 페이지]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/d1dde9a2-1852-4237-990c-ae3a318a8900)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/28819f73-0c88-447a-8943-13108a239126)
 
-#### 5.11. 14.1. Send03.html_데이터 송수신 실습 03
+#### 5.21. 14.1. Send03.html_데이터 송수신 실습 03
 ``` html
 <!DOCTYPE html>
 <html>
@@ -1966,7 +2451,7 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 </body>
 </html>
 ```
-#### 5.11. 14.2. Receive03.jsp _데이터 송수신 실습 03
+#### 5.21. 14.2. Receive03.jsp _데이터 송수신 실습 03
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -2034,12 +2519,12 @@ request.setCharacterEncoding("UTF-8"); // check~!!!
 ```
 
 
-### 5.11. 15. [회원 가입과 관련한 기본 정보를 입력받는 html 페이지]
+### 5.21. 15. [회원 가입과 관련한 기본 정보를 입력받는 html 페이지]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/50eaca82-4aec-4aca-b942-e03d5daf313c)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/58112152-afad-4385-bce8-e12409ccf919)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/cb923124-d24f-470d-8f90-f34ac183f3ef)
 
-#### 5.11. 15.1. Send04.html_데이터 송수신 실습 04
+#### 5.21. 15.1. Send04.html_데이터 송수신 실습 04
 ``` html
 <!DOCTYPE html>
 <html>
@@ -2295,7 +2780,7 @@ function formCheck()
 </body>
 </html>
 ```
-#### 5.11. 15.2. Receive04.jsp_데이터 송수신 실습 04
+#### 5.21. 15.2. Receive04.jsp_데이터 송수신 실습 04
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -2373,11 +2858,11 @@ function formCheck()
 ```
 
 
-### 5.11. 16. [구구단 결과를 출력하는 JSP(Receive05.jsp)]
+### 5.21. 16. [구구단 결과를 출력하는 JSP(Receive05.jsp)]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8bf07065-0bc3-4bc2-9446-60d45ad95b52)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/55123adf-6384-4592-83d5-7f5b1ec15719)
 
-#### 5.11. 16.1. Send05.html_데이터 송수신 실습 05
+#### 5.21. 16.1. Send05.html_데이터 송수신 실습 05
 ``` html
 <!DOCTYPE html>
 <html>
@@ -2473,7 +2958,7 @@ function formChange(obj)
 </body>
 </html>
 ```
-#### 5.11. 16.2. Receive05.jsp_ 데이터 송수신 실습 05
+#### 5.21. 16.2. Receive05.jsp_ 데이터 송수신 실습 05
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -2528,12 +3013,12 @@ function formChange(obj)
 ```
 
 
-### 5.11. 17. [이전 페이지(SendAndReceive06.jsp -> 자기자신)로부터 넘어온 데이터 수신]
+### 5.21. 17. [이전 페이지(SendAndReceive06.jsp -> 자기자신)로부터 넘어온 데이터 수신]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/3939aa38-80c5-474a-9d7e-0363ee7afb0d)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/292e7bb3-7839-4ee2-951a-edec2955f02f)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/5b7feaf6-d22c-46a8-b96f-6d498e95b710)
 
-#### 5.11. 17.1. SendAndReceive06.jsp_데이터 송수신 실습 06
+#### 5.21. 17.1. SendAndReceive06.jsp_데이터 송수신 실습 06
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -2650,7 +3135,7 @@ function formChange(obj)
 </html>
 ```
 
-### 5.11. 18. SendAndReceive07_1.html_데이터 송수신 실습 07_달력을 출력하는 JSP 페이지
+### 5.21. 18. SendAndReceive07_1.html_데이터 송수신 실습 07_달력을 출력하는 JSP 페이지
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/c48a18f7-e5e1-47dc-8777-be65e64c6285)
 
 ``` html
@@ -2989,7 +3474,7 @@ function formCalendar(obj)
 </html>
 ```
 
-### 5.11. 19. SendAndReceive08.jsp_데이터 송수신 실습 08_달력을 출력하는 JSP 페이지
+### 5.21. 19. SendAndReceive08.jsp_데이터 송수신 실습 08_달력을 출력하는 JSP 페이지
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/5d37885b-3129-458b-b159-773f37bdcdda)
 
 ``` html
@@ -3193,13 +3678,13 @@ function formCalendar(obj)
 ```
 
 
-### 5.11. 20. [포워딩과 리다이렉트]
+### 5.21. 20. [포워딩과 리다이렉트]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/898915c5-e3c4-456a-a058-814ef4770a10)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/414dd208-f23d-4e54-a77d-abb840d60f79)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/1bd56ba2-7cdf-4179-9693-77d961b51bd2)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/9c11cefc-ec7c-4459-a0c2-a0b2b4ebf026)
 
-#### 5.11. 20.1. Send09.jsp_포워딩과 리다이렉트
+#### 5.21. 20.1. Send09.jsp_포워딩과 리다이렉트
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -3247,7 +3732,7 @@ function formCalendar(obj)
 </body>
 </html>
 ```
-#### 5.11. 20.2. Send09_re.jsp_포워딩과 리다이렉트
+#### 5.21. 20.2. Send09_re.jsp_포워딩과 리다이렉트
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -3295,7 +3780,7 @@ function formCalendar(obj)
 </body>
 </html>
 ```
-#### 5.11. 20.3. Send09_for.jsp_포워딩과 리다이렉트
+#### 5.21. 20.3. Send09_for.jsp_포워딩과 리다이렉트
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -3340,7 +3825,7 @@ function formCalendar(obj)
 </body>
 </html>
 ```
-#### 5.11. 20.4. Receive09.jsp_포워딩과 리다이렉트
+#### 5.21. 20.4. Receive09.jsp_포워딩과 리다이렉트
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -3380,13 +3865,13 @@ function formCalendar(obj)
 </html>
 ```
 
-### 5.11. 21. [■ 포워딩 / 리다이렉트 관련 중요한 실습(forward 처리) ■]
+### 5.21. 21. [■ 포워딩 / 리다이렉트 관련 중요한 실습(forward 처리) ■]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/fc0ecc99-4a9c-466f-a803-ebc2e6f570dc)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/ccef45a1-a7ea-4ea4-858a-96cbbfaa966a)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/5660ea3f-37fb-44ce-a4f0-5140370d9cae)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/4e34682b-c20d-4f54-ab2f-492406ae0ceb)
 
-#### 5.11. 21.1. Send10.jsp_사용자 최초 요청 페이지
+#### 5.21. 21.1. Send10.jsp_사용자 최초 요청 페이지
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -3450,7 +3935,7 @@ function formCalendar(obj)
 </body>
 </html>
 ```
-#### 5.11. 21.2. Forward10.jsp_연산 전용 페이지
+#### 5.21. 21.2. Forward10.jsp_연산 전용 페이지
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -3506,7 +3991,7 @@ function formCalendar(obj)
 </body>
 </html>
 ```
-#### 5.11. 21.3. Forward10_1.jsp_연산 전용 페이지
+#### 5.21. 21.3. Forward10_1.jsp_연산 전용 페이지
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>	<!-- **JSP라는 정체성. 지우면 안됨** -->
 <%
@@ -3613,7 +4098,7 @@ function formCalendar(obj)
 %>
 ```
 
-#### 5.11. 21.4. Receive10.jsp_최종 결과 출력 페이지
+#### 5.21. 21.4. Receive10.jsp_최종 결과 출력 페이지
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -3648,11 +4133,11 @@ function formCalendar(obj)
 </html>
 ```
 
-### 5.11. 22. [■ 포워딩 / 리다이렉트 관련 중요한 실습( redirect 처리)■]
+### 5.21. 22. [■ 포워딩 / 리다이렉트 관련 중요한 실습( redirect 처리)■]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/dd28973b-a568-48c6-81d9-3bd80616e9e5)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/ce1759df-397b-4488-a6b3-7b0cc16e38dc)
 
-#### 5.11. 22.1. Send11.jps_사용자 최초 요청 페이지
+#### 5.21. 22.1. Send11.jps_사용자 최초 요청 페이지
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -3714,7 +4199,7 @@ function formCalendar(obj)
 </body>
 </html>
 ```
-#### 5.11. 22.2. Forward11.js_연산 전용 페이지
+#### 5.21. 22.2. Forward11.js_연산 전용 페이지
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -3752,7 +4237,7 @@ function formCalendar(obj)
 	
 %>
 ```
-#### 5.11. 22.3. Receive11.jsp_최종 결과 출력 페이지
+#### 5.21. 22.3. Receive11.jsp_최종 결과 출력 페이지
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -3801,7 +4286,7 @@ function formCalendar(obj)
 </html>
 ```
 
-### 5.11. 23. Test001.jsp_ 데이터베이스 연결 실습
+### 5.21. 23. Test001.jsp_ 데이터베이스 연결 실습
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/9b0b41bb-119b-4641-b965-701c86b29b84)
 ``` html
 <%@page import="java.sql.Connection"%>
@@ -3848,11 +4333,11 @@ function formCalendar(obj)
 </html>
 ```
 
-### 5.11. 24. [데이터베이스 연결 및 데이터 처리]
+### 5.21. 24. [데이터베이스 연결 및 데이터 처리]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/29ed8371-f396-4237-b8d1-c83804bb4157)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/fa9bc74c-b379-4deb-b5dc-c061b3533799)
 
-#### 5.11. 24.1. WebApp08_scott.sql
+#### 5.21. 24.1. WebApp08_scott.sql
 ``` sql
 SELECT USER
 FROM DUAL;
@@ -3935,7 +4420,7 @@ COMMIT;
 --==>> 커밋 완료.
 ```
 
-#### 5.11. 24.2. Test002.jsp_데이터베이스 연결 및 데이터 처리
+#### 5.21. 24.2. Test002.jsp_데이터베이스 연결 및 데이터 처리
 ``` html
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
@@ -4072,7 +4557,7 @@ function formCheck()
 </body>
 </html>
 ```
-#### 5.11. 24.3. Memberinsert.jsp_이전 페이지(Test002.jsp)로 부터 넘어온 데이터 수신
+#### 5.21. 24.3. Memberinsert.jsp_이전 페이지(Test002.jsp)로 부터 넘어온 데이터 수신
 ``` html
 <%@page import="java.sql.Statement"%>
 <%@page import="com.util.DBConn"%>
@@ -4122,11 +4607,11 @@ function formCheck()
 %>
 ```
 
-## 5.11. JSP, JAVA, SQL 통합
-### 5.11.1. [이름, 국어점수, 영어점수, 수학점수를 입력받아 총점과 평균을 계산하여 리스트를 출력]
+## 5.21. JSP, JAVA, SQL 통합
+### 5.21.1. [이름, 국어점수, 영어점수, 수학점수를 입력받아 총점과 평균을 계산하여 리스트를 출력]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/d9fd8210-9ae4-4d51-9802-202a0040eb2a)
 
-#### 5.11.1.1. WebApp09_scott.sql
+#### 5.21.1.1. WebApp09_scott.sql
 ``` sql
 SELECT USER
 FROM DUAL;
@@ -4214,7 +4699,7 @@ FROM TBL_SCORE;
 COMMIT;
 --==>> 커밋 완료.
 ```
-#### 5.11.1.2. ScoreList.jsp
+#### 5.21.1.2. ScoreList.jsp
 ``` html
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
@@ -4415,7 +4900,7 @@ function scoreInsert()
 </body>
 </html>
 ```
-#### 5.11.1.3. ScoreInsert.jsp
+#### 5.21.1.3. ScoreInsert.jsp
 ``` html
 <%@page import="java.sql.Statement"%>
 <%@page import="com.util.DBConn"%>
@@ -4467,13 +4952,13 @@ function scoreInsert()
 </html>
 ```
 
-### 5.11.2. [데이터베이스 연동 회원관리 실습]
+### 5.21.2. [데이터베이스 연동 회원관리 실습]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/c002fc3c-c4c4-4dcd-8434-e569400c20d3)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/743af3f7-cfb0-400f-8da0-fe9a61f80bf9)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/9f82e9a0-4231-4d3b-b74d-e5cff6db6f30)
 
 
-#### 5.11.2.1. WebApp10_scott.sql
+#### 5.21.2.1. WebApp10_scott.sql
 ``` sql
 SELECT USER
 FROM DUAL;
@@ -4537,7 +5022,7 @@ SELECT COUNT(*) AS COUNT FROM TBL_MEMBER
 ;
 --==>> 5
 ```
-#### 5.11.2.2. MemberDAO.java
+#### 5.21.2.2. MemberDAO.java
 ``` java
 /* ==========================================
 	MemberDAO.java
@@ -4643,7 +5128,7 @@ public class MemberDAO
 	}
 }
 ```
-#### 5.11.2.3. MemberDTO.java
+#### 5.21.2.3. MemberDTO.java
 ``` java
 /* ==========================================
 	MemberDTO.java
@@ -4691,7 +5176,7 @@ public class MemberDTO
 	
 }
 ```
-#### 5.11.2.4. Memberinsert.jsp
+#### 5.21.2.4. Memberinsert.jsp
 ``` html
 <%@page import="com.test.MemberDTO"%>
 <%@page import="com.test.MemberDAO"%>
@@ -4751,7 +5236,7 @@ public class MemberDTO
 	// 아래 보여주는 페이지는 모두 삭제
 %>
 ```
-#### 5.11.2.5. MemberList.jsp
+#### 5.21.2.5. MemberList.jsp
 ``` html
 <%@page import="com.test.MemberDTO"%>
 <%@page import="com.test.MemberDAO"%>
@@ -4910,14 +5395,14 @@ function formCheck()
 </html>
 ```
 
-### 5.11.3. [성적 리스트 출력 프로그램(ver.2)]
+### 5.21.3. [성적 리스트 출력 프로그램(ver.2)]
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/668ccd72-dd1c-4e2c-bee4-4f0f26494118)
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/748a4330-b31c-4b5d-9f19-3c03c12af2ea)
 
 
-#### 5.11.3.1. WebApp11_scott.sql
+#### 5.21.3.1. WebApp11_scott.sql
 >> 9와 동일<<
-#### 5.11.3.2. ScoreDTO.Java
+#### 5.21.3.2. ScoreDTO.Java
 ``` java
 package com.test;
  
@@ -4987,7 +5472,7 @@ public class ScoreDTO
 	}
 }
 ```
-#### 5.11.3.3. ScoreDAO.Java
+#### 5.21.3.3. ScoreDAO.Java
 ``` java
 package com.test;
  
@@ -5081,7 +5566,7 @@ public class ScoreDAO
 	}
 }
 ```
-#### 5.11.3.4. ScoreList.jsp
+#### 5.21.3.4. ScoreList.jsp
 ``` html
 <%@page import="com.test.ScoreDTO"%>
 <%@page import="com.test.ScoreDAO"%>
@@ -5238,7 +5723,7 @@ function scoreInsert()
 </body>
 </html>
 ```
-#### 5.11.3.5. ScoreInsert.jsp
+#### 5.21.3.5. ScoreInsert.jsp
 ``` html
 <%@page import="com.test.ScoreDTO"%>
 <%@page import="com.test.ScoreDAO"%>
@@ -5289,9 +5774,9 @@ function scoreInsert()
 %>
 ```
 
-### 5.11.4. [회원 성적 관리 및 출력 페이지(ver.2)]
+### 5.21.4. [회원 성적 관리 및 출력 페이지(ver.2)]
 
-#### 5.11.4.1. WebApp12_scott.sql
+#### 5.21.4.1. WebApp12_scott.sql
 ``` sql
 SELECT USER
 FROM DUAL;
@@ -5592,7 +6077,7 @@ SELECT COUNT(*) AS COUNT FROM TBL_MEMBERSCORE WHERE SID=1
 -- 0이 나올 경우 -> 성적 처리 되지 않음
 
 ```
-#### 5.11.4.2. MemberDAO.java
+#### 5.21.4.2. MemberDAO.java
 ``` java
 /* =================================================
 	MemberDAO.java
@@ -5773,7 +6258,7 @@ public class MemberDAO
 
 }
 ```
-#### 5.11.4.3. MemberDTO.java
+#### 5.21.4.3. MemberDTO.java
 ``` java
 /* =================================================
 	MemberScoreDTO.java
@@ -5821,7 +6306,7 @@ public class MemberDTO
 }
 
 ```
-#### 5.11.4.4. MemberScoreDAO.java
+#### 5.21.4.4. MemberScoreDAO.java
 ``` java
 /* =================================================
 	MemberScoreDAO.java
@@ -5974,7 +6459,7 @@ public class MemberScoreDAO
 }
 
 ```
-#### 5.11.4.5. MemberScoreDTO.java
+#### 5.21.4.5. MemberScoreDTO.java
 ``` java
 /* =================================================
 	MemberScoreDTO.java
@@ -6061,7 +6546,7 @@ public class MemberScoreDTO
 }
 
 ```
-#### 5.11.4.6. MemberDelete.jsp
+#### 5.21.4.6. MemberDelete.jsp
 ``` html
 <%@page import="com.test.MemberDAO"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
@@ -6124,7 +6609,7 @@ public class MemberScoreDTO
 %>
 
 ```
-#### 5.11.4.7. MemberInsert.jsp
+#### 5.21.4.7. MemberInsert.jsp
 ``` html
 <%@page import="com.test.MemberDTO"%>
 <%@page import="com.test.MemberDAO"%>
@@ -6180,7 +6665,7 @@ public class MemberScoreDTO
 %>
 
 ```
-#### 5.11.4.8. MemberInsertForm.jsp
+#### 5.21.4.8. MemberInsertForm.jsp
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -6282,7 +6767,7 @@ function memberReset()
 </body>
 </html>
 ```
-#### 5.11.4.9. MemberScoreDelete.jsp
+#### 5.21.4.9. MemberScoreDelete.jsp
 ``` html
 <%@page import="com.test.MemberScoreDAO"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
@@ -6322,7 +6807,7 @@ function memberReset()
 %>
 
 ```
-#### 5.11.4.10. MemberScoreInsert.jsp
+#### 5.21.4.10. MemberScoreInsert.jsp
 ``` html
 <%@page import="com.test.MemberScoreDTO"%>
 <%@page import="com.test.MemberScoreDAO"%>
@@ -6385,7 +6870,7 @@ function memberReset()
 %>
 
 ```
-#### 5.11.4.11. MemberScoreInsertForm.jsp
+#### 5.21.4.11. MemberScoreInsertForm.jsp
 ``` html
 <%@page import="com.test.MemberScoreDTO"%>
 <%@page import="com.test.MemberScoreDAO"%>
@@ -6573,7 +7058,7 @@ function memberScoreReset()
 </body>
 </html>
 ```
-#### 5.11.4.12. MemberScoreSelect.jsp
+#### 5.21.4.12. MemberScoreSelect.jsp
 ``` html
 <%@page import="com.test.MemberScoreDTO"%>
 <%@page import="com.test.MemberScoreDAO"%>
@@ -6726,7 +7211,7 @@ function memberScoreDelete(sid, name)
 </html>
 ```
 
-#### 5.11.4.13. MemberScoreUpdate.jsp
+#### 5.21.4.13. MemberScoreUpdate.jsp
 ``` html
 <%@page import="com.test.MemberScoreDAO"%>
 <%@page import="com.test.MemberScoreDTO"%>
@@ -6783,7 +7268,7 @@ function memberScoreDelete(sid, name)
 	response.sendRedirect("MemberScoreSelect.jsp");
 %>
 ```
-#### 5.11.4.14. MemberScoreUpdateForm.jsp
+#### 5.21.4.14. MemberScoreUpdateForm.jsp
 ``` html
 <%@page import="com.test.MemberScoreDTO"%>
 <%@page import="com.test.MemberScoreDAO"%>
@@ -6977,7 +7462,7 @@ function memberScoreReset()
 </body>
 </html>
 ```
-#### 5.11.4.15. MemberSelect.jsp
+#### 5.21.4.15. MemberSelect.jsp
 ``` html
 <%@page import="com.test.MemberDTO"%>
 <%@page import="com.test.MemberDAO"%>
@@ -7125,7 +7610,7 @@ function memberDelete(sid, name)
 </body>
 </html>
 ```
-#### 5.11.4.16. MemberUpdate.jsp
+#### 5.21.4.16. MemberUpdate.jsp
 ``` html
 <%@page import="com.test.MemberDAO"%>
 <%@page import="com.test.MemberDTO"%>
@@ -7177,7 +7662,7 @@ function memberDelete(sid, name)
 // 이후 보여지는 페이지 구성 모두 삭제
 %>
 ```
-#### 5.11.4.17. MemberUpdateForm.jsp
+#### 5.21.4.17. MemberUpdateForm.jsp
 ``` html
 <%@page import="com.test.MemberDTO"%>
 <%@page import="com.test.MemberDAO"%>
@@ -7336,7 +7821,7 @@ function memberReset()
 </body>
 </html>
 ```
-#### 5.11.4.18. Notice.jsp
+#### 5.21.4.18. Notice.jsp
 ``` html
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
@@ -7363,68 +7848,68 @@ function memberReset()
 
 ------------------------------------------------
 
-### 5.11.2. []
+### 5.21.2. []
 
-#### 5.11.3.1. WebApp11_scott.sql
+#### 5.21.3.1. WebApp11_scott.sql
 ``` sql
 ```
-#### 5.11.3.2. ScoreDTO.Java
+#### 5.21.3.2. ScoreDTO.Java
 ``` java
 ```
-#### 5.11.2.3. ScoreDAO.Java
+#### 5.21.2.3. ScoreDAO.Java
 ``` java
 ```
-#### 5.11.2.4. ScoreList.jsp
+#### 5.21.2.4. ScoreList.jsp
 ``` html
 ```
-#### 5.11.2.5. ScoreInsert.jsp
-``` html
-```
-
-### 5.11.3. []
-
-#### 5.11.3.1. .jsp
-``` html
-```
-#### 5.11.3.2. .jsp
+#### 5.21.2.5. ScoreInsert.jsp
 ``` html
 ```
 
-### 5.11.4. []
+### 5.21.3. []
 
-#### 5.11.4.1. .jsp
+#### 5.21.3.1. .jsp
 ``` html
 ```
-#### 5.11.4.2. .jsp
-``` html
-```
-
-### 5.11.5. []
-
-#### 5.11.5.1. .jsp
-``` html
-```
-#### 5.11.5.2. .jsp
+#### 5.21.3.2. .jsp
 ``` html
 ```
 
-### 5.11.6. []
+### 5.21.4. []
 
-#### 5.11.6.1. .jsp
+#### 5.21.4.1. .jsp
 ``` html
 ```
-#### 5.11.6.2. .jsp
+#### 5.21.4.2. .jsp
+``` html
+```
+
+### 5.21.5. []
+
+#### 5.21.5.1. .jsp
+``` html
+```
+#### 5.21.5.2. .jsp
+``` html
+```
+
+### 5.21.6. []
+
+#### 5.21.6.1. .jsp
+``` html
+```
+#### 5.21.6.2. .jsp
 ``` html
 ```
 
 
 
-### 5.11. . []
+### 5.21. . []
 
-#### 5.11. .1. .jsp
+#### 5.21. .1. .jsp
 ``` html
 ```
-#### 5.11. .2. .jsp
+#### 5.21. .2. .jsp
 ``` html
 ```
 
