@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test018.html</title>
+</head>
+<body>
+	<div>
+		<h1>여러 줄 데이터 입력 글상자</h1>
+		<hr>
+	</div>
+	
+<!-- 
+	많은 내용을 기재할 수 있는 엘리먼트로
+	태그 사이의 공백 문자 인식
+	엔터키 입력을 통한 개행 처리
+ -->
+	
+<div>
+	<form>
+		<textarea rows="10" cols="50">많은 내용을 기재</textarea>
+		<!-- **
+		textarea: pc 데이터 영역(textarea태그 사이-여는 태그 닫는 태그)에서 값을 처리함(value 가 아님!)
+		ㄴ rows: 행 / cols: 너비
+		※ 주의사항1) pc 데이터 영역에서는 띄어쓰기 공백들이 모두 인식되기 때문에 조심할것!
+		※ 주의사항2) 개행은 br로 처리X -> 개행 (\n) 처리O
+		** -->
+		
+		<!-- **
+		textarea 주의사항1) 테스트
+		 -> 마지막 글자와 </textarea> 붙여야함
+		 ㄴ 이유: 공백인식되므로!
+		 ** -->
+		<textarea rows="10" cols="50">많은 내용을 기재할 수 있는 엘리먼트
+태그와 태그 사이의 공백 문자 인식한다.
+엔터키 입력을 통한 개행 처리 -> 이렇게 사용O</textarea>
+
+		<textarea rows="10" cols="50">많은 내용을 기재할 수 있는 엘리먼트
+태그와 태그 사이의 공백 문자 인식한다.
+엔터키 입력을 통한 개행 처리 -> 이렇게 사용X
+		</textarea>
+
+		<br>
+		<!-- **textarea 주의사항2) 테스트** -->
+		하나 
+		두울 
+		셋 -> 하나(\n)두울(\n)셋 으로 처리할 것!!
+
+	</form>
+</div>
+	
+	
+<div>
+	<form>
+		<input type="text" value="입력 내용 처리">
+		<!-- **input: value속성의 속성값으로 값을 처리함** -->
+	</form>
+</div>
+</body>
+</html>

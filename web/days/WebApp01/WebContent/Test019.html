@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test019.html</title>
+</head>
+<body>
+<div>
+	<h1>여러 줄 데이터 입력 글상자</h1>
+	<hr>
+</div>
+	
+<div>
+	<form>
+		<!-- ** 
+		체크박스
+		※ 주의사항1)
+		아래의 내용은 위의 질문에 대해 묶여서 처리되어야하므로 
+		name을 같게하여 묶음처리
+		※ 주의사항2)
+		체크박스를 선택했을 때 값을 가져오기 위해서는 value를 넣어줘야 함
+		※ 당부사항) 
+		ㄴ친절한 코드: <label>로 묶어서 텍스트 선택시 같이 선택되는 것
+		ㄴ불친절한 코드: 체크박스로만 선택되는 것
+		ㄴ멀리 떨어졌을 때 같이 선택되게 하는 예제: 미역국(input의 id 와 label의 for를 같은 값으로)
+		** -->
+		<p>1. 오늘 점심으로 먹은 메뉴는?</p>
+		<input type="checkbox" name="foodCheck1" value="code1"> 밥(텍스트로 선택X)<br>
+		
+		<label>
+			<input type="checkbox" name="foodCheck1" value="code1"> 밥(텍스트로 선택O)
+		</label><br><br>
+		
+		<input type="checkbox" name="foodCheck1" value="code2" id="label2"> 미역국
+		<input type="checkbox" name="foodCheck1"> 김치찌개
+		<input type="checkbox" name="foodCheck1"> 달걀말이
+		<br><br>
+		
+		<input type="checkbox" name="foodCheck1"> 장조림
+		<input type="checkbox" name="foodCheck1"> 김
+		<input type="checkbox" name="foodCheck1"> 김치
+		<input type="checkbox" name="foodCheck1"> 멸치볶음
+		<br><br><br>
+		
+		<p>2. 오늘 저녁으로 먹을 메뉴는?</p>
+		
+		<input type="checkbox"> 밥
+		<label for="label2">
+			<input type="checkbox"> 미역국(점심 미역국과 연결됨)
+		</label>
+		<input type="checkbox"> 김치찌개
+		<input type="checkbox"> 달걀말이
+		<br><br>
+		
+		<input type="checkbox"> 장조림
+		<input type="checkbox"> 김
+		<input type="checkbox"> 김치
+		<input type="checkbox"> 멸치볶음
+		<br><br>
+	</form>
+</div>	
+</body>
+</html>

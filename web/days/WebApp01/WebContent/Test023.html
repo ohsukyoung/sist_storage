@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test023.html</title>
+</head>
+<body>
+<div>
+	<h1>드로다운메뉴(selectbox) 만들기</h1>
+	<hr>
+</div>
+
+<div>
+	<form>
+		<!-- **
+		select
+		- 야구 값과 <option>은 연관이 없기 때문에 value로 값을 가져와야함
+		- 제일 많이 쓰는 값(사원)을 위로 구성하면 많은 수고로움을 덜 수 있지만, 
+			회사 사정상 사원이 회장보다 위에있는 것을 원하지 않을 수 있음
+			이럴 때 selected="selected"사용이 권장됨
+		※ 주의사항1) 최초선택이 되어있을때 셀렉트를 확인못하고 넘어가면 최초선택된 값으로 넘어가므로
+			<option>에 선택을 안내하는 문구로 선택을 해야 페이지가 넘어갈 수 있게 구성
+		** -->
+		
+		<input type="text">
+		
+		<!-- **select 주의사항1) 테스트** -->
+		<p>당신이 가장 좋아하는 종목은?</p>
+		<select name="selectSport">
+			<option>--선택하세요--</option>
+			<option value="val2">축구</option>
+			<option value="val3">배구</option>
+			<option value="val4">농구</option>
+		</select>
+		
+		<p>당신의 직책은?</p>
+		<select name="selectJikwi">
+			<option value="1">회장</option>
+			<option value="2">사장</option>
+			<option value="3">부장</option>
+			<option value="4">과장</option>
+			<option value="5">대리</option>
+			<option value="6" selected="selected">사원</option>
+			<option value="7">인턴</option>
+		</select>
+		<br><br>
+		
+		<button type="button">확인</button>
+		<button type="reset">다시입력</button>
+		<!-- **reset 엑션발생시 모두 없어지는 것이 아니라 기본값으로 바뀜** -->
+	
+		<p>좋아하는 산은?(다중 선택 가능)</p>
+		<select name="trav" size="6" multiple="multiple">
+			<option value="val1">백두산
+			<option value="val2">한라산
+			<option value="val3">지리산
+			<option value="val4">설악산
+			<option value="val5">북한산
+			<option value="val6">속리산
+		</select>
+		<!-- **
+		select는 기본적으로 다중선택이 불가능함
+		하지만 가능하게 만들 수 있음
+		-> <select>의 사이즈를 option갯수만큼 바꾸기, muitiple속성 부여
+		ㄴㄴ shift 연속 선택 가능, ctrl 개별 선택 가능
+		** -->
+	</form>
+</div>
+
+
+
+</body>
+</html>
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test021.html</title>
+</head>
+<body>
+<div>
+	<h1>전송, 취소 버튼 만들기</h1>
+	<hr>
+</div>
+
+<div>
+	<!-- **서버쪽을 보기 위해서는 백엔드와 같이 해야함, 큰 흐름을 인지하고 넘어가기** -->
+
+	<!-- form: 데이터 전송 및 페이지 요청			**'데이터 전송' 보다 '페이지 요청'이 더 중요함** -->
+	<!-- 폼으로 구성한 데이터의 내용을 전달할테니... 요청한 페이지와 만날 수 있게 해 달라... -->
+	<form action="http://localhost:3306/WebApp01/Test022.html">
+		<!-- **
+		요청메서드 종류: 
+		ㄴ get 메서드: ex. 엽서 전달/ 중간 집배원 존재. 내용이 다 보임
+		ㄴ post 메서드: ex. 편지/ 편지는 편지봉투안에 있기 때문에 내용 안 보임
+		**  -->		
+		
+		*이름
+		<input type="text" name="name" size="15" maxlength="10"><br>
+		*이메일
+		<input type="text" name="email" size="15" maxlength="20"><br>
+		*하고 싶은 말
+		<br>
+		<textarea rows="10" cols="50" name="field"></textarea>
+		<br><br>
+		
+		<input type="submit" value="전송하기1" name="submitBtn">
+		<input type="button" value="전송하기2">
+		<button type="button">전송하기3</button>
+		<button>전송하기4</button>
+		<!-- **
+		모양만 보았을 때는 버튼이지만, 어떻게 만들었는지에 따라 다르게 동작함
+		- 전송하기1: <input type="submit">
+		- 전송하기2: <input type="button">
+		- 전송하기3: <button type="button"></button>
+		ㄴ 전송하기2-3은 기능적으로 같은 버튼
+		ㄴ 왜 두가지가 있을까?
+			ㄴㄴ 전송2는 다른 태그 수용X
+			ㄴㄴ 전송3은 다른 태그 수용O
+		- 전송하기4: <button></button>
+		ㄴ type이 기재되지 않은 버튼일 시, submit과 같은 기능을 함
+		** -->
+		
+		<br><br>
+		
+		<input type="reset" value="취소하기" name="resetBtn">
+		<!-- **<input type="reset">: 내용이 모두 삭제됨** -->
+	</form>
+</div>
+
+</body>
+</html>

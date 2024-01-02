@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+/* **
+	- <style type="text/css"></style>태그를 활용해 
+	앞뒤로 감쌌던 내용을 직접적으로 이 곳에서 작성
+	- 임베디드보다 더 자주 사용됨	
+	** */
+
+h2 {color: blue;}
+
+p {
+	font-size: 20pt; 
+	font-weight: bold; 
+	color: red;
+}
+

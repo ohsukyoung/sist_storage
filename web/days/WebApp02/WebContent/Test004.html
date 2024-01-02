@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test004.html</title>
+
+<style type="text/css">
+/* **id 로는 여러개를 정의 하지 않음(하나밖에 없기 때문에)** */
+/* **
+style을 입힌 뒤 페이지 새로고침시 바로 적용이 안되는 경우,
+웹서버와 웹클라이언트가 소통하는 과정을 이해해야함.
+브라우저마다 캐시가 있음(임시저장 공간)
+
+내가 한번 보았던 서버인경우 캐시에 등록해놓기 때문에 
+다시 방문할 경우 안의 내용이 변경되었을 경우, 브라우저 입장에서는
+갱신된 내용이 없다고 판단하고 스타일 적용이 안되어 보이는 경우가 있음
+
+이럴 경우 ... > 설정 > 개인정보 및 보안 > 인터넷 사용기록 및 삭제(방문기록, 캐시) > 캐시를 삭제
+의 과정을 거치면 적용되어 보일 것.	
+** */
+	#f001 {color: red; font-family: 굴림; font-size: 20pt;}
+	#f002 {color: black; font-family: 궁서체; font-size: 15pt;}
+	#f003 {color: aqua; font-family: 맑은고딕; font-size: 10pt;}
+
+</style>
+
+</head>
+<body>
+
+<div>
+	<h1>id 를 선택자로 활용</h1>
+	<hr>
+</div>
+
+<div id="f001">id 선택자를 활용하는 실습이다.</div>
+<p id="f002">id 를 선택자로 활용하는 경우 id 앞에 우물정(#) 표시를 해야 한다.</p>
+<p id="f003">id 는 class 와 유사하게 활용되지만, 페이지 내에서 유일하게 구성해야 한다.</p>
+</body>
+</html>

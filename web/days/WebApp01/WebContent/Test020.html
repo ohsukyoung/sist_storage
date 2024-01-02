@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test020.html</title>
+</head>
+<body>
+<div>
+	<h1>여러 줄 데이터 입력 글상자</h1>
+	<hr>
+</div>
+
+<div>
+	<form>
+		<!-- **
+		라디오버튼
+		※ 주의사항1) 여자 or 남자 가 맞고, 여자 and 남자 는 있을 수 없으므로 
+		name으로 묶어줌으로써 둘중하나 선택으로 처리됨(ex. gender, subject)
+		※ 주의사항2) 값을 받기 위해서는 value를 부여해야함(ex. kor,eng,mat...)
+		- 텍스트 선택하기 위해 <label>의 for 속성과 <input>의 id를 맞춰줘야함
+		- checked="checked"를 부여해 가급적 이 속성을 선택하도록 유도할 수 있음 
+		** -->
+		<p>1. 당신의 성별은?</p>
+		
+		<input type="radio" name="gender" checked="checked"> 여자
+		<input type="radio" name="gender" id="m"> 
+		<label for="m"> 남자</label>
+		
+		<br><br>
+		
+		<p>2. 당신이 좋아하는 과목은?</p>
+		
+		<input type="radio" name="subject" value="kor"> 국어
+		<input type="radio" name="subject" value="eng"> 영어
+		<input type="radio" name="subject" value="mat" checked="cheched"> 수학
+		<input type="radio" name="subject" value="soc"> 사회
+		<input type="radio" name="subject" value="sci"> 과학
+		
+		<br><br>
+		
+	</form>
+</div>
+
+</body>
+</html>

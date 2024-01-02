@@ -1,0 +1,5 @@
+@charset "UTF-8";
+/* ☆Tip☆ - css에서 color위에 hover 시 컬러피커 생성되어 색 확인 가능 */
+p {color: #0000a0;}
+h2 {color: orange;}
+span {color: lime;}
