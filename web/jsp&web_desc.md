@@ -3238,6 +3238,1110 @@ function memberReset()
 </html>
 ```
 
+<br>
+
+## 7.5. [세션처리-로그인]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e3fc2c5f-4bfb-4494-8352-73c0a733f58d)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/915b18c0-e8be-4ff9-bda3-da391ae35073)
+
+### 7.5.1. TestSession01.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 최초 요청일 경우... 아무것도 없지만...
+	// TEstSession01_ok.jsp 페이지에서
+	// 로그인 성공 후에 요청된 페이지라면...
+	// session의 userId에 superman 을 
+	//			 userName 에 문정환을 담아서 보낸 상황
+	
+	String userId = (String)session.getAttribute("userId");		// "superman"
+	String userName = (String)session.getAttribute("userName"); // "문정환"
+	//-- 『session.getAttribute("userId");』는
+	//	Object 타입을 반환하므로
+	//	String 타입으로 반환하는 과정 필요(다운 캐스팅)
+	
+	// 추가~!!!
+	// 세션 활성화 시간 변경 -----------------------------------------------------------
+	
+	// ※ 세션 기본(default) 시간은 1800초.
+	
+	session.setMaxInactiveInterval(10);
+	//--- 세션이 유지되는 시간을 10초로 설정한 상태.
+	//	이로 인해...
+	//	로그인 후 10 초 동안 아무 액션도 없는 상태에서...
+	//	다시 기능을 이용하려 하거나, 페이지 새로고침을 수행하면
+	//	로그아웃 처리된 것을 확인할 수 있다.
+	
+	// ------------------------------------------------------------세션 활성화 시간 변경
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TestSession01</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/MemberScore.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	/* .btnMenu{border: 1px solid gray;border-radius: 3px;font-size: 8px;width: 60px;height: 20px;} */
+	.btn_box [type="button"], .btn_box [type="reset"], .btn{min-width: 80px;}
+</style>
+<script type="text/javascript">
+function sendIt()
+{
+	// 확인
+	//alert("함수 호출");
+	
+	var f = document.myForm;
+	
+	if(!f.userId.value)
+	{
+		alert("아이디를 입력해야 합니다~!!!");
+		f.userId.focus();
+		return;
+	}
+	
+	if(!f.userPwd.value)
+	{
+		alert("패스워드를 입력해야 합니다~!!!");
+		f.userPwd.focus();
+		return;
+	}
+	f.submit();	
+}
+</script>
+</head>
+<body class="section">
+<!-- **Session은 서버쪽 자원이므로 먼저 볼 것** -->
+<div>
+	<h1>세션 처리 - 로그인</h1>
+</div>
+
+<div class="layout">
+	<div class="tbl_box">
+		<table>
+			<tr>
+				<td class="btn_box" style="display:flex;align-items: center;">
+					<a href="">
+						<button type="button" class="btnMenu btn01">게시판</button>
+					</a> |
+					<%
+					if(userId == null)
+					{
+					%>
+					<a href="">
+						<button type="button" class="btnMenu btn02">일정관리</button>
+					</a> |
+					<a href="">
+						<button type="button" class="btnMenu btn02">친구관리</button>
+					</a> |...
+					<%
+					}
+					else
+					{
+					%>
+					<a href="Sca.jsp">
+						<button type="button" class="btnMenu btn01">일정관리</button>
+					</a> |
+					<a href="Fir.jsp">
+						<button type="button" class="btnMenu btn01">친구관리</button>
+					</a> |...
+					<%
+					}
+					%>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="tbl_box">
+		<%
+		if(userId == null)
+		{
+		%>
+		<form action="TestSession01_ok.jsp" method="post" name="myForm">
+			<table>
+				<tr>
+					<th>아이디</th>
+					<td>
+						<input type="text" name="userId" class="txt">
+					</td>
+				</tr>
+				<tr>
+					<th>패스워드</th>
+					<td>
+						<!-- <input type="text"> -->
+						<input type="text" name="userPwd" class="txt">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button type="button" class="btn" style="width:100%;" onclick="sendIt();">로그인</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<%
+		}
+		else
+		{
+		%>
+		<h2><%=userName %>(<%=userId %>)님, 환영합니다.</h2>
+		<p>이제, 일정관리와 친구관리 서비스를 이용할 수 있습니다.</p>
+		<p class="btn_box">
+			<a href="Logout.jsp">
+				<button type="button" class="btnMenu btn01">로그아웃</button>
+			</a>
+		</p>
+		<%
+		}
+		%>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.5.2. TestSession01_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// TestSession01_ok.jsp
+	
+	// 이전 페이지(TestSession01.jsp)로 부터 넘어온 데이터 수신
+	// -> userId, userPwd
+	String userId = request.getParameter("userId");
+	String userPwd = request.getParameter("userPwd");
+	
+	// DB 활용 -> dao 로그인 처리 -> dao 활용
+	// -> 로그인 관련 테이블 데이터와 비교 -> 최종적으로 로그인 액션 처리
+	
+	String memberId = "superman";
+	String memberPwd = "1234567";
+	String memberName = "문정환";
+	
+	if(userId.equals(memberId) && userPwd.equals(memberPwd))
+	{
+		// 로그인 액션 처리
+		session.setAttribute("userId", userId);			//-- session 의 userId -> superman 
+		session.setAttribute("userName", memberName);	//-- session 의 userName -> 문정환
+		
+		// 클라이언트가 페이지를 다시 요청할 수 있도록 안내
+		response.sendRedirect("TestSession01.jsp");
+		
+	}
+	
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TestSession01_ok.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div class="layout">
+	<h1>로그인 실패~!!!</h1>
+	<hr>
+</div>
+
+<a href="TestSession01.jsp">▶ 로그인 페이지로 돌아가기</a>
+
+</body>
+</html>
+```
+### 7.5.3. Logout.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// Logout.jsp
+	//-- 세션의 내용을 없애 로그아웃 처리
+	//	 이후 ... 클라이언트가 다시 요청할 페이지 안내
+	
+	session.removeAttribute("userId");
+	session.removeAttribute("userName");
+	// 세션의 사용자아이디와 이름 삭제
+	
+	// 기존 세션에 저장되어 있는 모든 항목을 제거하고 센션을 초기화
+	session.invalidate();
+	
+	// 클라이언트에게 다시 로그인 페이지를 요청할 수 있도록 안내
+	response.sendRedirect("TestSession01.jsp");
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Logout.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div class="layout">
+	<h1>안전하게~!로그아웃 처리되었습니다~!!!</h1>
+</div>
+
+</body>
+</html>
+```
+
+<br>
+
+## 7.6. [회원가입01-03(이름,전화번호)(아이디,패스워드),(이름,전화번호,아이디, 패스워드 출력)]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/a09772c1-39e6-448d-897a-5fe2b86ee039)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/16a73706-32df-4f28-9819-6cf06ab04a9a)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/00a1f3da-7ec7-4948-bd94-3e477d7c7996)
+
+### 7.6.1. TestSession01.jsp_회원가입01 (이름, 전화번호)
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TestSession01.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<!-- 
+	○ TestSession01.jsp 에서 TestSession02.jsp 페이지로 
+		이름과 전화번호를 입력받아 전송
+		
+		TestSession02.jsp에서 TestSession03.jsp 페이지로
+		아이디와 패스워드를 입력받고
+		앞에서 전달받은 이름과 전화번호를 함께 전송
+		
+		TestSession03.jsp 에서 전달받은 이름, 전화번호, 아이디, 패스워드 출력
+		
+		01 ---------------- 02 ----------------- 03
+		이름, 전화			아이디, 패스워드	이름, 전화, 아이디, 패스워드
+		입력				입력				출력
+		
+							-getParameter		- getAttribute
+		
+	※ 즉, 01에서 02로 넘겨받을 땐 getParameter
+		02에서 03으로 넘겨받을 땐 getParmeter 와 getAttribute 로 세션 활용
+		01에서 03으로 직접 넘겨줄 수 없기 때문에 세션(session)에 저장
+		
+	※ session 외에 input 태그 hidden 속성을 이용한 정보 전달 가능~!!!
+ -->
+
+<div>
+	<!-- <h1>TestSession01.jsp -> TestSession02.jsp -> TestSession03.jsp</h1> -->
+	<h2>회원가입01 (이름, 전화번호)</h2>
+	<h2>(TestSession01.jsp)</h2>
+	<hr>
+</div>
+
+<div class="layout">
+	<div class="tbl_box">
+		<form action="TestSession02.jsp" method="post" name="form01">
+			<table>
+				<tr>
+					<th>이름</th>
+					<td><input type="text" id="userName" name="userName"></td>
+				</tr>
+				<tr>
+					<th>전화</th>
+					<td><input type="text" id="userTel" name="userTel"></td>
+				</tr>
+				<tr class="btn_box" style="display: contents;">
+					<td colspan="2">
+						<a href="javascript:formCheck01();"><button type="button" style="width: 100%;">입력</button></a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+function formCheck01()
+{
+	//alert("확인");
+	
+	var f = document.form01;
+	
+	if(!f.userName.value)
+	{
+		alert("이름을 입력해주세요.");
+		f.userName.focus();
+		return;
+	}
+	
+	if(!f.userTel.value)
+	{
+		alert("전화번호를 입력해주세요.");
+		f.userTel.focus();
+		return;
+	}
+	
+	f.submit();
+}
+</script>
+</body>
+</html>
+```
+### 7.6.2. TestSession02.jsp_회원가입02 (아이디, 패스워드)
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지(TestSession01.jsp)로 부터 넘어온 데이터 수신
+	// -> userName, userTel
+
+	request.setCharacterEncoding("UTF-8");
+
+	String name = request.getParameter("userName");
+	String tel = request.getParameter("userTel");
+	
+	// check~!!
+	// 추가
+	// 세선으로 값 보내기
+	session.setAttribute("userName", name);
+	session.setAttribute("userTel", tel);
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TestSession02.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h2>회원가입02 (아이디, 패스워드)</h2>
+	<h2>(TestSession02.jsp)</h2>
+	<hr>
+</div>
+
+<div class="layout">
+	<div class="tbl_box">
+		<form action="TestSession03.jsp" method="post" name="form02">
+			<table>
+				<tr>
+					<th>아이디</th>
+					<td><input type="text" id="userId" name="userId"></td>
+				</tr>
+				<tr>
+					<th>패스워드</th>
+					<td><input type="text" id="userPwd" name="userPwd"></td>
+				</tr>
+				<tr class="btn_box" style="display: contents;">
+					<td colspan="2">
+						<a href="javascript:formCheck02();"><button type="button" style="width: 100%;">입력</button></a>
+					</td>
+				</tr>
+			</table>
+			<%-- <input type="text" id="userName" name="userName" value="<%=name%>">
+			<input type="text" id="userTel" name="userTel" value="<%=tel%>"> --%>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+function formCheck02()
+{
+	//alert("확인");
+	
+	var f = document.form02;
+	
+	if(!f.userId.value)
+	{
+		alert("아이디를 입력해주세요.");
+		f.userName.focus();
+		return;
+	}
+	
+	if(!f.userPwd.value)
+	{
+		alert("전화번호를 입력해주세요.");
+		f.userPwd.focus();
+		return;
+	}
+	
+	f.submit();
+}
+</script>
+</body>
+</html>
+```
+### 7.6.3. TestSession03.jsp_이름, 전화번호, 아이디, 패스워드 출력
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지(TestSession02.jsp)로 부터 넘어온 데이터 수신
+	// -> userId, userPwd
+
+	request.setCharacterEncoding("UTF-8");
+
+	String id = request.getParameter("userId");
+	String pwd = request.getParameter("userPwd");
+	
+	//String name = request.getParameter("userName");
+	//String tel = request.getParameter("userTel");
+	
+	// 세션에서 값 가져오기
+	String name = (String)session.getAttribute("userName");
+	String tel = (String)session.getAttribute("userTel");
+	
+	session.removeAttribute("userName");
+	session.removeAttribute("userTel");
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TestSession03.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h2>이름, 전화번호, 아이디, 패스워드 출력</h2>
+	<h2>(TestSession03.jsp)</h2>
+	<hr>
+</div>
+
+<div class="layout">
+	<div class="tbl_box">
+		<form action="TestSession03.jsp" method="post" name="form02">
+			<table>
+				<tr>
+					<th>이름</th>
+					<td><%=name %></td>
+				</tr>
+				<tr>
+					<th>전화</th>
+					<td><%=tel %></td>
+				</tr>
+				<tr>
+					<th>아이디</th>
+					<td><%=id%></td>
+				</tr>
+				<tr>
+					<th>패스워드</th>
+					<td><%=pwd%></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+</body>
+</html>
+```
+
+<br>
+
+## 7.7. [쿠키 설정 및 추가, 쿠키 정보 얻어내기, 쿠키 정보 삭제/Application을 활용한 접속자 수 체크]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/661e7556-5d56-46de-941f-37c24721de52)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/2a8b2d82-5f0a-4f59-91db-1c029de3dc8f)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/acfbf3cb-e015-4af2-8b89-1377eaf0b75e)
+
+### 7.7.1. TestSetCookie.jsp_쿠키 정보 얻어내기
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+
+	Cookie[] ck = request.getCookies();
+	
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TestGetCookie.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+	
+<div>
+	<h1>쿠키 정보 얻어내기</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<div class="tbl_box">
+		<table class="table">
+			<tr>
+				<th style="width: 120px;">쿠키 이름</th>
+				<th>쿠키 값</th>
+			</tr>
+			<%
+			for (Cookie c : ck)
+			{
+			%>
+			<tr>
+				<td><%= c.getName() %></td>
+				<td><%= c.getValue() %></td>
+			</tr>
+			<%
+			}
+			%>
+		</table>
+	</div>
+	
+	<div class="layout">
+		<a href="TestSetCookie.jsp"><button type="button" class="btn">쿠키 정보 설정</button></a>
+		<a href="TestRemoveCookie.jsp"><button type="button" class="btn">쿠키 정보 삭제</button></a>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.7.2. TestRemoveCookie.jsp_쿠키 정보 삭제하기
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+
+	/* **
+	쿠키는 제거가 따로 없음. -> 비어있는 쿠키로 덮어씀
+	** */
+	
+	// 비어있는 내용으로 기존의 쿠키를 덮어쓰기하는 개념
+	Cookie killCookie = new Cookie("cookie_test",  "");	// 제거 하고자 하는 쿠키 이름과 같아야 함
+	
+	killCookie.setMaxAge(0);
+	response.addCookie(killCookie);
+	// 처음 쿠키를 구성할 때에도 『addCookie()』로 처리하였기 때문에
+	//	삭제할 ㄱ때도  같은 이름의 쿠키를 『addCookie()』로 처리해야 안정적으로 삭제.
+	//	즉, 내용이 포함된 쿠키를 심었다가..
+	//	이번에는 내용이 비어있는 쿠키를 심는 개념.
+	
+	//※ 여기서 쿠키 삭제는 클라이언트 입장에서의 삭제이다.
+	// 한 명의 클라이언트가 쿠키를 삭제했다고 해서
+	// 다른 클라이언트들의 쿠키도 삭제되면 안되기 때문에
+	// 이 쿠키의 정보는 로컬 PC에서 컨트롤 하게 된다.(브라우저가...)
+	
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TestRemoveCookie.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+	
+<div>
+	<h1>쿠키 정보 삭제하기</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<h2>성공적으로 쿠키를 제거했습니다~!!!</h2>
+
+	<div class="btn_box">
+		<a href="TestSetCookie.jsp"><button type="button" class="btn">쿠키 정보 설정</button></a>
+		<a href="TestGetCookie.jsp"><button type="button" class="btn">쿠키 정보 확인</button></a>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.7.3. TestSetCookie.jsp_쿠키 설정 및 추가
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+
+	// 쿠키 생성(서버에 생성된 쿠키)
+	Cookie c = new Cookie("cookie_test", "studyCookie");
+	/* **쿠키는 서블릿컨테이너(서버)에 만들어짐** */
+	
+	// 쿠키 설정 (서버에 생성된 쿠키에 대한 설정)
+	c.setMaxAge(3600);		// 쿠키 1시간 유지
+	
+	// 쿠키 추가 (서버에서 생성되고 설정된 쿠키를 클라이언트에 전달(심기))
+	response.addCookie(c);
+	
+	
+	
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TestSetCookie.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>쿠키 설정 및 추가</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<div class="btn_box">
+		<a href="TestGetCookie.jsp"><button type="button" class="btn">쿠키 정보 확인</button></a>
+		<a href="TestRemoveCookie.jsp"><button type="button" class="btn">쿠키 정보 삭제</button></a>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.7.4. Application을 활용한 접속자 수 체크
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 접속자 수
+	int n = 0;
+
+	String count =(String)application.getAttribute("count");
+	
+	if(count != null)
+		n = Integer.parseInt(count);
+	n++;
+	
+	application.setAttribute("count", Integer.toString(n));
+	
+	String realPath = application.getRealPath("/");
+	application.log("접속자: "+request.getRemoteAddr());
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TestApplication.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+	
+<div>
+	<h1>Application을 활용한 접속자 수 체크</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<h2>총 접속자: <%=n %></h2>
+	<h2 style="word-wrap:break-word;">웹 서버 실제 경로<%=realPath %></h2>
+</div>
+	
+</body>
+</html>
+```
+
+<br>
+
+## 7.7. [세션처리-로그인]
+
+### 7.7.1. WebApp11_scott.sql
+``` java
+```
+### 7.7.2. ScoreDTO.Java
+``` java
+```
+### 7.7.3. ScoreDAO.Java
+``` java
+```
+### 7.7.4. ScoreList.jsp
+``` html
+```
+### 7.7.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.8. [세션처리-로그인]
+
+### 7.8.1. WebApp11_scott.sql
+``` java
+```
+### 7.8.2. ScoreDTO.Java
+``` java
+```
+### 7.8.3. ScoreDAO.Java
+``` java
+```
+### 7.8.4. ScoreList.jsp
+``` html
+```
+### 7.8.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.9. [세션처리-로그인]
+
+### 7.9.1. WebApp11_scott.sql
+``` java
+```
+### 7.9.2. ScoreDTO.Java
+``` java
+```
+### 7.9.3. ScoreDAO.Java
+``` java
+```
+### 7.9.4. ScoreList.jsp
+``` html
+```
+### 7.9.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.10. [세션처리-로그인]
+
+### 7.10.1. WebApp11_scott.sql
+``` java
+```
+### 7.10.2. ScoreDTO.Java
+``` java
+```
+### 7.10.3. ScoreDAO.Java
+``` java
+```
+### 7.10.4. ScoreList.jsp
+``` html
+```
+### 7.10.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.11. [세션처리-로그인]
+
+### 7.11.1. WebApp11_scott.sql
+``` java
+```
+### 7.11.2. ScoreDTO.Java
+``` java
+```
+### 7.11.3. ScoreDAO.Java
+``` java
+```
+### 7.11.4. ScoreList.jsp
+``` html
+```
+### 7.11.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.12. [세션처리-로그인]
+
+### 7.12.1. WebApp11_scott.sql
+``` java
+```
+### 7.12.2. ScoreDTO.Java
+``` java
+```
+### 7.12.3. ScoreDAO.Java
+``` java
+```
+### 7.12.4. ScoreList.jsp
+``` html
+```
+### 7.12.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.13. [세션처리-로그인]
+
+### 7.13.1. WebApp11_scott.sql
+``` java
+```
+### 7.13.2. ScoreDTO.Java
+``` java
+```
+### 7.13.3. ScoreDAO.Java
+``` java
+```
+### 7.13.4. ScoreList.jsp
+``` html
+```
+### 7.13.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.14. [세션처리-로그인]
+
+### 7.14.1. WebApp11_scott.sql
+``` java
+```
+### 7.14.2. ScoreDTO.Java
+``` java
+```
+### 7.14.3. ScoreDAO.Java
+``` java
+```
+### 7.14.4. ScoreList.jsp
+``` html
+```
+### 7.14.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.15. [세션처리-로그인]
+
+### 7.15.1. WebApp11_scott.sql
+``` java
+```
+### 7.15.2. ScoreDTO.Java
+``` java
+```
+### 7.15.3. ScoreDAO.Java
+``` java
+```
+### 7.15.4. ScoreList.jsp
+``` html
+```
+### 7.15.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.16. [세션처리-로그인]
+
+### 7.16.1. WebApp11_scott.sql
+``` java
+```
+### 7.16.2. ScoreDTO.Java
+``` java
+```
+### 7.16.3. ScoreDAO.Java
+``` java
+```
+### 7.16.4. ScoreList.jsp
+``` html
+```
+### 7.16.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.17. [세션처리-로그인]
+
+### 7.17.1. WebApp11_scott.sql
+``` java
+```
+### 7.17.2. ScoreDTO.Java
+``` java
+```
+### 7.17.3. ScoreDAO.Java
+``` java
+```
+### 7.17.4. ScoreList.jsp
+``` html
+```
+### 7.17.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.18. [세션처리-로그인]
+
+### 7.18.1. WebApp11_scott.sql
+``` java
+```
+### 7.18.2. ScoreDTO.Java
+``` java
+```
+### 7.18.3. ScoreDAO.Java
+``` java
+```
+### 7.18.4. ScoreList.jsp
+``` html
+```
+### 7.18.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.19. [세션처리-로그인]
+
+### 7.19.1. WebApp11_scott.sql
+``` java
+```
+### 7.19.2. ScoreDTO.Java
+``` java
+```
+### 7.19.3. ScoreDAO.Java
+``` java
+```
+### 7.19.4. ScoreList.jsp
+``` html
+```
+### 7.19.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.20. [세션처리-로그인]
+
+### 7.20.1. WebApp11_scott.sql
+``` java
+```
+### 7.20.2. ScoreDTO.Java
+``` java
+```
+### 7.20.3. ScoreDAO.Java
+``` java
+```
+### 7.20.4. ScoreList.jsp
+``` html
+```
+### 7.20.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.21. [세션처리-로그인]
+
+### 7.21.1. WebApp11_scott.sql
+``` java
+```
+### 7.21.2. ScoreDTO.Java
+``` java
+```
+### 7.21.3. ScoreDAO.Java
+``` java
+```
+### 7.21.4. ScoreList.jsp
+``` html
+```
+### 7.21.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.22. [세션처리-로그인]
+
+### 7.22.1. WebApp11_scott.sql
+``` java
+```
+### 7.22.2. ScoreDTO.Java
+``` java
+```
+### 7.22.3. ScoreDAO.Java
+``` java
+```
+### 7.22.4. ScoreList.jsp
+``` html
+```
+### 7.22.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.23. [세션처리-로그인]
+
+### 7.23.1. WebApp11_scott.sql
+``` java
+```
+### 7.23.2. ScoreDTO.Java
+``` java
+```
+### 7.23.3. ScoreDAO.Java
+``` java
+```
+### 7.23.4. ScoreList.jsp
+``` html
+```
+### 7.23.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.24. [세션처리-로그인]
+
+### 7.24.1. WebApp11_scott.sql
+``` java
+```
+### 7.24.2. ScoreDTO.Java
+``` java
+```
+### 7.24.3. ScoreDAO.Java
+``` java
+```
+### 7.24.4. ScoreList.jsp
+``` html
+```
+### 7.24.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.25. [세션처리-로그인]
+
+### 7.25.1. WebApp11_scott.sql
+``` java
+```
+### 7.25.2. ScoreDTO.Java
+``` java
+```
+### 7.25.3. ScoreDAO.Java
+``` java
+```
+### 7.25.4. ScoreList.jsp
+``` html
+```
+### 7.25.5. ScoreInsert.jsp
+``` html
+```
+
+<br>
+
+## 7.26. [세션처리-로그인]
+
+### 7.26.1. WebApp11_scott.sql
+``` java
+```
+### 7.26.2. ScoreDTO.Java
+``` java
+```
+### 7.26.3. ScoreDAO.Java
+``` java
+```
+### 7.26.4. ScoreList.jsp
+``` html
+```
+### 7.26.5. ScoreInsert.jsp
+``` html
+```
+
 ------------------------------------------------
 
 ## 7.2. []
