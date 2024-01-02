@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test023.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="section">
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+<!-- 
+	<prompt()>를 활용하여 여러 명의 성적 데이터를 입력 받고,
+	등수를 부여하여, 리스트를 출력하는 페이지를 구성한다.
+	HTML, CSS, Javascript 활용한다.
+	
+	페이지 레이아웃
+	-----------------------------------------------------------
+	
+	< 성적 정보 입력 > ------------- prompt() --------------- 이름 국어 영어 수학(1):
+	
+	전체 인원 수: [    ] 명
+	--------------------------------------------- ---- textarea
+	이름	국어	영어	수학	총점	등수
+	김다슬	80 		70 		60 		xxx 	1등
+	오수경	70  	60 		50 		xxx 	2등
+	김경태	60  	50 		40 		xxx 	3등
+	박범구	50  	40 		30 		xxx 	4등
+	---------------------------------------------
+	
+	-----------------------------------------------------------
+ -->
+<div class="layout">
+	<form>
+		<div class="btn_box input_box">
+			<input type="button" value="성적 정보 입력" onclick="scoreInsert()">
+		</div>
+		
+		<div class="result_box">
+			<span class="tit">전체 인원 수: </span>
+			<input type="text" id="txtCount" style="width: 40px">명
+		</div>
+		
+		<div>
+			<textarea rows="10" cols="50" id="txtResult" readonly="readonly"></textarea>	
+		</div>			
+	</form>
+</div>
+
+<script type="text/javascript">
+function scoreInsert()
+{
+	var str = "";
+	var arr = new Array();
+	var temp;
+	var n = 0;
+
+	// -- 입력값 받아오기 및 총점계산
+	do
+	{
+		str = prompt("이름 국어 영어 수학("+(n+1)+"):");
+		
+		if(str=="" || str==" " || str==null || str==".")
+			break;
+		
+		arr[n] = str.split(" ");
+		
+		arr[n][4] = parseInt(arr[n][1]) + parseInt(arr[n][2]) + parseInt(arr[n][3]);
+					
+		n++;
+		
+	} while (true);
+	
+	// -- [test] 등수 정상 출력을 위한 샘플 데이터
+	//arr = new Array(new Array("오수경", 70, 60, 50, 180),new Array("김경태", 60, 50, 40, 150),new Array("박범구", 50, 40, 30, 120),new Array("김다슬", 80, 70, 60, 210));
+	
+	// -- 점수 내림차순정렬
+	if(arr.length>0){
+		document.getElementById("txtCount").value = arr.length;
+		
+		for(var j=1; j<arr.length; j++)
+		{
+			for(var k=0; k<arr.length-j; k++)
+			{
+				// -- [test] 바뀌는 여부 확인
+				//console.log("1="+arr[k][4]);
+				//console.log("2="+arr[k+1][4]);
+				//console.log(parseInt(arr[k][4]) < parseInt(arr[k+1][4]));
+				if(parseInt(arr[k][4]) < parseInt(arr[k+1][4]))
+				{
+					temp 	= arr[k];
+					arr[k] 	= arr[k+1];
+					arr[k+1]= temp;
+				}
+				//console.log("-------------");
+			}
+		}		
+		
+		//-- 헤더 출력
+		document.getElementById("txtResult").value = "이름\t국어\t영어\t수학\t총점\t등수\n";
+			
+		//-- 데이터 출력
+		for(var k=0; k<arr.length; k++)
+		{
+			for(var m=0; m<arr[k].length; m++)
+			{
+				document.getElementById("txtResult").value += arr[k][m] + "\t";
+			}
+			document.getElementById("txtResult").value += (k+1) + "등" + "\n";
+		}
+	}
+	
+}
+</script>
+</body>
+</html>

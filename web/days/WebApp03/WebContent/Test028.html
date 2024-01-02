@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test028.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="section">
+
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<h2>라디오버튼, 체크박스 다루기(1)</h2>
+	<form>
+		<div>
+			---- 사이즈 선택 ---- <br><br>
+			
+			<!-- **같은 그룹일 경우 name을 같게 해야함** -->
+			<input type="radio" name="radioGruop" id="a" value="1"> <label for="a">싱글</label>
+			<!-- **라디오 독립적인 컨트롤 시 label과 input 따로, 아닐시 같이 만들기** -->
+			<label><input type="radio" name="radioGruop" id="b" value="2"> 더블</label>
+			<label><input type="radio" name="radioGruop" id="c" value="3"> 파인트</label>
+			<label><input type="radio" name="radioGruop" id="d" value="4"> 쿼터</label>
+			<label><input type="radio" name="radioGruop" id="e" value="500"> 패밀리</label>
+			<label><input type="radio" name="radioGruop" id="f" value="6"> 하프갤런</label>
+		</div>
+		
+		<div class="btn_box">
+			<button type="button" class="btn" onclick="actionChoice()">확인</button>
+		</div>
+		
+	</form>
+</div>
+<script type="text/javascript">
+function actionChoice()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+
+	//var radio1 = document.getElementById("a");
+	var radioObj = document.getElementsByName("radioGruop");
+	/* **
+		radio 컨트롤시 신경써야 하는 부분
+		1) getElementsByName 사용('s'에 유의!)
+	**	*/
+	
+	// 확인
+	//alert(radioObj);
+	//--==>> [object NodeList] -> 자바스크립트 배열
+	//alert(radioObj.length);
+	//--==>> 6 
+	
+	var message="선택된 항목이 존재하지 않습니다.";
+	for (var i = 0; i < radioObj.length; i++)	// 0 1 2 3 4 5
+	{
+		// 확인
+		//alert(radioObj[i].checked);
+		
+		if(radioObj[i].checked)
+		{
+			// 확인
+			//alert(i);
+			//alert(radioObj[i].value);
+			
+			message = "당신이 선택한 사이즈는 아이크림의 종류를 "
+						+ radioObj[i].value + "개 고를 수 있습니다.";
+			break;	//**불필요하게 도는 횟수를 줄일 수 있음**
+		}	
+	}
+	alert(message);
+}
+</script>
+</body>
+</html>

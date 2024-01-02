@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test014.html</title>
+
+<script type="text/javascript">
+/* 함수안에서 지역변수로 사용할때 지역변수와 전역변수... */
+
+	// msg 변수 -> 각각의 함수들 밖에 선언 -> 모든 함수에서 접근 가능한 전역 변수
+	var msg="2023년 11월이 저무는 어느날...";
+	
+	// msg 변수 -> 각각의 함수들 밖에 선언 -> 모든 함수에서 접근 가능한 전역 변수
+	msg="2023년 11월이 저무는 어느날...";
+	//-- <var> 키워드 사용 여부와 관계 없이 전역 변수 형태로 기능하는 상황~!!!
+	
+	function buttonOnclick1()
+	{
+		// 테스트
+		//alert("첫 번째 버튼 클릭 확인~!!!");
+		
+		alert(msg);
+		
+		/* **
+		키워드에 대한 테스트는 처음이자 마지막이므로 잘 살펴보기!
+		** */
+		// <var> 키워드 포함 -> name 변수 -> 함수 내부에 선언 -> 지역변수
+		//var name= "최혜인";
+		
+		// <var> 키워드 생략 -> name 변수 -> 함수 내부에 선언 -> 상황에 따른 지역/전역 변수
+		//ㄴ 상황: 코드가 한번도 실행된 적인 없으면 -> 지역변수
+		//				한번이라도 실행된 적 있으면 -> 전역변수
+		name = "길현욱";
+		
+		document.write("이름: "+name);
+	}
+	function buttonOnclick2()
+	{
+		// 테스트
+		//alert("두 번째 버튼 클릭 확인~!!!");
+
+		alert(msg);
+		
+		document.write("이름: "+name);
+	}
+</script>
+
+<!-- 확인사항1 -->
+<noscript>
+	<!-- **오래된 프로젝트라고 인식하기(과거 크로스브라우징 처리하지 않을 때 사용했었음)** -->
+	자바스크립트가 사용되지 못할 경우 표현되는 영역
+</noscript>
+<!-- 확인사항2 -->
+<script type="text/javascript">
+	<!-- 
+	html에서 보지 못하게 감싸놓은... 코드
+	//-->   		/* <- 라인단위 주석 */
+</script>
+
+</head>
+<body>
+	<input type="button" id="btn01" value="Button1" onclick="buttonOnclick1()"><br>
+	<input type="button" id="btn02" value="Button2" onclick="buttonOnclick2()"><br>
+</body>
+</html>

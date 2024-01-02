@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test018.html</title>
+
+<style type="text/css">
+	.section .layout >div>ul>li .tit{text-align: justify;line-height: 0;}
+	.section .layout >div>ul>li .tit:before{content:'';display: inline-block;width:100%;}
+	.section .layout >div>ul>li .tit:after{content:'';display: inline-block;width:100%;}
+</style>
+</head>
+<body>
+
+<!-- 
+	사용자로부터 이름, 국어점수, 영어점수, 수학점수를 입력받아
+	평균점수와 판정결과를 출력하는 페이지를 구성한다.
+	판정 결과는 합격, 과락, 불합격 중 하나로 처리한다.
+	
+	합격은 모든 과목 점수가 40점 이상이면서 평균 점수가 60점 이상인 경우,
+	과락은 평균이 60점 이상이지만 한 과목이라도 과목 점수가 40점 미만의 과목이 존재하는 경우
+	불합격은 평균 점수가 60점 미만인 경우로 처리한다.
+	
+	HTML, CSS, Javascript 활용한다.
+	
+	페이지 레이아웃
+	---------------------------------------------------------------
+	
+	이름		[		]
+	국어점수	[		]
+	영어점수	[		]
+	수학점수	[		]
+	
+	< 처리 결과 확인 >
+	평균		판정결과
+	[		]	[		]
+	
+	----------------------------------------------------------------
+ -->
+ 	<div class="score">
+		<div>
+			<h1>자바스크립트 활용</h1>
+			<hr>
+		</div>
+
+ 		<form>
+ 			<ul class="score_box">
+ 				<li class="input_box">
+ 					<div class="tit">사용자 입력</div>
+ 					<div>
+ 						<ul>
+ 							<li><span>이름</span><input type="text" id="name"></li>
+ 							<li><span>국어점수</span><input type="text" id="korScore"></li>
+ 							<li><span>영어점수</span><input type="text" id="engScore"></li>
+ 							<li><span>수학점수</span><input type="text"id="matScore"></li>
+ 						</ul>
+ 					</div>
+ 					<div><input type="button" value="처리결과 확인" onclick="resultShow()" class="btn_basic"></div> 					
+ 				</li>
+ 				<li class="result_box">
+ 					<div>
+ 						<ul>
+ 							<li><span>평균</span><input type="text" disabled id="avgScore"></li>
+ 							<li><span>판정결과</span><input type="text" disabled id="result"></li>
+ 						</ul>
+ 					</div> 					
+ 				</li>
+ 			</ul>
+ 		</form>
+ 	</div>
+ 	
+<script type="text/javascript">
+
+function resultShow()
+{
+	//var name = document.getElementById("inputName").value;
+	var korScore = parseInt(document.getElementById("korScore").value);
+	var engScore = parseInt(document.getElementById("engScore").value);
+	var matScore = parseInt(document.getElementById("matScore").value);
+	
+	var avgScore = parseInt(((korScore) + (engScore) + (matScore))/3);
+	
+	var result = "";
+	
+	if(avgScore>=60)
+	{
+		if(korScore>=40 && engScore>=40 && matScore>=40)
+		{
+			result = "합격";
+		}else{
+			result = "과락";
+		}
+	}else{
+		result = "불합격";
+	}
+	
+	document.getElementById("avgScore").value = avgScore;
+	document.getElementById("result").value = result;
+}
+
+
+
+
+</script>
+</body>
+</html>

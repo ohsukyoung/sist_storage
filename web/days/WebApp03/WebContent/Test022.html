@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test022.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style type="text/css">
+	textarea {/* font-family: 나눔고딕코딩; */font-weight: bold; margin: 2px;}
+	#txtCount {width: 40px; text-align:right;}
+</style>
+</head>
+<body class="section">
+
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+
+<!-- 
+	여러 명의 이름과 전화번호를 입력받고
+	그 내용을 전체 출력하는 페이지를 구현한다.
+	HTML, CSS, Javascript 를 활용한다.
+	
+	※ prompt() 활용
+	
+	페이지 레이아웃
+	------------------------------------------------
+	< 회원 정보 입력 >
+	
+	전체 회원 수: [  ] 명
+	-----------------------
+		이름	전화번호
+	-----------------------
+			:
+			:
+	
+	------------------------------------------------
+ -->
+
+<div class="layout">
+	<form>
+		<div class="btn_box input_box">
+			<input type="button" value="회원 정보 입력" class="btn" onclick="addMember()">
+		</div>
+		
+		<div class="result_box">
+			<span>전체 회원수: </span>
+			<input type="text" id="txtCount" class="txt" readonly="readonly">명
+		</div>
+	
+		<div>
+			<textarea rows="10" cols="30" id="txtResult" readonly="readonly"></textarea>	
+		</div>	
+	</form>
+</div>
+
+<script type="text/javascript">
+function addMember()
+{
+	// 확인
+	//alert("함수 호출 확인~!!!");
+	
+	//var temp = prompt("안내: ");
+	
+	var str = "";
+	var arr = new Array();
+	var n = 0;
+	
+	do
+	{
+		// ※ <prompt()>: 대화창을 통해 데이터 입력 안내
+		//				-> 입력 데이터를 받아와 변수에 담아내기
+		str = prompt("이름 전화번호("+ (n+1)+")");
+		
+		//확인
+		//alert(str);
+		
+		if(str==null || str =='.' || str==" " || str=="")
+			break;
+		
+		arr[n] = str;
+		
+		// 확인
+		alert(arr[n]);
+		
+		n++;		
+		
+	} while (true);
+	
+	document.getElementById("txtCount").value = arr.length;
+	/* **
+	배열을 가지고 있는 구조가 자바와 다르기 때문에 자바라면 불가능한 구조
+	자바- 배열을 연결되어 가지고 있음
+	자바스크립트- 배열이 연결되어있음
+	** */
+	
+	document.getElementById("txtResult").value = "	이름	전화번호\n";
+	/* **
+	txtResult를 클리어 할 필요 없음.
+	ㄴ 이유: 누적합을 출력하는 구조가 아니기 때문에
+	** */
+	
+	for(var n=0; n<arr.length; n++)
+	{
+		document.getElementById("txtResult").value += arr[n] + "\n";
+	}
+	
+	
+}
+</script>
+
+</body>
+</html>

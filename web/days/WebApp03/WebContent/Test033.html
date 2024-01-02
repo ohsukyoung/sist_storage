@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test033.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+function myAddr(addr)
+{
+	// 확인
+	//alert("함수호출");
+	
+	// 확인
+	//alert(addr);
+	
+	// 실행되지 않음
+	//document.getElementById("addr").value = "1234";
+	
+	//window.opener.document.getElementById("addr1").value = "1234";
+	//---- Test033
+	//       ----- Test032
+	
+	window.opener.document.getElementById("addr1").value = addr;
+	
+	//IE 용
+	//window.opener.document.getElementById("txt1").innerText = addr;
+	
+	//CR, FF 용
+	window.opener.document.getElementById("txt1").innerHTML = addr;
+	
+	// 현재 창 닫기
+	window.close();
+}
+</script>
+</head>
+<body class="section">
+	
+<div class="layout" style="padding: 20px 0;">
+	<form>
+		<div class="input_box btn_box">
+			<span class="tit">주소 검색(새창)</span>
+			<input type="text">
+			<input type="button" value="검색">
+		</div>
+		<div>
+			<ul>
+				<!-- **바람직하지 않은 방법** -->
+				<!-- <li><a href="Test032.html">서울 마포구 월드컵북로 1가 (1~110번지)</a></li> -->
+				
+				<!-- **함수호출: 그냥 함수명을 넣어서는 실행X** -->
+				<!-- <li><a href="myAddr()">서울 마포구 월드컵북로 1가 (1~110번지)</a></li> -->
+				<li><a href="javascript:myAddr('04044 서울 마포구 월드컵북로1가')">서울 마포구 월드컵북로 1가 (1~110번지)</a></li>
+				<li><a href="javascript:myAddr('04045 서울 마포구 월드컵북로2가')">서울 마포구 월드컵북로 2가 (111~132번지)</a></li>
+				<li><a href="javascript:myAddr('04046 서울 마포구 월드컵북로3가')">서울 마포구 월드컵북로 3가 (133~145번지)</a></li>
+				<li><a href="javascript:myAddr('04047 서울 마포구 월드컵북로4가')">서울 마포구 월드컵북로 4가 (146~153번지)</a></li>
+				<li><a href="javascript:myAddr('04048 서울 마포구 월드컵북로5가')">서울 마포구 월드컵북로 5가 (152~166번지)</a></li>
+				<li><a href="javascript:myAddr('04049 서울 마포구 월드컵북로6가')">서울 마포구 월드컵북로 6가 (167~180번지)</a></li>
+				<!-- 문자열 사용시 큰따옴표(") 작은따옴표(')모두 사용가능. 단, 묶어서 구분지어 사용해야함 -->
+				
+				<li><a href="">서울 마포구 월드컵북로 1가 (1~110번지)</a></li>
+				<li><a href="">서울 마포구 월드컵북로 2가 (111~132번지)</a></li>
+			</ul>
+		</div>
+		
+	</form>
+</div>	
+	
+</body>
+</html>

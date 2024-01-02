@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test017.html</title>
+<link rel="stylesheet" type="text/css" href="css/myCssStyle.css">
+
+
+
+<script type="text/javascript">
+
+	function resultShow()
+	{
+		var money = document.getElementById("inputMoney").value;
+		//alert(money);
+		
+		// 500원 구하기
+		var money500 = parseInt(money / 500);
+		//alert(money500);
+		
+		// 100원 구하기
+		var money100 = parseInt((money%500)/100);
+		//alert(money100);
+		
+		// 50원 구하기
+		var money50 = parseInt((money%100)/50);
+		//alert(money50);
+		
+		// 10원 구하기
+		var money10 = parseInt((money%50)/10);
+		//alert(money10);
+		
+		
+		
+		// [값 넣어주기]
+		
+		document.getElementById("totalMoney").value = money;
+		
+		document.getElementById("500Money").value = money500;
+		document.getElementById("100Money").value = money100;
+		document.getElementById("50Money").value = money50;
+		document.getElementById("10Money").value = money10;
+	}
+	
+	function deleteMoney()
+	{
+		document.getElementById("inputMoney").value = "";
+	 	document.getElementById("totalMoney").value = "";
+		document.getElementById("500Money").value = "";
+		document.getElementById("100Money").value = "";
+		document.getElementById("50Money").value = "";
+		document.getElementById("10Money").value = ""; 
+	}
+
+
+
+</script>
+
+
+</head>
+<body>
+
+<!-- 
+	특정 금액(10원 ~ 990월)을 사용자로부터 입력받아
+	화폐 단위로 구분하여 출력하는 페이지를 구성한다.
+	화폐 단위는 편의상 오백원, 백원, 오십원, 십원으로 구분한다.
+	HTML, CSS, Javascript 를 활용한다.
+	
+	페이지 기본 레이아웃 구성
+	--------------------------------------------------------------------
+	
+	금액	 [			] 원
+	
+	<결과> <취소>
+	
+	총액	[			] 원
+	오백원		[		] 개
+	백원		[		] 개
+	오십원		[		] 개
+	십원		[		] 개	
+	
+	--------------------------------------------------------------------
+ -->
+
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+
+
+<!-- <div>
+	<form>
+		<table>
+			<tr>
+				<td>
+					금 액
+				</td>
+				<td>
+					<input type="text" id="inputMoney" class="Money">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="button" style="width: 100px;">
+					<input type="button" style="width: 100px;">
+					
+				</td>
+			</tr>
+			
+		</table>
+	</form>
+</div> -->
+
+
+
+<div>
+	<form>
+		<br><br>
+		금액 	<input type="text" id="inputMoney" class="Money">
+		<br><br>
+		
+		
+		<input type="button" id="resultButton" class="btn" value="결과" onclick="resultShow()">
+		<input type="button" id="cancelButton" class="btn" value="취소" onclick="deleteMoney()">
+		<br><br><br>
+		
+		총액 	<input type="text" id="totalMoney" class="Money" disabled="disabled"> 원
+		<br>
+		오백원  <input type="text" id="500Money" class="Money" disabled="disabled"> 개
+		<br>
+		백원 	<input type="text" id="100Money" class="Money" disabled="disabled"> 개
+		<br>
+		오십원 	<input type="text" id="50Money" class="Money" disabled="disabled"> 개
+		<br>
+		십원 	<input type="text" id="10Money" class="Money" disabled="disabled"> 개
+		<br>
+		
+		
+	</form>
+</div>
+
+</body>
+</html>

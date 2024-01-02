@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test017.html</title>
+<link rel="stylesheet" type="text/css" href="css/myCssStyle.css">
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+
+	function myCalculate()
+	{
+		// 확인
+		//alert("함수 호출 확인~!!!");
+		
+		var moneyStr = document.getElementById("money").value;
+		
+		// 입력값에 대한 유효성 검사 코드 삽입 가능
+		
+		var money = parseInt(moneyStr);
+		
+		document.getElementById("totalMoney").value = money;
+		
+		// 【Math.floor】 : 소수점 아랫자리 절삭 함수!
+		//  Math 객체 내부에 있는 floor 함수는 소수점 아랫자리를 절삭시키는 함수이다.
+		// 그런데, parseInt()로 실수값을 감싸도, 실수 → 정수형으로 변환되는 과정에서 소수점이 사라지므로
+		// 같은 결과가 출력된다는 것을 알 수 있다.
+		
+		//var m500 = money/500;
+		//var m500 = Math.floor(money/500);
+		var m500 = parseInt(money/500);
+		
+		// 확인
+		//alert(m500);
+		
+		//alert(123.456);
+		//alert(parseInt(123.456));		[소수점 아래자리 절삭!!]		
+		//--==>> 123 이 안내창으로 출력된다.
+		
+		//alert(123.456)
+		//alert(Math.floor(123.456));	[소수점 아래자리 절삭!!]		
+		//--==>> 123 이 안내창으로 출력된다.
+		
+		money = money%500;					// money %= 500;
+		var m100 = parseInt(money/100)		// var m100 = Math.floor(money/100); (parseInt와 같은 결과를 반환한다!)
+		
+		money = money%100;					// money %= 100;
+		var m50 = parseInt(money/50);		// var m50 = Math.floor(money/50);
+		
+		money = money%50;					// money %= 50;
+		var m10 = parseInt(money/10);		// var m10 = Math.floor(money/10);
+		
+		
+		document.getElementById("m500").value = m500;
+		document.getElementById("m100").value = m100;
+		document.getElementById("m50").value = m50;
+		document.getElementById("m10").value = m10;
+	}
+
+
+</script>
+
+
+</head>
+<body class="section">
+
+<!-- 
+	특정 금액(10원 ~ 990월)을 사용자로부터 입력받아
+	화폐 단위로 구분하여 출력하는 페이지를 구성한다.
+	화폐 단위는 편의상 오백원, 백원, 오십원, 십원으로 구분한다.
+	HTML, CSS< Javascript 를 활용한다.
+	
+	페이지 기본 레이아웃 구성
+	--------------------------------------------------------------------
+	
+	금액	 [			] 원
+	
+	<결과> <취소>
+	
+	총액	[			] 원
+	오백원		[		] 개
+	백원		[		] 개
+	오십원		[		] 개
+	십원		[		] 개	
+	
+	--------------------------------------------------------------------
+ -->
+
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+		
+<div class="layout">
+	<form>
+		<div class="input_box">
+		금액 	<input type="text" id="money" class="Money">
+		</div>
+		
+		<div class="btn_box">
+		<input type="button" id="resultButton" class="btn" value="결과" onclick="myCalculate()">
+		<input type="button" id="cancelButton" class="btn" value="취소">
+		</div>
+		
+		<div class="result_box">
+			<ul>
+				<li>
+					<span class="tit">총액</span>
+					<input type="text" id="totalMoney" class="Money" disabled="disabled"> 원
+				</li>
+				<li>
+					<span class="tit">오백원</span>
+					<input type="text" id="m500" class="Money" disabled="disabled"> 개
+				</li>
+				<li>
+					<span class="tit">백원</span>
+					<input type="text" id="m100" class="Money" disabled="disabled"> 개
+				</li>
+				<li>
+					<span class="tit">오십원</span>
+					<input type="text" id="m50" class="Money" disabled="disabled"> 개
+				</li>
+				<li>
+					<span class="tit">십원</span>
+					<input type="text" id="m10" class="Money" disabled="disabled"> 개
+				</li>
+			</ul>
+		</div>		
+		
+	</form>
+</div>
+
+</body>
+</html>

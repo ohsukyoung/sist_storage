@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test015.html</title>
+<style type="text/css">
+	*
+	{
+	
+		color: #343;
+		font-family: 맑은 고딕;
+	
+	}
+	input.box:focus
+	{
+		background-color: yellow;
+	}
+	input.btn:hover
+	{
+		color: orange;
+		font-weight: bold;
+	}
+	input.numberBox
+	{
+		width: 50px;
+		text-align: right;
+	}
+</style>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+
+// 1. aaa 쓰고 A버튼 클릭하면 옆에 입력창에 aaa
+// 2. bbb 쓰고 B버튼 클릭하면 옆에 입력창에 aaabbb
+
+
+// ★ [id는 문서 안에서 고유하므로, 가장 많이 활용하게 된다.(Oracle의 식별자 개념과 유사)]
+
+	function actionBtnA()
+	{
+		// 테스트
+		//alert("A버튼 클릭 확인~!!!");
+		
+		// 텍스트를 가져오는 것이 아니라, 입력창 객체(Object) 자체를 가져온다!
+		// value : 텍스트 박스 내부에 적힌 텍스트를 가져오기 위해
+		// ★【[txtLeft] 텍스트박스 오브젝트.value】 = 작성된 내용을 가져올 수 있다!
+		
+		//alert(document.getElementById("txtLeft"));
+		//alert(document.getElementById("txtLeft").value);
+		
+		// 둘 다 객체 타입으로 저장된다!!!
+		var txt01 = document.getElementById("txtLeft");
+		var txt02 = document.getElementById("txtRight");
+		
+		// 테스트
+		//alert(txt01);
+		//--==>> [object HTMLInputElement] 오브젝트 타입이 나온 것을 확인할 수 있다!
+		
+		//alert(txt01.value);
+		//--==>> 123 (123을 입력창에 입력하자, 123이 안내창으로 떴다!)
+		
+		var leftStr = txt01.value;
+		// ① 텍스트박스 1에 적힌 문자열을 leftStr에 저장해서
+		
+		txt02.value = leftStr;
+		// ② 텍스트박스 2의 value에 대입해 준다!
+		
+	}
+	
+	function actionBtnB()
+	{
+		// 테스트
+		//alert("B버튼 클릭 확인~!!!");
+		
+		var txt01 = document.getElementById("txtLeft");
+		var txt02 = document.getElementById("txtRight");
+		
+		var rightVal = txt02.value;
+		txt01.value = rightVal;
+		
+	}
+	
+/* 	function gogo()
+	{
+		var a = document.getElementById("txtNumber01");
+		var b = document.getElementById("txtNumber02");
+		
+		var result = a.value + b.value;
+		
+		txtResult.value = result;
+	} */
+	
+	function actionBtnResult()
+	{
+		// [내 풀이]===============================================================
+		// 테스트
+		//alert("함수 호출 확인~!!!");
+		
+		//var a = document.getElementById("txtNumber01");
+		//var b = document.getElementById("txtNumber02");
+		
+		// parseInt 로 바꿔주지 않으면, 문자열 결합 연산이 이루어지기 때문에
+		// 반드시 정수 타입으로 형변환 해 주어야 한다.
+		
+		//var result = parseInt(a.value) + parseInt(b.value);
+		
+		//txtResult.value = result;
+		//========================================================================
+			
+			
+		// [선생님 해설]==========================================================
+		
+		// ⓐ 오브젝트 가져오기
+		//var num1 = document.getElement.getElementById("txtNumber01");
+		
+		// ⓑ 텍스트 자체를 가져오기
+		var num1 = document.getElementById("txtNumber01").value;
+		var num2 = document.getElementById("txtNumber02").value;
+		
+		// 확인
+		//alert(num1);
+		//alert(num2);
+		
+		//var result = num1 + num2;				//-- 문자열 결합
+		// parseInt()
+		//var result = parseInt(num1 + num2);	//--(Ⅹ) 문자열을 결합한 결과를 숫자로 변환하게 된다! 
+												//  "12" + "23" = "1223" → parseInt() → 1223 (Ⅹ)
+												//-- 문자열 결합된 결과물을 정수형태로 변환
+
+		
+		//var result = parseInt(num1) + parseInt(num2);
+											
+		
+		// 확인
+		//alert(result);
+		
+		
+		// var result = parseInt(num1) + parseInt(num2);
+		//                       "12"             "23"
+		//				--------------   -------------
+		//
+		
+		var result = Number(num1) + Number(num2);
+		// 앞글자가 대문자인 메소드는, 생성자를 의미한다
+		// Number 객체에 변수를 넣어주게 되면 그 변수 또한 정수형으로 변환되므로 이렇게도 작성할 수 있다.
+		
+		
+		// 확인
+		//alert(result);
+		
+		document.getElementById("txtResult").value = result;
+		
+		
+		// 위의 처리 내용과 같은 결과 (짧은 처리)
+		
+		/* document.getElementById("txtResult").value
+		= parseInt(document.getElementById("txtNumber01").value)
+		+ parseInt(document.getElementById("txtNumber02").value); */
+		
+		
+		// ※ 자바스크립트가 자동으로 형변환 하는 것을 믿지 말고(의존하지 말고)
+		//    사용자가 직접 정의하여 형변환을 하도록 하자.
+		
+		//========================================================================
+	}
+	
+	
+	
+	
+
+</script>
+
+
+</head>
+<body class="section">
+
+<div>
+	<h1>자바스크립트 기본 관찰</h1>
+	<hr>
+</div>
+
+<div class="btn_box">
+	<input type="text" class="box" id="txtLeft">
+	<input type="button" value="A버튼" class="btn" id="btnA" onclick="actionBtnA()">
+	<input type="button" value="B버튼" class="btn" id="btnB" onclick="actionBtnB()">
+	<input type="text" class="box" id="txtRight">
+	
+	<br><br><br>
+	<hr>
+	
+	<input type="text" class="numberBox" id="txtNumber01">
+	+
+	<input type="text" class="numberBox" id="txtNumber02">
+	<input type="button" value=" = " class="btn w_auto" id="btnResult" onclick="actionBtnResult()">
+	<input type="text" class="numberBox" id="txtResult" disabled="disabled">
+	
+	<!--disabled : 사용자가 입력값을 넣을 수 없지만, 개발자가 값을 넣어줄 수 있다.  -->
+	<!-- equal 버튼이 클릭되었을 때 처리해야 한다. -->
+	
+<div>
+
+
+
+</div>
+
+
+</div>
+
+</body>
+</html>

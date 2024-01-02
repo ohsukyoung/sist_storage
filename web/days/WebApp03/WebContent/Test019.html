@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test019.html</title>
+</head>
+<body>
+
+<!--
+	사용자로부터 임의의 정수 n 을 입력받아
+	1 부터 n 까지의 합을 계산하되
+	n 은 100 이상만 허용하고,
+	출력 시 10의 배수가 될 때마다 중간 합을 출력할 수 있는 페이지를 구성한다.
+	반복문을 활용할 수 있도록 한다.
+	
+	HTML, CSS, Javascript 활용
+	
+	페이지 레이아웃					(입력값은 100 이상만 가능~!!!)
+	------------------------------------------------------------------
+	
+	정수 입력(100 이상) [		] -> 조건 유효성 -> textbox, num으로 식별
+		< 결과 >	< 취소 >
+		
+	-------------------------------- -> textarea, result 로 식별
+	1 ~ 10 : 55 	┐
+	1 ~ 20 : 210 	│
+	1 ~ 30 : xxx 	│중간 합
+		: 			│
+	1 ~ 100 : 5050  ┘
+	1 ~ 101 : 5051 ─ 최종 합
+	--------------------------------	
+	
+	------------------------------------------------------------------ 
+ -->
+
+<div class="section">
+	<div>
+		<h1>자바스크립트 활용</h1>
+		<hr>
+	</div>
+
+	<form>
+		<div class="layout">
+			<div class="input_box">
+				<span class="tit">정수 입력(100 이상)</span>
+				<input type="number" class="ip_box" id="inputNum">
+			</div>
+			<div class="btn_box">
+				<input type="button" value="결과" id="btnResult" onclick="resultShow()">
+				<input type="reset" value="취소" id="btnCancel">
+			</div>
+			<div class="result_box">
+				<textarea id="result" cols="300" rows="10" style="resize: none;width:400px;"></textarea>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+
+function resultShow()
+{
+	//alert("test");
+	var num = document.getElementById("inputNum").value;
+	var result = "";
+	var tot = 0;
+
+	if(num < 0){
+		result = "입력한 값이 100이상이 아닙니다.";		
+	}else{
+		
+		for(var i = 0; i<=num; i++)
+		{
+			tot += parseInt(i);
+			if(i%10 == 0 || i==num)
+			{
+				//console.log("10의 배수");
+				result += ("1 ~ " + i + " : " + tot + "\n");
+				//console.log(("1 ~ " + i + " : " + tot + "\n"));
+			}
+				
+		}
+		//result = tot;
+	}
+	document.getElementById("result").value = result;
+}
+
+</script>
+</body>
+</html>

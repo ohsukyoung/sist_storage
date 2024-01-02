@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test031.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+
+	// select 를 다루어보기 위한 테스트 함수 정의
+	function selectTest()
+	{
+		// 확인
+		//alert("함수 호출~!!!");
+		
+		
+		// **컨트롤 하는 방법을 여러가지로 알아둬야함**
+		
+		// 첫 번째 방법 ========================================================
+		/* 
+		var positionStr = document.getElementById("userPosition").value;
+		
+		// 확인
+		alert(positionStr);
+		*/
+		
+		// 두 번째 방법 ========================================================
+		/* 
+		var positionObj = document.getElementById("userPosition");
+		var positionOptions = positionObj.options;		//**배열~!!!**
+		var positionMsg = "";
+		
+		// 확인
+		//alert(positionOptions);
+		//--==>> [object HTMLOptionsCollection] -> 자바스크립트 배열
+		
+		//alert(positionOptions.length);
+		//--==>> 4
+		
+		for (var i = 0; i < positionOptions.length; i++)		// 0 1 2 3
+		{
+			// 확인
+			//alert(positionOptions[i].selected);
+			//--==>> 선택된 옵션 항목에 따라 true/false 형태로 확인
+			//		ture false false false (부장 선택된 상태)
+			//		false false false true (사원 선택된 상태)
+			
+			if(positionOptions[i].selected)
+			{
+				// 확인
+				//alert(i);
+				//--==>> 0 (부장 선택된 상태)
+				//		 3 (사원 선택된 상태)
+				
+				// 단일 선택
+				//positionMsg = positionOptions[i].value;
+				//break;
+				
+				// 다중 선택
+				positionMsg = positionOptions[i].value + " ";
+				// **다중 선택에서는 break 쓰면 X**
+			}
+		}
+		
+		// 확인
+		alert(positionMsg); 
+		*/
+		
+		// 세 번째 방법 =====================================================
+		/* 
+		var positionObj = document.getElementById("userPosition");
+		
+		// 확인
+		//alert(positionObj.selectedIndex);
+		//--==>> 부장->0, 과장->1, 대리->2, 사원->3
+		
+		// 확인
+		//alert(positionObj.options[2].value);
+		//--==>> cde(대리)
+		//alert(positionObj.options[0].value);
+		//--==>> zaq(부장)
+		
+		positionMsg = positionObj.options[positionObj.selectedIndex].value;
+		//			  ------------------- 배열
+		//								 -------------------------- 선택된 인덱스 번호
+		//															------ 배열의 값
+		
+		// 확인
+		alert(positionMsg);
+		 */
+		
+	}
+function addMember()
+{
+	//console.log("확인");
+	
+	var memBodyNode = document.getElementById("memberList");
+	var trNode = document.createElement("tr");
+	
+	var userName = document.getElementById("userName");
+	var userSsn = document.getElementById("userSsn");
+	
+	var userCity = document.getElementById("userCity");
+	var userDepartment = document.getElementById("userDepartment");
+	var userPosition = document.getElementById("userPosition");
+	
+	var userBasicPay = document.getElementById("userBasicPay");
+	
+	
+	var arr = new Array();
+	
+	arr[0] = userName.value;
+	arr[1] = userSsn.value;
+	
+	// S: 방법 1 ----------------------------------------------	
+	/* arr[2] = userCity.value;
+	arr[3] = userDepartment.value;
+	arr[4] = userPosition.value; */
+	// E: 방법 1 ----------------------------------------------	
+	
+	// S: 방법 2 ----------------------------------------------	
+	/* var userCityOptions = userCity.options;
+	for (var i = 0; i < userCityOptions.length; i++)
+	{
+		if(userCityOptions[i].selected)
+		{
+			arr[2] = userCityOptions[i].value;
+		}
+	}
+	
+	var userDepartmentOptions = userDepartment.options;
+	for (var i = 0; i < userDepartmentOptions.length; i++)
+	{
+		if(userDepartmentOptions[i].selected)
+		{
+			arr[3] = userDepartmentOptions[i].value;
+		}
+	}
+	
+	var userPositionOptions = userPosition.options;
+	for (var i = 0; i < userPositionOptions.length; i++)
+	{
+		if(userPositionOptions[i].selected)
+		{
+			arr[4] = userPositionOptions[i].value;
+		}
+	} */
+	// E: 방법 2 ----------------------------------------------	
+	
+	// S: 방법 3 ----------------------------------------------	
+	arr[2] = userCity.options[userCity.selectedIndex].value;
+	arr[3] = userDepartment.options[userDepartment.selectedIndex].value;
+	arr[4] = userPosition.options[userPosition.selectedIndex].value;
+	
+	
+	// E: 방법 3 ----------------------------------------------	
+	
+	arr[5] = userBasicPay.value;
+	
+	
+	
+	for (var i = 0; i < arr.length; i++)
+	{
+		trNode.appendChild(createTdNode(arr[i]));
+	}
+	
+	memBodyNode.appendChild(trNode);
+	
+	
+}
+function createTdNode(val)
+{
+	var txtNode = document.createTextNode(val);
+	var tdNode = document.createElement("td");
+	tdNode.appendChild(txtNode);
+	
+	return tdNode;
+}
+
+</script>
+
+
+</head>
+<body class="section">
+
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+
+<div>
+	<h2>선택목록(select) 다루기</h2>
+	
+	
+	<form>
+		<table>
+			<tr>	
+				<td>이름</td>
+				<td>
+					<input type="text" id="userName">
+				</td>
+			</tr>
+			<tr>
+				<td>주민번호</td>
+				<td>
+					<input type="text" id="userSsn">
+				</td>
+			</tr>
+			<tr>
+			
+			<!-- "서울" "마포구"... 이런식으로 사용자 입력으로 받으면 처리가 불가능하다. -->
+			<!-- 선택지에서 선택할 수 있도록 변경해야 한다! 【text → select[드롭다운]】 -->
+			
+				<td>지역</td>
+				<td>
+					<!-- <input type="text" id="userCity"> -->
+					<select id="userCity">
+						<option value="1123(서울)">서울</option>
+						<option value="3328(대전)">대전</option>
+						<option value="4239(광주)">광주</option>
+						<option value="5832(대구)">대구</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>부서</td>
+				<td>
+					<!-- <input type="text" id="userDepartment"> -->
+					<select id="userDepartment">
+						<option value="9987(개발부)">개발부</option>
+						<option value="9986(인사부)">인사부</option>
+						<option value="9985(자재부)">자재부</option>
+						<option value="9984(영업부)">영업부</option>
+						<option value="9983(총무부)">총무부</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>직위</td>
+				<td>
+					<!-- <input type="text" id="userPosition"> -->
+					<select id="userPosition">
+						<option value="zaq(부장)">부장</option>
+						<option value="xsw(과장)">과장</option>
+						<option value="cde(대리)">대리</option>
+						<option value="bgt(사원)">사원</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>기본급</td>
+				<td>
+					<input type="text" id="userBasicPay">
+				</td>
+			</tr>
+			<tr class="btn_box">
+				<td colspan="2" style="text-align: center">
+					
+					<!-- 선택된 값을 가져오는 1,2,3 방법 -->
+					<!-- <input type="button" value="직원 추가" class="btn" style="width: 48%"
+					onclick="selectTest()"> -->
+					
+					<!-- 직원 추가 기능  -->
+					<input type="button" value="직원 추가" class="btn"
+					onclick="addMember()">
+					
+					<input type="reset" value="입력 취소" class="btn">
+				</td>
+			</tr>
+		</table>
+		<br>
+		
+		
+		<table id="memberList">
+			<tr>
+				<td>이름</td>
+				<td>주민번호</td>
+				<td>지역</td>
+				<td>부서</td>
+				<td>직위</td>
+				<td>기본급</td>
+			</tr>
+		</table>
+		
+	</form>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test030.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="section">
+
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+<!-- 
+	1. 사이즈 선택(몇종류 아이스크림 선택할 수 있는지)
+	 파인트-> 3개
+	2. 선택 종류 초과시
+	ㄴ"선택개수 초과" 경고창
+	ㄴ 확인버튼 누르면 없어야함
+	3. 취소후 선택가능
+	
+	힌트) 엑션 버튼 클릭시 걸었음. 지금은 선택마다 실행되어야함.
+ -->
+<div class="layout">
+	<h2>아이스크림 주문</h2>
+	<form>
+		<div>		
+			--- 사이즈 선택 ---<br><br>
+			<input type="radio" name="iceSize" value="1" onclick="actionChoice1()"> 싱글
+			<input type="radio" name="iceSize" value="2" onclick="actionChoice1()"> 더블
+			<input type="radio" name="iceSize" value="3" onclick="actionChoice1()"> 파인트
+			<input type="radio" name="iceSize" value="4" onclick="actionChoice1()"> 쿼터
+			<input type="radio" name="iceSize" value="5" onclick="actionChoice1()"> 패밀리
+			<input type="radio" name="iceSize" value="6" onclick="actionChoice1()"> 하프갤런
+		</div>
+				
+		<div>
+			--- 종류 선택 -- <br><br>
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 엄마는외계인
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 레인보우샤베트
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 민트초코
+			<br>
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 바람과함께사라지다
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 애플민트
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 초코나무숲
+			<br>
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 피스타치오아몬드
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2this()"> 아몬드봉봉
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 요거트31
+			<br>
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 체리쥬빌레
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 슈팅스타
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 사랑에빠진딸기
+			<br>
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 뉴옥치즈케이크
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 쿠앤크
+			<input type="checkbox" name="iceType" value="1" onclick="actionChoice2(this)"> 베리베리스트로베리
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+/* document.addEventListener('DOMContentLoaded', function() {
+	var radios = document.querySelectorAll('input[type=radio][name=iceSize]');
+	 
+    for (var radio of radios)
+    {
+    	radio.addEventListener('change', function(event)
+        {
+        	actionChoice1();
+        });
+    }
+    
+    var checkboxes = document.querySelectorAll('input[type=checkbox][name=iceType]');
+ 
+    for (var checkbox of checkboxes)
+    {
+        checkbox.addEventListener('change', function(event)
+        {
+        	actionChoice2();
+        });
+    }
+}, false); */
+
+// 사이즈 선택
+function actionChoice1()
+{
+	var radioObj = document.getElementsByName("iceSize");
+	var size = 0;
+	
+	for (var i = 0; i < radioObj.length; i++)
+	{
+		if(radioObj[i].checked)
+		{
+			size = parseInt(radioObj[i].value);
+			break;
+		}
+	}
+	console.log("size: "+size);
+	return size;
+}
+
+// 종류 선택
+function actionChoice2(obj)
+{	
+	var checkObj = document.getElementsByName("iceType");
+	var size = actionChoice1();
+	var type = 0;
+	
+	for (var i = 0; i < checkObj.length; i++)
+	{
+		if(checkObj[i].checked)
+		{
+			type++;
+		}
+		console.log("type: "+type);
+		
+	}
+	if(size<type)
+	{
+		//checkObj[i].checked = false;
+		alert("선택개수 초과");
+		obj.checked = false;
+		return false;
+	}
+}
+</script>
+</body>
+</html>

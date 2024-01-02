@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test016_1.html</title>
+
+<style type="text/css">
+
+	* {color: #223322; font-family: 나눔고딕코딩; font-weight: bold;}
+	input:focus {background-color: #eeeedd;}
+	input.btn {width: 80px; font-weight: bold; font-family: 맑은 고딕;}
+	input.op{width: 60px;}
+	input.btn:hover{color: orange; background-color: #334433;}
+	input.btn:active{color: red;}
+	.txtNum {width: 80px;}
+	#result {width: 120px; text-align: center;}
+
+</style>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+
+// ⓐ [함수를 각각 구성하는 방식]---------------------
+/* 	function test1()
+	{
+		alert("덧셈 연산 수행")
+		
+	}
+	
+	function test2()
+	{
+		alert("뺄셈 연산 수행")
+		
+	}
+	
+	function test3()
+	{
+		alert("곱셈 연산 수행")
+		
+	}
+	
+	function test4()
+	{
+		alert("나눗셈 연산 수행")
+		
+	} */
+
+//---------------------------------------------------
+
+// ★ ⓑ [하나의 함수로 처리하는 방식]===============
+	
+	// 【매개변수 형태로 test(1) test(2) test(3) test(4) 구분하면 된다!!】
+	// 자바스크립트도 객체지향 언어이므로 this 키워드 사용 가능.
+	
+/* 	function test1(num)
+	{
+		//alert("연산 수행");
+		alert(num);
+
+	}
+ */
+ 
+	function test1(obj)
+	{
+		//alert("연산 수행");
+		//alert(num);
+		
+		// ⓐ**********
+		//  alert(obj);
+		// ************
+		// ⓐ object 타입으로 객체가 넘어온다.
+		
+		// ⓑ*****************
+		//   alert(obj.value);
+		//  ******************
+		// ⓑ object가 갖는(this의 객체 = object)의 value("더하기", "빼기", ...)가
+		//    넘어온다!!
+		
+		var vNum1 = document.getElementById("num1").value;
+		var vNum2 = document.getElementById("num2").value;
+		var vResult = 0;
+		
+		// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+		// 자바의 경우 if (String.equals("라라")) 처럼 작성하지만
+		// 자바스크립트는 == 로도 문자열 비교가 가능하다!
+		// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+		
+		if (obj.value == "더하기")
+		{
+			// 테스트
+			//alert("덧셈 연산 수행");
+			vResult = parseInt(vNum1) + parseInt(vNum2);
+		}
+		else if (obj.value == "빼기")
+		{
+			// 테스트
+			//alert("뺄셈 연산 수행");
+			vResult = parseInt(vNum1) - parseInt(vNum2);
+		}
+		else if (obj.value == "곱하기")
+		{
+			// 테스트
+			//alert("곱셈 연산 수행");
+			vResult = parseInt(vNum1) * parseInt(vNum2);
+		}
+		else if (obj.value == "나누기")
+		{
+			// 테스트
+			//alert("나눗셈 연산 수행");
+			vResult = parseInt(vNum1) / parseInt(vNum2);
+			
+			// 자바스크립트는 나눗셈 연산을 할 때도
+			// 피연산자 중 하나를 실수 타입으로 바꿀 필요가 없다.
+		}
+		
+		// 테스트
+		//alert(vResult);
+		
+		document.getElementById("result").value = vResult;
+
+	}
+ 
+ 
+//===================================================
+	
+</script>
+</head>
+<body class="section">
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<div class="info_box">
+		<p>사용자로부터 두 개의 정수를 입력받고</p>
+		<p>합, 차, 곱, 몫을 연산하여 연산 결과를 페이지에 출력할 수 있도록 한다.</p>
+		<p>HTML, CSS, Javascript 를 활용하여 처리한다.</p>
+	</div>
+	
+	<div>
+		<form>
+			정수1 <input type="text" id="num1" class="txtNum">
+			정수2 <input type="text" id="num2" class="txtNum">
+			<br><br>
+			
+			<!-- 	
+			<input type="button" class="btn" value="더하기">
+			<input type="button" class="btn" value="빼기">
+			<input type="button" class="btn" value="곱하기">
+			<input type="button" class="btn" value="나누기">
+			<br><br>
+	 		-->		
+			
+			<!-- [각각에 대한 함수를 생성했을 경우]
+			<input type="button" class="btn" value="더하기" onclick="test1()">
+			<input type="button" class="btn" value="빼기" onclick="test2()">
+			<input type="button" class="btn" value="곱하기" onclick="test3()">
+			<input type="button" class="btn" value="나누기" onclick="test4()">
+			<br><br>
+			-->
+			
+			<!--
+			<input type="button" class="btn" value="더하기" onclick="test1(1)">
+			<input type="button" class="btn" value="빼기" onclick="test1(2)">
+			<input type="button" class="btn" value="곱하기" onclick="test1(3)">
+			<input type="button" class="btn" value="나누기" onclick="test1(4)">
+			<br><br> 
+			-->
+			
+			<input type="button" class="btn" value="더하기" onclick="test1(this)">
+			<input type="button" class="btn" value="빼기" onclick="test1(this)">
+			<input type="button" class="btn" value="곱하기" onclick="test1(this)">
+			<input type="button" class="btn" value="나누기" onclick="test1(this)">
+			<br><br>
+			
+			<!--
+			★[this]★======================================== 
+			this 라는 키워드가 포함되어있는 객체 자체를 의미한다
+			this가 어디에 쓰였느냐에 따라 this가 포함된 객체 의미
+			-->
+			
+			<!--
+			<input type="button" class="btn" value="더하기" onclick="test1(this)">
+			→ this가 포함된 객체 전부!!
+			 -->
+			
+			
+	
+			결과 <input type="text" id="result" class="txtNum" disabled="disabled">
+			<input type="reset" class="btn" value="취소">
+			
+			<!-- 사용자에게 모두 정수1, 정수2 를 가져오는 연산은 똑같다. -->
+			<!-- 연산만 다를 뿐이지, result 창에 결과를 집어넣는 것도 똑같다. -->
+			<!-- 하나의 함수로도 처리 가능하다!! -->
+			
+			
+			
+		</form>
+	</div>
+</div>
+
+
+
+
+</body>
+</html>

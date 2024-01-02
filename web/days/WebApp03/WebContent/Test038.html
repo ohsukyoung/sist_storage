@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test038.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<style type="text/css">
+	table{width: 100%;}
+	th{text-align: left;}
+	#uName{width: 150px;}
+	#uContent{width: 100%;}
+	#btn{width: 100%;}
+</style>
+
+<script type="text/javascript">
+	// 자바스크립트 배열 객체 구성
+	var boardArray = new Array();
+	
+	// 사용자 정의 객체 구성(-> 생성자 함수 정의)
+	/* **
+	객체를 구성한다 -> 
+		- 자바는 클래스로 만들어짐
+		- 자바스크립트는 함수의 형태로 만들어짐
+			따라서, 자바스크립트에서는 객체의 경우 첫 글자를 대문자로 만들기로 암묵적으로 약속함
+	this ->
+		- 자바는 클래스를 찾아감
+		- 자바스크립트는 해당 함수가 돌아가는 그 자체..?
+	** */
+	function Board(uName,uContent)
+	{
+		this.userName = uName;
+		this.content = uContent;
+		this.writeDay = new Date();
+	};
+		
+	// 프로토타입 구성을 통해... 사용자 정의 함수(기능, 동작) 정의
+	//Board.prototype.userLocalString = function(){ };
+	Board.prototype.userLocalString = function()
+	{ 
+		return this.writeDay.getFullYear() + "-"
+				+ (this.writeDay.getMonth()+1) + "-"
+				+ this.writeDay.getDate() + " "
+				+ this.writeDay.getHours() + ":"
+				+ this.writeDay.getMinutes() + ":"
+				+ this.writeDay.getSeconds();
+				
+		// 시 -> getHours()
+		// 분 -> getMinutes()
+		// 초 -> getSeconds()
+	};
+	
+	// 글쓰기 버튼이 클릭되었을 때 호출되어 기능하는 함수
+	function protoTest()
+	{
+		// 확인
+		//alert("함수 호출~!!!");
+		
+		var uName = document.getElementById("uName").value;
+		var uContent = document.getElementById("uContent").value;
+		
+		var len = boardArray.length;
+		
+		// 확인
+		//alert(len);
+		//--==>> 현재 시점에서 테스트시... -> 0
+		
+		boardArray[len] = new Board(uName, uContent);
+		
+		// 확인
+		//alert(len);
+		//--==>> 작성이 이루어질 때마다... -> +1
+		
+		// 내용 출력 -> 출력 함수 호출
+		print(len);
+	}
+	
+	// 내용 출력 함수 정의
+	function print(idx)
+	{
+		// 확인
+		//var strTemp = boardArray[idx].content;
+		//alert(strTemp);
+		var uNameTxt = boardArray[idx].userName;
+		var uContentTxt = boardArray[idx].content;
+		var num = idx+1;
+		var date = boardArray[idx].userLocalString();
+		
+		var trNode = document.createElement("tr");
+		trNode.appendChild(createTdNode(num));
+		trNode.appendChild(createTdNode(uNameTxt));
+		trNode.appendChild(createTdNode(uContentTxt));
+		trNode.appendChild(createTdNode(date));
+				
+		var tableNode = document.getElementById("bbsTable");
+		tableNode.appendChild(trNode);
+		
+	}
+	
+	// td 노드를 생성 및 반환 함수 정의
+	function createTdNode(val)
+	{
+		var textNode = document.createTextNode(val);
+		var tdNode = document.createElement("td");
+		tdNode.appendChild(textNode);
+		
+		return tdNode;
+	}
+	
+</script>
+
+</head>
+<body class="section">
+<div>
+	<h1>자바스크립트 활용</h1>
+</div>
+
+<div class="layout">
+	<p>사용자 정의 객체 및 프로토타입 활용</p>
+	
+	<div>
+		<form>
+			<!-- 입력 폼을 구성하는 레이아웃 테이블 -> 나중에 div로 구성해 볼 것 -->
+			<div class="table_box">
+				<table class="table">
+					<tr>
+						<th>작성자</th>
+						<td><input type="text" id="uName" class="txt"></td>
+					</tr>
+					<tr>
+						<th>내용</th>
+						<td><input type="text" id="uContent" class="txt"></td>
+					</tr>
+					<tr>
+						<th colspan="2"><input type="button" value="글쓰기" class="btn" onclick="protoTest()"></th>
+					</tr>
+				</table>
+			</div>
+			
+			<!-- 내용을 리스트 형식으로 볼 수 있도록 구성하는 레이아웃 테이블 -->
+			<div class="table_box">
+				<table class="table table_box" id="bbsTable">
+					<tr>
+						<th>번호</th><th>작성자</th><th>내용</th><th>작성일</th>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</div>
+</div>
+
+</body>
+</html>

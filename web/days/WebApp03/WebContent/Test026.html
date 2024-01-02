@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test026.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="section">
+	
+<div>
+	<h1>자바스크립트 활용</h1>
+	<hr>
+</div>
+
+<!-- 
+	가위, 바위, 보 게임을 구성한다.
+	HTML, CSS, Javascript 를 활용한다.
+	자바스크립트의 난수 발생 함수를 찾아 활용한다.
+	(https://www.w3schools.com/js/js_random.asp)
+	ㄴ 한명의 개발자가 학습 사이트 개발..(북유럽사람..?)
+		ㄴ 세심하게 다루고 있는 좋은 사이트라고 알고있음
+	
+	-> http://w3schools.com
+	-> http://koxo.com
+	
+	페이지 레이아웃
+	---------------------------------------------------
+	입력(1.가위, 2.바위, 3.보)	[ 2 ] <게임 결과 확인>
+	
+	[ 사용자:바위, 컴퓨터: 보 -> 컴퓨터가 이겼습니다. ]
+ -->
+	
+<div class="layout">
+	<div class="input_box btn_box">
+		<span class="tit">입력(1.가위, 2.바위, 3.보)</span> &nbsp;
+		<input type="text" style="width: 50px;" id="inputText"> &nbsp;
+		<input type="button" value="게임 결과 확인" onclick="actionGame()">
+	</div>
+	<div class="result_box">
+		<textarea rows="20" cols="40" id="result"></textarea>
+	</div>
+</div>
+<script type="text/javascript">
+function actionGame()
+{
+	var user = parseInt(document.getElementById("inputText").value);
+	var com = Math.floor(Math.random()*10)%3 +1;
+	var gameTexts = ["가위","바위","보"];
+	//var resultTexts = ["비겼습니다.","컴퓨터가 이겼습니다.","사용자가 이겼습니다."];
+	var resultTexts = ["비김","이김","짐"];
+	
+	var check = (user-com);
+	if(check < 0)
+		check += 3;
+ 
+	document.getElementById("result").value
+	+= ("사용자: "+ gameTexts[user-1]
+		+ "\t, 컴퓨터: "+ gameTexts[com-1]
+		+ "\t-> " + resultTexts[check] + "\n");
+}
+
+</script>
+	
+	
+</body>
+</html>

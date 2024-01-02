@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test032.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+function searchAddr()
+{
+	//console.log("함수호출");
+	
+	// ※ window.open();
+	
+	//	- 형식 및 구조
+	//		var result = window.open(url,name,spec,replace);
+	//
+	//	  ·result
+	//		새로 생성된 창의 객체가 반환된다.
+	//		창 객체 생성이 정상적으로 이룽지지 않을 경우 null을 반환한다.
+	//	  ·url
+	//		새 창으로 요청할 주소.
+	//	  ·name
+	//		새 창의 속성 또는 이름.
+	//		(_blank / _parent / _self / _top / 임의의 이름)
+	//	  ·spec
+	//		새 창의 스펙 설정.
+	//	  ·replace
+	//	  	히스토리 목록에 새창을 만들지의 여부 지정.
+	
+	window.open("Test033.html","Test","width=500, height=300");
+	//----내장 객체(DOM 객체)
+	//**DOM은 BOM 객체 위에 생성됨**
+	//			------------- 열 페이지
+	//						   ------ 열렸을 때 이름
+	//								  ----------------------- 스펙(위치, 크기 등..)
+	
+	
+}
+</script>
+
+</head>
+<body class="section">
+<div>
+	<h1>자바스크립트를 활용</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<h2>주소 검색</h2>
+	
+	<form>
+		<div class="input_box btn_box">
+			<span class="tit">기본 주소</span>
+			<input type="text" id="addr1" readonly="readonly" class="txt">
+			<input type="button" value="검색" class="btn" onclick="searchAddr()">
+		</div>
+		<div>
+			<span class="tit">상세 주소</span>
+			<input type="text" id="addr2" class="txt">
+		</div>
+		<div>
+			<span id="txt1" style="color: red; font-weight: bold">
+				시각적으로 확인 할 수 있게 처리
+			</span>
+		</div>
+	</form>
+</div>
+</body>
+</html>

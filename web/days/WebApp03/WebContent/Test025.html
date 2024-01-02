@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test025.html</title>
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="section">
+
+<div>
+	<h1>테이블 동적 생성으로 만년달력 그리기</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<form>
+		<div class="input_box">
+			<input type="text" id="txtYear" class="txt" style="width: 80px">년
+			<input type="text" id="txtMonth" class="txt" style="width: 40px">월
+		</div>
+
+		<div class="btn_box">
+			<input type="button" class="btn" value="만년달력 그리기" onclick="actionCalendar()">
+		</div>		
+	
+		<div>
+			<table border="1" id="calendarTbl">
+				<tr>
+					<th>일</th>
+					<th>월</th>
+					<th>화</th>
+					<th>수</th>
+					<th>목</th>
+					<th>금</th>
+					<th>토</th>
+				</tr>
+			</table>		
+		</div>	
+	</form>
+</div>
+<script type="text/javascript">
+/* 1. 달의 마지막 날짜
+2. 윤년계산(4의 배수이고 100의 배수가 아니거나, 400의 배수) -> 29
+3. 입력받은 연도의 이전 년도 날수까지의 계산
+4. 입력받은 받은 연도(해당 연도)의 전 월까지 계산
+5. 요일= 날수%7 */
+	
+function actionCalendar()
+{
+	/* var txtYear = document.getElementById("txtYear").value;	
+	var txtMonth = document.getElementById("txtMonth").value; */
+	
+	// 1년 1월 1일은 월요일!
+	
+	var txtYear = "2023";
+	var txtMonth = "12";
+	var allDay=0;
+	var monthDay=0;
+	var week=0;
+	var weekText;
+	//console.log("1: "+ txtYear);
+	//console.log("2: "+ txtMonth);
+	
+	//1. 달의 마지막 날짜
+	var lastDay = new Array(31,28,31,30,31,30,31,31,30,31,30,31);
+	//						1  2  3  4  5  6  7  8  9  10 11 12
+	
+	//2. 윤년계산(4의 배수이고 100의 배수가 아니거나, 400의 배수) -> 29
+	if((Number(txtYear)%4==0) && (Number(txtYear)%100!=0) || (Number(txtYear)%400==0))
+		lastDay[1] = 29
+	//console.log("2월: "+lastDay[1]);
+	
+	//3. 입력받은 연도의 이전 년도 날수까지의 계산
+	allDay = (Number(txtYear)-1)*365 + Math.floor((Number(txtYear)-1)/4) - Math.floor((Number(txtYear)-1)/100) + Math.floor((Number(txtYear)-1)/400);
+	allDay += 1;
+	//console.log("모든 날: "+allDay);
+	
+	//4. 입력받은 받은 연도(해당 연도)의 전 월까지 계산
+	for (var i = 0; i < (Number(txtMonth)-1); i++)
+	{
+		monthDay += Number(lastDay[i]);
+	}
+	//console.log("전월까지의 날: "+ monthDay);
+	
+	//5. 요일= 날수%7
+	week = Math.floor((allDay + monthDay)%7);
+	//console.log(week);
+	
+	switch(week)
+	{
+		case 0: 
+			weekText = "일";break;
+		case 1: 
+			weekText = "월";break;
+		case 2: 
+			weekText = "화";break;
+		case 3: 
+			weekText = "수";break;
+		case 4: 
+			weekText = "목";break;
+		case 5: 
+			weekText = "금";break;
+		case 6: 
+			weekText = "토";break;	
+	}
+	//console.log("해당월의 1일 요일: "+ weekText);
+	
+	//6. 그리기
+	var tblNode = document.getElementById("calendarTbl");
+	
+	var trNode = document.createElement("tr");
+	
+	for (var i = 1; i <= week; i++)
+	{
+		trNode.appendChild(createTdNode(" "));
+		//console.log(trNode);
+		if(i%7==0)
+		{
+			tblNode.appendChild(trNode);
+			trNode = document.createElement("tr");
+		}
+		
+	}
+	tblNode.appendChild(trNode);
+	
+	for (var i = 1; i <= lastDay[Number(txtMonth)-1]; i++)
+	{
+		trNode.appendChild(createTdNode(i));
+		//alert(trNode[0]);
+		console.log(trNode);
+		if((i+week)%7==0)
+		{
+			tblNode.appendChild(trNode);
+			trNode = document.createElement("tr");
+		}
+		
+	}
+	tblNode.appendChild(trNode);	
+}
+	
+function createTdNode(val)
+{
+	var dayText = document.createTextNode(val);
+	var tdNode = document.createElement("td");
+	tdNode.appendChild(dayText);
+	
+	return tdNode;	
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</script>
+
+
+</body>
+</html>

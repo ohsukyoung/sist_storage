@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test016.html</title>
+
+<style type="text/css">
+
+/*	<link rel="myCssStyle" type="text/css" href="css/myCssStyle.css"> */
+
+
+	* {color: #223322; font-family: 나눔고딕코딩; font-weight: bold;}
+	input:focus {background-color: #eeeedd;}
+	input.btn {width: 80px; font-weight: bold; font-family: 맑은 고딕;}
+	input.op{width: 60px;}
+	input.btn:hover{color: orange; background-color: #334433;}
+	input.btn:active{color: red;}
+	.txtNum {width: 80px;}
+	#result {width: 120px; text-align: center;}
+	
+
+</style>
+
+<script type="text/javascript">
+
+	var result;
+	
+	function add()
+	{
+		var num1 = parseInt(document.getElementById("num1").value);
+		var num2 = parseInt(document.getElementById("num2").value);
+		
+		result = num1+num2;
+		
+		document.getElementById("result").value = result;
+	}
+	
+	function sub()
+	{
+		var num1 = parseInt(document.getElementById("num1").value);
+		var num2 = parseInt(document.getElementById("num2").value);
+		
+		result = num1-num2;
+		document.getElementById("result").value = result;
+	}
+	
+	function mult()
+	{
+		var num1 = parseInt(document.getElementById("num1").value);
+		var num2 = parseInt(document.getElementById("num2").value);
+		
+		result = num1*num2;
+		
+		document.getElementById("result").value = result;
+		
+	}
+	
+	function div()
+	{
+		var num1 = parseInt(document.getElementById("num1").value);
+		var num2 = parseInt(document.getElementById("num2").value);
+		
+		result = num1/num2;
+		
+		document.getElementById("result").value = result;
+		
+		
+	}
+	
+	
+	function delAB()
+	{
+		document.getElementById("num1").value = "";
+		document.getElementById("num2").value = "";
+		
+	}
+
+
+</script>
+</head>
+<body>
+
+<div>
+	<p>사용자로부터 두 개의 정수를 입력받고</p>
+	<p>합, 차, 곱, 몫을 연산하여 연산 결과를 페이지에 출력할 수 있도록 한다.</p>
+	<p>HTML, CSS, Javascript 를 활용하여 처리한다.</p>
+</div>
+
+<div>
+	<form>
+		정수1 <input type="text" id="num1" class="txtNum">
+		정수2 <input type="text" id="num2" class="txtNum">
+		<br><br>
+		
+		<input type="button" class="btn" value="더하기" onclick="add()">
+		<input type="button" class="btn" value="빼기" onclick="sub()">
+		<input type="button" class="btn" value="곱하기" onclick="mult()">
+		<input type="button" class="btn" value="나누기" onclick="div()">
+		<br><br>
+		
+		결과 <input type="text" id="result" class="txtNum" disabled="disabled">
+		<input type="reset" class="btn" value="취소" onclick="delAB()">
+		
+	</form>
+	
+</div>
+
+
+
+
+</body>
+</html>
