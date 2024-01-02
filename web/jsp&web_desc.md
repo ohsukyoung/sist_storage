@@ -3944,182 +3944,3923 @@ function formCheck02()
 
 <br>
 
-## 7.7. [세션처리-로그인]
+## 7.7. [F_WebApp16: JSP 액션 태그 실습]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8543ed15-6253-4776-9826-e1a8308a6f3b)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/253a491d-cabe-4fb6-9600-6a2b7ec555db)
 
-### 7.7.1. WebApp11_scott.sql
+### 7.7.1. Calc.java
 ``` java
+/* =======================
+	Calc.java
+========================== */
+
+package com.test;
+
+public class Calc
+{
+	// 주요 속성  구성
+	private int su1;		//-- 피연산자1 (정수 형태)
+	private String op;		//-- 연산자 (문자열 형태)
+	private int su2;		//-- 피연산자2 (정수 형태)
+	
+	// 생성자 정의 하지 않음(사용자 정의 생성자 없음)
+	// -> default 생성자 자동 삽입
+	
+	// getter / setter 구성
+	public int getSu1()
+	{
+		return su1;
+	}
+	public void setSu1(int su1)
+	{
+		this.su1 = su1;
+	}
+	public String getOp()
+	{
+		return op;
+	}
+	public void setOp(String op)
+	{
+		this.op = op;
+	}
+	public int getSu2()
+	{
+		return su2;
+	}
+	public void setSu2(int su2)
+	{
+		this.su2 = su2;
+	}
+	
+	// 메소드 추가
+	public String result()
+	{
+		String result = "";
+		
+		int s=0;
+		if(op != null)
+		{
+			if(op.equals("+"))
+				s = su1 + su2;
+			else if(op.equals("-"))
+				s = su1 - su2;
+			else if(op.equals("*"))
+				s = su1 * su2;
+			else if(op.equals("/"))
+				s = su1 / su2;
+			
+			result = String.format("%d %s %d = %d", su1, op, su2, s);
+		}
+		
+		return result;
+	}
+	
+}
 ```
-### 7.7.2. ScoreDTO.Java
-``` java
-```
-### 7.7.3. ScoreDAO.Java
-``` java
-```
-### 7.7.4. ScoreList.jsp
+### 7.7.2. Calc.jsp_JSP 액션 태그 실습
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Calc.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>JSP 액션 태그 실습</h1>
+</div>
+
+<div class="layout">
+	<!-- 첫 번재 방법 -->
+	<!-- <form action="Calc_ok1.jsp" method="post" name="myForm"> -->
+	
+	<!-- 두 번재 방법 -->
+	<!-- <form action="Calc_ok2.jsp" method="post" name="myForm"> -->
+	
+	<!-- 세 번재 방법 -->
+	<form action="Calc_ok3.jsp" method="post" name="myForm">
+		<table class="table">
+			<tr>
+				<th>첫 번째 정수</th>
+				<td><input type="text" name="su1" class="txt"></td>
+			</tr>
+			<tr>
+				<th>연산자</th>
+				<td>
+					<select name="op">
+						<option value="+">더하기</option>
+						<option value="-">빼기</option>
+						<option value="*">곱하기</option>
+						<option value="/">나누기</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>두 번째 정수</th>
+				<td><input type="text" name="su2" class="txt"></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button type="submit" class="btn" style="width: 100%;"> = </button>
+				</td>
+			</tr>
+			
+		</table>
+	</form>
+</div>
+
+</body>
+</html>
 ```
-### 7.7.5. ScoreInsert.jsp
+### 7.7.3. Calc_ok1.jsp_첫 번째 방법 처리결과
 ``` html
+<%@page import="com.test.Calc"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	// 이전 페이지(Calc.jsp)로 부터 넘어온 데이터 수신
+	// -> su1, su2, op
+	String strSu1 = request.getParameter("su1");
+	String strSu2 = request.getParameter("su2");
+	String op = request.getParameter("op");
+	
+	int su1, su2;
+	su1 = su2 = 0;
+	String str="";
+	
+	if(strSu1.equals("") || strSu2.equals("") || strSu1==null || strSu2==null)
+		response.sendRedirect("Calc.jsp");
+	else{
+		su1 = Integer.parseInt(strSu1);
+		su2 = Integer.parseInt(strSu2);
+		
+		// 자바에서 우리가 설계한 클래스를 사용하기 위해... 객체생성
+		Calc ob = new Calc();
+		//-- 이클립스 자동완성 기능을 사용하여 구문을 작성할 경우
+		//		『@page import="com.test.Calc"』이 구문도 함께 생성되어 처리됨.
+		//		혹은 자동완성 기능을 사용하지 않을 경우도
+		//		『@page import="com.test.Calc"』이와 같은 구문을 직접 작성해서
+		//		해당 클래스를 사용할 수 있도로 처리해 주어야 함.
+		//		또는, 생성 구문에 직접 『com.test.Calc ob=new com.test.Calc();』
+		//		와 같이 작성하는 거도 가능함.
+		
+		ob.setSu1(su1);
+		ob.setSu2(su2);
+		ob.setOp(op);
+		
+		str = ob.result();
+	}
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Calc_ok1.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>첫 번째 방법 처리결과</h1>
+</div>
+	
+<div class="layout">
+	<h2><%=str %></h2>
+</div>
+
+</body>
+</html>
+```
+### 7.7.4. Calc_ok2.jsp_두 번째 방법 처리결과
+``` html
+<%@page import="com.test.Calc"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%/* 
+	// 이전 페이지(Calc.jsp)로 부터 넘어온 데이터 수신
+	// -> su1, su2, op
+	String strSu1 = request.getParameter("su1");
+	String strSu2 = request.getParameter("su2");
+	String op = request.getParameter("op");
+	
+	int su1, su2;
+	su1 = su2 = 0;
+	String str="";
+	
+	if(strSu1.equals("") || strSu2.equals("") || strSu1==null || strSu2==null)
+		response.sendRedirect("Calc.jsp");
+	else{
+		su1 = Integer.parseInt(strSu1);
+		su2 = Integer.parseInt(strSu2);
+		
+		Calc ob = new Calc();
+		
+		ob.setSu1(su1);
+		ob.setSu2(su2);
+		ob.setOp(op);
+		
+		str = ob.result();
+	}
+	*/
+%>
+<%
+	/* String strSu1 = request.getParameter("su1");
+	int su1 = Integer.parseInt(strSu1); */
+%>
+
+<!-- Calc 클래스의 객체를 현재 페이지에서 사용할 수 있도록 지정 -->
+<jsp:useBean id="ob" class="com.test.Calc"></jsp:useBean>
+<!-- 이 구문은 스크립릿 영역에서
+	『com.gets.Calc ob = new com.test.Cals();』
+	을 작성하여 import 구문을 자동으로 처리한 것과
+	마찬가지 효과를 적용하게 된다. -->
+	
+<!-- requset.getParameter() 메소드를 통해 넘겨받은(전달받은) 데이터를 
+	『Calc』 클래스를 기반으로 만들어진 『ob』객체에 넘겨주기 위 한 속성 지정 -->
+<%-- <jsp:setProperty property="su1" name="ob" value="<%=su1 %>"/> --%>
+<!-- 이 구문은 Calc_ok1.jsp 의 『ob.setSu1(su1);』과 같은 구문 -->
+
+<!-- check~!!! -->
+<!-- ※ 속성 이름과 동일한 파라미터인 경우
+	『getParameter()』메소드 없이 바로 받을 수 있다. -->
+	
+	
+<!-- ob.su1 = xxx; -->
+<jsp:setProperty property="su1" name="ob"/>
+<!-- ① request.getParameter() 처리 -> 매개변수를 전달하기 위한 데이터 수신 처리 -->
+<!-- ② Integer.parseInt() 처리 	-> 매개변수를 전달하기 위한 형 변환 처리 -->
+<!-- ③ ob.su1 						-> ob.setSu1() 호출 처리 -->
+<!-- ==> 최종적으로 ob -> Calc 기반의 ob 객체의 su1 속성에
+		이전 페이지로부터 넘겹다은 데이터를 적절한 데이터타입(형)으로 전달 -->
+		
+<jsp:setProperty property="su2" name="ob"/>
+<jsp:setProperty property="op" name="ob"/>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Calc_ok2.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>두 번째 방법 처리결과</h1>
+</div>
+	
+<div class="layout">
+	<%-- <h2><%=str %></h2> --%>
+	<h2><%=ob.result() %></h2>
+</div>
+
+</body>
+</html>
+```
+### 7.7.5. Calc_ok3.jsp_세 번째 방법 처리결과
+``` html
+<%@page import="com.test.Calc"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+
+<%-- 
+<jsp:useBean id="ob" class="com.test.Calc"></jsp:useBean>
+<jsp:setProperty property="su1" name="ob"/>	
+<jsp:setProperty property="su2" name="ob"/>
+<jsp:setProperty property="op" name="ob"/>
+ --%>
+
+<jsp:useBean id="ob" class="com.test.Calc"></jsp:useBean>
+<jsp:setProperty property="*" name="ob"/>
+<!-- **※주의! java의 변수명과 jsp의 name 속성값이 같아야 사용가능** -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Calc_ok3.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>세 번째 방법 처리결과</h1>
+</div>
+	
+<div class="layout">
+	<%-- <h2><%=str %></h2> --%>
+	<h2><%=ob.result() %></h2>
+</div>
+
+</body>
+</html>
 ```
 
 <br>
 
-## 7.8. [세션처리-로그인]
+## 7.8. [F_WebApp17: 간단한 기본 방명록 작성 실습]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/67cb3928-3fd1-4e69-9c2c-9fb7b6902132)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/f8116dbb-223a-45eb-9270-4bdfd1f8a263)
 
-### 7.8.1. WebApp11_scott.sql
-``` java
-```
-### 7.8.2. ScoreDTO.Java
-``` java
-```
-### 7.8.3. ScoreDAO.Java
-``` java
-```
-### 7.8.4. ScoreList.jsp
+### 7.8.1. GuestDTO.java
 ``` html
+/*
+	GuestDTO.java
+*/
+package com.test;
+
+public class GuestDTO
+{
+	// 주요 속성 구성
+	private String userName;		//-- 게시물 작성자
+	private String subject;		//-- 게시물 제목
+	private String content;		//-- 게시물 내용
+	
+	//※ 여기에서 사용하는 변수명(속성명)의 앞 두글자는 소문자로 작성할 것 ~!!! check~!!!
+	//	numScore 	-> getNumscore()/ setNumScore()
+	//	nScore		-> getNScore()	/ setNScore()
+	//				-> getnScore()	/ setnScore()
+	//				-> getNScore()	/ setNscore()
+	//	와 같이 setter 가 속성명을 불러오는 과정에서 인식이 어긋나는 경우가 발생할 수 있기 때문
+	
+	// ※ 여기에서 사용하는 변수명(속성명)은 HTML 의 form 태그에서 name 속성으로 지정하여 사용할 것.
+	// 그래야 속성 데이터 수신 및 속성 매핑을 액션 태그를 사용하여 처리해 줄 수 있기 때문.
+	
+	public String getUserName()
+	{
+		return userName;
+	}
+	public void setUserName(String userName)
+	{
+		this.userName = userName;
+	}
+	public String getSubject()
+	{
+		return subject;
+	}
+	public void setSubject(String subject)
+	{
+		this.subject = subject;
+	}
+	public String getContent()
+	{
+		return content;
+	}
+	public void setContent(String content)
+	{
+		this.content = content;
+	}
+}
 ```
-### 7.8.5. ScoreInsert.jsp
+### 7.8.2. Guest_ok.jsp_간단한 기본 방명록 작성 실습
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
+
+<jsp:useBean id="guest" class="com.test.GuestDTO" scope="page"></jsp:useBean>
+<jsp:setProperty property="*" name="guest"/>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Guest_ok.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>간단한 기본 방명록 작성 실습</h1>
+	<hr />
+</div>
+
+<div>
+	<h2>작성된 내용</h2>
+	<!-- <h3>이름: 홍길동</h3>
+	<h3>제목: 어쩌구저쩌구</h3>
+	<h3>내용: 이러쿵 저렁쿵 궁시렁 궁시렁</h3> -->
+	
+	<h3>이름: <%=guest.getUserName() %></h3>
+	<h3>제목: <%=guest.getSubject() %></h3>
+	<h3>내용: <%=guest.getContent().replaceAll("\n","<br>") %></h3>
+	
+</div>
+
+</body>
+</html>
+```
+### 7.8.3. Guest.jsp_간단한 기본 방명록 작성 실습
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Guest.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<script type="text/javascript">
+
+function formSubmit()
+{
+	//alert("확인");
+	var uName = document.getElementById("userName");
+	var uTitle = document.getElementById("subject");
+	var uCon = document.getElementById("content");
+	
+	var f = document.myForm;
+	
+	if(uName.value == "" || uTitle.value == "" || uCon.value == "" ||uName.value == null || uTitle.value == null || uCon.value == null )
+	{
+		return;
+	}
+	
+	f.submit();
+}
+
+</script>
+
+<div>
+	<h1>간단한 기본 방명록 작성 실습</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	<form action="Guest_ok.jsp" method="post" name="myForm">
+		<table class="table">
+			<tr>
+				<th>이름</th>
+				<td><input type="text" class="txt" name="userName" id="userName"></td>
+			</tr>
+			<tr>
+				<th>제목</th>
+				<td><input type="text" class="txt" name="subject" id="subject"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td><textarea cols="30" rows="5" name="content" id="content"></textarea></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button type="button" class="btn" style="width: 100%;" onclick="formSubmit()">방명록 작성</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+</body>
+</html>
 ```
 
 <br>
 
-## 7.9. [세션처리-로그인]
+## 7.9. [F_WebApp18: 데이터 입력과 등록 수신결과 확인]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/51b1ef9b-9b31-419e-beb0-43ec81d7641a)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/c487a537-9ba0-4ff4-b15b-06b2525f7cf8)
 
-### 7.9.1. WebApp11_scott.sql
+### 7.9.1. FriendDTO.java
 ``` java
+package com.test;
+
+public class FriendDTO
+{
+	// 주요 속성 구성
+	private String name, gender;		//-- 이름, 성별
+	private int age;					//-- 나이
+	//private String checkGruop;
+	private String[] checkGruop;		//-- 이상형
+	//-- 이상형은 여러 개의 데이터가 동시에 전달되므로
+	//(즉, 다중 선택이 가능하도록 구성하였기 때문에)
+	//배열로 처리할 수 있다.
+	
+	// getter / setter
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	public String getGender()
+	{
+		return gender;
+	}
+	public void setGender(String gender)
+	{
+		this.gender = gender;
+	}
+	public int getAge()
+	{
+		return age;
+	}
+	public void setAge(int age)
+	{
+		this.age = age;
+	}
+	public String[] getCheckGruop()
+	{
+		return checkGruop;
+	}
+	public void setCheckGruop(String[] checkGruop)
+	{
+		this.checkGruop = checkGruop;
+	}
+	
+	public String result()
+	{		
+		String result = "";
+		if(checkGruop != null)
+		{
+			for(String item: checkGruop)
+				result += "["+ item + "]";
+		}
+		
+		return result;
+	}
+	
+}
 ```
-### 7.9.2. ScoreDTO.Java
-``` java
-```
-### 7.9.3. ScoreDAO.Java
-``` java
-```
-### 7.9.4. ScoreList.jsp
+### 7.9.2. Friend_ok.jsp_등록 수신결과 확인
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
+
+<jsp:useBean id="ob" class="com.test.FriendDTO" scope="page"></jsp:useBean>
+<jsp:setProperty property="*" name="ob"/>
+
+<!-- 반복문 필요(다중 선택으로 넘어온 결과값을 출력하기 위한 처리) -->
+<%
+	String str = "";
+if(ob.getCheckGruop() != null)
+{
+	for(String temp: ob.getCheckGruop())
+	{
+		str += temp+"";
+	}
+}
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Friend_ok</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>등록 수신결과 확인</h1>
+	<hr />
+</div>
+
+<ul>
+	<li>이름: <%=ob.getName() %></li>
+	<li>나이: <%=ob.getAge() %></li>
+	<li>성별: <%=ob.getGender() %></li>
+	<li>이상형(방법1): <%=ob.result() %></li>
+	<li>이상형(방법2): <%
+		for (String s : ob.getCheckGruop())
+	    {%>
+	    <%=s %>
+	  <%} %>
+	</li>
+	<li>이상형(방법3): <%=str %></li>
+</ul>
+
+
+</body>
+</html>
 ```
-### 7.9.5. ScoreInsert.jsp
+### 7.9.3. Friend.jsp_데이터 입력
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Friend.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+<script type="text/javascript">
+function sendIt()
+{
+	var f = document.myForm;
+	
+	if(!f.name.value)
+	{
+		alert("이름입력")
+		f.name.focus();
+		return;
+	}
+	f.submit();
+}
+</script>
+
+<div>
+	<h1>데이터 입력</h1>
+	<hr />
+</div>
+
+<!-- com.test.FriendDTO -->
+<!-- Friend_ok.jsp -->
+
+<div class="layout">
+	<form action="Friend_ok.jsp" method="post" name="myForm">
+		<table class="table">
+			<tr>
+				<th>이름(*)</th>
+				<td><input type="text" class="txt" name="name"></td>
+			</tr>
+			<tr>
+				<th>나이</th>
+				<td><input type="text" class="txt" name="age"></td>
+			</tr>
+			<tr>
+				<th>성별</th>
+				<td>
+					<label><input type="radio" name="gender" value="남자">남자</label>
+					<label><input type="radio" name="gender" value="여자" checked>여자</label>
+				</td>
+			</tr>
+			<tr>
+				<th>이상형</th>
+				<td>
+					<label><input type="checkbox" name="checkGruop" value="원빈">원빈</label>
+					<label><input type="checkbox" name="checkGruop" value="천우희">천우희</label>
+					<label><input type="checkbox" name="checkGruop" value="카리나">카리나</label>
+					<label><input type="checkbox" name="checkGruop" value="정우성">정우성</label>
+					<label><input type="checkbox" name="checkGruop" value="이동욱">이동욱</label>
+					<label><input type="checkbox" name="checkGruop" value="한소희">한소희</label>
+					<label><input type="checkbox" name="checkGruop" value="정해인">정해인</label>
+					<label><input type="checkbox" name="checkGruop" value="수지">수지</label>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="button" class="btn" style="width: 100%;" onclick="sendIt()">등록</button></td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+</body>
+</html>
 ```
 
 <br>
 
-## 7.10. [세션처리-로그인]
+## 7.10. [F_WebApp19: 상단메뉴, 좌측메뉴, 메인화면, 하단메뉴 레이아웃]
 
-### 7.10.1. WebApp11_scott.sql
-``` java
-```
-### 7.10.2. ScoreDTO.Java
-``` java
-```
-### 7.10.3. ScoreDAO.Java
-``` java
-```
-### 7.10.4. ScoreList.jsp
+### 7.10.1. Bottom.jsp
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+하단 메뉴<br>
+<a href="">사이트소개</a> |
+<a href="">이용약관</a> |
+<a href="">도움말</a> |
+<a href="">사이트맵</a> |
+
+</body>
+</html>
 ```
-### 7.10.5. ScoreInsert.jsp
+### 7.10.2. Left.jsp
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+좌측 메뉴 <br>
+
+<ul>
+	<li><a href="">게시판</a></li>
+	<li><a href="">방명록</a></li>
+	<li><a href="">일정관리</a></li>
+</ul>
+
+</body>
+</html>
+```
+### 7.10.3. Main.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Main.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+<!-- include 액션태그가 예전만큼 중요도가 높진 않다.(iframe 사용함) -->
+
+<div class="layout">
+	<table class="table" border="1" style="width: 400px;">
+		<tr>
+			<td colspan="2">
+				<!-- Top -->
+				<jsp:include page="Top.jsp"></jsp:include>
+			</td>
+		</tr>
+		<tr style="height: 300px;">
+			<td>
+				<!-- Left -->
+				<jsp:include page="Left.jsp"></jsp:include>
+			</td>
+			<td>Main(메인화면)</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<!-- Bottom -->
+				<jsp:include page="Bottom.jsp"></jsp:include>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>
+```
+### 7.10.4. Top.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+상단 메뉴<br>
+<a href="">로그인</a> |
+<a href="">회원가입</a> |
+<a href="">정보확인</a> |
+
+</body>
+</html>
 ```
 
 <br>
 
-## 7.11. [세션처리-로그인]
+## 7.11. [F_WebApp20: JDBC 연동 게시판 작성 실습]
 
-### 7.11.1. WebApp11_scott.sql
-``` java
-```
-### 7.11.2. ScoreDTO.Java
-``` java
-```
-### 7.11.3. ScoreDAO.Java
-``` java
-```
-### 7.11.4. ScoreList.jsp
+### 7.11.0. JDBC 연동 게시판 작성 실습.txt
 ``` html
+■■■ JDBC 연동 게시판 작성 실습 ■■■
+ 
+○ 프로젝트: WebApp20
+ 
+○ 물리적 구성 요소
+ 
+	00. WebApp20_scott.sql
+	
+	01. DBConn.java
+	02. BoardDTO.java
+	03. BoardDAO.java
+	04. MyUtil.java -> 페이징 처리
+	    
+	05. List.jsp
+	06. Created.jsp
+	07. Created_ok.jsp
+	08. Article.jsp
+	09. Updated.jsp
+	10. Updated_ok.jsp
+	11. Delete_ok.jsp
 ```
-### 7.11.5. ScoreInsert.jsp
+### 7.11.1. WebApp20_scott.sql
+``` sql
+SELECT USER
+FROM DUAL;
+--==>> SCOTT
+
+SELECT *
+FROM TAB;
+
+PURGE RECYCLEBIN;
+
+--○ 기존 테이블 제거
+DROP TABLE TBL_BOARD PURGE;
+--==>> Table TBL_BOARD이(가) 삭제되었습니다.
+
+--○ 게시판 전용 테이블 생성(TBL_BOARD)
+CREATE TABLE TBL_BOARD
+( NUM       NUMBER(9)                       NOT NULL    -- 게시물 번호
+, NAME      VARCHAR2(30)                    NOT NULL    -- 게시물 작성자
+, PWD       VARCHAR2(20)                    NOT NULL    -- 게시물 암호
+, EMAIL     VARCHAR2(50)                                -- 작성자 이메일
+, SUBJECT   VARCHAR2(100)                   NOT NULL    -- 게시물 제목
+, CONTENT   VARCHAR2(4000)                  NOT NULL    -- 게시물 내용
+, IPADDR    VARCHAR2(20)                                -- 접속한 클라이언트 IP 주소
+, HITCOUNT   NUMBER      DEFAULT 0           NOT NULL   -- 게시물 조회수
+, CREATED   DATE        DEFAULT SYSDATE     NOT NULL    -- 게시물 작성일
+, CONSTRAINT BOARD_NUM_PK   PRIMARY KEY(NUM)            -- 게시물 번호에 PK 제약조건 설정
+);
+--==>> Table TBL_BOARD이(가) 생성되었습니다.
+
+--○ 게시물 번호의 최대값을 얻어내는 쿼리문 구성
+SELECT NVL(MAX(NUM),0) AS MAXNUM
+FROM TBL_BOARD;
+--> 한 줄 구성
+SELECT NVL(MAX(NUM),0) AS MAXNUM FROM TBL_BOARD
+;
+
+--○ 게시물 작성 쿼리문 구성
+INSERT INTO TBL_BOARD(NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT, IPADDR, HITCOUNT, CREATED)
+VALUES(1, '노은하','1234','neh@test.com', '작성테스트', '게시물내용작성', '211.238.142.160', 0, SYSDATE);
+--> 한 줄 구성
+INSERT INTO TBL_BOARD(NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT, IPADDR, HITCOUNT, CREATED) VALUES(1, '노은하','1234','neh@test.com', '작성테스트', '게시물내용작성', '211.238.142.160', 0, SYSDATE)
+;
+--==>> 1 행 이(가) 삽입되었습니다.
+
+
+--○ 롤백
+ROLLBACK;
+--==>> 롤백 완료.
+
+
+--○ DB 레코드 갯수를 가져오는 쿼리문 구성 (게시물 수)
+/* 최대값을 찾는 것은 삭제를 염두해두고 있지 않기 때문에 갯수 세는 쿼리문은 따로 만들어야 함 */
+SELECT COUNT(*) AS COUNT
+FROM TBL_BOARD;
+--> 한 줄 구성
+SELECT COUNT(*) AS COUNT FROM TBL_BOARD;
+
+--○ 특정 영역(시작번호-끝번호) 게시물 목록을 읽어오는 쿼리문 구성
+--      번호, 작성자, 제목, 조회수, 작성일
+--SELECT TB.번호, TB.작성자, TB.제목, TB.조회수, TB.작성일
+--FROM 
+--(
+--    SELECT ROW_NUMBER() OVER(ORDER BY CREATED DESC) 번호, NAME 작성자, SUBJECT 제목, HITCOUNT 조회수, CREATED 작성일
+--    FROM TBL_BOARD
+--)TB
+--WHERE TB.번호 BETWEEN 1 AND 3;
+
+SELECT NUM, NAME, SUBJECT, HITCOUNT, CREATED
+FROM
+(
+    SELECT ROWNUM RNUM, DATA.*
+    FROM
+    (
+        SELECT NUM, NAME, SUBJECT, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED
+        FROM TBL_BOARD
+        ORDER BY NUM DESC
+    ) DATA
+)
+WHERE RNUM>=1 AND RNUM<=10;
+--==> 한 줄 구성
+SELECT NUM, NAME, SUBJECT, HITCOUNT, CREATED FROM(SELECT ROWNUM RNUM, DATA.* FROM ( SELECT NUM, NAME, SUBJECT, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED FROM TBL_BOARD ORDER BY NUM DESC ) DATA ) WHERE RNUM>=1 AND RNUM<=10
+--AND NAME LIKE '%윤수%'
+;
+
+--○ 특정 게시물의 조회에 따른 조회 횟수 증가 쿼리문 구성
+UPDATE TBL_BOARD
+SET HITCOUNT = HITCOUNT+1
+WHERE NUM=1;
+--==>> 한 줄 구성
+UPDATE TBL_BOARD SET HITCOUNT = HITCOUNT+1 WHERE NUM=1
+;
+-- 로그화~!!!
+
+
+--○ 특정 게시물의 내용을 읽어오는 쿼리문 구성
+/* 오늘 게시물인 경우 시분초까지, 오늘이 아닐경우 년-월-일 까지 읽어옴 */
+SELECT NUM, NAME, PWD, SUBJECT, CONTENT, IPADDR, HITCOUNT
+    , TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED
+FROM TBL_BOARD
+WHERE NUM=1;
+--> 한 줄 구성
+SELECT NUM, NAME, PWD, SUBJECT, CONTENT, IPADDR, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED FROM TBL_BOARD WHERE NUM=1
+;
+
+
+--○ 특정 게시물을 삭제하는 쿼리문 구성
+DELETE
+FROM TBL_BOARD
+WHERE NUM=1;
+--> 한 줄구성
+DELETE FROM TBL_BOARD WHERE NUM=1
+;
+
+--○ 특정 게시물을 수정하는 쿼리문 구성
+--  (게시물 상세 보기 페이지 -> Article.jsp 내에서의 처리)
+--  작성자, 패스워드, 이메일, 제목, 내용
+UPDATE TBL_BOARD
+SET NAME='박가영', PWD='123456', EMAIL='pky@test.com', SUBJECT='수정제목', CONTENT='수정내용'
+WHERE NUM=1;
+--> 한 줄 구성
+UPDATE TBL_BOARD SET NAME='박가영', PWD='123456', EMAIL='pky@test.com', SUBJECT='수정제목', CONTENT='수정내용' WHERE NUM=1
+;
+
+
+--○ 특정 게시물(50)의 다음 번호 읽어오는 쿼리문 구성
+SELECT NVL(MIN(NUM),-1) AS NEXTNUM FROM TBL_BOARD
+WHERE NUM>50;
+--> 한 줄 구성
+SELECT NVL(MIN(NUM),-1) AS NEXTNUM FROM TBL_BOARD WHERE NUM>50
+;
+
+
+--○ 특정 게시물(50)의 이전 번호 읽어오는 쿼리문 구성
+SELECT NVL(MAX(NUM),-1) AS BEFORENUM 
+FROM TBL_BOARD 
+WHERE NUM<50;
+--> 한 줄 구성
+SELECT NVL(MAX(NUM),-1) AS BEFORENUM FROM TBL_BOARD WHERE NUM<50
+;
+
+
+
+/*INSERT INTO TBL_BOARD(NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT, IPADDR, HITCOUNT, CREATED) VALUES(1, '1번','1234','neh@test.com', '작성테스트', '게시물내용작성', '211.238.142.160', 0, SYSDATE);
+INSERT INTO TBL_BOARD(NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT, IPADDR, HITCOUNT, CREATED) VALUES(2, '2번','1234','neh@test.com', '작성테스트', '게시물내용작성', '211.238.142.160', 0, SYSDATE);
+INSERT INTO TBL_BOARD(NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT, IPADDR, HITCOUNT, CREATED) VALUES(3, '3번','1234','neh@test.com', '작성테스트', '게시물내용작성', '211.238.142.160', 0, SYSDATE);
+INSERT INTO TBL_BOARD(NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT, IPADDR, HITCOUNT, CREATED) VALUES(4, '4번','1234','neh@test.com', '작성테스트', '게시물내용작성', '211.238.142.160', 0, SYSDATE);
+INSERT INTO TBL_BOARD(NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT, IPADDR, HITCOUNT, CREATED) VALUES(5, '5번','1234','neh@test.com', '작성테스트', '게시물내용작성', '211.238.142.160', 0, SYSDATE);
+
+
+DELETE
+FROM TBL_BOARD
+WHERE NUM=2;
+
+SELECT *
+FROM TBL_BOARD;*/
+
+DESC TBL_BOARD;
+--==>>
+/*
+이름       널?       유형             
+-------- -------- -------------- 
+NUM      NOT NULL NUMBER(9)      
+NAME     NOT NULL VARCHAR2(30)   
+PWD      NOT NULL VARCHAR2(20)   
+EMAIL    NOT NULL VARCHAR2(50)   
+SUBJECT  NOT NULL VARCHAR2(100)  
+CONTENT  NOT NULL VARCHAR2(4000) 
+IPADDR   NOT NULL VARCHAR2(20)   
+HITCOUNT NOT NULL NUMBER         
+CREATED  NOT NULL DATE
+*/
+
+DELETE
+FROM TBL_BOARD;
+--==>> 1 행 이(가) 삭제되었습니다.
+
+SELECT *
+FROM TBL_BOARD;
+--==>> 조회결과 없음
+
+COMMIT;
+--==>> 커밋 완료.
+
+SELECT *
+FROM TBL_BOARD
+ORDER BY NUM DESC;
+```
+
+### 7.11.2. WebApp20_scott(pslql).sql
+``` sql
+SELECT USER
+FROM DUAL;
+--==>> SCOTT
+
+DESC TBL_BOARD;
+--==>>
+/*
+이름       널?       유형             
+-------- -------- -------------- 
+NUM      NOT NULL NUMBER(9)      
+NAME     NOT NULL VARCHAR2(30)   
+PWD      NOT NULL VARCHAR2(20)   
+EMAIL    NOT NULL VARCHAR2(50)   
+SUBJECT  NOT NULL VARCHAR2(100)  
+CONTENT  NOT NULL VARCHAR2(4000) 
+IPADDR   NOT NULL VARCHAR2(20)   
+HITCOUNT NOT NULL NUMBER         
+CREATED  NOT NULL DATE           
+
+*/
+
+
+DECLARE
+    V_NUM      NUMBER(9)        := 1;      
+    V_NAME     VARCHAR2(30);
+    V_PWD      VARCHAR2(20);
+    V_EMAIL    VARCHAR2(50);
+    V_SUBJECT  VARCHAR2(100);
+    V_CONTENT  VARCHAR2(4000); 
+    V_IPADDR   VARCHAR2(20);
+    V_HITCOUNT NUMBER;
+    V_CREATED  DATE             := TO_DATE('2020-12-12','YYYY-MM-DD');
+BEGIN
+    LOOP
+        EXIT WHEN V_NUM > 684;
+        
+        V_NUM := V_NUM +1;
+        
+        IF(MOD(V_NUM, 5)=0) THEN
+            V_PWD := 'java006$';
+            V_CONTENT := '영화관련 내용물 작성';
+            V_IPADDR := '211.238.142.160';
+            V_NAME := '노';
+            V_SUBJECT := '취미';
+
+        ELSIF(MOD(V_NUM, 3)=0) THEN
+            V_PWD := 'java007$';
+            V_CONTENT := '떡볶이관련 내용물 작성';
+            V_IPADDR := '211.238.142.165';
+            V_NAME := '박';
+            V_SUBJECT := '음식';
+        
+        ELSIF(MOD(V_NUM, 7)=0) THEN
+            V_PWD := 'java008$';
+            V_CONTENT := '축구관련 내용물 작성';
+            V_IPADDR := '211.238.142.170';
+            V_NAME := '채';
+            V_SUBJECT := '운동';
+        
+        ELSE
+            V_PWD := 'java002$';
+            V_CONTENT := '눈보라관련 내용물 작성';
+            V_IPADDR := '211.238.142.175';
+            V_NAME := '김';
+            V_SUBJECT := '날씨';
+        END IF;
+            
+        V_NAME := V_NAME || '윤수' || LTRIM(TO_CHAR(V_NUM));
+        V_SUBJECT := V_SUBJECT || '에 대해 작성한 게시물' || LTRIM(TO_CHAR(V_NUM));
+        
+        V_CREATED := V_CREATED + 1;
+        
+        IF(MOD(V_NUM,2)=0) THEN
+            V_EMAIL := 'apple' || V_NUM || '@test.com';
+            V_HITCOUNT := 29;
+        ELSIF(MOD(V_NUM,3)=0) THEN
+            V_EMAIL := 'test' || V_NUM || '@test.com';
+            V_HITCOUNT := 34;
+        ELSIF(MOD(V_NUM,4)=0) THEN
+            V_EMAIL := 'study' || V_NUM || '@test.com';
+            V_HITCOUNT := 47;
+        ELSE
+            V_EMAIL := 'snow' || V_NUM || '@test.com';
+            V_HITCOUNT := 11;    
+        
+        END IF;
+    
+        INSERT INTO TBL_BOARD(NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT, IPADDR, HITCOUNT, CREATED)
+        VALUES(V_NUM, V_NAME, V_PWD, V_EMAIL, V_SUBJECT, V_CONTENT, V_IPADDR, V_HITCOUNT, V_CREATED);
+
+    END LOOP;
+END;
+--==>> PL/SQL 프로시저가 성공적으로 완료되었습니다.
+
+
+
+COMMIT;
+--==>> 커밋 완료.
+```
+### 7.11.3. BoardDAO.java
+``` java
+/* =================== 
+	BoardDAO.java
+=================== */
+package com.test;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class BoardDAO
+{
+	// 주요 속성 구성
+	private Connection conn;
+	
+	// 생성자 정의
+	public BoardDAO(Connection conn)
+	{
+		this.conn = conn;
+	}
+	
+	// 게시물 번호의 최대값 얻어내기
+	public int getMaxNum()
+	{
+		int result = 0;
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sql = "";
+				
+		try
+		{
+			sql = "SELECT NVL(MAX(NUM),0) AS MAXNUM FROM TBL_BOARD";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if(rs.next())
+				result = rs.getInt("MAXNUM");
+			rs.close();
+			stmt.close();
+			
+		}catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}// end getMaxNum()
+	
+	// 게시물 작성 -> 데이터 입력
+	public int insertData(BoardDTO dto)
+	{
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		String sql = "";
+		
+		try
+		{
+			// hitCount 는 기본값 0 또는 default 또는 입력생략 가능
+			// create 는 기본값 sysdate 또는 default 입력항목 또는 생략 가능
+			sql = "INSERT INTO TBL_BOARD(NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT"
+					+ ", IPADDR, HITCOUNT, CREATED)"
+					+ " VALUES(?, ?, ?, ?, ?, ?, ?, 0, SYSDATE)";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, dto.getNum());
+			pstmt.setString(2, dto.getName());
+			pstmt.setString(3, dto.getPwd());
+			pstmt.setString(4, dto.getEmail());
+			pstmt.setString(5, dto.getSubject());
+			pstmt.setString(6, dto.getContent());
+			pstmt.setString(7, dto.getIpAddr());
+			
+			result = pstmt.executeUpdate();
+			pstmt.close();
+			
+		}catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	} // end insertData(BoardDTO dto)
+
+	// DB 레코드의 갯수를 가져오는 메소드 정의 (지금은 전체~!!!)
+	// -> 검색 기능을 추가하게 되면.. 수정하게 될 메소드(-> 검색 대상의 갯수)
+	/*
+	public int getDataCount()
+	{
+		int result = 0;
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try
+		{
+			sql = "SELECT COUNT(*) AS COUNT FROM TBL_BOARD";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if(rs.next())
+				result = rs.getInt(1);
+			rs.close();			
+			stmt.close();
+			
+		}catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	} // end getDataCount()
+	*/
+	
+	
+	// check~!!!
+	// 검색 기능 추가
+	// → searchKey 	: 제목 or 작성자 or 내용
+	//	  searchValue 	: 입력값
+	
+	public int getDataCount(String searchKey, String searchValue)
+	{
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try 
+		{
+			// check~!!!
+			searchValue = "%" + searchValue + "%";
+			
+			sql = "SELECT COUNT(*) AS COUNT "
+		               + " FROM TBL_BOARD"
+		               + " WHERE " + searchKey + " LIKE ?";
+				  //+ " WHERE ? LIKE ?";
+			// ** 위와 같이 처리해도 상관은 없으나, 종종 홑따옴표 때문에 
+			//		문제가 되는 경우가 있어서 문자열 결합 사용**
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, searchValue);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				result = rs.getInt("COUNT");
+			rs.close();
+			pstmt.close();
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	
+
+	// 특정 영역의(시작번호~끝번호) 게시물의 목록을 
+	// 읽어오는 메소드 정의
+	// -> 검색 기능을 추하하게 되면... 수정하게 될 메소드(->검색 대상의 리스트)
+	/*
+	public List<BoardDTO> getLists(int start, int end)
+	{
+		List<BoardDTO> result = new ArrayList<BoardDTO>();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try
+		{
+			
+			//sql +="SELECT RNUM, NAME, SUBJECT, HITCOUNT, CREATED";
+			//sql +=" FROM";
+			//sql +=" (";
+			//sql +="    SELECT ROWNUM RNUM, DATA.*";
+			//sql +="    FROM";
+			//sql +="    (";
+			//sql +="        SELECT NUM, NAME, SUBJECT, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED";
+			//sql +="        FROM TBL_BOARD";
+			//sql +="        ORDER BY NUM DESC";
+			//sql +="    ) DATA";
+			//sql +=" )";
+			//sql +=" WHERE RNUM>=? AND RNUM<=?";
+			
+			sql += "SELECT NUM, NAME, SUBJECT, HITCOUNT, CREATED FROM(SELECT ROWNUM RNUM, DATA.* FROM ( SELECT NUM, NAME, SUBJECT, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED FROM TBL_BOARD ORDER BY NUM DESC ) DATA ) WHERE RNUM>=? AND RNUM<=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, start);
+			pstmt.setInt(2, end);
+			
+			rs= pstmt.executeQuery();
+			
+			while(rs.next())
+			{
+				BoardDTO dto = new BoardDTO();
+				
+				dto.setNum(rs.getInt("NUM"));
+				dto.setName(rs.getString("NAME"));
+				dto.setSubject(rs.getString("SUBJECT"));
+				dto.setHitCount(rs.getInt("HITCOUNT"));
+				dto.setCreated(rs.getString("CREATED"));
+				
+				result.add(dto);
+			}
+			rs.close();
+			pstmt.close();
+			
+		}catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}// end getLists(int start, int end)
+	*/
+	
+	
+	
+	
+	
+	//check~!!!
+	// 검색 기능 추가
+	// → searchKey 	: 제목 or 작성자 or 내용
+	//	  searchValue 	: 입력값
+	public List<BoardDTO> getLists(int start, int end, String searchKey, String searchValue)
+	{
+		List<BoardDTO> result = new ArrayList<BoardDTO>();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try
+		{	
+			// check~!!!
+			searchValue = "%" + searchValue + "%";										// 추가
+			
+			/*
+			sql += "SELECT NUM, NAME, SUBJECT, HITCOUNT, CREATED"
+					+ " FROM"
+					+ "("
+						+ "SELECT ROWNUM RNUM, DATA.*"
+						+ " FROM"
+							+ " ( SELECT NUM, NAME, SUBJECT, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED"
+							+ " FROM TBL_BOARD"
+							+ " WHERE "+ searchKey + " LIKE ?"							// 추가
+							+ " ORDER BY NUM DESC"
+							+ " )"
+						+ " DATA"
+					+ " )"
+					+ " WHERE RNUM>=? AND RNUM<=?";
+			*/
+			
+			//sql += "SELECT NUM, NAME, SUBJECT, HITCOUNT, CREATED FROM(SELECT ROWNUM RNUM, DATA.* FROM ( SELECT NUM, NAME, SUBJECT, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED FROM TBL_BOARD WHERE "+ searchKey + " LIKE ? ORDER BY NUM DESC ) DATA ) WHERE RNUM>=? AND RNUM<=?";
+			
+			sql = "SELECT NUM, NAME, SUBJECT, HITCOUNT, CREATED "
+		               + " FROM ( SELECT ROWNUM RNUM, DATA.* FROM (SELECT NUM, NAME, SUBJECT, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED "
+		               + " FROM TBL_BOARD "
+		               + " WHERE " + searchKey + " LIKE ?"      
+		               + " ORDER BY NUM DESC ) DATA) "
+		               + " WHERE RNUM>= ? AND RNUM<=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, searchValue);											// 추가
+			pstmt.setInt(2, start);														// 인덱스 변경
+			pstmt.setInt(3, end);														// 인덱스 변경
+			
+			rs= pstmt.executeQuery();
+			
+			while(rs.next())
+			{
+				BoardDTO dto = new BoardDTO();
+				
+				dto.setNum(rs.getInt("NUM"));
+				dto.setName(rs.getString("NAME"));
+				dto.setSubject(rs.getString("SUBJECT"));
+				dto.setHitCount(rs.getInt("HITCOUNT"));
+				dto.setCreated(rs.getString("CREATED"));
+				
+				result.add(dto);
+			}
+			rs.close();
+			pstmt.close();
+			
+		}catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	
+	
+	
+	
+	// 특정 게시물 조회에 따른 조회 횟수 증가 메소드 정의
+	public int updateHitCount(int num)
+	{
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		String sql = "";
+		
+		try
+		{
+			sql = "UPDATE TBL_BOARD SET HITCOUNT = HITCOUNT+1 WHERE NUM=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+		}catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+		
+	}// end updateHitCount(int num)
+	
+	// 특정 게시물의 내용을 읽어오는 메소드 정의
+	public BoardDTO getReadData(int num)
+	{
+		BoardDTO result = null;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try
+		{
+			sql = "SELECT NUM, NAME, PWD, EMAIL, SUBJECT, CONTENT, IPADDR, HITCOUNT"
+					+ ", TO_CHAR(CREATED, 'YYYY-MM-DD') AS CREATED"
+					+ " FROM TBL_BOARD"
+					+ " WHERE NUM=?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				result = new BoardDTO();
+				result.setNum(rs.getInt("NUM"));
+				result.setName(rs.getString("NAME"));
+				result.setPwd(rs.getString("PWD"));
+				result.setEmail(rs.getString("EMAIL"));
+				result.setSubject(rs.getString("SUBJECT"));
+				result.setContent(rs.getString("CONTENT"));
+				result.setIpAddr(rs.getString("IPADDR"));
+				result.setHitCount(rs.getInt("HITCOUNT"));
+				result.setCreated(rs.getString("CREATED"));
+			}
+			rs.close();
+			pstmt.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;		
+	}// end getReadData(int num)
+	
+	// 특정 게시물 삭제하는 기능의 메소드 정의
+	public int deleteData(int num)
+	{
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		String sql = "";
+		
+		try
+		{
+			sql = "DELETE FROM TBL_BOARD WHERE NUM=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		return result;
+	}// deleteData(int num)
+	
+	// 특정 게시물을 수정하는 기능의 메소드 정의
+	public int updateData(BoardDTO dto)
+	{
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		String sql = "";
+		
+		try
+		{
+			sql="UPDATE TBL_BOARD"
+					+ " SET NAME=?, PWD=?, EMAIL=?, SUBJECT=?, CONTENT=?"
+					+ " WHERE NUM=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getName());
+			pstmt.setString(2, dto.getPwd());
+			pstmt.setString(3, dto.getEmail());
+			pstmt.setString(4, dto.getSubject());
+			pstmt.setString(5, dto.getContent());
+			pstmt.setInt(6, dto.getNum());
+			
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+		}catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}// end updateData(BoardDTO dto)
+	
+	// 특정 게시물의 이전 게시물 번호를 얻어내는 메소드 정의
+	// (이전 게시물이 존재하지 않을 경우 -1 반환)
+	public int getBeforeNum(int num)
+	{
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try
+		{
+			sql = "SELECT NVL(MAX(NUM),-1) AS BEFORENUM FROM TBL_BOARD WHERE NUM<?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+						
+			if(rs.next())
+				result = rs.getInt("BEFORENUM");
+			
+			rs.close();
+			pstmt.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	// 특정 게시물의 다음 게시물 번호를 얻어내는 메소드 정의
+	// (다음 게시물이 존재하지 않을 경우 -1 반환)
+	public int getNextNum(int num)
+	{
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try
+		{
+			sql = "SELECT NVL(MIN(NUM),-1) AS NEXTNUM FROM TBL_BOARD WHERE NUM>?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+						
+			if(rs.next())
+				result = rs.getInt("NEXTNUM");
+			
+			rs.close();
+			pstmt.close();
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+}
+```
+### 7.11.4. BoardDTO.java
+``` java
+/* =================== 
+	BoradDTO.java
+=================== */
+package com.test;
+
+public class BoardDTO
+{
+	// TBL_BOARD 테이블의 레코드 구조와 동일한 속성 구성
+	private int num;
+	private String name, pwd, email, subject, content, ipAddr, created;
+	private int hitCount;
+	public int getNum()
+
+	// 사용자 정의 생성자를 정의하지 않음
+	// -> default 생성자 자동 삽입
+	
+	// getter / setter 구성
+	{
+		return num;
+	}
+	public void setNum(int num)
+	{
+		this.num = num;
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	public String getPwd()
+	{
+		return pwd;
+	}
+	public void setPwd(String pwd)
+	{
+		this.pwd = pwd;
+	}
+	public String getEmail()
+	{
+		return email;
+	}
+	public void setEmail(String email)
+	{
+		this.email = email;
+	}
+	public String getSubject()
+	{
+		return subject;
+	}
+	public void setSubject(String subject)
+	{
+		this.subject = subject;
+	}
+	public String getContent()
+	{
+		return content;
+	}
+	public void setContent(String content)
+	{
+		this.content = content;
+	}
+	public String getIpAddr()
+	{
+		return ipAddr;
+	}
+	public void setIpAddr(String ipAddr)
+	{
+		this.ipAddr = ipAddr;
+	}
+	public String getCreated()
+	{
+		return created;
+	}
+	public void setCreated(String created)
+	{
+		this.created = created;
+	}
+	public int getHitCount()
+	{
+		return hitCount;
+	}
+	public void setHitCount(int hitCount)
+	{
+		this.hitCount = hitCount;
+	}
+}
+```
+### 7.11.5. MyUtil.java_게시판 페이징 처리
+``` java
+/* ======================
+	MyUtil.java
+	- 게시판 페이징 처리
+========================= */
+
+// check~!!!
+// 지금 같이 확인해보고자 하는 페이징 처리 기법은
+// 다양한 방법들 중 하나(그나마 쉬운 것을 골라...)이다.
+// 학습을 마친 이후에... 꼭!!! 추가적으로 개념을 정리하고
+// 확장시키고, 다른 방법들도 찾아보고 공부해야한다~!!
+
+package com.util;
+
+public class MyUtil
+{
+	// ■ 전체 페이지 수를 구하는 메소드
+	// numPerPage : 한 페이지에 표시할 데이터(게시물)의 수
+	// dataCount : 전체 데이터(게시물) 수
+	public int getPageCount(int numPerPage, int dataCount)
+	{
+		int pageCount = 0;
+		
+		pageCount = dataCount / numPerPage;
+		
+		if(dataCount%numPerPage != 0)
+			pageCount++;
+		
+		return pageCount;
+	}
+	//-- 한 페이지에 10개의 게시물을 출력할 때
+	//	총 32 개의 게시물을 페이지로 구성하기 위해서는
+	//	『32 / 10』의 연산을 수행하여 결과 3을 얻을 수 있다.
+	//	-> 『pageCount = datatCount / numPerPage;』
+	//	그런데 이 때, 나머지 2개의 게시물을 출력해 주기 위해서는
+	//	페이지 하나가 더 필요하다.
+	//	『pageCount++;』
+	
+	// ■ 페이징 처리 기능의 메소드
+	// currentPage: 현재 표시할 페이지
+	// totalPage: 전체 페이지의 수
+	// listUrl: 링크를 설정할 url
+	public String pageIndexList(int currentPage, int totalPage, String listUrl)
+	{
+		// 실제 페이징을 저장할 StringBuffer 변수
+		StringBuffer strList = new StringBuffer();
+		
+		int numPerBlock = 10;
+		//-- 페이징 처리 시 게시물 리스트 하단의 숫자를 10개씩 보여주겠다.
+		
+		int currentPageSetup;
+		//-- 현재 페이지(이 페이지를 기준으로 보여주는 숫자가 달라져야 하기 때문...)
+		
+		int page;
+		int n;
+		//-- 이전 페이지 블럭(& 다음 페이지 블럭) 과 같은 처리에서 이동하기 위한 변수
+		//	(얼마만큼 이동해야 하는지...)
+		
+		// 페이징 처리가 별도로 필요하지 않은 경우
+		//-- 데이터가 존재하지 않거나 데이터의 수가
+		//	1페이지도 못채우는 경우는 별도로 페이징 처리를 할 필요가 없다.
+		if(currentPage == 0)
+			return "";
+		
+		// ※ 페이지 요청을 처리하는 과정에서 URL 경로의 패턴에 대한 처리
+		/*
+			- 클라이언트 요청의 형태 → List.jsp	→ (가공) → List.jsp + 『?』 + pageNum=20
+			- 클라이언트 요청의 형태 → List.jsp?subject=study → (가공) → List.jsp?subject=study + 『&』 + pageNum=1
+		*/
+		
+		// 링크를 설정할 URL에 대한 선가공 처리~!!!
+		if(listUrl.indexOf("?") != -1)	// 링크를 설정할 URL 에 『?』가 들어있으면...
+		{
+			listUrl = listUrl + "&";	// listUrl += "&";
+		} else							// 링크를 설정할 URL 에 『?』가 없으면...
+		{
+			listUrl = listUrl + "?";	// listUrl += "?";
+		}
+		//-- 예를 들어, 검색값이 존재하면
+		//	이미 request 값이 searchKey 와 searchValue 가 들어있는 상황이므로
+		//	『&』를 붙여서 속성값에 추가해 주어야 한다.
+		
+		// ※ currentPageSetup = 표시할 첫 페이지 - 1
+		currentPageSetup = (currentPage / numPerBlock) * numPerBlock;
+		//-- 만약 현재 페이지가 5페이지이고(currentPage=5)
+		//	리스트 하단에 보여줄 페이지 갯수가 10이면(numPerBlock=10)
+		//	『5 / 10 = 0』이며... 여기에 『* 10』(10을 곱해도) 0이다.
+		//	하지만, 현재 페이지가 11 페이지라면(currentPage=11)
+		//	『11 / 10 = 1』이며... 여기에 『* 10』(10을 곱하면) 10이다.
+		//	그러면... currentPageSetup 은 10이 되는 것이다.
+		
+		if(currentPage % numPerBlock == 0)
+		{
+			currentPageSetup = currentPageSetup - numPerBlock;
+			// currentPageSetup -= numPerBlock;
+		}
+		//-- 만약 위 처리에서 ... (라인88)
+		//	현재 페이지가 20 페이지였다면(currentPage=20)
+		//	『20 / 10 = 2』이며... 여기에 『*10』 (10을 곱해서) 20이 되는데
+		//	이와 같은 상황이라면... 다시 10을 빼서 10으로 만들어주기 위한 구문.
+		
+		// 1 페이지 (맨처음으로)
+		if( (totalPage>numPerBlock) && (currentPageSetup>0) )
+		{
+			strList.append(" <a href='"+ listUrl +"pageNum=1'>1</a>");
+		}
+		//-- listUrl은 위에서 (라인 75 ~ 77) 이미 처리가 끝난 상황이기 때문에
+		//	『...?』 상태또는 『..?..&』인 상태이다.
+		//	이로 인해 결과는
+		//	『..?pageNum=1』이거나 『..?..&pageNum=1』이 되는 상황이다.
+		
+		// Prev(이전으로)
+		n = currentPage - numPerBlock;
+		//-- n 해당 페이지만큼 앞으로(또는 뒤로) 가기 위한 변수
+		
+		if( (totalPage>numPerBlock) && (currentPageSetup>0) )
+		{
+			strList.append(" <a href='"+ listUrl +"pageNum="+ n +"'>Prev</a>");
+		}
+		//-- currentPageSetup 이 0 보다 큰 경우는
+		//	이미 페이지가 11 이상이라는 의미이며
+		//	이 때, 현재 페이지가(currentPage)가 11 이상일 경우
+		//	『Prev』를 붙이기 위한 구문.
+		//-- 『Prev』 를 클릭할 경우
+		//	n 변수 페이지로 이동하는데
+		//	12에서 『Prev』 할 경우... 2 페이지가 되고,
+		//	22에서 『Prev』 할 경우... 12페이지가 될 수 있도록 처리하는 방식이다.
+		
+		// 각 페이지 바로가기
+		page = currentPageSetup + 1;
+		//-- 『+1』을 수행하는 이유는
+		//	앞에서 currentPageSetup 에서 10을 가져왔다면
+		//	10부터 시작하는 것이 아니라
+		//	바로가기 페이지는 11부터 시작해야 하기 때문이다.
+		
+		while( (page<=totalPage) && (page<=currentPageSetup+numPerBlock) )
+		{
+			if(page==currentPage)	// 현재 페이지
+			{
+				strList.append(" <span stlye='color:orange; font-weight: bold;'>"+ page +"</span>");
+			}else
+			{
+				strList.append(" <a href='"+ listUrl +"pageNum="+ page +"'>"+ page +"</a>");
+			}
+			
+			page++;
+		}
+		
+		// Next(다음으로)
+		n = currentPage + numPerBlock;
+		if( (totalPage-currentPageSetup) > numPerBlock )
+		{
+			strList.append(" <a href='"+ listUrl +"pageNum="+ n +"'>Next</a>");
+		}
+		
+		// 마지막 페이지(맨 마지막으로)
+		if( (totalPage>numPerBlock) && (currentPageSetup+numPerBlock<totalPage) )
+		{
+			strList.append(" <a href='"+ listUrl +"pageNum="+ totalPage +"'>"+ totalPage +"</a>");
+		}
+		
+		return strList.toString();
+		
+	} // pageIndexList(int currentPage, int totalPage, String listUrl)
+}
+```
+### 7.11.6. Article.jsp_글상세
 ``` html
+<%@page import="com.test.BoardDTO"%>
+<%@page import="com.test.BoardDAO"%>
+<%@page import="com.util.DBConn"%>
+<%@page import="java.sql.Connection"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<%
+	Connection conn = DBConn.getConnection();
+	BoardDAO dao = new BoardDAO(conn);
+	
+	// 이전 페이지(List.jsp)로 부터 넘어온 데이터 수신
+	// 	-> num, pageNum
+	String pageNum = request.getParameter("pageNum");
+	String strNum = request.getParameter("num");
+	int num = Integer.parseInt(strNum);
+	
+	// 해당 게시물 조회수 증가
+	dao.updateHitCount(num);
+	
+	// 이전, 다음 게시물 번호 확인
+	int beforeNum = dao.getBeforeNum(num);	// ??	103
+	int nextNum = dao.getNextNum(num);		// 		103 ??
+	
+			
+	BoardDTO dtoBefore = null;
+	BoardDTO dtoNext = null;
+	
+	if(beforeNum != -1)
+		dtoBefore = dao.getReadData(beforeNum);
+	
+	if(nextNum != -1)
+		dtoNext = dao.getReadData(nextNum);
+	
+	// 해당 게시물의 내용 가져오기
+	BoardDTO dto = dao.getReadData(num);
+	
+	// 게시물 본문 라인 수 확인
+	int lineSu = dto.getContent().split("\n").length;
+	
+	// 게시물 내용
+	dto.setContent(dto.getContent().replaceAll("\n","<br>"));
+	//-- 즉, 
+	//	안녕하세요\n반갑습니다.\n화요일입니다.\n기운냅시다\n안녕히가세요.
+	//	안녕하세요<br>반갑습니다.<br>화요일입니다.<br>기운냅시다<br>안녕히가세요.
+	
+	
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Article.jsp</title>
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/article.css">
+<script type="text/javascript">
+function deleteCheck()
+{
+	//alert("함수 확인!");
+	var str ="";
+	<%-- javascript:location.href='<%=cp %>/Deleted_ok.jsp?num=<%=dto.getNum()%>' --%>
+	
+	str = prompt("비밀번호 입력:");
+		
+	if(str == '<%=dto.getPwd()%>')
+	{
+		/* alert("비밀번호 일치"); */
+		location.href='<%=cp %>/Deleted_ok.jsp?num=<%=dto.getNum()%>';
+	}else{
+		alert("비밀번호 불일치");
+	}
+	
+	<%-- location.href='<%=cp %>/Deleted_ok1.jsp'; --%>
+	
+}
+
+</script>
+</head>
+<body class="section">
+
+<div id="bbs">
+	<div id="bbs_title">
+		게 시 판 (JDBC 연동 버전)
+	</div>
+	<!-- #bbx_title -->
+	
+	<div id="bbsArticle">
+		<div id="bbsArticle_header">
+			<!-- 게시물의 제목입니다. -->
+			<%=dto.getSubject() %>
+		</div>
+		<!-- #bbsArticle_header -->
+		
+		<div class="bbsArticle_bottomLine">
+			<!-- <dl>
+				<dt>작성자</dt>
+				<dd>정현욱</dd>
+				<dt>라인수</dt>
+				<dd>23</dd>
+			</dl> -->
+			<dl>
+				<dt>작성자</dt>
+				<dd><%=dto.getName() %></dd>
+				<dt>라인수</dt>
+				<dd><%=lineSu %></dd>
+			</dl>
+		</div>
+		<!-- .bbsArticle_bottomLine -->
+		
+		<div class="bbsArticle_bottomLine">
+			<!-- <dl>
+				<dt>등록일</dt>
+				<dd>2023-12-19</dd>
+				<dt>조회수</dt>
+				<dd>13</dd>
+			</dl> -->
+			<dl>
+				<dt>등록일</dt>
+				<dd><%=dto.getCreated() %></dd>
+				<dt>조회수</dt>
+				<dd><%=dto.getHitCount() %></dd>
+			</dl>
+		</div>
+		<!-- .bbsArticle_bottomLine -->
+		
+		<div id="bbsArticle_content">
+			<table style="width:600px">
+				<tr>
+					<td style="padding: 10px 40px 10px 10px;vertical-align: top;height:150px">
+						<!-- 어쩌구 저쩌구 이러쿵 저러쿵 내용입니다. -->
+						<%=dto.getContent() %>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!-- .bbsArticle_content -->
+		
+		<div class="bbsArticle_bottomLine">
+			<!-- 이전글 : (104) 취미 관련 게시물 -->
+			<%
+			if(beforeNum != -1)
+			{
+			%>	
+				<!-- 이전글: 있음 -->
+				<%-- 이전글: (<%=beforeNum %>) <%=dtoBefore.getSubject() %> --%>
+				이전글: (<%=beforeNum %>) <a href="<%=cp%>/Article.jsp?pageNum=<%=pageNum %>&num=<%=beforeNum%>"><%=dtoBefore.getSubject() %></a>
+			<%
+			}else
+			{
+			%>
+				이전글: 없음
+			<%
+			}
+			%>
+		</div>
+		<!-- .bbsArticle_bottomLine -->
+		<div class="bbsArticle_bottomLine">
+			<!-- 다음글 : (102) 날씨 관련 게시물 -->
+			<%
+			if(nextNum != -1)
+			{
+			%>
+				<!-- 다음글: 있음 -->
+				<%-- 다음글: (<%=nextNum %>) <%=dtoNext.getSubject() %> --%>
+				다음글: (<%=nextNum %>) <a href="<%=cp%>/Article.jsp?pageNum=<%=pageNum %>&num=<%=nextNum%>"><%=dtoNext.getSubject() %></a>
+			<%
+			}else
+			{
+			%>
+				다음글: 없음
+			<%
+			}
+			%>
+		</div>
+		<!-- .bbsArticle_bottomLine -->
+	</div>
+	<!-- #bbsArticle -->
+	
+	<div class="bbsArticle_noLine" style="text-align: right;">
+		<!-- From: 211.238.142.151 -->
+		From: <%=dto.getIpAddr() %>
+	</div><!-- .bbsArticle_noLine -->
+	
+	<div id="bbsArticle_footer">
+		<div id="leftFooter">
+			<input type="button" value="수정" class="btn2"
+			onclick="javascript:location.href='<%=cp%>/Updated.jsp?num=<%=dto.getNum()%>&pageNum=<%=pageNum%>&status=1'">
+			<input type="button" value="삭제" class="btn2"
+			onclick="javascript:location.href='<%=cp%>/Updated.jsp?num=<%=dto.getNum()%>&pageNum=<%=pageNum%>&status=2'">
+			<!-- onclick="deleteCheck()"> -->
+		</div>
+		<!-- #leftFooter -->
+		<div id="rightFooter">
+			<input type="button" value="리스트" class="btn2"
+			onclick="javascript:location.href='<%=cp %>/List.jsp?pageNum=<%=pageNum %>'">
+		</div>
+		<!-- #rightFooter -->
+	</div><!-- #bbsArticle_footer -->
+	
+</div>
+<!-- #bbs -->
+
+</body>
+</html>
+```
+### 7.11.7. Created_ok.jsp_상세로직
+``` java
+<%@page import="com.util.DBConn"%>
+<%@page import="com.test.BoardDAO"%>
+<%@page import="java.sql.Connection"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+
+<jsp:useBean id="dto" class="com.test.BoardDTO" scope="page"></jsp:useBean>
+<jsp:setProperty property="*" name="dto"/>
+
+<%
+	// Created_ok.jsp
+	
+	Connection conn = DBConn.getConnection();
+	BoardDAO dao = new BoardDAO(conn);
+	
+	// 테이블 상 게시물 현재 상태의 최대값 얻어오기
+	int maxNum = dao.getMaxNum();
+	
+	// 게시물 번호 최대값에 1을 더해서 set 하는 과정 → dto 에 속성값 추가
+	dto.setNum(maxNum +1);
+	
+	// IP Address 확인
+	// → request.getRemoteAddr() → 클라이언트(브라우저)의 IP Address 확인
+	// → dto 에 속성값 추가
+	dto.setIpAddr(request.getRemoteAddr());
+	
+	// dao 의 insert 쿼리문을 수행하는 메소드 호출 (→ dto 필요~!!!)
+	dao.insertData(dto);
+	
+	// 호출한 위 메소드가 반환한 값을 활용한 분기 처리 가능~!!!
+	
+	DBConn.close();
+	
+	// 사용자에 List.jsp 페이지를 다시 요청할 수 있도록 안내
+	response.sendRedirect("List.jsp");
+	
+	// 아래보여지는 코드 모두 제거
+%>
+```
+### 7.11.8. Created.jsp_글올리기
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Created.jsp</title>
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/created.css">
+<script type="text/javascript" src="<%=cp%>/js/util.js"></script>
+<script type="text/javascript">
+function sendIt()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	f = document.myForm;
+	
+	// 제목 입력 확인 ----------------------------------------
+	// 필수 입력 항목 기재 여부 확인 및 공백 처리
+	str = f.subject.value;
+	str = str.trim();
+	f.subject.value = str;
+	
+	// ※ 외부에서 참조한 util.js 에 만들어 두었음.
+	
+	// 확인
+	//alert("|" + str + "|");
+	
+	if(!str)
+	{
+		alert("\n제목을 입력하세요~!!!");
+		f.subject.focus();
+		return;
+	}
+	// -------------------------------------------- 제목 입력 확인
+	
+	// 이름 입력 확인 -------------------------------------------
+	// 필수 입력 항목 기재 여부 확인 및 공백 처리
+	str = f.name.value;
+	str = str.trim();
+	f.name.value = str;
+	
+	if(!str)
+	{
+		alert("\이름을 입력하세요~!!!");
+		f.name.focus();
+		return;
+	}
+	// -------------------------------------------- 이름 입력 확인
+	
+	// 이메일 검사 -------------------------------------------
+	// 필수 입력 항목이 아니기 때문에 선택적인 입력이 가능하지만,
+	// 입력을 한 상황이라면, 이메일 형식에 맞게 입력했는지 확인하는 처리
+	
+	if(f.email.value)	//-- 이메일 항목을 입력한 상황이라면...
+	{
+		if(!isValidEmail(f.email.value))
+		{
+			alert("\정상적인 이메일 형식을 입력하세요~!!!");
+			f.email.focus();
+			return;
+		}
+	}
+	// -------------------------------------------- 이메일 검사
+
+	// 내용 입력 확인 -------------------------------------------
+	// 필수 입력 항목 기재 여부 확인 및 공백 처리
+	str = f.content.value;
+	str = str.trim();
+	f.content.value = str;
+	
+	if(!str)
+	{
+		alert("\내용을 입력하세요~!!!");
+		f.content.focus();
+		return;
+	}
+	// -------------------------------------------- 내용 입력 확인
+	
+	// 패스워드 입력 확인 ------------------------------------
+	// 필수 입력 항목 기재 여부 확인 및 공백 처리
+	str = f.pwd.value;
+	str = str.trim();
+	f.pwd.value = str;
+	
+	if(!str)
+	{
+		alert("\n패스워드를 입력하세요~!!!");
+		f.pwd.focus()
+		return;
+	}
+	
+	// ------------------------------------- 패스워드 입력 확인
+	
+	f.action = "<%=cp%>/Created_ok.jsp";
+	f.submit();
+	
+	
+	// -------------------------------------------------------
+}
+</script>
+</head>
+<body>
+
+<div id="bbs">
+	<div id="bbs_title">
+		게 시 판 (JDBC 연동 버전)
+	</div>
+	<!-- #bbs_title -->
+
+	<form action="" method="post" name="myForm">
+		<div id="bbsCreated">
+			<div class="bbsCreated_bottomLine">
+				<dl>
+					<dt>제목</dt>
+					<dd><input type="text" name="subject" size="64" maxlength="100" class="boxTF" /></dd>
+				</dl>
+			</div>
+			<!-- #bbsCreated_bottomLine -->
+			
+			<div class="bbsCreated_bottomLine">
+				<dl>
+					<dt>작성자</dt>
+					<dd>
+						<input type="text"	name="name" size="35" maxlength="20" class="boxTF">
+					</dd>
+				</dl>
+			</div><!-- .bbxCreated_bottomLine -->
+			
+			<div class="bbsCreated_bottomLine">
+				<dl>
+					<dt>이 메 일
+						<dd><input type="email" name="email" size="35" maxlength="50" class="boxTF" /></dd>
+					</dt>
+				</dl>
+			</div><!-- .bbxCreated_bottomLine -->
+			
+			<div id="bbsCreated_content">
+				<dl>
+					<dt>내 용</dt>
+					<dd><textarea name="content" id="" cols="63" rows="12" class="boxTA"></textarea></dd>
+				</dl>
+			</div>
+			<!-- #bbsCreated_content -->
+			
+			<div class="bbsCreated_noLine">
+				<dl>
+					<dt>패스워드</dt>
+					<dd>
+						<input type="password" name="pwd" size="35" maxlength="10" class="boxTF">
+						&nbsp;<span style="font-size: 6pt">(게시물 수정 및 삭제 필요)</span>
+					</dd>
+				</dl>
+			</div><!-- .bbsCreated_noLine -->
+			
+			<div id="bbsCreated_footer">
+				<input type="button" value="등록하기" class="btn2" 
+				onclick="sendIt()">
+				<input type="reset" value="다시입력" class="btn2"
+				onclick="document.myForm.subject.focus()">
+				<input type="button" value="작성취소" class="btn2" 
+				 onclick="javascript:location.href='<%=cp%>/List.jsp'">
+			</div>
+			<!-- #bbsCreated_footer -->
+		</div>
+	</form>
+</div>
+<!-- #bbs -->
+
+</body>
+</html>
+```
+### 7.11.9. Deleted_ok.jsp_삭제로직
+``` java
+<%@page import="com.util.DBConn"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="com.test.BoardDAO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+
+<jsp:useBean id="dto" class="com.test.BoardDTO"></jsp:useBean>
+<jsp:setProperty property="*" name="dto"/>
+
+<%
+	// Delete_ok2.jsp
+	
+	int num = Integer.parseInt(request.getParameter("num"));
+	String pageNum = request.getParameter("pageNum");
+	
+	Connection conn = DBConn.getConnection();
+	BoardDAO dao = new BoardDAO(conn);
+	
+	int result = dao.deleteData(num);
+	
+	// result 결과값에 따른 분기 처리 코드 삽입 가능~!!!
+	DBConn.close();
+	response.sendRedirect(cp + "/List.jsp?pageNum="+pageNum);
+	
+	// 아래 보여지는 코드 삭제
+%>
+```
+### 7.11.10. List.jsp_글리스트
+``` html
+<%@page import="java.net.URLDecoder"%>
+<%@page import="java.util.List"%>
+<%@page import="com.util.DBConn"%>
+<%@page import="com.util.MyUtil"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="com.test.BoardDAO"%>
+<%@page import="com.test.BoardDTO"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<%
+	// 이전 페이지(?)로부터 넘어온 게시물 번호 수신
+	String strNum = request.getParameter("num");
+	int num = 0;
+	if(strNum != null)
+		num = Integer.parseInt(strNum);
+	
+	// 이전 페이지(?)로 부터 넘어온 페이지 번호 수신
+	String pageNum = request.getParameter("pageNum");
+	int currentPage = 1;
+	if(pageNum != null)
+		currentPage = Integer.parseInt(pageNum);
+	
+	// 이전 페이지(?)로 부터 넘어온 검색키와 검색값 수신
+	String searchKey = request.getParameter("searchKey");
+	String searchValue = request.getParameter("searchValue");
+		
+	if(searchKey != null) 	//-- 검색 기능을 통해 이 페이지가 요청되었을 경우
+	{
+		// 테스트
+		//System.out.println("searchKey: "+ searchKey + ", searchValue: " + searchValue);
+		//--==>> searchKey: subject, searchValue: 음식
+		
+		// 넘어온 요청이 GET 방식이라면...디코딩 처리할 수 있도록 코드 구성
+		//→ GET은 한글 문자열을 인코딩해서 보내기 때문에...
+		if(request.getMethod().equalsIgnoreCase("GET"))
+		{
+			// 디코딩 처리
+			searchValue = URLDecoder.decode(searchValue,"UTF-8");
+		}
+		
+	}
+	else					//-- 검색 기능이 아닌 기본적인 페이지 요청이 이루어졌을 경우
+	{
+		searchKey = "subject";
+		searchValue = "";
+	}
+	
+	Connection conn = DBConn.getConnection();
+	BoardDAO dao = new BoardDAO(conn);
+	MyUtil myUtil = new MyUtil();
+	
+	// 전체 데이터 갯수 구하기	→ 검색 데이터 갯수 구하기로 변경 예정~!!!
+	//int dataCount = dao.getDataCount();
+	int dataCount = dao.getDataCount(searchKey, searchValue);							// 추가
+	
+	// 전체 데이터를 기준으로 총 페이지 수 계산
+	int numPerPage = 10;	//-- 한 페이지에 표시할 데이터 갯수
+	int totalPage = myUtil.getPageCount(numPerPage, dataCount);
+	
+	// 전체 페이지 수 보다 표시할 페이지가 큰 경우
+	// 표시할 페이지를 전체 페이지로 처리
+	// → 한 마디로, 데이터를 삭제해서 페이지가 줄어들었을 경우...
+	if(currentPage > totalPage)
+		currentPage = totalPage;
+	
+	// 데이터베이스에서 가져올 시작과 끝 위치
+	int start = (currentPage-1) * numPerPage + 1;
+	int end = currentPage * numPerPage;
+	//-- 현재 페이지가 1인 경우(currentPage=1)
+	//	데이터베이스에서 가져올 게시물은 1번째(start: 1) 부터 10번째(end: 10) 까지
+	//	현재 페이지가 2인 경우(currentPage=2)
+	//	데이터베이스에서 가져올 게시물은 11번째(start: 11) 부터 20번째(end: 20) 까지 이다. 
+	
+	// 가져올 리스트의 대역폭 확정~!!!
+	
+	// 실제 리스트 가져오기	→ 검색 데이터 갯수 구하기로 변경 예정~!!!
+	//List<BoardDTO> lists = dao.getLists(start, end);
+	List<BoardDTO> lists = dao.getLists(start, end, searchKey, searchValue);				// 추가
+	
+	// 페이징 처리
+	String param = "";
+	
+	// 검색값이 존재한다면...
+	if(!searchValue.equals(""))
+	{
+		param += "?searchKey=" + searchKey;
+		param += "&searchValue" + searchValue;
+	}
+	
+	String listUrl = "List.jsp" + param;
+	
+	String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
+	
+	// 글 내용 보기 주소
+	String articleUrl = cp + "/Article.jsp";
+	
+	if(param.equals(""))
+	{
+		articleUrl = articleUrl + "?pageNum=" + currentPage;
+	}else
+	{
+		articleUrl = articleUrl + param + "&pageNum=" + currentPage;
+	}
+	
+	DBConn.close();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/list.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/style2.css"> -->
+<script type="text/javascript">
+function sendIt()
+{
+	//alert("함수 호출~!!!");
+	
+	var f = document.searchForm;
+	
+	// 검색 키워드에 대한 유효성 검색 코드 삽입 가능~!!!
+	
+	f.action = "<%=cp%>/List.jsp";
+	
+	f.submit();
+	
+}
+</script>
+</head> 
+<body>
+
+<%-- <div>
+	<h1><%=cp %></h1>
+	<hr>
+</div> --%>
+
+<div id="bbsList">
+
+	<div id="bbsList_title">
+		게 시 판 (JDBC 연동 버전)
+	</div>	<!-- div#bbsList_title -->
+
+	<div id="bbsList_header">
+		<div id="leftHeader">
+		
+			<!-- 검색 폼 구성 -->
+			<form action="" name="searchForm" method="post">
+			<!-- <form action="" name="searchForm" method="get"> -->
+				<select name="searchKey" class="selectFiled">
+					<!-- 					
+					<option value="subject">제목</option>
+					<option value="name">작성자</option>
+					<option value="content">내용</option>
+					 -->
+					<%
+					if(searchKey.equals("name"))			//-- 수신한 searchKey 가 name 이라면...
+					{
+					%>
+						<option value="subject">제목</option>
+						<option value="name" selected="selected">작성자</option>
+						<option value="content">내용</option>
+					<%
+					}else if(searchKey.equals("content")){	//-- 수신한 searchKey 가 content 이라면...
+					%>
+						<option value="subject">제목</option>
+						<option value="name">작성자</option>
+						<option value="content" selected="selected">내용</option>
+					<%
+					}else{									//-- 수신한 searchKey 가 subject 이라면...
+					%>
+						<option value="subject" selected="selected">제목</option>
+						<option value="name">작성자</option>
+						<option value="content">내용</option>
+					<%
+					}
+					%>
+				</select>
+				<input type="text" name="searchValue" class="textFiled" value="<%=searchValue%>">
+				<input type="button" value="검색" class="bt2" onclick="sendIt()">
+			</form>
+			
+		</div> <!-- #leftHeader -->
+		
+		<div id="rightHeader">
+			<input type="button" value="글올리기" class="btn2" 
+			onclick="javascript:location.href='<%=cp%>/Created.jsp'">
+		</div> <!-- #rightHeader -->
+		
+	</div> <!-- div#bbsList_header -->
+
+	<div id="bbsList_list">
+		<div id="title">
+			<dl>
+				<dt class="num">번호</dt>
+				<dt class="subject">제목</dt>
+				<dt class="name">작성자</dt>
+				<dt class="created">작성일</dt>
+				<dt class="hitCount">조회수</dt>
+			</dl>
+		</div> <!-- #title -->
+		
+		<div id="lists">
+			<!-- 
+			<dl>
+				<dd class="num">1</dd>
+				<dd class="subject">안녕하세요</dd>
+				<dd class="name">김지민</dd>
+				<dd class="created">2023-12-19</dd>
+				<dd class="hitCount">0</dd>
+			</dl>
+			 -->
+			<%
+			for(BoardDTO dto: lists)
+			{
+			%>
+			<dl>
+				<dd class="num"><%=dto.getNum() %></dd>
+				<dd class="subject">
+					<a href="<%=articleUrl%>&num=<%=dto.getNum()%>"><%= dto.getSubject() %></a>	
+					<!-- **pageNum=1 -> 원래의 페이지로 돌아기 위해** -->
+				</dd>
+				<dd class="name"><%=dto.getName() %></dd>
+				<dd class="created"><%=dto.getCreated() %></dd>
+				<dd class="hitCount"><%=dto.getHitCount() %></dd>
+			</dl>
+			<%
+			}
+			%>
+		</div> <!-- #list -->
+		
+		<div id="footer">
+			<!-- <p>1 Prev 21 22 23 24 25 26 27 28 29 30 Next 42</p> -->
+			
+			<!-- <p>등록된 게시물이 존재하지 않습니다.</p> -->
+			<p>
+			<%
+			if(dataCount != 0)
+			{
+			%>
+				<!-- 등록된 게시물이 존재합니다. -->
+				<%=pageIndexList %>
+			<%
+			}else
+			{
+			%>
+				등록된 게시물이 존재하지 않습니다.
+			<%
+			}
+			%>
+			</p>
+		</div>
+		<!-- #footer -->
+	</div> <!-- #bbsList_list -->
+
+</div> <!-- #bbslist -->
+
+</body>
+</html>
+```
+### 7.11.10. Updated_ok.jsp_수정로직
+``` java
+<%@page import="com.util.DBConn"%>
+<%@page import="com.test.BoardDAO"%>
+<%@page import="java.sql.Connection"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+
+<jsp:useBean id="dto" class="com.test.BoardDTO" scope="page"></jsp:useBean>
+<jsp:setProperty property="*" name="dto"/>
+
+<%
+	// Updated_ok.jsp
+	
+	// 위의 액션 태그를 통해 dto 의 속성 값들을 이전 페이지(Updated.jsp)로부터 수신
+	// + pageNum
+	
+	String pageNum = request.getParameter("pageNum");
+
+	Connection conn = DBConn.getConnection();
+	BoardDAO dao = new BoardDAO(conn);
+	
+	dao.updateData(dto);
+	
+	// result 값에 따른 분기 처리코드 삽입 가능~!!!
+	
+	DBConn.close();
+	
+	// 사용자에게 리스트 페이지를 다시 요청할 수 있도록 안내
+	//response.sendRedirect(cp + "/List.jsp?pageNum=" + pageNum);
+	
+	// 사용자에게 게시물 내용 페이지를 다시 요청할 수 있도록 안내
+	response.sendRedirect(cp + "/Article.jsp?pageNum=" + pageNum + "&num=" + dto.getNum());
+	
+// 아래 보여주는 코드 모두 제거	
+%>
+```
+### 7.11.10. Updated.jsp_수정
+``` html
+<%@page import="com.test.BoardDTO"%>
+<%@page import="com.test.BoardDAO"%>
+<%@page import="com.util.DBConn"%>
+<%@page import="java.sql.Connection"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<%
+	// 이전 페이지(Article.jsp)로 부터 넘어온 데이터 수신
+	// -> num, pageNum
+	int num = Integer.parseInt(request.getParameter("num"));
+	String pageNum = request.getParameter("pageNum");
+	
+	// ※ 삭제 액션 요청 처리과정에서 추가한 코드 -----------
+	String statusStr = request.getParameter("status");
+	int status = Integer.parseInt(statusStr);
+	// -------------- 삭제 액션 요청 처리과정에서 추가한 코드
+	
+	
+	
+	Connection conn = DBConn.getConnection();
+	BoardDAO dao = new BoardDAO(conn);
+	
+	BoardDTO dto = dao.getReadData(num);
+	
+	String emailStr = "";
+	if (dto.getEmail()!=null)
+		emailStr = dto.getEmail();
+	
+	DBConn.close();
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Updated.jsp</title>
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/created.css">
+<style type="text/css">
+	#pwd{    border-color: red;}
+</style>
+<script type="text/javascript" src="<%=cp%>/js/util.js"></script>
+<script type="text/javascript">
+function sendIt()
+{
+	// 확인
+	//alert("함수 호출~!!!");
+	
+	f = document.myForm;
+	
+	// 제목 입력 확인 ----------------------------------------
+	// 필수 입력 항목 기재 여부 확인 및 공백 처리
+	str = f.subject.value;
+	str = str.trim();
+	f.subject.value = str;
+	
+	// ※ 외부에서 참조한 util.js 에 만들어 두었음.
+	
+	// 확인
+	//alert("|" + str + "|");
+	
+	if(!str)
+	{
+		alert("\n제목을 입력하세요~!!!");
+		f.subject.focus();
+		return;
+	}
+	// -------------------------------------------- 제목 입력 확인
+	
+	// 이름 입력 확인 -------------------------------------------
+	// 필수 입력 항목 기재 여부 확인 및 공백 처리
+	str = f.name.value;
+	str = str.trim();
+	f.name.value = str;
+	
+	if(!str)
+	{
+		alert("\이름을 입력하세요~!!!");
+		f.name.focus();
+		return;
+	}
+	// -------------------------------------------- 이름 입력 확인
+	
+	// 이메일 검사 -------------------------------------------
+	// 필수 입력 항목이 아니기 때문에 선택적인 입력이 가능하지만,
+	// 입력을 한 상황이라면, 이메일 형식에 맞게 입력했는지 확인하는 처리
+	
+	if(f.email.value)	//-- 이메일 항목을 입력한 상황이라면...
+	{
+		if(!isValidEmail(f.email.value))
+		{
+			alert("\정상적인 이메일 형식을 입력하세요~!!!");
+			f.email.focus();
+			return;
+		}
+	}
+	// -------------------------------------------- 이메일 검사
+
+	// 내용 입력 확인 -------------------------------------------
+	// 필수 입력 항목 기재 여부 확인 및 공백 처리
+	str = f.content.value;
+	str = str.trim();
+	f.content.value = str;
+	
+	if(!str)
+	{
+		alert("\내용을 입력하세요~!!!");
+		f.content.focus();
+		return;
+	}
+	// -------------------------------------------- 내용 입력 확인
+	
+	// 패스워드 입력 확인 ------------------------------------
+	// 필수 입력 항목 기재 여부 확인 및 공백 처리
+	str = f.pwd.value;
+	str = str.trim();
+	f.pwd.value = str;
+	
+	if(!str)
+	{
+		alert("\n패스워드를 입력하세요~!!!");
+		f.pwd.focus()
+		return;
+	}
+	// ------------------------------------- 패스워드 입력 확인
+	
+	// 패스워드 일치 여부 확인 --------------------------------
+	// 해당 게시물 작성 시 설정한 패스워드와
+	// 게시물을 수정하는 과정에서 입력한 채스워드가
+	// 서로 일치하는지를 확인하여 액션 처리 수행 여부 판단
+	var pwdSource = f.pwdSource.value;
+	if(str != pwdSource)
+	{
+		alert("\n 패스워드가 맞지 않습니다.");
+		f.pwd.focus();
+		return;
+	}
+	// --------------------------------- 패스워드 일치 여부 확인
+	
+	f.action = "<%=cp%>/Updated_ok.jsp";
+	f.submit();
+	
+	
+	// -------------------------------------------------------
+}
+
+function removeIt()
+{
+	f = document.myForm;
+	
+	// 패스워드 입력 확인 ------------------------------------
+	// 필수 입력 항목 기재 여부 확인 및 공백 처리
+	str = f.pwd.value;
+	str = str.trim();
+	f.pwd.value = str;
+	
+	if(!str)
+	{
+		alert("\n패스워드를 입력하세요~!!!");
+		f.pwd.focus()
+		return;
+	}
+	// ------------------------------------- 패스워드 입력 확인
+	
+	// 패스워드 일치 여부 확인 --------------------------------
+	// 해당 게시물 작성 시 설정한 패스워드와
+	// 게시물을 삭제하는 과정에서 입력한 채스워드가
+	// 서로 일치하는지를 확인하여 액션 처리 수행 여부 판단
+	var pwdSource = f.pwdSource.value;
+	if(str != pwdSource)
+	{
+		alert("\n 패스워드가 맞지 않습니다.");
+		f.pwd.focus();
+		return;
+	}
+	// --------------------------------- 패스워드 일치 여부 확인
+	
+	f.action = "<%=cp%>/Deleted_ok.jsp";
+	
+	f.submit();
+}
+</script>
+</head>
+<body>
+
+<div id="bbs">
+	<div id="bbs_title">
+		게 시 판 (JDBC 연동 버전)
+	</div>
+	<!-- #bbs_title -->
+
+	<form action="" method="post" name="myForm">
+		<div id="bbsCreated">
+			<div class="bbsCreated_bottomLine">
+				<dl>
+					<dt>제목</dt>
+					<dd>
+						<%
+						if(status==1)		// status ==1 → 수정 액션 요청
+						{
+						%>
+						<input type="text" name="subject" size="64"
+						 maxlength="100" class="boxTF" value="<%=dto.getSubject() %>">
+						<%
+						}else				// status ==2 → 삭제 액션 요청
+						{
+						%>
+						<input type="text" name="subject" size="64"
+						 maxlength="100" class="boxTF" value="<%=dto.getSubject() %>"
+						 disabled="disabled">
+						<%
+						}
+						%>
+					</dd>
+				</dl>
+			</div>
+			<!-- #bbsCreated_bottomLine -->
+			
+			<div class="bbsCreated_bottomLine">
+				<dl>
+					<dt>작성자</dt>
+					<dd>
+						<%
+						if(status==1)		// status ==1 → 수정 액션 요청
+						{
+						%>
+						<input type="text"	name="name" size="35"
+						 maxlength="20" class="boxTF" value="<%=dto.getName() %>">
+						<%
+						}else				// status ==2 → 삭제 액션 요청
+						{
+						%>
+						<input type="text"	name="name" size="35"
+						 maxlength="20" class="boxTF" value="<%=dto.getName() %>"
+						 disabled="disabled">
+						<%
+						}
+						%>
+					</dd>
+				</dl>
+			</div><!-- .bbxCreated_bottomLine -->
+			
+			<div class="bbsCreated_bottomLine">
+				<dl>
+					<dt>이 메 일
+						<dd>
+						<%
+						if(status==1)		// status ==1 → 수정 액션 요청
+						{
+						%>
+						<input type="email" name="email" size="35"
+							 maxlength="50" class="boxTF" value="<%=emailStr %>">
+						<%
+						}else				// status ==2 → 삭제 액션 요청
+						{
+						%>
+						<input type="email" name="email" size="35"
+							 maxlength="50" class="boxTF" value="<%=emailStr %>"
+						disabled="disabled">
+						<%
+						}
+						%>
+						</dd>
+					</dt>
+				</dl>
+			</div><!-- .bbxCreated_bottomLine -->
+			
+			<div id="bbsCreated_content">
+				<dl>
+					<dt>내 용</dt>
+					<dd>
+						<%
+						if(status==1)		// status ==1 → 수정 액션 요청
+						{
+						%>
+						<textarea name="content" id="" cols="63" rows="12" 
+							class="boxTA"><%=dto.getContent() %></textarea>
+						<%
+						}else				// status ==2 → 삭제 액션 요청
+						{
+						%>	
+						<textarea name="content" id="" cols="63" rows="12" 
+							class="boxTA" disabled="disabled"><%=dto.getContent() %></textarea>
+						<%
+						}
+						%>
+					</dd>
+				</dl>
+			</div>
+			<!-- #bbsCreated_content -->
+			
+			<div class="bbsCreated_noLine">
+				<dl>
+					<dt>패스워드</dt>
+					<dd>
+						<input type="hidden" name="pwdSource" value="<%=dto.getPwd() %>">
+						<input type="password" name="pwd" id="pwd" size="35" maxlength="10" class="boxTF">
+						&nbsp;<span style="font-size: 6pt">(게시물 수정 및 삭제 필요)</span>
+						<%-- <%
+						if(status==1)		// status ==1 → 수정 액션 요청
+						{
+						%>
+						
+						<%
+						}else				// status ==2 → 삭제 액션 요청
+						{
+						%>	
+						
+						<%
+						}
+						%> --%>
+					</dd>
+				</dl>
+			</div><!-- .bbsCreated_noLine -->
+			
+			<div id="bbsCreated_footer">
+				
+				<!-- ※ Updated_ok.jsp 페이지 요청 과정에서 추가로 필요한 데이터 구성 -->
+				<input type="hidden" name="num" value="<%=dto.getNum()%>">
+				<input type="hidden" name="pageNum" value="<%=pageNum%>">
+				
+				<%
+				if(status==1)		// status ==1 → 수정 액션 요청
+				{
+				%>
+				<input type="button" value="수정하기" class="btn2" onclick="sendIt()">
+				<input type="reset" value="다시입력" class="btn2" onclick="document.myForm.subject.focus()">
+				<input type="button" value="작성취소" class="btn2" 
+				 onclick="javascript:location.href='<%=cp%>/List.jsp?pageNum=<%=pageNum%>'">
+				<%
+				}else				// status ==2 → 삭제 액션 요청
+				{
+				%>	
+				<input type="button" value="삭제하기" class="btn2" onclick="removeIt()">
+				<input type="button" value="삭제취소" class="btn2" 
+				 onclick="javascript:location.href='<%=cp%>/List.jsp?pageNum=<%=pageNum%>'">
+				<%
+				}
+				%>				
+			</div>
+			<!-- #bbsCreated_footer -->
+		</div>
+	</form>
+</div>
+<!-- #bbs -->
+
+</body>
+</html>
 ```
 
 <br>
 
-## 7.12. [세션처리-로그인]
+## 7.12. [F_WebApp22: EL 관련 실습]
 
-### 7.12.1. WebApp11_scott.sql
-``` java
-```
-### 7.12.2. ScoreDTO.Java
-``` java
-```
-### 7.12.3. ScoreDAO.Java
-``` java
-```
-### 7.12.4. ScoreList.jsp
+### 7.12.1. Test3.jsp_EL 관련 실습
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/b5d2d388-3fa4-4ec3-b662-eee450994a2d)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/87c9d2aa-dd53-419d-b8cb-a300a18892c4)
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<% 
+	request.setAttribute("result", "EL 테스트 및 관찰");
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test3.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>EL 관련 실습</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	<!-- action 속성 생략 → su1과 su2 데이터를 전송하며 요청하는 페이지는 자기 자신~!!! -->
+	<form action="" method="post">
+		<div class="input_box">
+			정수1<input type="text" name="su1" class="txt" /> 
+			정수2<input type="text" name="su2" class="txt" />
+		</div>
+
+		<div class="btn_box">
+			<button type="submit" class="btn">결과 확인</button>
+		</div>
+	</form>
+
+	<div>
+		<h2>◈ 폼 데이터 수신</h2>
+		<!-- 폼 데이터를 수신하는 방법 1 -->
+		<h3><%=request.getParameter("su1") %></h3>
+		
+		<!-- 폼 데이터를 수신하는 방법 2 -->
+		<h3>${param.su1}</h3>
+	</div>
+	
+	<div>
+		<h2>◈ 폼의 데이터를 받아 연산 수행</h2>
+		
+		<!--  폼의 데이터를 받아 연산을 수행하는 방법 1 -->
+		<%
+			String s1 = request.getParameter("su1");
+			String s2 = request.getParameter("su2");
+		
+			int s = 0;
+			if(s1!=null && s2!=null)
+				s = Integer.parseInt(s1)+Integer.parseInt(s2);
+		%>
+		<h3>합: <%=s %></h3>
+		
+		<!--  폼의 데이터를 받아 연산을 수행하는 방법 2 -->
+		<h3>합: ${param.su1 + param.su2}</h3>
+		<!-- → 파라미터 수신도 알아서... -->
+		<!-- → 필요한 캐스팅(형변환)도 알아서 자동으로 수행... -->
+		<!-- → null 을 대하는 방식...(수신 되었을 때만 노출됨) -->
+		
+	</div>
+	
+	<div>
+		<h2>◈ setAttribute()로 넘긴 데이터 수신</h2>
+		<!-- setAttribute()로 넘긴 데이터를 수신하는 방법 1 -->
+		<h3><%=(String)request.getAttribute("result") %></h3>
+		
+		<!-- setAttribute()로 넘긴 데이터를 수신하는 방법 2 -->
+		<h3>${result }</h3>
+	</div>
+</div>
+
+
+
+
+</body>
+</html>
 ```
-### 7.12.5. ScoreInsert.jsp
+### 7.12.2. Test4.jsp_JSTL 코어(core) if문 실습
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/f16cc7e2-0537-4f94-950e-42c8ac440ba8)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/06f107ab-8b62-43fe-94b4-ee3f26cf0f00)
+
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test4.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div class="layout">
+	<div>
+		<h1>JSTL 코어(core) if문 실습</h1>
+		<hr />
+	</div>
+	
+	<div>
+		<form action="" method="post">
+			<div class="input_box">정수
+				<input type="text" name="su" class="txt" />
+			</div>
+			<div class="btn_box"><button type="submit" class="btn">결과확인</button></div>
+		</form>
+	</div>
+	
+	<div>
+		<%-- <h2>${param.su} </h2> --%>
+		
+		<%-- 『<c:if test=""></c:if>』: JSTL Core if 문 --%>
+		<!-- 『test=""』: 조건식 지정. 파라미터로 수신한 su 값이 존재한다면... -->
+		<!-- 『param.su』: EL 을 이용한 폼 전송 데이터 수신하는 부분 -->
+		<c:if test="${!empty param.su }">
+			<!-- <h2>있다~!!!</h2> -->
+			
+			<!-- 파라미터로 수신한 su가 짝수라면... -->
+			<c:if test="${param.su%2 == 0 }">
+				<h2>${param.su}: 짝수 </h2>
+			</c:if>
+		</c:if>
+		
+		<!-- JSTL Core if 에는... if는 있지만 else 는 없다. -->
+		<c:if test="${param.su%2 != 0 }">
+				<h2>${param.su}: 홀수 </h2>
+		</c:if>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.12.3. Test5.jsp_JSTL 코어(Core) forEach 문 실습
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/4d027e1f-88a8-4f79-b89d-81a3ef8ae883)
+
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+<div>
+	<h1>JSTL 코어(Core) forEach문 실습</h1>
+	<hr>
+</div>
+
+<div class="section">
+	<div class="layout">
+		<table class="table">
+			<%-- <c:forEach var="변수" begin="시작값" end="끝값" step="증가값"> --%>
+			<c:forEach var="a" begin="1" end="9" step="1"> <!-- a → 1 2 3 4 5 6 7 8 9 -->
+				<tr>
+					<c:forEach var="b" begin="1" end="9" step="1"> <!-- b → 1 2 3 4 5 6 7 8 9 -->
+					<td style="width:20px">${a*b} </td>
+					
+					</c:forEach>
+				</tr>
+			
+			</c:forEach>
+		</table>
+	</div>
+</div>
+
+</body>
+</html>
 ```
 
 <br>
 
-## 7.13. [세션처리-로그인]
+## 7.13. [JSTL 코어(Core) forEach문 실습_자료구조 활용]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/3f17e5c9-eb09-4994-864d-eb96b74f9fea)
 
-### 7.13.1. WebApp11_scott.sql
+### 7.13.1. MyData.java_사용자 정의 데이터타입 활용
 ``` java
+/* ================================
+	MyData.java
+	- 사용자 정의 데이터타입 활용
+=================================== */
+
+package com.test;
+
+public class MyData
+{
+	// 주요 속성 구성
+	private String name;
+	private int age;
+		
+	// default 생성자 형태의 사용자 정의 생성자
+	public MyData()
+	{}
+	
+	// 매개변수 2개 사용자 정의 생성자
+	public MyData(String name, int age)
+	{
+		this.name = name;
+		this.age = age;
+	}
+	
+	// getter / setter 구성
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	public int getAge()
+	{
+		return age;
+	}
+	public void setAge(int age)
+	{
+		this.age = age;
+	}
+	
+	
+	
+}
 ```
-### 7.13.2. ScoreDTO.Java
+### 7.13.2. Test6.jsp_JSTL 코어(Core) forEach문 실습
 ``` java
+<%@page import="com.test.MyData"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<%
+	// Test6.jsp
+	//-- 사용자 정의 데이터타입을 취하는 자료구조 생성
+
+	List<MyData> lists = new ArrayList<MyData>();
+	
+	MyData ob = new MyData("길현욱", 15);
+	lists.add(ob);
+	
+	ob = new MyData("최혜인", 23);
+	lists.add(ob);
+	
+	ob = new MyData("정한울", 24);
+	lists.add(ob);
+	
+	ob = new MyData("문정환", 16);
+	lists.add(ob);
+	
+	ob = new MyData("이윤수", 8);
+	lists.add(ob);
+	
+	ob = new MyData("임하성", 17);
+	lists.add(ob);
+	
+	request.setAttribute("lists", lists);
+%>
+<jsp:forward page="Test6_result.jsp"></jsp:forward>
 ```
-### 7.13.3. ScoreDAO.Java
-``` java
-```
-### 7.13.4. ScoreList.jsp
+### 7.13.3. Test6_result.jsp_JSTL 코어(Core) forEach문 실습-자료구조 활용
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test6_result.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+<div class="section">
+	<div>
+		<h2>JSTL 코어(Core) forEach문 실습</h2>
+		<h3>자료구조 활용</h3>
+		<hr />
+	</div>
+	
+	<div class="layout">
+		
+		<div>
+			<table class="table">
+				<tr>
+					<th>이름</th>
+					<th>나이</th>
+				</tr>
+				
+				<!-- 컬렉션 객체 접근용(출력용) 반복문 구성 -->
+				<!-- **c:forEach에서 items를 꼭 먼저 쓸 것!** -->
+				<c:forEach var="dto" items="${lists }">
+				<tr>
+					<td style="text-align:center;">${dto.name } </td>
+					<td style="text-align:center;">${dto.age } </td>
+					<!-- **속성만 명시하면 getter 메소드 알아서 호출** -->
+				</tr>
+				</c:forEach>
+			</table>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.13.4. Test7.jsp_JSTL 코어(Core) set문 실습-지수승 구하기
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/a14c0928-3a90-481a-89af-b0d43ac2dc44)
+
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test7.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+<div class="section">
+	<div>
+		<h1>JSTL 코어(Core) set문 실습</h1>
+		<h2>지수승 구하기</h2>
+		<hr />
+	</div>
+	<div class="layout">
+		<div class="info_box">
+			<p>『c:set』은 JSP의 setAttribute()와 같은 역할을 수행한다.</p>
+			<p>(page : request | session | application)
+				범위의 변수(속성)를 설정한다.</p>
+			<p>『c:remove』는 JSP의 removeAttribute()와 같은 역할을 수행한다.</p>
+			<p>(page : request | session | application)
+				범위의 변수(혹성)를 제거한다.</p>
+			<p>scope 속성이 생략될 경우 기본 값(default)은 page 이다.</p>
+		</div>
+		<br>
+		<div>
+			<!-- 수신처는 자기 자신~!!! -->
+			<form action="" method="post">
+				<div class="input_box">
+					정수1 <input type="text" name="su1" class="txt" />
+					정수2 <input type="text" name="su2" class="txt" />
+				</div>
+				<div class="btn_box">
+					<button type="submit" class="btn">결과 확인</button>
+				</div>
+			</form>
+		</div>
+		
+		<div>
+			<!-- request.getParameter("su1")로 수행한 결과값이 존재할 경우 처리 -->
+			<c:if test="${!empty param.su1 }">
+				<%-- 『<c:set var="변수" value="값"></c:set>』 --%>
+				<%-- → 변수의 값을 지정하는 구문 --%>
+				<%-- → 해당 스코프에 지정된 변수가 존재하지 않을 경우
+						변수를 새로 선언하여 초기화 하는 기능을 수행하게 되며
+						해당 스코프에 이미 지정된 변수가 존재할 경우
+						그 변수의 값을 다시 초기화하는 (덮어쓰기) 효과가 적용된다. --%>
+				
+				<%-- 변수를 선언하는 구문XXXX(아님) -> 선언하면 변수 재 선언 불가능하다고 이해하기 쉬우므로,
+					값을 지정하는 구문이라고 이해할 것.
+				 --%>
+																				<!-- su1:8, su2:7 -->
+				<c:set var="result" value="1"></c:set>    						<!-- result = 1 -->
+				<c:forEach var="a" begin="1" end="${param.su2 }" step="1">		<!-- for(int a=1; a<7; i++) -->
+					<c:set var="result" value="${result * param.su1 }"></c:set>	<!-- result = result*8 -->
+					<p>${param.su1 } ^ ${a } = ${result }</p>					<!-- su1 ^ a = result -->
+																				<!-- 8^1  = 8
+																						2 = 
+																				 -->
+				</c:forEach>
+			</c:if>
+		</div>
+	</div>
+	
+</div>
+
+</body>
+</html>
 ```
 ### 7.13.5. ScoreInsert.jsp
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/0f5bf15e-416b-4f54-b4f6-f60284a4ffb7)
+
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Gugudan.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+<div class="section">
+	<div>
+		<h1>JSTL 코어(Core)를 활용한 구구단 출력</h1>
+		<hr />
+	</div>
+	<div class="layout">
+		<form action="">원하는 단 입력
+			<div class="input_box">
+				<input type="text" name="dan" class="txt" />
+			</div>
+	
+			<div class="btn_box">
+				<button type="submit" class="btn">결과 확인</button>	
+			</div>		
+		</form>
+	</div>
+	
+	<div>
+		<c:if test="${!empty param.dan }">			
+			<c:set var="result" value="1"></c:set>
+			
+			<c:forEach var="i" begin="1" end="9" step="1">
+				<p>${param.dan } * ${i } = ${param.dan * i }</p>
+			</c:forEach>
+			
+		</c:if>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.13.6. Test8.jsp_JSTL 코어(Core) choose 문 실습-배수확인하기
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/7f9300c3-0cf1-453b-8a51-06d846a6ed7e)
+
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test8.jsp</title>
+<%-- <link rel="stylesheet" type="text/css" href="css/main.css"> --%>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>JSTL 코어(Core) choose문 실습</h1>
+	<h2>배수확인하기</h2>
+	<hr />
+</div>
+
+<div class="layout">
+	<form action="" method="post">
+		정수 <input type="text" name="su" class="txt" />
+		
+		<button type="submit" class="btn">결과 확인</button>
+	</form>
+	
+	<div>
+		<c:if test="${!empty param.su }">
+			<%-- JSTL 사용하는 구문에서는 JSP 주석 사용하기~~!!  --%>
+		
+			<%-- ${param.su } --%>
+		
+			<%-- <c:choose></c:choose> --%>
+			<%-- → JSTL Core 에서 if ~ else 를 대신할 수 있는 구문 --%>
+			
+			<%-- <c:choose>
+				<c:when test="${param.su % 3 == 0 }">
+					<p>${param.su }은(는) 3의 배수~!!!</p>
+				</c:when>
+				else
+				<c:otherwise>
+					<p>${param.su }은(는) 3의 배수가 아님~!!!</p>
+				</c:otherwise>
+			</c:choose> --%>
+			
+			
+			
+			<%-- 문제) 3 배수 / 4의 배수 / 3 과 4의 배수 / 3 또는 4의 배수 아님 --%>
+			
+			<%-- 내가 푼 풀이 --%>
+			<%-- <p>${param.su}는</p>
+			<c:choose>
+				<c:when test="${(param.su % 3 == 0) || (param.su % 4 == 0)}">
+					<c:choose>
+						<c:when test="${(param.su % 3 == 0) && (param.su % 4 == 0)}">
+							<p>3 과 4의 배수</p>					
+						</c:when>
+						<c:otherwise>
+							<c:choose>
+								<c:when test="${param.su % 3 == 0 }">
+									<p>3 배수</p>
+								</c:when>
+								<c:when test="${param.su % 4 == 0 }">
+									<p>4 배수</p>
+								</c:when>
+							</c:choose>
+						</c:otherwise>
+					</c:choose>
+				</c:when>
+				<c:otherwise>
+						<p>3 또는 4의 배수 아님</p>					
+				</c:otherwise>
+			</c:choose>
+			--%>
+			
+			<%-- 함께 푼 풀이 --%>
+			<c:choose>
+				<c:when test="${(param.su % 3 == 0) && (param.su % 4 == 0)}">
+					<p>3 과 4의 배수</p>
+				</c:when>
+				
+				<c:when test="${(param.su % 3 == 0)}">
+					<p>3 의 배수</p>
+				</c:when>
+				
+				<c:when test="${(param.su % 4 == 0)}">
+					<p>4 의 배수</p>
+				</c:when>
+				
+				<c:otherwise>
+					<p>3 또는 4의 배수 아님</p>					
+				</c:otherwise>
+			</c:choose>
+			
+		</c:if>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.13.7. Test9.jsp_JSTL 코어(Core) import 문 실습
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/42f1f64d-4e35-407c-ba6f-5d7c9f74bc34)
+
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>JSTL 코어(Core) import문 실습</h1>
+	<hr>
+</div>
+
+<div>
+	<p>『c:import』 는 URL 처리에 관여하며, 
+	URL을 활용하여 다른 자원의 결과를 삽입할 때 사용한다.</p>
+</div>
+
+<!-- 변수 지정 -->
+<c:set var="url" value="Gugudan.jsp"></c:set>
+
+<!-- import 를 수행 -->
+<c:import url="${url }" var="impt">
+	<%-- import 를 수행하며 해당 페이지가 필요로하는 파라미터 넘기기 --%>
+	<c:param name="dan" value="7"></c:param>
+</c:import>
+
+
+<!-- 결과 화면 출력 -->
+<c:out value="${impt }"></c:out>
+<!-- 결과 화면 출력 과정에서 HTML 코드를 그대로 출력하도록 처리하는 구문 -->
+<!-- 『escapeXml』 속성의 기본값(default> 은 true로 설정되어 있다. -->
+
+<!-- 결과 화면 출력 -->
+<c:out value="${impt }" escapeXml="false"></c:out>
+
+</body>
+</html>
 ```
 
 <br>
 
-## 7.14. [세션처리-로그인]
+## 7.14. [JSTL 코어(Core)를 활용한 회원 정보 입력]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/eb25e7df-c04b-488a-9407-20a8e9ab031b)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/221ceb70-03a4-40e6-a472-b0ea87317988)
 
-### 7.14.1. WebApp11_scott.sql
+### 7.14.1. MemberDTO.java
 ``` java
+// MemberDTO.java
+
+package com.test;
+
+public class MemberDTO
+{
+	String name, tel, add;
+	
+	public MemberDTO()
+	{}
+
+	public MemberDTO(String name, String tel, String add)
+	{
+		this.name = name;
+		this.tel = tel;
+		this.add = add;
+	}
+	
+	// getter, setter
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getTel()
+	{
+		return tel;
+	}
+
+	public void setTel(String tel)
+	{
+		this.tel = tel;
+	}
+
+	public String getAddr()
+	{
+		return add;
+	}
+
+	public void setAddr(String add)
+	{
+		this.add = add;
+	}
+	
+	
+}
 ```
-### 7.14.2. ScoreDTO.Java
+### 7.14.2. MemberInsert.jsp
 ``` java
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.test.MemberDTO"%>
+<%@page import="java.util.List"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<%
+	// MemberInsert.jsp
+	
+	// 5명 분 데이터 수신 → 객체 구성 → 자료구조 구성 →setAttribute()
+	//						 MemberDTO
+	
+	// → MemberList.jsp 에서 출력
+
+	List<MemberDTO> lists = new ArrayList<MemberDTO>();
+
+	MemberDTO member = new MemberDTO();
+	
+	for(int i=1; i<=5; i++)
+	{
+		/* **내가 푼 풀이** */
+		String name = request.getParameter("name" + i);
+		String tel = request.getParameter("tel" + i);
+		String add = request.getParameter("add" + i);
+		
+		member = new MemberDTO(name,tel,add);
+		
+		/* **함께 푼 풀이** */
+		/* MemberDTO member = new MemberDTO(
+								request.getParameter("name"+i)
+							  , request.getParameter("tel"+i)
+							  , request.getParameter("add" + i)); */
+		
+		lists.add(member);
+	}
+	
+	request.setAttribute("lists", lists);
+	
+%>
+
+<jsp:forward page="MemberList.jsp"></jsp:forward>
 ```
-### 7.14.3. ScoreDAO.Java
-``` java
-```
-### 7.14.4. ScoreList.jsp
+### 7.14.3. MemberInsertForm.jsp_회원 정보 입력
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MemberInsertForm.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h2>JSTL 코어(Core)를 활용한 회원 정보 입력</h2>
+	<hr />
+</div>
+
+<div class="layout">
+	<form action="MemberInsert.jsp" name="myForm" method="post">
+	
+		<!-- (이름, 전화번호, 주소) * 5명 분 -->
+		<!-- → submit 액션 처리 -->
+		
+		<c:forEach var="a" begin="1" end="5" step="1">
+		<div class="input_box" style="display: inline-block;">
+			<ul>
+				<li><span class="tit">이름: </span><input type="text" name="name${a }" value="입력한이름${a }"/></li>
+				<li><span class="tit">전화번호: </span><input type="text" name="tel${a }" value="${a }10-0000-0000"/></li>
+				<li><span class="tit">주소: </span><input type="text" name="add${a }" value="입력한주소${a }"/></li>
+			</ul>
+		</div>
+		<br><br>
+		</c:forEach>
+		<div class="btn_box"><button type="submit" class="btn">결과</button></div>
+		
+		
+		<!-- 함께 푼풀이 -->
+		<%-- 
+		<c:set var="i" value="1"></c:set>
+		<c:forEach var="a" begin="1" end="5" step="1">
+			<input type="text" name="name${a }">
+			<c:set var="i" value="${i+1 }"></c:set>
+		</c:forEach>
+		 --%>
+		
+		
+	</form>
+</div>
+
+</body>
+</html>
 ```
-### 7.14.5. ScoreInsert.jsp
+### 7.14.4. MemberList.jsp_회원 명단 출력
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MemberList.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>JSTL 코어(Core) 문제 해결</h1>
+	<h2>회원 명단 출력</h2>
+	<hr />
+</div>
+
+<div class="layout">
+	<!-- 5명의 이름, 전화번호, 주소 출력 -->
+	<%-- <c:forEach var="a" begin="1" end="5" step="1">
+		<div class="input_box" style="display: inline-block;"> --%>
+			<%-- <ul>
+				<li><span class="tit">이름: </span>${param.name${a}}</li>
+				<li><span class="tit">전화번호: </span>${param.tel${a}}</li>
+				<li><span class="tit">주소: </span>${param.addr${a}}</li>
+			</ul> --%>
+		<%-- </div>
+		<br><br>
+	</c:forEach> --%>
+	<c:forEach var="dto" items="${lists }">
+		<ul class="info_box" style="display:inlne-block;">
+			<li><span class="tit">이름: </span>${dto.name } </td></li>
+			<li><span class="tit">전화번호: </span>${dto.tel } </td></li>
+			<li><span class="tit">주소: </span>${dto.addr } </td></li>
+		</ul>
+		<br>
+	</c:forEach>
+</div>
+
+</body>
+</html>
 ```
 
 <br>
 
-## 7.15. [세션처리-로그인]
+## 7.15. [F_WebApp23: DBCP를 활용한 데이터베이스 접속 실습]
 
-### 7.15.1. WebApp11_scott.sql
+### 7.15.1. /WEB-INF/web.xml
 ``` java
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>WebApp00</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- DBCP -->
+  <resource-ref>
+  	<description>Oracle DataSource</description>
+  	<res-ref-name>jdbc/myOracle</res-ref-name>
+  	<res-type>javax.sql.DataSource</res-type>
+  	<res-auth>Container</res-auth>
+  </resource-ref>
+  
+  
+</web-app>
 ```
-### 7.15.2. ScoreDTO.Java
+### 7.15.2. DBCPAction.jsp
 ``` java
-```
-### 7.15.3. ScoreDAO.Java
-``` java
-```
-### 7.15.4. ScoreList.jsp
-``` html
-```
-### 7.15.5. ScoreInsert.jsp
-``` html
+<%@page import="java.sql.Connection"%>
+<%@page import="com.util.DBCPConn"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<%
+	Connection conn = DBCPConn.getConnection();
+	
+	String result ="";
+	if(conn !=null)
+	{
+		result = "데이터베이스 연결 성공~!!!";
+	}
+	else
+	{
+		result = "데이터베이스 연결 실패 ㅠㅠ";
+	}
+	
+	DBCPConn.close();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DBCPAction.jsp</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>DBCP를 활용한 데이터베이스 접속 실습</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	<h2><%=result %></h2>
+</div>
+
+</body>
+</html>
 ```
 
 <br>
