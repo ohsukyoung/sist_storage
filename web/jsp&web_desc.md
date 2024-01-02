@@ -7359,7 +7359,7 @@ public class MyData
 </body>
 </html>
 ```
-### 7.13.5. ScoreInsert.jsp
+### 7.13.5. Gugudan.jsp_JSTL 코어(Core)를 활용한 구구단 출력
 ![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/0f5bf15e-416b-4f54-b4f6-f60284a4ffb7)
 
 ``` html
@@ -7865,222 +7865,5418 @@ public class MemberDTO
 
 <br>
 
-## 7.16. [세션처리-로그인]
+## 7.16. [F_JQueryApp]
 
-### 7.16.1. WebApp11_scott.sql
-``` java
-```
-### 7.16.2. ScoreDTO.Java
-``` java
-```
-### 7.16.3. ScoreDAO.Java
-``` java
-```
-### 7.16.4. ScoreList.jsp
+### 7.16.1. JQTest01.html_.each(), .hover()
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/2a3e2c20-bb66-4a18-bb53-2e850e9bfc82)
+
 ``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jQTest01.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+#navigation > li a span{text-transform: capitalize;}
+</style>
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+	//jquery();
+	$(function()
+	{
+		var d=300;
+		$("#navigation a").each(function(){
+			$(this).stop().animate({"marginTop": "-80px"}, d+=150);
+		});
+		
+		$("#navigation > li").hover(function(){
+			//alert("관찰");
+			$("a", $(this)).stop().animate({"marginTop":"-2px"}, 100);
+		}, function(){
+			$("a", $(this)).stop().animate({"marginTop":"-80px"}, 900)	
+		});
+	});
+</script>
+
+</head>
+<body class="section">
+
+<table>
+	<tr>
+		<td>
+			<ul id="navigation">
+				<li class="home"><a href="#"><span>home</span></a></li>
+				<li class="about"><a href="#"><span>about</span></a></li>
+				<li class="search"><a href="#"><span>search</span></a></li>
+				<li class="podcasts"><a href="#"><span>podcasts</span></a></li>
+				<li class="rssfeed"><a href="#"><span>rssfeed</span></a></li>
+				<li class="photos"><a href="#"><span>photos</span></a></li>
+				<li class="contact"><a href="#"><span>contact</span></a></li>
+			</ul>
+		</td>
+	</tr>
+</table>
+
+
+
+</body>
+</html>
 ```
-### 7.16.5. ScoreInsert.jsp
+### 7.16.2. JQTest02.html_jquery(), jquery(document).ready(), $(), $(document).ready()
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/58fa43ce-374e-4588-a01a-8de231b94883)
+
 ``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jQTest02.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+	function test()
+	{
+		alert("함수 호출");
+		var a = 10;
+	}
+	
+	//jquery();
+	//jquery(document).ready();
+	//$();
+	//$(document).ready();
+	
+	/* 
+	$(document).ready(function()
+	{
+		//alert("함수 호출");
+		//test();	
+		
+		// ※ 우리가... 또는 이 페이지를 이용하는 사용자가...
+		//		뭔가 건드리지 않아도...
+		//		(즉, 특별한 이벤트를 발생시키지 않더라도...)
+		// 		자동으로 처리할 수 있는 영역
+		
+	});
+	 */
+	
+	$(function()
+	{
+		//alert("함수 호출");
+		
+		// h1이 클릭되었을 때 어떤 동작을 할 수 있도록 처리
+	 	//								↓
+		//$("h1").click(h1이 클릭되었을 때 수행되어야 할 동작, 기능, 행위);
+	 	//								↓
+		//$("h1").click(h1이 클릭되었을 때 수행되어야 할 함수 정의);
+	 	//								↓
+		//$("h1").click(이름이 필요없는 함수 정의);
+	 	
+	 	$("h1").click(function()
+	 	{
+	 		//alert("클릭되었네요~ ㅎㅎㅎ");
+	 		//alert($(this).html());
+	 		//$(this).html("어떻게 될까요?");
+	 		$(this).html($(this).html() + "★");
+	 	})
+	 	
+	 	
+	});
+	
+	
+</script>
+
+</head>
+<!-- <body onload="test()"> -->
+<body>
+	<h1>김지민</h1>
+	<h1>엄재용</h1>
+	<h1>이주형</h1>
+	<h1>김동민</h1>
+	<h1>강혜성</h1>
+
+</body>
+</html>
+```
+### 7.16.3. JQTest03.html_$(this).html()
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/0849af5f-fb4b-4664-949a-94e67e0f6d6c)
+
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQTest03.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<style type="text/css">
+*{margin:0px;padding:0px;}
+div{margin:5px;padding:3px;border:3px solid black;border-radius: 10px;}
+</style>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		//alert("제이쿼리 인식~!!!");
+		
+		//$("div").click(동작);
+		
+		$("div").click(function()
+		{
+			//alert("테스트");
+			
+			//alert($(this).html());
+			//	 -------- 클릭된 엘리먼트 객체 → (현재시점에선)div
+			//--==>>
+			/*
+				<h1>A강의실</h1>
+				<p>JAVA 수업 중</p>
+			*/
+			
+			//alert($(this).text());
+			//--==>>
+			/*
+				A강의실
+				JAVA 수업 중
+			*/
+			
+			//alert($("h1",this).text());
+			//--==>> A강의실
+			//alert($("p",this).text());
+			//--==>> JAVA 수업 중
+			
+			var h1 = $("h1",this).text();
+			var p = $("p",this).text();
+			
+			alert(h1 + " / " + p);
+			//--==>> A강의실 / JAVA 수업 중
+		});
+		
+	});
+</script>
+
+</head>
+<body>
+
+<div>
+	<h1>A강의실</h1>
+	<p>JAVA 수업 중</p>
+</div>
+<div>
+	<h1>B강의실</h1>
+	<p>닷넷 수업 중</p>
+</div>
+<div>
+	<h1>C강의실</h1>
+	<p>오라클 수업 중</p>
+</div>
+<div>
+	<h1>D강의실</h1>
+	<p>ASP 수업 중</p>
+</div>
+<div>
+	<h1>E강의실</h1>
+	<p>JSP 수업 중</p>
+</div>
+<div>
+	<h1>F강의실</h1>
+	<p>제이쿼리 수업 중</p>
+</div>
+
+</body>
+</html>
+```
+### 7.16.4. JQTest04.html_$(this).text()
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/7c72b245-0956-452a-8adc-b9ed57f25760)
+
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQTest04.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function()
+	{
+		/* $("h1").on("click",function()
+		{
+			
+			$(this).html(function()
+			{
+				return html+"★";
+			});
+		}) */
+		
+		$("h1").on("click",function()
+		{
+			
+			$(this).text($(this).text()+"★");
+			//console.log($(this).html()+"★");
+			//$(this).html($(this).html() + "★");
+		});
+		
+		// ※ 이벤트 강제 발생시키기: trigger(트리거)
+		$("input[type=button]").click(function()
+		{
+			//alert("확인~!!!");
+			
+			// 강제로 첫 번째 h1 태그에 click 이벤트를 발생시키도록 하겠다.
+			//$("h1").first().click();
+			
+			// 강제로 마지막 h1 태그에 click 이벤트를 발생시키도록 하겠다.
+			$("h1").last().click();
+			
+		});
+		
+	});
+</script>
+
+</head>
+<body>
+
+<input type="button" value="트리거 작동" />
+<hr>
+
+<h1>click start1: </h1>
+<h1>click start2: </h1>
+
+
+</body>
+</html>
+```
+### 7.16.5. JQTest05.html_키보드 관련 이벤트
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/fc684192-2486-428a-96d8-0649b68ae373)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/18a999c6-f787-49dc-a6d5-2854ab99bf6b)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/223123fc-eaa2-4ab0-b419-7dc94f518e37)
+
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQTest05</title>
+<link rel="stylesheet" type="text/css" href="css/style_.css">
+
+<style type="text/css">
+.outer{width:200px;height:200px;background:orange;padding:50px;margin:10px;}
+.inner{width:100%;height:100%;background:red;}
+</style>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+	
+	$(document).ready(function()
+	{
+		//alert("확인");
+		
+		// ◈ 키보드 관련 이벤트 ------------------------------------------------------
+		//$("textarea").keydown(동작);
+		//$("textarea").keydown(function()
+		$("textarea").keyup(function()
+		{
+			//alert("확인");
+			
+			// 입력 컨트롤(textarea)에 입력된 값을 경고창을 통해 확인
+			//alert($(this).html());		//--html() → (x)
+			//alert($(this).text());			//--text() → (x)
+			//alert($(this).val());			//--val() → (o) -> 값은 가져오지만, keydown일 시입력하기 이전의 값을 가져옴
+			
+			var len = $(this).val().length;
+			//alert(len);
+			
+			var remain = 30 - len;
+			//alert(remain);
+			
+			$("h3").html(remain);
+			
+			// remain 이 0이 되었을 경우...
+			// 입력을 막아버린다던지.. 경고창을 띄우던지..
+			// 등의 추가적인 액션 처리를 할 수 있다.
+			
+			if(remain<=10 && remain>=1)
+			{
+				$("h3").css("color","orange");
+			}
+			else if(remain <= 0)
+			{
+				$("h3").css("color","red").html("더 이상 입력 불가");
+				$(this).css("background","#f2f2f2").attr("disabled","disabled");
+				
+			}
+			else
+			{
+				$("h3").css("color","black");
+			}
+			
+			$("button").click(function()
+			{
+				$("textarea").removeAttr("disabled");
+				$("textarea").focus();
+				$("textarea").css("background","inherit")
+			})
+		});
+		
+		// ◈ 마우스 관련 이벤트 ------------------------------------------------------
+		/* mouseover는 */
+		$(".outer").mouseover(function()
+		{
+			//alert("확인");
+			$("body").append($("<div>mouseover</div>").css("color","blue"));
+			
+		}).mouseenter(function()
+		{
+			$("body").append($("<div>mouseenter</div>").css("color","red"));
+		});
+	});
+	
+</script>
+
+</head>
+<body class="section">
+
+<div class="layout">
+	<div>
+		<h1>키보드 관련 이벤트</h1>
+		<hr />
+		
+		<div class="info_box" style="display:inline-block;">
+			<ul>
+				<li>1. keydown: 	키가 눌렸을 때 </li>
+				<li>2. keypress: 	키가 아래로 눌려졌을 때 </li>
+				<li>3. keyup 순으로 이벤트 발생 </li>
+			</ul>
+		</div>
+	
+		<div class="result_box">
+			<p>남기고 싶은 말</p>
+			<h3>30</h3>
+			<textarea name="" id="" cols="70" rows="5"></textarea>
+			
+			<button type="button" class="btn">해제</button>
+		</div>
+	</div>
+	
+	<div>
+		<h1>마우스 관련 이벤트</h1>
+		<hr />
+		
+		<div class="info_box" style="display:inline-block;">
+			<ul>
+				<li>mouseenter</li>
+				<li>mouseleave</li>
+				<li>mousemove</li>
+				<li>mouseout</li>
+				<li>mouseover</li>
+				<li>mouseup 등</li>
+			</ul>
+		</div>
+	
+		<div class="result_box">
+			<div class="outer">
+				 <!-- mouseover영역: enter 뒤에도 존재! -->
+				<div class="inner">
+					<!-- mouseenter -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.16.6. JQTest06.html_.scroll(), $(document).height(): 문서 높이, $(document).height():브라우저 높이
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/2e73d401-65f0-481f-a80f-b5e0a8e8d9a1)
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQTest06.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		// 초기 게시물 구성 → 스크롤 생성 ---------------------------------
+		var docHeight = $(document).height();	// **$(document).height(): 문서의 높이**
+		
+		// 테스트
+		//alert(docHeight);
+		//--==>>886 	// 숫자가 다를 것
+		
+		// 테스트
+		//alert($(window).scrollTop());
+		//alert($(window).height());				//**$(window).height(): 브라우저 높이**
+		
+		var scrollHeight = $(window).scrollTop() + $(window).height();
+		
+		for(var i=0; i<30; i++)
+		{
+			$("<h3>기존의 읽어온 게시물 "
+					+ $(document).height() + "/"
+					+ $(window).scrollTop() + "/"	//**같은 값 유지**
+					+ $(window).height() 			//**같은 값 유지**
+					+ "</h3>").appendTo("body");
+			// append  와 .appendTo는 붙이는 위치가 다름
+			// append: 	 기준 append 붙이는 위치
+			// appendTo: 붙이는 위치 appendTo 기준 
+		}
+		
+		// --------------------------------- 초기 게시물 구성 → 스크롤 생성 
+	
+		$(window).scroll(function()
+		{
+			// 테스트
+			//alert("확인");
+			
+			var docHeight = $(document).height();
+			var scrollHeight = $(window).scrollTop() + $(window).height();
+			
+			// 스크롤이 바닥으로 내려졌을 때
+			// 태그 10개 추가하여 body에 붙이기
+			if(docHeight == scrollHeight)
+			{
+				for (var i = 0; i < 10; i++)
+				{
+					$("<h3>추가로 읽어온 게시물 "
+							+ $(document).height() + "/"
+							+ $(window).scrollTop() + "/"
+							+ $(window).height()
+							+ "</h3>").appendTo("body");
+				}
+			}
+		});
+		
+	});
+</script>
+</head>
+<body>
+	
+</body>
+</html>
+```
+### 7.16.7. JQTest07.html_type="checkbox" 속성 선택
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/0ed4594d-b54b-4f9c-87bb-5fc92e06f0c6)
+
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQTest07.html</title>
+<link rel="stylesheet" type="text/css" href="css/main.css">
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+
+   /*
+   $(function()
+   {
+      
+   });
+   */
+   
+   $(document).ready(function()
+   {
+      /*
+      $("#allCheck").change(function()
+      {
+         // 테스트
+         alert("change~!!!");
+      });
+      */
+      
+      $("#allCheck").click(function()
+      {
+         // 테스트
+         // alert("click~!!!");
+         
+         // 테스트
+         //alert( $(this).attr("checked") );      //-- undefined / undefined
+         
+         //alert( $(this).prop("checked") );      //-- 속성 → true / false
+         //alert( this.checked );            //-- 속성 → true / false
+         //alert( $(this).is(":checked") );      //-- 속성 → true / false
+         
+         // 방법 1.
+         //$("div > input:checkbox").prop("checked", this.checked);
+         
+         // 방법 2.
+         // 『$(선택자).children()』
+         $("div").children().prop("checked",this.checked);
+         
+         
+         
+      });
+   });
+
+</script>
+
+</head>
+<body>
+
+<label>
+   <input type="checkbox" id="allCheck">
+   <span style="font-weight: bold;">모두 선택</span>
+</label>
+
+<div>
+   <input type="checkbox" id="check1"><label for="check1">바나나</label><br>
+   <input type="checkbox" id="check2"><label for="check2">딸기</label><br>
+   <input type="checkbox" id="check3"><label for="check3">복숭아</label><br>
+   <input type="checkbox" id="check4"><label for="check4">수박</label><br>
+   <input type="checkbox" id="check5"><label for="check5">멜론</label><br>
+   
+   <!--
+    <label>
+      <input type="checkbox">딸기
+   </label><br>
+   <label>
+      <input type="checkbox">복숭아
+   </label><br>
+   <label>
+      <input type="checkbox">수박
+   </label><br>
+   <label>
+      <input type="checkbox">멜론
+   </label><br> 
+   -->
+   
+</div>
+
+</body>
+</html>
+```
+### 7.16.8. JQTest08.html_toggle
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/898974a4-903f-410e-8b7f-c667750873c6)
+
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQTest08</title>
+<link rel="stylesheet" type="text/css" href="css/style_.css">
+<style type="text/css">
+	div.page{border: 1px solid gray;padding:3px;margin:2px;position:absolute;right: 10px;
+		/* top:88px; */top:208px;}
+</style>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("button").css({"display":"block", "width":"200px"});
+		
+		$("button").click(function()
+		{
+			//$(".page").toggle("slow");
+			//$(this).next().toggle("slow");
+			
+			// 『$(선택자).next()』: document 구조 상 다음 엘리먼트
+			
+			//$(this).next().toggle(500);		// **숫자가 클수록 느림**
+			//$(this).next().toggle(300);
+			//$(this).next().toggle(100);
+			
+			//$(this).next().toggle(300, 동작);
+			$(this).next().toggle(300, function()
+			{
+				alert("토글 기능 테스트 완료~!!!");
+			});
+		});
+	});
+</script>
+
+</head>
+<body class="section">
+
+
+<div class="layout">
+	<div>
+		<h1>toggle</h1> <!-- 에스키모 단추? -->
+		<br>
+	</div>
+	
+	<div class="info_box">
+		show()/hide()/toggle()<br>
+		slideDown()/slideUp()/slideToggle()<br>
+		fadeIn()/fadeOut()/fadeToggle()<br>
+	</div>
+</div>
+
+<button class="btn">Toggle(토글) 버튼</button>
+<div class="page">
+	<h1>jQuery Toggle</h1>
+	<p>
+		show()/hide()<br>
+		toggle()<br>
+		slideDown()/slideUp()<br>
+		slideToggle()<br>
+		fadeIn()/fadeOut()<br>
+		fadeToggle()<br>
+	</p>
+</div>
+
+<button class="btn">Toggle(토글) 버튼</button>
+<div class="page">
+	<h1>jQuery Toggle</h1>
+	<p>
+		show()/hide()<br>
+		toggle()<br>
+		slideDown()/slideUp()<br>
+		slideToggle()<br>
+		fadeIn()/fadeOut()<br>
+		fadeToggle()<br>
+	</p>
+</div>
+
+<button class="btn">Toggle(토글) 버튼</button>
+<div class="page">
+	<h1>jQuery Toggle</h1>
+	<p>
+		show()/hide()<br>
+		toggle()<br>
+		slideDown()/slideUp()<br>
+		slideToggle()<br>
+		fadeIn()/fadeOut()<br>
+		fadeToggle()<br>
+	</p>
+</div>
+
+<button class="btn">Toggle(토글) 버튼</button>
+<div class="page">
+	<h1>jQuery Toggle</h1>
+	<p>
+		show()/hide()<br>
+		toggle()<br>
+		slideDown()/slideUp()<br>
+		slideToggle()<br>
+		fadeIn()/fadeOut()<br>
+		fadeToggle()<br>
+	</p>
+</div>
+
+<button class="btn">Toggle(토글) 버튼</button>
+<div class="page">
+	<h1>jQuery Toggle</h1>
+	<p>
+		show()/hide()<br>
+		toggle()<br>
+		slideDown()/slideUp()<br>
+		slideToggle()<br>
+		fadeIn()/fadeOut()<br>
+		fadeToggle()<br>
+	</p>
+</div>
+
+</body>
+</html>
+```
+### 7.16.9. JQTest09.html_jquery.innerfade.js
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/45d27152-2b20-4c1a-82bd-fd3c2c9c1786)
+
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQTest09.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+	ul{list-style:none;}
+</style>
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.innerfade.js"></script>
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		// jquery.innerfade.js
+		
+		$("#innerFade").innerfade(
+		{
+			animationtype: 'fade'	// Type of animation 'fade' or 'slide' (Default: 'fade')
+			, speed: 'slow'			// Fading-/Sliding-Speed in milliseconds or keywords (slow, normal or fast) (Default: 'normal')
+			, timeout: '2000'		// Time between the fades in milliseconds (Default: '2000')
+			, type: 'random'		// Type of slideshow: 'sequence', 'random' or 'random_start' (Default: 'sequence') 
+		}		
+		);
+		
+	})
+</script>
+
+</head>
+<body>
+
+<ul id="innerFade">
+	<li><img src="images/obj01.jpg" alt="" style="width:50%" /></li>
+	<li><img src="images/obj02.jpg" alt="" style="width:50%" /></li>
+	<li><img src="images/obj03.jpg" alt="" style="width:50%" /></li>
+	<li><img src="images/obj04.jpg" alt="" style="width:50%" /></li>
+	<li><img src="images/obj05.jpg" alt="" style="width:50%" /></li>
+</ul>
+
+</body>
+</html>
+```
+### 7.16.10. JQTest10.html_일정: 자바스크립트
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/fcf57202-c3ea-47b0-a107-b8d4d0636d84)
+
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQTest10.html</title>
+<link rel="stylesheet" type="text/css" href="css/style_.css">
+<style type="text/css">
+body,div,span,table,th,td{font-size: 12px;}
+#list{border: 1px solid gray;border-collapse:collapse;width:800px;}
+#list th{width:152px;}
+#list td{width:162px;}
+#list th, #list td{border: 1px solid gray;padding:3px;}
+</style>
+
+<script type="text/javascript">
+function add(){
+	
+	var item = document.getElementById("item").value;				// 제목
+	var week = Number(document.getElementById("week").value);		// 요일
+	var start = Number(document.getElementById("start").value);	// 시작시간
+	var end = Number(document.getElementById("end").value);		// 종료시간
+	var color = document.getElementById("color").value;				// 색상
+	//console.log(tit+'/'+week+'/'+start+'/'+end+'/'+color);
+	
+	
+	// 내가푼 풀이 -----------------------------------------------------------------
+	/* 
+	if(start<=end){
+		for(var i = start; i<=end; i++){
+			var changeE = document.getElementById("list").getElementsByTagName("tr")[i].getElementsByTagName("td")[week-1];
+			
+			changeE.innerText = item;
+			changeE.style.backgroundColor = color;
+		}
+	}
+	 */
+	
+	// 함께 푼 풀이 -----------------------------------------------------------------
+	var tds = document.getElementsByTagName("td");				// 모든 태그들
+	//alert(tds.length);
+	
+	// 월 11:00 ~ 12:00
+	// → 0; 4; i+4;
+	
+	// 요일 0 1 2 3
+	// 요일 (td) 이 4가지 이기 때문에... → *4
+	//for(var i = (week + (start-1) * 4); i<=(week+(end-1)*4); i+=4)		//→ 0 1 2 3
+	for(var i = ((week-1) + (start-1) * 4); i<=((week-1)+(end-1)*4); i+=4)	//→ 1 2 3 4
+	{
+		tds[i].innerText = item;
+		tds[i].style.backgroundColor = color;
+	};
+}
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>일정: 자바스크립트</h1>
+	<hr />
+</div>
+
+<div class="layout">
+<table id="list">
+	<tr>
+		<th>&nbsp;</th>
+		<th>월</th>
+		<th>화</th>
+		<th>수</th>
+		<th>목</th>
+	</tr>
+	<tr>
+		<th>11:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>12:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>13:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>14:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>15:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>16:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>17:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>18:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+</table>
+</div>
+
+<div style="margin-top: 20px;">
+	<label for="item">제목</label>
+	<input type="text" id="item" value="테스트">
+	<br>
+	
+	<label for="week">날짜</label>
+	<select name="week" id="week">
+		<!-- 
+		<option value="0">월요일</option>
+		<option value="1">화요일</option>
+		<option value="2">수요일</option>
+		<option value="3">목요일</option>
+		 -->
+		<option value="1">월요일</option>
+		<option value="2">화요일</option>
+		<option value="3">수요일</option>
+		<option value="4">목요일</option>
+	</select>
+	<br>
+	
+	<label for="start">시간</label>
+	<select name="start" id="start">
+		<option value="1">11:00</option>
+		<option value="2" selected>12:00</option>
+		<option value="3">13:00</option>
+		<option value="4">14:00</option>
+		<option value="5">15:00</option>
+		<option value="6">16:00</option>
+		<option value="7">17:00</option>
+		<option value="8">18:00</option>
+	</select>
+	~
+	<select name="end" id="end">
+		<option value="1">11:00</option>
+		<option value="2">12:00</option>
+		<option value="3">13:00</option>
+		<option value="4">14:00</option>
+		<option value="5" selected>15:00</option>
+		<option value="6">16:00</option>
+		<option value="7">17:00</option>
+		<option value="8">18:00</option>
+	</select>
+	<br>
+	
+	<label for="color">색상</label>
+	<select name="color" id="color">
+		<!-- <option value="#ff3300">빨강</option>
+		<option value="#ffff33">노랑</option>
+		<option value="#7799ff">파랑</option>
+		<option value="#808080">검정</option> -->
+		<option value="#F94144">빨강</option>
+		<option value="#F9C74F">노랑</option>
+		<option value="#38A3A5">파랑</option>
+		<option value="#415A77">검정</option>
+	</select>
+	<br>
+	
+	<input class="btn" type="button" value="일정추가하기" style="margin-top:15px;" onclick="add()" />
+	
+</div>
+
+</body>
+</html>
+```
+### 7.16.11. JQTest11.html_일정: 제이쿼리
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/475d0d6f-e2ec-4ab8-a481-a7a35113d3d5)
+
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JQTest11.html</title>
+<link rel="stylesheet" type="text/css" href="css/style_.css">
+<style type="text/css">
+body,div,span,table,th,td{font-size: 12px;}
+#list{border: 1px solid gray;border-collapse:collapse;width:800px;}
+#list th{width:152px;}
+#list td{width:162px;}
+#list th, #list td{border: 1px solid gray;padding:3px;}
+</style>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+
+/* eq, children() */
+$(function()
+{
+	
+	$('.btn').on("click",function(){
+		
+		var item = $("#item").val();
+		var week = parseInt($("#week").val());
+		var start = parseInt($("#start").val());
+		var end = parseInt($("#end").val());
+		var color = $("#color").val();
+		//console.log(item+'/'+week+'/'+start+'/'+end+'/'+color);
+		
+		// javascript 로 처리했던 기능을 jQuery 로 구성하면 더 간단하다.
+		//	1. 모든 tr 들 중 원하는 행을 찾고 (→ eq())
+		//	2. 그렇게 찾은 tr 의 자식 td 들 중 (→ children())
+		//		원하는 td를 찾아서 (→ eq()) 텍스트를 (→ text()) 삽입하고 색을 바꾼다. (→ css())
+		
+		// 내가푼 풀이 -----------------------------------------------------------------
+		/* if(start<=end){
+			for(var i = (start+1); i<=(end+1); i++){
+				$("#list tr:nth-child("+ i +") td:nth-child("+ (week+1) +")").css('background',color).text(item);
+			}
+		} */
+		
+		// 함께 푼 풀이 -----------------------------------------------------------------
+		for (var i = start; i <= end; i++)
+		{
+			//$("#list tr").eq(i).text("선택");
+			
+			//$("#list tr").eq(i).children().text("선택");
+			
+			$("#list tr").eq(i).children().eq(week).css("background",color).text(item);
+			
+		}
+	});
+	
+	
+	
+});
+function add(){
+	//console.log("aaa");
+	
+}
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>일정: 제이쿼리</h1>
+	<hr />
+</div>
+
+<div class="layout">
+<table id="list">
+	<tr>
+		<th>&nbsp;</th>
+		<th>월</th>
+		<th>화</th>
+		<th>수</th>
+		<th>목</th>
+	</tr>
+	<tr>
+		<th>11:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>12:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>13:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>14:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>15:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>16:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>17:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>18:00</th>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+</table>
+</div>
+
+<div style="margin-top: 20px;">
+	<label for="item">제목</label>
+	<input type="text" id="item" value="테스트">
+	<br>
+	
+	<label for="week">날짜</label>
+	<select name="week" id="week">
+		<option value="1">월요일</option>
+		<option value="2">화요일</option>
+		<option value="3">수요일</option>
+		<option value="4">목요일</option>
+	</select>
+	<br>
+	
+	<label for="start">시간</label>
+	<select name="start" id="start">
+		<option value="1">11:00</option>
+		<option value="2" selected>12:00</option>
+		<option value="3">13:00</option>
+		<option value="4">14:00</option>
+		<option value="5">15:00</option>
+		<option value="6">16:00</option>
+		<option value="7">17:00</option>
+		<option value="8">18:00</option>
+	</select>
+	~
+	<select name="end" id="end">
+		<option value="1">11:00</option>
+		<option value="2">12:00</option>
+		<option value="3">13:00</option>
+		<option value="4" selected>14:00</option>
+		<option value="5">15:00</option>
+		<option value="6">16:00</option>
+		<option value="7">17:00</option>
+		<option value="8">18:00</option>
+	</select>
+	<br>
+	
+	<label for="color">색상</label>
+	<select name="color" id="color">
+		<!-- <option value="#ff3300">빨강</option>
+		<option value="#ffff33">노랑</option>
+		<option value="#7799ff">파랑</option>
+		<option value="#808080">검정</option> -->
+		<option value="#F94144">빨강</option>
+		<option value="#F9C74F">노랑</option>
+		<option value="#38A3A5">파랑</option>
+		<option value="#415A77">검정</option>
+	</select>
+	<br>
+	
+	<input class="btn" type="button" value="일정추가하기" style="margin-top:15px;" onclick="add()" />
+	
+</div>
+
+</body>
+</html>
 ```
 
 <br>
 
-## 7.17. [세션처리-로그인]
+## 7.17. [AJAX 이용하여 텍스트 바꾸기]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/09c8d532-324e-4d63-917b-89a7a60da041)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/387e5693-6a34-45b5-9faa-1a2dc01fad3c)
 
-### 7.17.1. WebApp11_scott.sql
+### 7.17.1. ajaxTarget.txt
+``` txt
+AJAX is not a programming language.
+AJAX is a technique for accessing web server from a web page.
+```
+### 7.17.2. AjaxTest01.html
 ``` java
-```
-### 7.17.2. ScoreDTO.Java
-``` java
-```
-### 7.17.3. ScoreDAO.Java
-``` java
-```
-### 7.17.4. ScoreList.jsp
-``` html
-```
-### 7.17.5. ScoreInsert.jsp
-``` html
-```
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AjaxTest01.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
 
-<br>
+<script type="text/javascript">
 
-## 7.18. [세션처리-로그인]
+function loadXMLDocs()
+{
+	//alert("함수 호출~!!!");
+	
+	// XMLHttpRequest 객체(→ AJAX 객체) 를 담을 변수 선언
+	var xmlHttp;
+	
+	// (클라이언트 측) 브라우저에 따른 분기
+	// (클라이언트 측에서) 자신의 브라우저가 XMLHttpRequest 를 지원하고 있는 상황이라면
+	if(window.XMLHttpRequest)
+	{
+		// 테스트
+		//alert("XMLHttpRequsest 지원~!!!");
+		
+		// (이렇게...) 이와 같은 방법으로 객체를 생성하고
+		xmlHttp = new XMLHttpRequest();
+	}
+	else
+	{
+		// 테스트
+		//alert("XMLHttpRequsest 지원 하지 않음~!!!");
+		
+		// (이렇게...) 이와 같은 방법으로 객체를 생성해라
+		xmlHttp = new ActiveXObejct("Microsoft.XMLHTTP");
+	}
+	
+	// ※ 객체를 생성하는 방법의 차이만 있을 뿐 
+	//	  여기까지 수행하면 XMLHttpRequset 객체(→ AJAX 객체) 생성 완료~!!!
+	
+	//**- 함수 호출 → 상황 연출
+	//**- 상황 연출 → 함수 호출 ==> 콜백함수(아래가 그 부분)
+	
+	// 『xmlHttp』 : XMLHttpRequsest 객체
+	//	서버로부터 응답이 오면 『readystatechange』 이벤트가 발생하게 된다.
+	// 『onreadystatechange』: readystatechange 이벤트가 발생했을 때
+	// 동작할 수 있도록 이벤트 헨들러를 등록하는 과정.
+	// 즉, 이와같은 이벤트가 발생하게 되면.. 다음의 내용처럼 동작해라~!!! 라는 의미.
+	//xmlHttp.onreadystatechange = 기능, 동작, 행위;
+	xmlHttp.onreadystatechange = function()
+	// ** onclick 처럼 readystatecnage가 함수고, 앞에 on 붙인 것 **
+	{
+		// 테스트
+		//alert("이벤트 발생: readyState →"+ xmlHttp.readyState);
+		
+		// 응답이 올 때마다
+		// readyState 가 그 상황에서의 XMLHttpRequest 상태를 저장하게 된다.
+		// 즉, readyState 는 XMLHttpRequest 객체의 property 이다.
+		// ==> readyStatechage 이벤트는
+		//	   readyState 가 변경될 때 마다 발생하게 된다.
+		
+		// ※ 『XMLHttpRequest』의 『readyState』는 0에서 4까지 순차적으로 변환한다.
+		//	  0 → 요청이 초기화 되지 않음.
+		//	  1 → 서버 연결이 이루어지지 않음.
+		//	  2 → 요청이 수신됨.
+		//	  3 → 요청을 처리중.
+		//	  4 → 요청의 처리가 종료되고, 응답이 준비됨.
+		
+		// 요청의 처리가 종료되고 응답이 준비된 상태라면...
+		if (xmlHttp.readyState == 4)
+		{
+			// ※ 『XMLHttpRequest』 의 『status』는 『HTTP Status』 코드를 의미한다.
+			//	  200 → 올바른 응답
+			//	  40x → 클라이언트 측 에러
+			//	  50x → 서버 측 에러
+			
+			if(xmlHttp.status == 200)
+			{
+				// 이 구문을 통해 서버로부터 응답을 정상적으로 받아을 때
+				// 그 응답을 가져와서 DOM 을 업데이트 하겠다는 의미.
+				// 응답의 속성에는 크게 두가지 가 있는데
+				// 『responseText』는 텍스트 형식의 응답일 경우 사용하게 되고
+				// 『responseXML』은 응답이 XML 형식일 경우 사용하게 된다.
+				document.getElementById("myDiv").innerHTML = xmlHttp.responseText;
+			}
+		}
+	};
+	
+	// 『XMLHttpRequset』의 『open("페이지 요청 방식","URL",async)』
+	//	XMLHttpRequest 객체를 필요한 설정으로 초기화하는데 사용하는 메소드이다.
+	// GET 방식이 아닌 POST 방식으로 요청하기 위해서는 
+	// 『xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); xmlHttp.send(input1=value1&input2=value2);』
+	// 와 같은 구문으로 헤더를 추가해 주어야 한다.
+	xmlHttp.open("GET", "ajaxTarget.txt", true);
+	xmlHttp.send("");
+} 
 
-### 7.18.1. WebApp11_scott.sql
-``` java
-```
-### 7.18.2. ScoreDTO.Java
-``` java
-```
-### 7.18.3. ScoreDAO.Java
-``` java
-```
-### 7.18.4. ScoreList.jsp
-``` html
-```
-### 7.18.5. ScoreInsert.jsp
-``` html
-```
+/* 
+function loadXMLDocs()
+{
+	var xmlHttp;
 
-<br>
+	if(window.XMLHttpRequest)
+		xmlHttp = new XMLHttpRequest();
+	else
+		xmlHttp = new ActiveObject("Microsoft.XMLHTTP");
 
-## 7.19. [세션처리-로그인]
+	xmlHttp.onreadystatechange = function()
+	{
+		
+		
+		if(xmlHttp.readyState == 4)
+		{
+			if(xmlHttp.status == 200)
+				document.getElementById("myDiv").innerHTML = xmlHttp.responseText;
+		}
+	};
+	
+	xmlHttp.open("GET","ajaxTarget.txt", true);
+	xmlHttp.send("");
+}
+ */
+/* 
+function loadXMLDocs()
+{
+	//alert("확인");
+	
+	// 함수 선언
+	
+	// 브라우저 XMLHttpRequset 객체 사용에 따른 선언
+	
+	// 콜백함수 readystatechage 가 일어나면 실행
+		// readyStae 요청이 종료되고 응답이 실행 될 때
+			// 응답이 올바른 응답일 때
+				// 문서의 #myDiv를 찾아서 텍스트 형식 응답처리해라.
+	
+	// 페이지 요청방식에 따라 처리
+	// 보내면서 마무리.
+}
+*/
+</script>
+</head>
+<body class="section">
 
-### 7.19.1. WebApp11_scott.sql
-``` java
-```
-### 7.19.2. ScoreDTO.Java
-``` java
-```
-### 7.19.3. ScoreDAO.Java
-``` java
-```
-### 7.19.4. ScoreList.jsp
-``` html
-```
-### 7.19.5. ScoreInsert.jsp
-``` html
-```
+<div class="layout">
+	<div id="myDiv">
+		<h1>AJAX 를 이용하여 이 텍스트를 바꾸어본다.</h1>
+	</div>
+	
+	<button class="btn" type="button" onclick="loadXMLDocs()">Conetnet 바꾸기</button>
+</div>
 
-<br>
-
-## 7.20. [세션처리-로그인]
-
-### 7.20.1. WebApp11_scott.sql
-``` java
-```
-### 7.20.2. ScoreDTO.Java
-``` java
-```
-### 7.20.3. ScoreDAO.Java
-``` java
-```
-### 7.20.4. ScoreList.jsp
-``` html
-```
-### 7.20.5. ScoreInsert.jsp
-``` html
-```
-
-<br>
-
-## 7.21. [세션처리-로그인]
-
-### 7.21.1. WebApp11_scott.sql
-``` java
-```
-### 7.21.2. ScoreDTO.Java
-``` java
-```
-### 7.21.3. ScoreDAO.Java
-``` java
-```
-### 7.21.4. ScoreList.jsp
-``` html
-```
-### 7.21.5. ScoreInsert.jsp
-``` html
-```
-
-<br>
-
-## 7.22. [세션처리-로그인]
-
-### 7.22.1. WebApp11_scott.sql
-``` java
-```
-### 7.22.2. ScoreDTO.Java
-``` java
-```
-### 7.22.3. ScoreDAO.Java
-``` java
-```
-### 7.22.4. ScoreList.jsp
-``` html
-```
-### 7.22.5. ScoreInsert.jsp
-``` html
-```
-
-<br>
-
-## 7.23. [세션처리-로그인]
-
-### 7.23.1. WebApp11_scott.sql
-``` java
-```
-### 7.23.2. ScoreDTO.Java
-``` java
-```
-### 7.23.3. ScoreDAO.Java
-``` java
-```
-### 7.23.4. ScoreList.jsp
-``` html
-```
-### 7.23.5. ScoreInsert.jsp
-``` html
-```
-
-<br>
-
-## 7.24. [세션처리-로그인]
-
-### 7.24.1. WebApp11_scott.sql
-``` java
-```
-### 7.24.2. ScoreDTO.Java
-``` java
-```
-### 7.24.3. ScoreDAO.Java
-``` java
-```
-### 7.24.4. ScoreList.jsp
-``` html
-```
-### 7.24.5. ScoreInsert.jsp
-``` html
-```
-
-<br>
-
-## 7.25. [세션처리-로그인]
-
-### 7.25.1. WebApp11_scott.sql
-``` java
-```
-### 7.25.2. ScoreDTO.Java
-``` java
-```
-### 7.25.3. ScoreDAO.Java
-``` java
-```
-### 7.25.4. ScoreList.jsp
-``` html
-```
-### 7.25.5. ScoreInsert.jsp
-``` html
+</body>
+</html>
 ```
 
 <br>
 
-## 7.26. [세션처리-로그인]
+## 7.18. [AJAX 기본 실습: 페이지 내 컨트롤 확인]
+| 번호 | 파일명          | 비고                                                             | 코드                                                                                                                                                                                                                                                                                                |
+|------|-----------------|------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| 1    |                 | test02send.do                                                    | 사용자요청                                                                                                                                                                                                                                                                                          |
+| 2    | web.xml         |                                                                  | ``` html <servlet>      <servlet-name>test02send</servlet-name><br> <servlet-class>com.test.ajax.Test02dSend</servlet-class>   </servlet>  <servlet-mapping>    <servlet-name>test02send</servlet-name>    <url-pattern>/test02send.do</url-pattern>   </servlet-mapping> ```                             | 
+| 3    | Test02Send.java | - 물리적: 자바파일 - 법적지위: Controller ㄴ Controller(Servlet) | ``` java String view = "AjaxTest02.jsp";  RequestDispatcher dispatcher = request.getRequestDispatcher(view); dispatcher.forward(request, response); ```                                                                                                                                                         |
+| 4    | AjaxTest02.jsp  |                                                                  | ```java var url = "test02.do?n1="+ n1 +"&n2="+ n2; ajax = createAjax(); ajax.open("GET", url, true); ajax.onreadystatechange = function() { if(ajax.readyState == 4) { if(ajax.status == 200) { callBack(); } } }; ajax.send("");```                                                                           |
+| 5    |                 | test02.do                                                        | 사용자 요청                                                                                                                                                                                                                                                                                         |
+| 6    | web.xml         |                                                                  | ``` html <servlet>    <servlet-name>test02</servlet-name>    <servlet-class>com.test.ajax.Test02</servlet-class>   </servlet>      <servlet-mapping>    <servlet-name>test02</servlet-name>    <url-pattern>/test02.do</url-pattern>   </servlet-mapping> ```                                                   |
+| 7    | Test02.java     | - 물리적: 자바파일 - 법적지위: Controller ㄴ Controller(Servlet) | ``` java int n1 = Integer.parseInt(request.getParameter("n1")); int n2 = Integer.parseInt(request.getParameter("n2"));  int result = n1 + n2;  request.setAttribute("result", result);  RequestDispatcher dispatcher = request.getRequestDispatcher("Test02_ok.jsp"); dispatcher.forward(request, response);``` |
+| 8    | Test02_ok.jsp   |                                                                  | ${result}                                                                                                                                                                                                                                                                                           |
+| 9    | AjaxTest02.jsp  |                                                                  | ``` java function callBack() { var data = ajax.responseText; document.getElementById("result").value = data; ```  }                                                                                                                                                                                              |
+### 7.18.1. ajax.js
+``` java
+/**
+ * ajax.js
+ */
 
-### 7.26.1. WebApp11_scott.sql
-``` java
+var ajax = null;
+
+// AJAX 객체(→ XMLHttpRequest 객체) 생성 함수
+function createAjax()
+{
+	/*
+	// ActiveXObject 를 지원한느 브라우저 라면...
+	if(window.ActiveXObject)	//-- IE 7 이전
+	{
+		//return new ActiveXObejct("Microsoft.XMLHTTP");
+		return new ActiveXObejct("Msxml2.XMLHTTP");
+		//-- 이와 같은 방식으로 XMLHttpRequest 객체를 생성해서 반환해라.
+		//	 (ActiveXObject 객체 → XMLHttpRequest 객체를 대신할 수 있는 객체)
+	}
+	else						//-- 그 외 브라우저
+	{
+		if(window.XMLHttpRequest)//-- XMLHttpRequest 객체 지원 브라우저
+		{
+			return new XMLHttpRequest();
+			//-- 이와 같은 방식으로 XMLHttpRequest 객체를 생성해서 반환해라.
+		}
+		else					//-- AJAX 를 지원하지 않는 브라우저
+		{
+			return null;
+			//-- AJAX 사용할 수 없으므로 null 을 반환해라.
+		}
+		
+		return new XMLHttpRequest();
+	}
+	*/
+	
+	/*
+	if(window.ActiveXObject)	//-- IE 7 이전
+		return new ActiveXObejct("Microsoft.XMLHTTP");
+	else if(window.XMLHttpRequest)//-- XMLHttpRequest 객체 지원 브라우저
+			return new XMLHttpRequest();
+	else						//-- AJAX 를 지원하지 않는 브라우저
+		return null;
+	*/
+	
+	if(window.XMLHttpRequest)//-- XMLHttpRequest 객체 지원 브라우저
+		return new XMLHttpRequest();
+	else if(window.ActiveXObject)	//-- IE 7 이전
+		return new ActiveXObejct("Microsoft.XMLHTTP");
+	else						//-- AJAX 를 지원하지 않는 브라우저
+		return null;
+}
 ```
-### 7.26.2. ScoreDTO.Java
+### 7.18.2. AjaxTest02.jsp
 ``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<style type="text/css">
+	.short{width: 50px; text-align:right;}
+</style>
+
+<script type="text/javascript" src="<%=cp %>/js/ajax.js"></script>
+<script type="text/javascript">
+function sum()
+{
+	//alert("확인");
+	
+	// 데이터 수집
+	var n1 = document.getElementById("num1").value;
+	var n2 = document.getElementById("num2").value;
+	
+	// URL 구성
+	var url = "test02.do?n1="+ n1 +"&n2="+ n2;
+	
+	// XMLHttpRequest 객체 생성(→ AJAX 객체)
+	ajax = createAjax();			//-- ajax.js
+	
+	// 『GET』 : 데이터 전송 및 페이지 요청 방식(POST 사용 가능. POST 사용 시 헤더 추가 필요)
+	// 『url』 : AJAX 요청 페이지(데이터 수신 및 응답 페이지)
+	// 『true』: boolean → true(비동기), false(동기), AJAX 처리 과정에서 동기는 사용 안함.
+	ajax.open("GET", url, true);
+	//-- 실제 서버와의 연결이 아니고, 일종의 큰 의미에서 환경 설정 부분으로 이해하는 것이 좋겠다.
+	//	 (실제 서버 연결은 나중에...)
+	
+	// ajax 객체(→ XMLHttpRequest 객체)의 readyState 속성은
+	// 각 단계별로 변화되며, 0 부터 4 까지 순차적으로 증가하는 형태로 변화한다.
+	// 그 때마다... 『readystatechange』 이벤트가 발생하게 된다.
+	ajax.onreadystatechange = function()
+	{
+		// 그 중에서...(0 부터 4 까지의 상태 중에서...)
+		// 4가 되는 순간이 요청했던 서버로부터 응답 준비가 완료된 시점이기 때문에
+		// 4 인 경우.. 수행해야 할 업무를 진행할수 있도록 처리한다.
+		if(ajax.readyState == 4)
+		{
+			// 서버로부터 응답이 완료되었다 하더라도
+			// 그 과정에서 데이터가 올바른 것인지, 에러 메세지를 받은 것인지
+			// 알수 없기 때문에 서버로부터 응답 받은 코드를 확인한 후
+			// 업무를 진행할 수 있도록 처리(구성)한다.
+			if(ajax.status == 200)
+			{
+				// 업무진행
+				//-- 업무 코드를 외부로 추출
+				callBack();
+			}
+		}
+	};
+	
+	// 실제 서버에서 AJAX 요청을 한다.(즉, 이부분이 진짜 연결 작업이다.)
+	// GET 방식으로 데이터를 전송하는 경우... 인자값이 ""
+	// POST 방식으로 데이터를 전송하는 경우... 인자값이 해당 데이터를 넣는다.
+	// 현재는 GET 방식의 요청이다. (비워두는 것은 하지 말자.)
+	ajax.send("");
+}
+
+// 추출된 업무 코드
+//-- AJAX 요청이 완료된 후 호출되는 최종 업무 처리 함수
+function callBack()
+{
+	// 여기서는 두 가지 방법 중 하나로 데이터를 바인딩 한다.
+	
+	// 1. 서버에서 응답한 데이터가 텍스트 일 경우(단일 데이터)
+	var data = ajax.responseText;
+	
+	// 2. 서버에서 응답한 데이터가 XML 일 경우(다랑의 데이터)
+	//var data = ajax.responseXML;	//** XML: 데이터를 구조화시킬 수 있는포멧, 단-수식하는 데이터가 더 많을 수 있음**
+	
+	// 바인딩한 데이터를 업무에 적용한다.
+	document.getElementById("result").value = data;
+	
+}
+
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>AJAX 기본 실습</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	<input type="text" id="num1" class="txt short">
+	+
+	<input type="text" id="num2" class="txt short">
+	<input type="button" value="=" class="btn" onclick="sum()" style="min-width: 30px;">
+	<input type="text" id="result" class="txt short">
+
+
+	<p>같은 페이지에 있는 기타 다른 요소들</p>
+	
+	<input type="text" />
+	
+	<input type="text">
+	<br>
+	
+	<input type="checkbox" name="check" value="check1"> 체크1
+	<input type="checkbox" name="check" value="check2"> 체크2
+	<br>
+	
+	<input type="radio" name="radio" value="rdo1"> 라디오1
+	<input type="radio" name="radio" value="rdo2"> 라디오2
+	<br>
+	
+	<select id="sel">
+		<option value="1">선택1</option>
+		<option value="2">선택2</option>
+		<option value="3">선택3</option>
+	</select>
+
+</div>
+</body>
+</html>
 ```
-### 7.26.3. ScoreDAO.Java
+### 7.18.3. Test02_ok.jsp
 ``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+${result}
 ```
-### 7.26.4. ScoreList.jsp
+### 7.18.4. test02send.do
+... 내용 없음 ....  
+### 7.18.5. /AjaxApp/WebContent/WEB-INF/web.xml
 ``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>AjaxApp</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+   <!-- AJAX 관련 실습 -->
+   <!-- AjaxTest02 → 페이지 내 컨트롤 확인 -->
+   <servlet>
+  	<servlet-name>test02send</servlet-name>
+  	<servlet-class>com.test.ajax.Test02Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test02send</servlet-name>
+  	<url-pattern>/test02send.do</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+   <servlet>
+  	<servlet-name>test02</servlet-name>
+  	<servlet-class>com.test.ajax.Test02</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test02</servlet-name>
+  	<url-pattern>/test02.do</url-pattern>
+  </servlet-mapping>
+</web-app>
 ```
-### 7.26.5. ScoreInsert.jsp
+
+<br>
+
+## 7.19. [아이디 중복 검사]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/cc50c5c6-ebb8-4388-a858-1651d628ab6a)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/ced5c82f-dfab-4bcc-a046-754c74bf6381)
+
+### 7.19.1. Test03.java
+``` java
+/* ==================
+	Test02.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Test03 extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		// 이전 페이지(AjaxTets03.jsp)로 부터 넘어온 데이터 수신
+		// → id
+		String id = request.getParameter("id");
+		
+		// id 가 pbg 인 경우...
+		// Model → DB 액션 처리 요청 → DAO(처리 요청)
+		//								---------------
+		//								DTO, Connection 활용
+		//
+		// → SELECT COUNT(*) AS COUNT FROM MEMBER WHERE ID = 'pbg';
+		//			 -----------------						  -----
+		//				수신 처리						넘겨주는 데이터
+		//				--==>> 1 OR 0
+		
+		// ※ DB 구성을 별도로 하지 않았기 때문에 컬렉션 자료구조로 대신함~!!!
+		
+		List<String> db = new ArrayList<String>();
+		db.add("superman");
+		db.add("batman");
+		db.add("admin");
+		
+		int result = 0;
+		
+		for (String item : db)
+		{
+			if(item.equals(id))
+			{
+				result = 1;
+			}
+		}
+		
+		// 최종 result 에 1 이 남아있으면... 이미 존재하는 id → 사용 불가
+		// 1로 바뀌지 않고 0이 남아있으면... 존재하지 않는 id → 사용 가능
+		request.setAttribute("result", result);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Test03_ok.jsp");
+		dispatcher.forward(request, response);
+		
+		
+		
+		
+	}
+}
+```
+### 7.19.2. Test03Send.java
+``` java
+/* ==================
+	Test02Send.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Test03Send extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		//String view = "WEB-INF/view/AjaxTest03.jsp";
+		String view = "AjaxTest03.jsp";
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+		
+		
+	}
+}
+```
+### 7.19.3. AjaxTest03.jsp
 ``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AjaxTest03</title>
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<style type="text/css">
+	#result {display: inline-block; width: 250px; color:#F33;font-size:small;}
+</style>
+
+<script type="text/javascript" src="<%=cp %>/js/ajax.js"></script>
+<script type="text/javascript">
+function check()
+{
+	//alert("확인");
+	
+	// 데이터 수집
+	var id = document.getElementById("id").value;
+	var name = document.getElementById("name").value;
+	var addr = document.getElementById("addr").value;
+	
+	// URL 구성
+	var url = "test03.do?id="+id;
+	
+	// AJAX 객체 (→ XMLHttpRequest 객체) 생성
+	ajax = createAjax();
+	
+	// 환경 설정 (『open("요청방식", "URL", 비동기/동기)』)
+	ajax.open("GET",url,true);
+	
+	ajax.onreadystatechange = function()
+	{
+		if(ajax.readyState == 4 && ajax.status == 200)
+		{
+			// 업무처리 (모듈화 → 외부로 추출)
+			callBack();
+			
+		}
+	};
+	
+	ajax.send("");
+	
+}
+
+// 아이디 중복 검사의 결과(1 or 0)를 통보받아
+// 사용자에게 메세지 출력 → span → #result
+function callBack()
+{
+	// 외부로 추출된 업무 처리 내용 구성(responseText / responseXML)
+	
+	var data = ajax.responseText;
+	
+	data = parseInt(data);
+	
+	if(data==0)
+	{
+		document.getElementById("result").innerText = "사용 가능한 아이디입니다.";	
+	}else
+	{
+		document.getElementById("result").innerText = "이미 사용중인 아이디입니다.";	
+		
+	}
+	
+}
+
+</script>
+
+</head>
+<body class="section">
+
+<h1>회원가입</h1>
+
+<div class="layout">
+	<div class="info_box" style="display:inline-block;">
+		<p>- Test03Send.java</p>
+		<p>- AjaxTest03.jsp</p>
+		<p>- ajax.js</p>
+		<p>- main.css</p>
+		<p>- Test03.java</p>
+		<p>- Test03_ok.jsp</p>
+		<p>- web.xml</p>
+		<p>※ url: test03send.do / test03.do</p>
+		<p>※ 자료구조 활용 → superman / batman / admin</p>
+	</div><br>
+	
+	<div class="tbl_box">
+		<table class="table">
+			<tr>
+				<th style="width: 80px">아이디</th>
+				<td>
+					<input type="text" id="id" class="txt conrtol" />
+					<input type="button" value="중복검사" class="btn control" onclick="check()" />
+					<span id="result"></span>
+					<!-- <span id="result">사용 가능한 아이디입니다.</span> -->
+					<!-- <span id="result">이미 사용중인 아이디입니다.</span> -->
+				</td>
+			</tr>
+			<tr>
+				<th>이름</th>
+				<td>
+					<input type="text" id="name" class="txt conrtol" />
+				</td>
+			</tr>
+			<tr>
+				<th>주소</th>
+				<td>
+					<input type="text" id="addr" class="txt conrtol" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.19.4. Test03_ok.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+${result}
+```
+### 7.19.5. test03send.do
+... 내용 없음 ....
+### 7.19.6. /AjaxApp/WebContent/WEB-INF/web.xml
+``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>AjaxApp</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+   <!-- AJAX 관련 실습 -->
+   <!-- AjaxTest02 → 페이지 내 컨트롤 확인 -->
+   <servlet>
+  	<servlet-name>test02send</servlet-name>
+  	<servlet-class>com.test.ajax.Test02Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test02send</servlet-name>
+  	<url-pattern>/test02send.do</url-pattern>
+  </servlet-mapping>
+  
+  
+   <servlet>
+  	<servlet-name>test02</servlet-name>
+  	<servlet-class>com.test.ajax.Test02</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test02</servlet-name>
+  	<url-pattern>/test02.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- ========================================= -->
+  
+  <!-- AJAX 관련 실습 -->
+  <!-- AjaxTest03 → 아이디 중복 검사 -->
+  <servlet>
+  	<servlet-name>test03send</servlet-name>
+  	<servlet-class>com.test.ajax.Test03Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test03send</servlet-name>
+  	<url-pattern>/test03send.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>test03</servlet-name>
+  	<servlet-class>com.test.ajax.Test03</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test03</servlet-name>
+  	<url-pattern>/test03.do</url-pattern>
+  </servlet-mapping>
+  
+  
+</web-app>
+```
+
+<br>
+
+## 7.20. [우편번호 검색]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/8e6caf3a-470d-4545-ab82-5e34e43d6ac7)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/60c17d89-1181-484b-a1f6-9705b46973df)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/2ec94d65-edcb-4986-a6d2-0406527d6106)
+
+### 7.20.1. Test04.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Test04 extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		// 한글 깨짐 방지 처리
+		request.setCharacterEncoding("UTF-8");
+		
+		// 이전 페이지(AjaxTest04.jsp)로 부터 넘어온 데이터 수신
+		// → addr
+		String addr = request.getParameter("addr");
+		
+		// ※ 여기서도 마찬가지로 우편번호 데이터베이스가 이다고 가정하고...
+		//		대신 직접 자료구조(ArrayList) 구성
+		ArrayList<ZipCodeDTO> db = new ArrayList<ZipCodeDTO>();
+		
+		if(addr.indexOf("서교") > -1)
+		{
+			//db.add(new ZipCodeDTO());
+			db.add(new ZipCodeDTO("04047", "서울특별시 마포구 독막로3길 40 (서교동, 서교동다세대주택)"));
+			db.add(new ZipCodeDTO("04048", "서울특별시 마포구 독막로7길 34 (서교동, 서교빌딩)"));
+			db.add(new ZipCodeDTO("04029", "서울특별시 마포구 동교로 116 (서교동, 서교동교회)"));
+			db.add(new ZipCodeDTO("04030", "서울특별시 마포구 동교로 144-9 (서교동, 서교빌라)"));
+			db.add(new ZipCodeDTO("04031", "서울특별시 마포구 동교로 162-6 (서교동, 서교동다세대빌라)"));
+			db.add(new ZipCodeDTO("04035", "서울특별시 마포구 동교로12길 41-12 (서교동, 서교마임)"));
+		}
+		else if(addr.indexOf("연남") > -1)
+		{
+			db.add(new ZipCodeDTO("03984", "서울특별시 마포구 동교로 241 (연남동, 연남파크빌딩)"));
+			db.add(new ZipCodeDTO("03983", "서울특별시 마포구 동교로 263-6 (연남동, 연남동주택)"));
+			db.add(new ZipCodeDTO("03980", "서울특별시 마포구 동교로 273-20 (연남동, 연남빌라)"));
+			db.add(new ZipCodeDTO("03990", "서울특별시 마포구 동교로27길 44-5 (연남동, 연남원룸)"));
+			db.add(new ZipCodeDTO("03983", "서울특별시 마포구 동교로41길 36 (연남동, 연남동주민커뮤니티센터)"));
+			db.add(new ZipCodeDTO("03984", "서울특별시 마포구 동교로41길 41 (연남동, 연남동41빌딩)"));
+			db.add(new ZipCodeDTO("03983", "서울특별시 마포구 동교로45길 30 (연남동, 연남동주택)"));
+			db.add(new ZipCodeDTO("03983", "서울특별시 마포구 동교로47길 26 (연남동, 연남동고깔집)"));
+		}
+		else if(addr.indexOf("망원") > -1)
+		{
+			db.add(new ZipCodeDTO("04019", "서울특별시 마포구 동교로8안길 23 (합정동, 망원정)"));
+			db.add(new ZipCodeDTO("03954", "서울특별시 마포구 마포나루길 386 (망원동, 망원한강수영장)"));
+			db.add(new ZipCodeDTO("03954", "서울특별시 마포구 마포나루길 407 (망원동, 망원2호)"));
+			db.add(new ZipCodeDTO("04085", "서울특별시 마포구 마포나루길 594 (합정동, 망원수상훈련장)"));
+			db.add(new ZipCodeDTO("04006", "서울특별시 마포구 망원로 12 (망원동, 망원아트빌라)"));
+			db.add(new ZipCodeDTO("04007", "서울특별시 마포구 망원로 28 (망원동, 망원1-1공영주차장)"));
+			db.add(new ZipCodeDTO("04007", "서울특별시 마포구 망원로 34-15 (망원동, 망원동다세대주택)"));
+		}
+		
+		request.setAttribute("lists", db);
+		
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/view/Test04_ok.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Test04_ok.jsp");
+		dispatcher.forward(request, response);
+	}
+}
+```
+### 7.20.2. Test04Send.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Test04Send extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		//String view = "WEB-INF/view/AjaxTest04.jsp";
+		String view = "AjaxTest04.jsp";
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+		
+	}
+}
+```
+### 7.20.3. ZipCodeDTO.java
+``` java
+/* ===================
+	ZipCodeDTO.java
+=====================*/
+
+package com.test.ajax;
+
+public class ZipCodeDTO
+{
+	// 주요 속성 구성
+	private String zipCode;
+	private String address;
+	
+	// 기본 생성자 추가 구성
+	public ZipCodeDTO()
+	{
+		this("","");
+	}
+	
+	//  사용자 정의 생성자 구성
+	public ZipCodeDTO(String zipCode, String address)
+	{
+		this.zipCode = zipCode;
+		this.address = address;
+	}
+	
+	// getter / setter 구성
+	public String getZipCode()
+	{
+		return zipCode;
+	}
+	public void setZipCode(String zipCode)
+	{
+		this.zipCode = zipCode;
+	}
+	public String getAddress()
+	{
+		return address;
+	}
+	public void setAddress(String address)
+	{
+		this.address = address;
+	}
+	
+	
+}
+```
+### 7.20.4. AjaxTest04.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AjaxTest04.jsp</title>
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<style type="text/css">
+	#result {display: inline-block; width: 250px; color:#F33;font-size:small;}
+</style>
+<script type="text/javascript" src="<%=cp %>/js/ajax.js"></script>
+<script type="text/javascript">
+function check()
+{
+	
+	var id = document.getElementById("id").value;
+	var name = document.getElementById("name").value;
+	var addr = document.getElementById("addr").value;
+	var url = "test03.do?id="+id;
+	ajax = createAjax();
+	ajax.open("GET",url,true);
+	
+	ajax.onreadystatechange = function()
+	{
+		if(ajax.readyState == 4 && ajax.status == 200)
+			callBack();
+	};
+	
+	ajax.send("");
+}
+
+function callBack()
+{
+	var data = ajax.responseText;
+	data = parseInt(data);
+	if(data==0)
+		document.getElementById("result").innerText = "사용 가능한 아이디입니다.";	
+	else
+		document.getElementById("result").innerText = "이미 사용중인 아이디입니다.";	
+}
+
+// ---------------------------------------------------------------------
+
+function search()
+{
+	//alert("확인");
+	// 데이터 수집
+	var addr = document.getElementById("addr").value;
+	
+	// URL 준비
+	var url = "test04.do?addr=" + addr;
+	
+	// AJAX 객체(→ XMLHttpRequeset 객체) 생성
+	ajax = createAjax();
+	
+	// 설정
+	ajax.open("GET", url, true);
+	ajax.onreadystatechange = function()
+	{
+		if(ajax.readyState==4 && ajax.status==200)
+		{
+			// 수행 업무
+			callBack2();
+		}
+	}
+	
+	ajax.send("");
+}
+
+// 추출된 업무
+// → 우편번호 검색 결과를 통보받아
+// 	  사용자에게 안내해 줄 수 있도록 처리
+function callBack2()
+{
+	//alert("확인");
+	//var data = ajax.responseText;
+	
+	// XML 문서 전체 참조 객체. (흔히... XML 문서 객체라고 한다.)
+	var doc = ajax.responseXML;
+	
+	// XMl 문서의 최상위 엘리먼트(루트 엘리먼트)
+	//-- 현재는 『<list></list>』 엘리먼트
+	var root = doc.documentElement;
+	
+	// 모든 『<item></item>』 엘리먼트 반환 받기
+	var itemList = root.getElementsByTagName("item");
+	
+	// select box 초기화
+	document.getElementById("addrResult").innerHTML = "";
+	
+	// 검색 결과 확인
+	if(itemList.length == 0)
+	{
+		document.getElementById("addrResult").innerHTML
+			= "<option>주소를 입력하세요.</option>";
+	}else
+	{
+		document.getElementById("addrResult").innerHTML
+			= "<option value='0'>주소를 선택하세요.</option>";
+	}
+	
+	// 검색 결과가 존재할 경우...
+	// 반복문을 순환하며 각 데이터 가져오기
+	for (var i = 0; i < itemList.length; i++)	//-- 수신한 아이템의 갯수만큼 반복 순화
+	{
+		var zipcode = itemList[i].getElementsByTagName("zipcode")[0];
+		var address = itemList[i].getElementsByTagName("address")[0];
+		
+		// ※ 태그가 가지는 텍스트는 태그의 첫 번째 자식이고..
+		//	텍스트 노드의 값은 nodeValue 로 가져온다.
+		
+		var zipcodeText = zipcode.firstChild.nodeValue;
+		var addressText = address.firstChild.nodeValue;
+		
+		//select box 에 아이템 (<option></option>) 추가
+		document.getElementById("addrResult").innerHTML
+			+= "<option value='"+ zipcodeText + "/" + addressText +"'>["+ zipcodeText +"]" + addressText +"</option>"; 
+	}
+	
+}
+
+// ---------------------------------------------------------------------
+
+function selectZipCode(sel)
+{		
+	/* 
+	document.getElementById("addr1").value = sel.value.split("/")[0];
+	document.getElementById("addr2").value = sel.value.split("/")[1];
+	document.getElementById("addr3").focus();
+	 */
+	if(sel.value != "0")
+	{
+		var addrArr = sel.value.split("/");
+		document.getElementById("addr1").value = sel.value.split("/")[0];
+		document.getElementById("addr2").value = sel.value.split("/")[1];
+		document.getElementById("addr3").focus();
+	}
+}
+
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>회원 가입</h1>
+	<p>우편번호 검색</p>
+	<hr />
+</div>
+
+<div class="layout">
+	<table class="table">
+		<tr>
+			<th style="width: 80px;">아이디</th>
+			<td>
+				<input type="text" id="id" class="txt control">
+				<input type="button" value="중복검사" class="btn control" onclick="check()">
+				<span id="result"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>이름</th>
+			<td>
+				<input type="text" id="name" class="txt control">
+			</td>
+		</tr>
+		<tr>
+			<th>주소</th>
+			<td>
+				<input type="text" id="addr" class="txt control" placeholder="동 입력">
+				<input type="button" value="검색하기" class="btn control" onclick="search()">
+				<br>
+				<select name="" id="addrResult" class="control" onchange="selectZipCode(this)">
+					<option>주소를 입력하세요.</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>주소 검색 결과</th>
+			<td>
+				<input type="text" id="addr1" class="txt control" readonly="readonly" style="width: 200px;">
+				<br>
+				<input type="text" id="addr2" class="txt control" readonly="readonly" style="width: 400px;">
+				<br>
+				<input type="text" id="addr3" class="txt control" style="width: 400px;" placeholder="상세 주소를 입력하세요.">
+				<br>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>
+```
+### 7.20.5. Test04_ok.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"
+%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" 
+%><%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+	
+	// check~!!!
+	response.setContentType("text/xml");
+	//-- AJAX 객체에 데이터를 반환할 때
+	//	브라우저가 이 데이터를 XML로 인식해야하기 때문에
+	//	MIME 타입을 XML 로 선언한다.
+	
+	// ※ (수신해서 처리해야 하는) 데이터가 한 개 이상 일 경우...
+	//	  XML 이나 JSON과 같이 구조화시킬 수 있는 데이터의 형태로
+	//	  전달하는 것이 처리 결과에서 용이하다.
+	//	  우편번호에 대한 검색 결과는
+	//	  당연히 다량의 데이터를 전송해야 하기 때문에
+	//	  일반 텍스트가 아닌 XML 형태로 반환하려고 하는 것이다.
+	
+	
+	//** 중요!!!) xml 앞에 공백이 하나도 있으면 문제가 생김! **
+	//** 기본 루트 엘리먼트 하나에 포함되어 있어야 함 **
+%><?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<c:forEach var="item" items="${lists }">
+	<item>
+		<zipcode>${item.zipCode }</zipcode>
+		<address>${item.address }</address>
+	</item>
+	</c:forEach>
+</list>
+```
+### 7.20.6. test04send.do
+... 내용 없음 ...
+### 7.20.7. /AjaxApp/WebContent/WEB-INF/web.xml
+``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>AjaxApp</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+   <!-- AJAX 관련 실습 -->
+   <!-- AjaxTest02 → 페이지 내 컨트롤 확인 -->
+   <servlet>
+  	<servlet-name>test02send</servlet-name>
+  	<servlet-class>com.test.ajax.Test02Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test02send</servlet-name>
+  	<url-pattern>/test02send.do</url-pattern>
+  </servlet-mapping>
+  
+  
+   <servlet>
+  	<servlet-name>test02</servlet-name>
+  	<servlet-class>com.test.ajax.Test02</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test02</servlet-name>
+  	<url-pattern>/test02.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- ========================================= -->
+  
+  <!-- AJAX 관련 실습 -->
+  <!-- AjaxTest03 → 아이디 중복 검사 -->
+  <servlet>
+  	<servlet-name>test03send</servlet-name>
+  	<servlet-class>com.test.ajax.Test03Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test03send</servlet-name>
+  	<url-pattern>/test03send.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>test03</servlet-name>
+  	<servlet-class>com.test.ajax.Test03</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test03</servlet-name>
+  	<url-pattern>/test03.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- ========================================= -->
+  
+  <!-- AJAX 관련 실습 -->
+  <!-- AjaxTest04 → 우편번호 검색 -->
+  <servlet>
+  	<servlet-name>test04send</servlet-name>
+  	<servlet-class>com.test.ajax.Test04Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test04send</servlet-name>
+  	<url-pattern>/test04send.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>test04</servlet-name>
+  	<servlet-class>com.test.ajax.Test04</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test04</servlet-name>
+  	<url-pattern>/test04.do</url-pattern>
+  </servlet-mapping>
+  
+</web-app>
+```
+
+<br>
+
+## 7.21. [AJAX 실습 - 추천 검색어]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/0088011a-71c5-45a8-b0c9-ebc823ae1a30)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/d475352f-de7c-4a54-bf18-c16e30db0f3c)
+
+### 7.21.1. Test05.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Test05 extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		// ※ 완성형 한글 형태로 전송된 데이터 수신
+		
+		request.setCharacterEncoding("UTF-8");
+		
+		// 이전 페이지(AjaxTest05.jsp)부터 넘어온 데이터 수신
+		// → search
+		String search = request.getParameter("search");
+		
+		//System.out.println(search);
+		
+		//DB 연결 및 액션 처리
+		// .......... WHERE COLUMNNAME LIKE 'search%'; 와 같은 쿼리문 수행
+		//	그에 따른 결과 수신
+		
+		ArrayList<WordDTO> lists = new ArrayList<WordDTO>();
+		
+		if(search.equals("가"))
+		{
+			lists.add(new WordDTO("가요대전"));
+			lists.add(new WordDTO("가방"));
+			lists.add(new WordDTO("가다랑어"));
+			lists.add(new WordDTO("가위"));
+			lists.add(new WordDTO("가죽"));
+			lists.add(new WordDTO("가족"));
+			lists.add(new WordDTO("가지"));
+			lists.add(new WordDTO("가평"));
+		}
+		else if(search.equals("가습"))
+		{
+			lists.add(new WordDTO("가습 손질"));
+			lists.add(new WordDTO("가습 구매"));
+			lists.add(new WordDTO("가습 분해"));
+			lists.add(new WordDTO("가습 교체"));
+			lists.add(new WordDTO("가습 수리"));
+			lists.add(new WordDTO("가습끈"));
+		}
+		else if(search.equals("가방"))
+		{
+			lists.add(new WordDTO("가방 손질"));
+			lists.add(new WordDTO("가방 구매"));
+			lists.add(new WordDTO("가방 분해"));
+			lists.add(new WordDTO("가방 교체"));
+			lists.add(new WordDTO("가방 수리"));
+			lists.add(new WordDTO("가방끈"));
+		}
+		else if(search.equals("가방끈"))
+		{
+			lists.add(new WordDTO("가방끈 매듭"));
+			lists.add(new WordDTO("가방끈 매듭 묶기"));
+			lists.add(new WordDTO("가방끈 매듭 푸는 법"));
+			lists.add(new WordDTO("가방끈 길이 조절"));
+			lists.add(new WordDTO("가방끈 교체"));
+			lists.add(new WordDTO("가방끈 색상"));
+		}
+		
+		request.setAttribute("lists", lists);
+		
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/view/Test05_ok.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Test05_ok.jsp");
+		dispatcher.forward(request, response);
+	}
+}
+```
+### 7.21.2. Test05Send.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Test05Send extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		//String view = "WEB-INF/view/AjaxTest05.jsp";
+		String view = "AjaxTest05.jsp";
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+		
+	}
+}
+```
+### 7.21.3. WordDTO.java
+``` java
+/* ===========================
+	WordDTO.java
+=========================== */
+
+package com.test.ajax;
+
+public class WordDTO
+{
+	// 주요 속성 구성
+	private String word;
+
+	// 기본 생성자 구성
+	public WordDTO()
+	{
+		this("");
+	}
+	
+	// 사용자 정의 생성자 구성
+	public WordDTO(String word)
+	{
+		this.word = word;
+	}
+	
+	// getter / setter 구성
+	public String getWord()
+	{
+		return word;
+	}
+
+	public void setWord(String word)
+	{
+		this.word = word;
+	}
+	
+	
+}
+```
+### 7.21.4. AjaxTest05.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AjaxTest05.jsp</title>
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<style type="text/css">
+#search{width: 500px;}
+#list{display:none;border: 1px solid gray;width: 500px; position: absolute;left:67px;}
+#list .item{padding: 3px;}
+#list #footer{background-color: #ddd; text-align:right;padding: 5px; font-size: small;}
+</style>
+
+<script type="text/javascript" src="<%=cp %>/js/ajax.js"></script>
+
+<script type="text/javascript">
+// 검색창에서 키보드 입력이 발생할 때마다
+// 그 때까지 입력된 단어를 서버로 전송하고
+// 그 전송된 단어에 맞는 추천 검색을 받아올 수 있도록 처리
+function search()
+{
+	// 데이터 수집(입려된 값 얻어오기)
+	var search = document.getElementById("search").value;
+	
+	//alert(search);
+	
+	// 서버로 전송하기 전에 유효성 검사 --------------------------------------
+	// ① 검색어가 존재할 경우에만 서버로 전송할 수 있도록 처리
+	if(search.replace(" ","") == "")
+	{
+		document.getElementById("list").style.display = "none";
+		return;
+	}
+	// ② 입력된 검색어가 완성형 한글일 경우에만
+	//	  검색 키워드를 서버로 전송할 수 있도록 처리
+	//	  정규표현식 사용
+	var regEx = /^[가-힣]{1,}$/;
+	
+	if(!regEx.test(search))
+	{
+		return;		
+	}
+	// ----------------------------------------서버로 전송하기 전에 유효성 검사
+	
+	// URL 구성
+	var url = "test05.do?search="+search;
+	
+	// AJAXHttpRequest 객체 (→ AJAX 객체) 생성
+	ajax = createAjax();
+	
+	ajax.open("GET", url, true);
+	ajax.onreadystatechange = function()
+	{
+		if(ajax.readyState==4 && ajax.status==200)
+		{
+			// 업무 내용 수행(→ 외부의 함수 호출)
+			callBack();
+		}
+	};
+	ajax.send("");
+}
+
+// 추출된 업무 수행 내용
+//-- XML 목록으로 받아온 검색어들을
+//	 적절한 리스트로 생성해서 화면에 출력할 수 있도록 처리
+function callBack()
+{
+	// XML 문서 객체
+	var doc = ajax.responseXML;
+	
+	// XML 문서의 최상위 엘리먼트 수신(루트 엘리먼트)
+	// → 지금은 『<list></list>』인 상황
+	var root = doc.documentElement;
+	
+	// 루트 엘리먼트 하위의 모든 『<item></item>』 엘리먼트 반환받기
+	var itemList = root.getElementsByTagName("item");
+	
+	// 추천 검색어 출력(노출) 지점 초기화
+	document.getElementById("items").innerHTML = "";
+	
+	// 수신한 데이터(추천 검색어) 삽입하기
+	for (var i = 0; i < itemList.length; i++)
+	{
+		var word = itemList[i].firstChild.nodeValue;
+		
+		// 출력(노출) 지점에 추가 → items
+		document.getElementById("items").innerHTML
+			+= "<div class='item'>" + word +"</div>";
+			
+		// 최종적으로 목록을 화면에 보일 수 있도록 랜딩
+		document.getElementById("list").style.display = "block";
+	}
+}
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>AJAX 실습 - 추천 검색어</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	<div>
+		검색어
+		<input type="text" id="search" class="control" placeholder="검색어를 입력하세요"
+		onkeyup="search()">
+	</div>
+	
+	<div id="list">
+		<div id="items">
+			<div class="item">가습기</div>
+			<div class="item">가요대전</div>
+			<div class="item">가방</div>
+			<div class="item">가다랑어</div>
+			<div class="item">가위</div>
+			<div class="item">가죽</div>
+			<div class="item">가족</div>
+			<div class="item">가지</div>
+			<div class="item">가평</div>
+		</div>
+		
+		<div id="footer">
+			추천 검색어
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.21.5. Test05_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"
+%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" 
+%><%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+	
+	response.setContentType("text/xml");
+%><?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<c:forEach var="item" items="${lists }">
+	<item>${item.word }</item>
+	</c:forEach>
+</list>
+```
+### 7.21.5. test05send.do
+... 내용 없음 ....
+### 7.21.5. /AjaxApp/WebContent/WEB-INF/web.xml
+``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>AjaxApp</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+   <!-- AJAX 관련 실습 -->
+   <!-- AjaxTest02 → 페이지 내 컨트롤 확인 -->
+   <servlet>
+  	<servlet-name>test02send</servlet-name>
+  	<servlet-class>com.test.ajax.Test02Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test02send</servlet-name>
+  	<url-pattern>/test02send.do</url-pattern>
+  </servlet-mapping>
+  
+  
+   <servlet>
+  	<servlet-name>test02</servlet-name>
+  	<servlet-class>com.test.ajax.Test02</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test02</servlet-name>
+  	<url-pattern>/test02.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- ========================================= -->
+  
+  <!-- AJAX 관련 실습 -->
+  <!-- AjaxTest03 → 아이디 중복 검사 -->
+  <servlet>
+  	<servlet-name>test03send</servlet-name>
+  	<servlet-class>com.test.ajax.Test03Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test03send</servlet-name>
+  	<url-pattern>/test03send.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>test03</servlet-name>
+  	<servlet-class>com.test.ajax.Test03</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test03</servlet-name>
+  	<url-pattern>/test03.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- ========================================= -->
+  
+  <!-- AJAX 관련 실습 -->
+  <!-- AjaxTest04 → 우편번호 검색 -->
+  <servlet>
+  	<servlet-name>test04send</servlet-name>
+  	<servlet-class>com.test.ajax.Test04Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test04send</servlet-name>
+  	<url-pattern>/test04send.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>test04</servlet-name>
+  	<servlet-class>com.test.ajax.Test04</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test04</servlet-name>
+  	<url-pattern>/test04.do</url-pattern>
+  </servlet-mapping>
+   
+  <!-- ========================================= -->
+  
+  <!-- AJAX 관련 실습 -->
+  <!-- AjaxTest05 → 추천 검색어 처리 -->
+  <servlet>
+  	<servlet-name>test05send</servlet-name>
+  	<servlet-class>com.test.ajax.Test05Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test05send</servlet-name>
+  	<url-pattern>/test05send.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>test05</servlet-name>
+  	<servlet-class>com.test.ajax.Test05</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test05</servlet-name>
+  	<url-pattern>/test05.do</url-pattern>
+  </servlet-mapping>
+</web-app>
+```
+
+<br>
+
+## 7.22. [jQuery 의 load() 활용 실습]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/668ca59e-663c-464b-a0bb-b4e3c69e5b21)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/70cc6215-9613-4168-be00-020ca00ac50d)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/b4529c82-e46c-46be-b7b7-62a534a3419c)
+
+### 7.22.1. LoadTest01.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LoadTest01.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	
+	//※ 『load()』
+	// 	 『$(선택자).load("로드를 원하는 html 문서의 위치와 이름");』
+	//	  - jQuery 의 기능이 수행되는 과정에서 다른 html 문서를 로드
+	//	  - HTML 을 읽어들여서 DOM 에 삽입하는 기능을 수행
+	// **비동기로 처리함**
+	
+	$("#btn .btnLoad").click(function()
+	{
+		//alert("확인");
+		
+		$("#ctlGrid").load("LoadTest02.html");
+		//-- 『비동기』방식으로 페이지 로드
+		
+		window.alert("여기서 작성한 페이지가 출력되는 시점 확인");
+		//-- Line 23 보다 이 메세지 박스가 먼저 출력~!!!
+		//	 이유는... 비동기~!!!
+		
+	})
+});
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>jQuery 의 load() 활용 실습</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	<div>
+		<div id="btn">
+			<div class="btnLoad">HTML 읽어오기 버튼</div>
+		</div>
+	</div>
+	
+	<div id="ctlGrid">
+	
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.22.2. LoadTest02.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LoadTest02.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+load() 에 대한 실습
+
+</body>
+</html>
+```
+
+<br>
+
+## 7.23. [jQuery 의 load() 활용 실습: 두수의 연산]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/829e7dad-7ef1-4dce-9d0e-3b6b895ed511)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/3388d98a-5ae5-4840-bb0d-f82d2939a49c)
+
+### 7.23.1. LoadTest03.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class LoadTest03 extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		// 이전 페이지(LoadTest03.jsp)로부터 넘어온 데이터 수신
+		// → su1, su2, oper
+		int su1 = Integer.parseInt(request.getParameter("su1"));
+		int su2 = Integer.parseInt(request.getParameter("su2"));
+		String oper = request.getParameter("oper");
+		
+		// 업무 로직 처리
+		/*
+		int result = 0;
+		String result = "";
+		if(oper.equals("add"))
+			result = su1 + su2;
+		else if(oper.equals("sub"))
+			result = su1 - su2;
+		else if(oper.equals("mul"))
+			result = su1 * su2;
+		else if(oper.equals("div"))
+			result = su1 / su2;
+		*/
+		
+		String result = "";
+		if(oper.equals("add"))
+			result = String.format("%d + %d = %d", su1, su2, (su1+su2));
+		else if(oper.equals("sub"))
+			result = String.format("%d - %d = %d", su1, su2, (su1-su2));
+		else if(oper.equals("mul"))
+			result = String.format("%d * %d = %d", su1, su2, (su1*su2));
+		else if(oper.equals("div"))
+			result = String.format("%d / %d = %d", su1, su2, (su1/su2));
+		
+		// 반환할 결과값 준비
+		request.setAttribute("result", result);
+		
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/view/Test03_ok.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("LoadTest03_ok.jsp");
+		dispatcher.forward(request, response);
+		
+		
+	}
+}
+```
+### 7.23.2. Test03Send.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Test03Send extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		//String view = "WEB-INF/view/LoadTest03.jsp";
+		String view = "LoadTest03.jsp";
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+		
+	}
+}
+```
+### 7.23.3. LoadTest03_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+${result}
+```
+### 7.23.4. LoadTest03.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LoadTest03.jsp</title>
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<style type="text/css">
+	.txtNum{width: 100px;text-align:right;}
+</style>
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	
+	$("#sendButton").click(function()
+	{
+		//alert("확인");
+		
+		var su1 = document.getElementById("su1").value;
+		// var su1 = $("#su1").val();
+		var oper = document.getElementById("oper").value;
+		var su2 = document.getElementById("su2").value;
+		
+		$("#result").load("loadtest03.do?su1="+su1+"&oper="+oper+"&su2="+su2);
+		
+	})
+});
+
+
+
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>jQuery 의 load() 활용 실습2: 두수의 연산</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	<div>
+		<input type="text" id="su1" class="txt txtNum" />
+		
+		<select name="" id="oper">
+			<option value="add">덧셈</option>
+			<option value="sub">뺄셈</option>
+			<option value="mul">곰셈</option>
+			<option value="div">나누셈</option>
+		</select>
+		
+		<input type="text" id="su2" class="txt txtNum" />
+		<input type="button" value=" = " id="sendButton" class="btn" style="min-width: 40px">
+	</div>
+
+loadtest03send.do → Test03Send.java → LoadTest03.jsp
+											↓
+										loadtest03.do → LoadTest03.java → LoadTest03_ok.jsp
+
+	<div id="result">
+	
+	</div>
+	<br>
+	
+	<div>
+		<input type="radio" name="rdo" />rdo1
+		<input type="radio" name="rdo" />rdo2
+	</div>
+	<div>
+		<input type="checkbox" name="chk" />chk1
+		<input type="checkbox" name="chk" />chk2
+	</div>
+	
+	<div><input type="text" /></div>
+</div>
+
+
+</body>
+</html>
+```
+### 7.23.5. loadtest03send.do
+... 내용 없음 ....
+### 7.23.5. /AjaxJquery01/WebContent/WEB-INF/web.xml
+``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>WebApp00</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 
+  <servlet>
+  	<servlet-name></servlet-name>
+  	<servlet-class></servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name></servlet-name>
+  	<url-pattern></url-pattern>
+  </servlet-mapping>
+  -->
+  
+  <!-- LoadTest03: jQuery의 load() 활용 실습 -->
+  <servlet>
+  	<servlet-name>load03send</servlet-name>
+  	<servlet-class>com.test.ajax.Test03Send</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>load03send</servlet-name>
+  	<url-pattern>/loadtest03send.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>load03</servlet-name>
+  	<servlet-class>com.test.ajax.LoadTest03</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>load03</servlet-name>
+  	<url-pattern>/loadtest03.do</url-pattern>
+  </servlet-mapping>
+</web-app>
+```
+
+<br>
+
+## 7.24. [jQuery의 get() 활용 실습]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e0c6afa6-89e0-4733-ad21-bf35a100182e)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/bd16f556-1ded-4f47-adc9-5b1a472a0f1a)
+
+### 7.24.1. GetTest01.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>GetTest01.jsp</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+
+<script type="text/javascript">
+$(function ()
+{
+	$("#loadBtn").click(function()
+	{
+		var nickName = $("#nickName").val();
+		
+		// ※ 『$.get()』
+		//	  『$.get(url, data, callBack);』
+		//	   - 매개변수로 전달받은 URL 을 사용하여
+		//		 서버에 대한 GET요청을 전송하도록 한다.
+		//
+		//	  『$.get(url, {속성: 값, 속성: 값, 속성: 값, ...}, callBack)』
+		//	   - 전달과정에서 data 는 JSON 형태로 처리할 수 있다. 
+		//
+		//	  『$.get("요청URL", {이름1:값1, 이름2:값2:}, function (넘겨받은값){ $(선택자).html(넘겨받은값처리); });』
+		
+		$.get("GetTest01_ok.jsp",{nickName: nickName},function(data)
+		{
+			$("#resultDiv").html(data);
+		});
+		
+	});
+});
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>jQuery 의 get() 활용 실습</h1>
+	<hr>
+</div>
+
+<div class="layout">
+	<div>
+		<input type="text" id="nickName" class="txt" />
+		<br />
+		<button type="button" id="loadBtn" class="btn">눌러보자</button>
+	</div>
+	
+	<div id="resultDiv">
+	</div>
+</div>
+
+</body>
+</html>
+```
+### 7.24.2. GetTest01_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<%
+	// GetTest01_ok.jsp
+	
+	//String nickName= request.getParameter("nickName");
+%>
+<%-- <%=nickName %>님 안녕하세요. <br> 반갑습니다. --%>
+${param.nickName }님 안녕하세요. 
+<br>
+반갑습니다.
+```
+### 7.24.3. /AjaxJquery02/WebContent/WEB-INF/web.xml
+``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>WebApp00</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 
+  <servlet>
+  	<servlet-name></servlet-name>
+  	<servlet-class></servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name></servlet-name>
+  	<url-pattern></url-pattern>
+  </servlet-mapping>
+  -->
+  
+  <!-- LoadTest03: jQuery의 load() 활용 실습 -->
+  <servlet>
+  	<servlet-name>getTest02send</servlet-name>
+  	<servlet-class>com.test.ajax.GetTest02Controller</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>getTest02send</servlet-name>
+  	<url-pattern>/gettest02.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>getTest02</servlet-name>
+  	<servlet-class>com.test.ajax.GetTest02OkConroller</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>getTest02</servlet-name>
+  	<url-pattern>/gettest02ok.do</url-pattern>
+  </servlet-mapping>
+</web-app>
+```
+
+<br>
+
+## 7.25. [jQuery 의 get() 활용 실습2: 두수의 연산]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/dae70e5b-af5f-4164-bc77-09e07266b8c4)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e1d494e7-fe8b-4cc1-bbec-54ea21286d53)
+
+### 7.25.1. GetTest02Controller.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class GetTest02Controller extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		String view = "WEB-INF/view/GetTest02.jsp";
+		//String view = "GetTest02.jsp";
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+		
+	}
+}
+```
+### 7.25.2. GetTest02OkController.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class GetTest02OkConroller extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		// 이전 페이지(LoadTest03.jsp)로부터 넘어온 데이터 수신
+		// → su1, su2, oper
+		int su1 = Integer.parseInt(request.getParameter("su1"));
+		int su2 = Integer.parseInt(request.getParameter("su2"));
+		String oper = request.getParameter("oper");
+		
+		// 업무 로직 처리
+		
+		String result = "";
+		if(oper.equals("add"))
+			result = String.format("%d + %d = %d", su1, su2, (su1+su2));
+		else if(oper.equals("sub"))
+			result = String.format("%d - %d = %d", su1, su2, (su1-su2));
+		else if(oper.equals("mul"))
+			result = String.format("%d * %d = %d", su1, su2, (su1*su2));
+		else if(oper.equals("div"))
+			result = String.format("%d / %d = %d", su1, su2, (su1/su2));
+		
+		// 반환할 결과값 준비
+		request.setAttribute("result", result);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/view/GetTest02_ok.jsp");
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("GetTest02_ok.jsp");
+		dispatcher.forward(request, response);
+		
+		
+	}
+}
+```
+### 7.25.3. GetTest02_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+${result}
+```
+### 7.25.4. GetTest02.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>GetTest02.jsp</title>
+<link rel="stylesheet" type="text/css" href="<%=cp %>/css/style.css">
+<style type="text/css">
+	.txtNum{width: 100px;text-align:right;}
+</style>
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	
+	$("#sendButton").click(function()
+	{
+		//alert("확인");
+		
+		var su1 = $("#su1").val();
+		var oper = $("#oper").val();
+		var su2 = $("#su2").val();
+		
+		$.get("gettest02ok.do",{su1:su1,oper:oper,su2:su2},function(data)
+		{
+			$("#result").html(data);
+		});
+		
+		
+	})
+});
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>jQuery 의 get() 활용 실습2: 두수의 연산</h1>
+	<hr />
+</div>
+
+<!-- gettest02.do
+	 → com.test.ajax.GetTest02Controller.java
+	 → Web-INF/view/GetTest02.jsp
+	 				↓ gettest02ok.do
+	 				→ com.test.ajax.GetTest02OkConroller.java
+	 				→ WEB-INF/view/GetTest02_ok.jsp
+-->
+
+<div class="layout">
+	<div>
+		<input type="text" id="su1" class="txt txtNum" />
+		
+		<select name="" id="oper">
+			<option value="add">덧셈</option>
+			<option value="sub">뺄셈</option>
+			<option value="mul">곰셈</option>
+			<option value="div">나누셈</option>
+		</select>
+		
+		<input type="text" id="su2" class="txt txtNum" />
+		<input type="button" value=" = " id="sendButton" class="btn" style="min-width: 40px">
+	</div>
+
+	<div id="result">
+	
+	</div>
+	<br>
+	
+	<div>
+		<input type="radio" name="rdo" />rdo1
+		<input type="radio" name="rdo" />rdo2
+	</div>
+	<div>
+		<input type="checkbox" name="chk" />chk1
+		<input type="checkbox" name="chk" />chk2
+	</div>
+	
+	<div><input type="text" /></div>
+</div>
+
+
+</body>
+</html>
+```
+### 7.25.5. gettest02.do
+... 내용 없음 ....
+
+<br>
+
+## 7.26. [jQuery 의 post() 활용 실습]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/564c577c-93f9-442f-8e1b-ed967e6f4ecc)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/fc5d4b80-4563-4c80-8b5a-41b770af9380)
+
+### 7.26.1. PostTest01_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+제목: <b>${param.title }</b>
+<br>
+내용: <b>${param.content }</b>
+```
+### 7.26.2. PostTest01.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PostTest01.jsp</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
+#resultDiv{width: 240px;height:180px;border:2px solid #499bd7;paddin:4px;}
+</style>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#sendBtn").click(function()
+	{
+		//alert("확인");
+		
+		// ※ 『post()』
+		//	  『$.post(url, data, callBack);』
+		//		- 매개변수로 전달받은 URL 을 사용하여 서버에 POST 요청을 전송한다.
+		//		- 매개변수
+		//		 ·url: (String) POST 함수로 연결하는 서버 측 URL
+		//		 ·data: (Object) 이름과 값의 쌍으로 프로퍼티를 가진 객체.
+		//				미리 구성 및 인코딩 된 쿼리 스트링.
+		//		 ·callBack: (Function) 요청이 완료되면 호출되는 함수.
+		
+		$.post("PostTest01_ok.jsp"
+				,{title:$("#title").val(), content:$("#content").val()}
+				, function(data)
+				{
+					$("#resultDiv").html(data);
+				});
+	});	
+});
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>jQuery 의 post() 활용 실습</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	<div>
+		제목<input type="text" id="title" class="txt" />
+		<br />
+		내용<input type="text" id="content" class="txt" />
+		
+		<input type="button" id="sendBtn" value="보내기" class="btn" />
+	</div>
+	<br>
+	
+	<div id="resultDiv">
+	test
+	</div>
+</div>
+
+</body>
+</html>
+```
+
+<br>
+
+## 7.27. [jQuery의 post()활용 실습2: 두수의 연산]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/28f9726c-3165-41de-aa27-574bf57a4b1c)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/387705cd-2e0d-4898-aa27-989caa5b103c)
+
+### 7.27.1. PostTest02Controller.java
+``` java
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class PostTest02Controller extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		String view = "PostTest02.jsp";
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+	}
+}
+```
+### 7.27.2. PostTest02OkController.java
+``` java
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class PostTest02OkController extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		// 이전 페이지(LoadTest03.jsp)로부터 넘어온 데이터 수신
+		// → su1, su2, oper
+		int su1 = Integer.parseInt(request.getParameter("su1"));
+		int su2 = Integer.parseInt(request.getParameter("su2"));
+		String oper = request.getParameter("oper");
+		
+		// 업무 로직 처리
+		
+		String result = "";
+		if(oper.equals("add"))
+			result = String.format("%d + %d = %d", su1, su2, (su1+su2));
+		else if(oper.equals("sub"))
+			result = String.format("%d - %d = %d", su1, su2, (su1-su2));
+		else if(oper.equals("mul"))
+			result = String.format("%d * %d = %d", su1, su2, (su1*su2));
+		else if(oper.equals("div"))
+			result = String.format("%d / %d = %d", su1, su2, (su1/su2));
+		
+		// 반환할 결과값 준비
+		request.setAttribute("result", result);
+		
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/view/PostTest02_ok.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("PostTest02_ok.jsp");
+		dispatcher.forward(request, response);
+	}
+}
+```
+### 7.27.3. PostTest02_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+${result}
+```
+### 7.27.4. PostTest02.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PostTest02.jsp</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#sendButton").click(function()
+	{
+		//alert("확인");
+		
+		$.post("posttest02ok.do"
+				,{su1:$("#su1").val(), oper:$("#oper").val(), su2:$("#su2").val()}
+				, function(data)
+				{
+					$("#result").html(data);
+				});
+	});	
+});
+</script>
+
+</head>
+<body class="section">
+ 
+<div>
+	<h1>jQuery 의 post() 활용 실습2: 두수의 연산</h1>
+	<hr />
+</div>
+ 
+<!-- 
+posttest02.do
+PostTest02Controller.java
+PostTest02.jsp - + - * /
+posttest02ok.do
+PostTest02OkController.java
+PostTest02_ok.jsp
+web.xml
+-->
+ 
+<div class="layout">
+	<div>
+		<input type="text" id="su1" class="txt txtNum" />
+		
+		<select name="" id="oper">
+			<option value="add">덧셈</option>
+			<option value="sub">뺄셈</option>
+			<option value="mul">곰셈</option>
+			<option value="div">나누셈</option>
+		</select>
+		
+		<input type="text" id="su2" class="txt txtNum" />
+		<input type="button" value=" = " id="sendButton" class="btn" style="min-width: 40px">
+	</div>
+ 
+	<div id="result">
+	
+	</div>
+	<br>
+	
+	<div>
+		<input type="radio" name="rdo" />rdo1
+		<input type="radio" name="rdo" />rdo2
+	</div>
+	<div>
+		<input type="checkbox" name="chk" />chk1
+		<input type="checkbox" name="chk" />chk2
+	</div>
+	
+	<div><input type="text" /></div>
+</div>
+ 
+ 
+</body>
+</html>
+```
+### 7.27.5. posttest02.do
+... 내용 없음 ....
+### 7.27.5. /AjaxJquery03/WebContent/WEB-INF/web.xml
+``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>WebApp00</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 
+  <servlet>
+  	<servlet-name></servlet-name>
+  	<servlet-class></servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name></servlet-name>
+  	<url-pattern></url-pattern>
+  </servlet-mapping>
+  -->
+  
+  <!-- postTest02 -->
+  <servlet>
+  	<servlet-name>postTest02send</servlet-name>
+  	<servlet-class>com.test.ajax.PostTest02Controller</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>postTest02send</servlet-name>
+  	<url-pattern>/posttest02.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>postTest02</servlet-name>
+  	<servlet-class>com.test.ajax.PostTest02OkController</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>postTest02</servlet-name>
+  	<url-pattern>/posttest02ok.do</url-pattern>
+  </servlet-mapping>
+</web-app>
+```
+
+<br>
+
+## 7.28. [F_JsonApp: JSON 실습 테스트]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/661f71d9-aaca-482b-88aa-960fa30bcf55)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/476c95c7-3a5d-4a01-b296-9048c9fd7546)
+
+### 7.28.1. JsonTest01.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest01.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject = 
+{
+	 "test":"hello"
+}
+
+/* var myJsonObject = {"test":"hello"} */
+</script>
+</head>
+<body class="section">
+
+<form action="">
+	<input type="button" value="click1" onclick="alert(myJsonObject)" />
+	<!-- [object Object] -->
+	<br>
+	<input type="button" value="click2" onclick="alert(typeof myJsonObject)" />
+	<!-- **typeof: 어떤 타입인지 확인** -->
+	<!-- object -->
+</form>
+
+</body>
+</html>
+```
+### 7.28.2. JsonTest02.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest02.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject2 = 
+{
+	"test":"hello"
+	/* "test":"new test" */
+}
+</script>
+</head>
+<body class="section">
+
+<form action="">
+	<input type="button" value="click1" onclick="alert(myJsonObject2.test)"><br>
+	<!-- hello -->
+	
+	<input type="button" value="click2" onclick="myJsonObject2.test='new test';alert(myJsonObject2.test)">
+</form>
+
+</body>
+</html>
+```
+### 7.28.3. JsonTest03.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest03.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject3=
+{
+	"test1":"hello1"
+	, "test2": "hello2"
+	, "test3": "hello3"
+}
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<!-- <input class="btn" type="button" value="click1" onclick="myJsonObject3.test1"> -->
+	
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject3.test1)"><br>
+	<!-- hello1 -->
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject3.test2)"><br>
+	<!-- hello2 -->
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject3.test3)">
+	<!-- hello3 -->
+	
+	<br><br>
+	
+	<input type="button" class="btn" value="click4" onclick="alert(typeof myJsonObject3.test1)"><br>
+	<input type="button" class="btn" value="click5" onclick="alert(typeof myJsonObject3.test2)"><br>
+	<input type="button" class="btn" value="click6" onclick="alert(typeof myJsonObject3.test3)">
+	<!-- 셋 모두 --==>> string -->
+	<!-- **typeof를 찍었을 때, test1 의 타입을 찍는 것이 아닌.. hello1의 타입을 확인하는 것** -->
+	
+</form>
+
+</body>
+</html>
+```
+### 7.28.4. JsonTest04.html_eval()
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest04.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject4 =
+{
+	"test" : function()
+	{
+		alert("Method Test~!!!");
+	}
+}
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<input type="button" class="btn" value="click1" onclick="myJsonObject4.test"><br>
+	<!-- → X(동작하지 않음) -->
+	<input type="button" class="btn" value="click2" onclick="alert(myJsonObject4.test);">
+	<!-- **텍스트로 구성하고 있는 값 자체를 문자열 형태로 구성**
+	function(){
+		alert("Method Test~!!!");
+	}
+	 -->
+
+	<br><br>	
+	<input type="button" class="btn" value="click3" onclick="alert(myJsonObject4.test());"><br>
+	<!-- **더미 처리하듯 나옴**
+		Method Test~!!!
+		↓
+		undefined
+	 -->
+	 
+	 <!-- 『eval()』 : 변수를 자바스크립트의 함수처럼 사용할 수 있도록 해주는 함수
+	 					즉, 정적인 문자열을 동적인 코드 형식으로 처리해 주는 함수
+	 					보안성 이슈로 조심히 다루어야 할 함수  -->
+	 <!-- **자바스크립트는 계륵..?
+	 		자바스크립트가 보안상 이유로 문제가 있으나,
+	 		유용한 부분이 많기 때문에...
+	 		
+	 		우리나라에서는 크게 보안적 이슈를 크게 문제 삼고 있지 않으나,
+	 		해외의 여러 분야를 고려해서 고민하는 개발자들 사이에.. 
+	 		자바스크립트가 문제가 있다는 것을 고민중인 경우가 많음 ** -->
+	<input type="button" class="btn" value="click4" onclick="eval('a='+myJsonObject4.test); a();"><br>
+	<!-- Method Test~!!! -->
+</form>
+
+</body>
+</html>
+```
+### 7.28.5. JsonTest05.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest05</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+	var myJsonObejct5 =
+	{
+		"test" : function(args)
+		{
+			alert("Method Test: " + args);
+		}
+	}
+
+	var t = myJsonObejct5.test;
+	/* JsonTest04.html → var a = myJsonObject5.test; a(); */
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<input type="button" class="btn" value="click1" onclick="t('kyungtae')"><br>
+	<!-- Method Test: kyungtae -->
+	
+	<input type="button" class="btn" value="click2"
+	 onclick="eval('var a=' + myJsonObejct5.test); a('sukyoung')"><br>
+	<!-- Method Test: sukyoung -->
+	 
+	<input type="button" class="btn" value="click3"
+	 onclick="eval( '(' + myJsonObejct5.test+')(\'daseul\')' )"><br>
+	 <!-- myJsonObect5.test('daseul') -->
+	 <!-- → Method Test: daseul -->
+</form>
+
+</body>
+</html>
+```
+### 7.28.6. JsonTest06.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest06.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+
+// ①
+/* 
+var myJsonObject6=
+{
+	"test":123	
+}
+*/
+
+// ②
+/* 
+var myJsonObject6=
+{
+	"test":123.456	
+}
+ */
+// ③
+/* 
+var myJsonObject6=
+{
+	"test":true
+}
+ */
+
+// ④
+var myJsonObject6=
+{
+	"test":null
+}
+
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject6.test)"><br>
+	<!-- ① → 123 -->
+	<!-- ② → 123.456 -->
+	<!-- ③ → true -->
+	<!-- ④ → null -->
+	<!-- ④ →  -->
+	
+	<input type="button" class="btn" value="click2" onclick="alert(typeof myJsonObject6.test)">
+	<!-- ① → number -->
+	<!-- ② → number -->
+	<!-- ③ → boolean -->
+	<!-- ④ → object --> <!-- check~!!! -->
+	
+	<br><br>
+	
+	<input type="button" value="click3" class="btn"
+		onclick="myJsonObject6.test=false; alert(myJsonObject6.test)">
+	<!-- false -->
+	<input type="button" value="click4" class="btn"
+		onclick="myJsonObject6.test=false; alert(typeof myJsonObject6.test)">
+	<!-- boolean -->
+		
+	<br><br>
+	
+	<input type="button" value="click5" class="btn"
+		onclick="myJsonObject6.test=123; alert(myJsonObject6.test)">
+	<!-- 123 -->
+	<input type="button" value="click6" class="btn"
+		onclick="myJsonObject6.test=123; alert(typeof myJsonObject6.test)">
+	<!-- number -->	
+	<br><br>
+	
+	<input type="button" value="click7" class="btn"
+		onclick="myJsonObject6.test='123'; alert(myJsonObject6.test)">
+	<!-- 123 -->
+	<input type="button" value="click8" class="btn"
+		onclick="myJsonObject6.test='123'; alert(typeof myJsonObject6.test)">
+	<!-- string -->
+</form>
+
+</body>
+</html>
+```
+### 7.28.7. JsonTest07.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest07.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject7 = ["test"]
+var myJsonObject7_1 = ["test1", "test2"]
+var myJsonObject7_2 = ["test2", "test2",123, 123+1]
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject7)">
+	<!-- → test -->
+	<input type="button" class="btn" value="click2" onclick="alert(myJsonObject7_1)">
+	<!-- → test1,test2 -->
+	<input type="button" class="btn" value="click3" onclick="alert(myJsonObject7_2)">
+	<!-- → test2,test2,123,124 -->
+	<!-- **더미로 출력되는 것을 확인할 수 있음** -->
+	
+	<br><br>
+	
+	<input type="button" class="btn" value="click4" onclick="alert(typeof myJsonObject7)">
+	<input type="button" class="btn" value="click5" onclick="alert(typeof myJsonObject7_1)">
+	<input type="button" class="btn" value="click6" onclick="alert(typeof myJsonObject7_2)">
+	<!-- 셋 모두 → object -->
+	
+	<br><br>
+	<input type="button" class="btn" value="click7" onclick="alert(myJsonObject7[0])">
+	<!-- → test -->
+	<input type="button" class="btn" value="click8" onclick="alert(typeof myJsonObject7[0])">
+	<!-- → string -->
+	<input type="button" class="btn" value="click9" onclick="alert(myJsonObject7[1])">
+	<!-- → undefined -->
+	<!-- **자바스크립트 배열이 자바의 배열과 다른점
+		고정값이 아님. 내용이 같지 않아도 들어감**-->
+	<input type="button" class="btn" value="click10" onclick="alert(typeof myJsonObject7[1])">
+	<!-- → undefined -->
+	<!-- **undefined 의 타입은 undefined** -->
+	
+	<br><br>
+	<input type="button" class="btn" value="click11"
+		onclick="alert(myJsonObject7_1[0] + myJsonObject7_1[1])">
+	<!-- → test1test2 -->
+	<input type="button" class="btn" value="click12"
+		onclick="alert(typeof (myJsonObject7_1[0] + myJsonObject7_1[1]))">
+	<!-- string -->
+	<!-- **괄호 안 씌울 경우 stringtest2 ** -->
+	
+	<br><br>
+	<input type="button" class="btn" value="click13"
+		onclick="alert(myJsonObject7_2[2] + myJsonObject7_2[3])">
+	<!-- → 247 -->
+	<input type="button" class="btn" value="click14"
+		onclick="alert(typeof (myJsonObject7_2[2] + myJsonObject7_2[3]))">
+	<!-- → number -->
+	
+	<br><br>
+	<!-- check~!!! -->
+	<input type="button" class="btn" value="click15"
+		onclick="alert(myJsonObject7_1[0] + myJsonObject7_1[2])">
+	<!-- → test1undefined -->
+	<!-- **undefined를 문자열로 취급함** -->
+	<input type="button" class="btn" value="click16"
+		onclick="alert(typeof (myJsonObject7_1[0] + myJsonObject7_1[2]))">
+	<!-- → string -->
+	
+	<br><br>
+	<!-- check~!!! -->
+	<input type="button" class="btn" value="click17"
+		onclick="alert(myJsonObject7_2[3] + myJsonObject7_2[4])">
+	<!-- → NaN(Not a Number) -->
+	<input type="button" class="btn" value="click18"
+		onclick="alert(typeof (myJsonObject7_2[3] + myJsonObject7_2[4]))">
+	<!-- → number -->
+	<!-- **NaN인지 아닌지 여부 확인을 위해 typeof 를 찍어보는 것은 의미없음!** -->
+	
+</form>
+
+</body>
+</html>
+```
+### 7.28.8. JsonTest08.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest08.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject8=
+{
+	"test": ["ccc", "ddd"]
+	, "exam": ["kkk", "ppp"]
+}
+
+/* var myJsonObject8={	"test": ["ccc", "ddd"], "exam": ["kkk", "ppp"]} */
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject8)">
+	<!-- → [object(자바스크립트 타입) Object(html dom 타입)] -->
+	<input type="button" class="btn" value="click2" onclick="alert(typeof myJsonObject8)">
+	<!-- → object -->
+	
+	<br><br>
+	
+	<input type="button" class="btn" value="click3" onclick="alert(myJsonObject8.test)">
+	<!-- → ccc,ddd -->
+	<input type="button" class="btn" value="click4" onclick="alert(typeof myJsonObject8.test)">
+	<!-- → object -->
+	<!-- **배열도 typeof에서는 object** -->
+	
+	<br><br>
+	
+	<input type="button" class="btn" value="click5" onclick="alert(myJsonObject8.test[0])">
+	<!-- → ccc -->
+	<input type="button" class="btn" value="click6" onclick="alert(typeof myJsonObject8.test[0])">
+	<!-- → string -->
+	
+	<!-- ※ 객체 구조상... 2차원 배열의 형태로 볼 수 있지만...
+			다음과 같은 접근이나 처리는 불가능하다.
+	 -->
+	 
+	<!-- ccc -->
+	<input type="button" class="btn" value="click7" onclick="alert(myJsonObject8.[0][0])">
+	<!-- → X -->
+	<!-- ppp -->
+	<input type="button" class="btn" value="click7" onclick="alert(myJsonObject8.[1][1])">
+	<!-- → X -->
+	
+</form>
+
+</body>
+</html>
+```
+### 7.28.9. JsonTest09.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest09.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject9 =
+{
+	"superman": 
+	{
+		"name":"moonjunghwan"
+		, "age": 49
+		, "hobby": ["song", "dance"]
+	}	
+}
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<input type="button" class="btn" value="click1" onclick="alert(typeof myJsonObject9)">
+	<!-- → object -->
+	
+	<input type="button" class="btn" value="click2" onclick="alert(typeof myJsonObject9.superman)">
+	<!-- → object -->
+	
+	<input type="button" class="btn" value="click3" onclick="alert(typeof myJsonObject9.superman.name)">
+	<!-- → string -->
+	
+	<input type="button" class="btn" value="click4" onclick="alert(typeof myJsonObject9.superman.age)">
+	<!-- → number -->
+	
+	<input type="button" class="btn" value="click5" onclick="alert(typeof myJsonObject9.superman.hobby)">
+	<!-- → object -->
+	
+	<br><br>
+	
+	<input type="button" class="btn" value="click6" onclick="alert(myJsonObject9.superman.hobby[0])">
+	<!-- → song -->
+	<input type="button" class="btn" value="click7" onclick="alert(typeof myJsonObject9.superman.hobby[0])">
+	<!-- → string -->
+</form>
+
+</body>
+</html>
+```
+### 7.28.10. JsonTest10.html
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest10.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+function printString(cnt)
+{
+	alert(cnt);
+}
+window.onload = function()
+{
+	var temp = "printString('First')";
+	
+	/* JSON */
+	var printList = 
+	{
+		"1": "printString('Hi JSON~!!!')"
+		, "2": temp
+		, "3": "alert('Second')"
+		, "4": "printString('Third')"
+	}
+	
+	for (var i = 1; i < 5; i++)	// 1 2 3 4
+	{
+		eval(printList[i]);
+		/* 
+		Hi JSON~!!!
+		First
+		Second
+		Third
+		*/
+	}
+};
+</script>
+</head>
+<body>
+
+</body>
+</html>
+```
+
+<br>
+
+## 7.29. [F_AjaxJquery04: jQuery의 ajax() 활용 실습]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/1720567a-06fa-4133-b43c-b8fa38b8e4ac)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/1dda860d-e562-4b3b-b532-04c1dad6bc72)
+
+### 7.29.1. AjaxTest01.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AjaxTest01.jsp</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+$(function()
+{
+	$("#sendBtn").click(function()
+	{
+		// 테스트
+		//alert("확인~!!!");
+		
+		// data 구성
+		var params = "name=" + $.trim($("#name").val())
+					+ "&content=" + $.trim($("#content").val());
+		
+		// check~!!!
+		// ※ jQuery 의 ajax() 함수 사용(호출)
+		
+		//$.ajxa();
+		//	↓
+		//$.ajxa(
+		//{
+		//	type: "POST"				// 데이터 전송 및 페이지 요청 방식
+		//	, url:"AjaxTest01_ok.jsp"	// 요청 페이지 URL
+		//	, data: params				// 요청 페이지(AjaxTest01_ok.jsp)에서 수신하게 되는 데이터
+		//	, success: 동작				// 페이지요청 및 데이터전달이 성공했을 때의 처리
+		//	, beforeSend: 반환값확인	// 요청 전 확인해야 할 항목 처리(true/false)
+		//	, error: 동작				// 처리과정에서 문제가 발생했을 때의 처리
+		//});
+		
+		$.ajax(
+		{
+            type:"POST"
+            , url:"AjaxTest01_ok.jsp"
+            , data:params               // url 지정 페이지로 넘길 값   // check~!!
+            , success:function(args)
+            {
+               $("#resultDiv").html(args);
+               
+               $("#name").val("");
+               $("#content").val("");
+               $("#name").focus();
+            }
+         , beforeSend:showRequest         // true / false      // check~!!!
+         , error:function(e)
+           {
+            alert(e.responseText);
+           }
+         });
+	});
+});
+function showRequest()
+{
+	//console.log($.trim($("#name").val()));
+	if(!$.trim($("#name").val()))
+	{
+		alert("이름을 입력해야 합니다.");
+		$("#name").focus();
+		
+		return false;
+	}
+	
+	if(!$.trim($("#content").val()))
+	{
+		alert("내용을 입력해야 합니다.");
+		$("#content").focus();
+		
+		return false;
+	}
+	return true;
+}
+
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>jQuery의 ajax() 활용 실습</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	이름
+	<input type="text" id="name" class="txt">
+	<br><br>
+	
+	내용
+	<textarea name="" id="content" cols="30" rows="10"></textarea>
+	<br><br>
+
+	<input type="button" id="sendBtn" value="등록하기" class="btn">
+</div>
+
+<div id="resultDiv"></div>
+
+</body>
+</html>
+```
+### 7.29.2. AjaxTest01_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"
+%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%><%
+	// AjaxTest02_ok.jsp → XML 구성
+	
+	String name = request.getParameter("name");
+	String content = request.getParameter("content");
+	
+	response.setContentType("text.xml");
+%><?xml version="1.0" encoding="UTF-8"?>
+<lists>
+	<total_dataCount>5</total_dataCount>
+	<%
+	for (int i=1; i<=5; i++)
+	{
+	%>
+	<comment num="<%=i %>">
+		<name><%=name+i %></name>
+		<content><%=content+i %></content>
+	</comment>
+	<%
+	}
+	%>
+</lists>
+```
+
+<br>
+
+## 7.30. [jQuery의 ajax() 활용 실습2]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/17492343-b8ac-4f6f-b8a6-702075f16e3d)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/e5569f33-87db-47c2-9b25-f71bb90419d6)
+
+### 7.30.1. AjaxTest02.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AjaxTest02.jsp</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+$(function()
+		   {
+		      $("#sendBtn").click(function()
+		      {
+		         //alert("확인");
+		         
+		         var params = "name=" + $.trim($("#name").val())
+		            + "&content=" + $.trim($("#content").val());
+		         
+		         // ※ jQuery 의 ajax() 함수 사용(호출)
+		         /*
+		         $.ajax();
+		         ↓
+		         $.ajax(
+		         {
+		            type : "POST"               	// 데이터 전송 및 페이지 요청 방식
+		            , url : "AjaxTest01_ok.jsp"     // 요청 페이지 URL
+		            , data : params               	// 요청 페이지(AjaxTest01_ok.jsp)에서 수신하게 되는 데이터
+		            , success : 동작            	// 페이지요청 및 데이터전달이 성공했을 때의 처리
+		            , beforeSend : 반환값확인      	// 요청 전 확인해야 할 항목 처리 (true / false)
+		            , error : 동작               	// 처리과정에서 문제가 발생했을 때의 처리
+		         })
+		         */
+		         
+		         $.ajax(
+		         {
+		            type:"POST"
+		            , url:"AjaxTest02_ok.jsp"
+		            , data:params               // url 지정 페이지로 넘길 값   // check~!!
+		            , dataType: "xml"			//-- check~!!! //**넘겨받는 데이터 타입**
+		            //,async:false				//-- 동기
+		            , success:function(args)
+		            {
+		            	var out = "";
+		            	out=">> 게시물 갯수: "+ $(args).find("total_dataCount").text() + "<br>";
+		            	
+		            	$(args).find("comment").each(function()
+						{
+							var item = $(this);
+							var num = item.attr("num");
+							var name = item.find("name").text();
+							var content = item.find("content").text();
+							
+							out += "<br>========================"
+							out += "<br> 번호: "+ num;
+							out += "<br> 이름: "+ name;
+							out += "<br> 내용: "+ content;
+							out += "<br>========================"
+						});
+		            	
+		               $("#resultDiv").html(out);
+		               
+		               $("#name").val("");
+		               $("#content").val("");
+		               $("#name").focus();
+		            }
+		         , beforeSend:showRequest         // true / false      // check~!!!
+		         , error:function(e)
+		           {
+		            alert(e.responseText);
+		           }
+		         });
+		      
+		      });
+		   });
+		   
+		   
+		   function showRequest()
+		   {
+		      if (!$.trim($("#name").val()))
+		      {
+		         alert("이름을 입력해야 합니다.");
+		         $("#name").focus();
+		         
+		         return false;
+		      }
+		      
+		      if (!$.trim($("#content").val()))
+		      {
+		         alert("내용을 입력해야 합니다.");
+		         $("#content").focus();
+		         
+		         return false;
+		      }
+		      
+		      return true;
+		      
+		   }
+</script>
+
+</head>
+<body class="section">
+
+<div>
+	<h1>jQuery의 ajax() 활용 실습2</h1>
+	<hr />
+</div>
+
+<div class="layout">
+	이름
+	<input type="text" id="name" class="txt">
+	<br><br>
+	
+	내용
+	<textarea name="" id="content" cols="30" rows="10"></textarea>
+	<br><br>
+
+	<input type="button" id="sendBtn" value="등록하기" class="btn">
+</div>
+
+<div id="resultDiv"></div>
+
+</body>
+</html>
+```
+### 7.30.2. AjaxTets02_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"
+%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%><%
+	// AjaxTest02_ok.jsp → XML 구성
+	
+	String name = request.getParameter("name");
+	String content = request.getParameter("content");
+	
+	response.setContentType("text.xml");
+%><?xml version="1.0" encoding="UTF-8"?>
+<lists>
+	<total_dataCount>5</total_dataCount>
+	<%
+	for (int i=1; i<=5; i++)
+	{
+	%>
+	<comment num="<%=i %>">
+		<name><%=name+i %></name>
+		<content><%=content+i %></content>
+	</comment>
+	<%
+	}
+	%>
+</lists>
+```
+
+<br>
+
+## 7.31. [jQuery 의 ajax() 활용 실습3: 두수의 연산]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/93a22141-8823-4804-89ff-00814d8725ae)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/7b6bb37b-b954-4ca6-b203-67b2cdbc8ef8)
+
+### 7.31.1. AjaxTest03Controller.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class AjaxTest03Controller extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		String view = "WEB-INF/view/AjaxTest03.jsp";
+		//String view = "AjaxTest03.jsp";
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+	}
+}
+```
+### 7.31.2. AjaxTest03OkController.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class AjaxTest03OkController extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		// 이전 페이지(LoadTest03.jsp)로부터 넘어온 데이터 수신
+		// → su1, su2, oper
+		int su1 = Integer.parseInt(request.getParameter("su1"));
+		int su2 = Integer.parseInt(request.getParameter("su2"));
+		String oper = request.getParameter("oper");
+		
+		// 업무 로직 처리
+		
+		String result = "";
+		if(oper.equals("add"))
+			result = String.format("%d + %d = %d", su1, su2, (su1+su2));
+		else if(oper.equals("sub"))
+			result = String.format("%d - %d = %d", su1, su2, (su1-su2));
+		else if(oper.equals("mul"))
+			result = String.format("%d * %d = %d", su1, su2, (su1*su2));
+		else if(oper.equals("div"))
+			result = String.format("%d / %d = %d", su1, su2, (su1/su2));
+		
+		// 반환할 결과값 준비
+		request.setAttribute("result", result);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/view/AjaxTest03_ok.jsp");
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("AjaxTest03_ok.jsp");
+		dispatcher.forward(request, response);
+		
+	}
+}
+```
+### 7.31.3. AjaxTest03_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"%>
+${result}
+```
+### 7.31.4. AjaxTest03.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AjaxTest03.jsp</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#sendButton").click(function()
+	{
+		//alert("확인");
+		
+		var params = "su1="+$.trim($("#su1").val())
+			+ "&oper=" + $.trim($("#oper").val())
+			+ "&su2=" + $.trim($("#su2").val());
+		
+		$.ajax(
+		{
+			type:"POST"
+			, url: "ajaxtest03ok.do"
+			, data: params
+			, success: function(args)
+			{
+				$("#result").html(args);
+	               
+				$("#su1").val("");
+                $("#su2").val("");
+                $("#su1").focus();
+			}
+		});
+		
+	})
+});
+</script>
+
+</head>
+<body class="section">
+ 
+<div>
+	<h1>jQuery 의 ajax() 활용 실습2: 두수의 연산</h1>
+	<hr />
+</div>
+ 
+<!-- 
+ajaxtest03.do
+AjaxTest03Controller.java
+AjaxTest03.jsp - + - * /
+ajaxtest03ok.do
+AjaxTest03OkController.java
+AjaxTest03_ok.jsp
+web.xml
+-->
+ 
+<div class="layout">
+	<div>
+		<input type="text" id="su1" class="txt txtNum" />
+		
+		<select name="" id="oper">
+			<option value="add">덧셈</option>
+			<option value="sub">뺄셈</option>
+			<option value="mul">곰셈</option>
+			<option value="div">나누셈</option>
+		</select>
+		
+		<input type="text" id="su2" class="txt txtNum" />
+		<input type="button" value=" = " id="sendButton" class="btn" style="min-width: 40px">
+	</div>
+ 
+	<div id="result">
+	
+	</div>
+	<br>
+	
+	<div>
+		<input type="radio" name="rdo" />rdo1
+		<input type="radio" name="rdo" />rdo2
+	</div>
+	<div>
+		<input type="checkbox" name="chk" />chk1
+		<input type="checkbox" name="chk" />chk2
+	</div>
+	
+	<div><input type="text" /></div>
+</div>
+ 
+ 
+</body>
+</html>
+```
+### 7.31.5. ajaxtest03.do
+... 내용 없음 ...
+### 7.32.6. /AjaxJquery04/WebContent/WEB-INF/web.xml
+``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>WebApp00</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 
+  <servlet>
+  	<servlet-name></servlet-name>
+  	<servlet-class></servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name></servlet-name>
+  	<url-pattern></url-pattern>
+  </servlet-mapping>
+  -->
+  
+  <!-- ajaxTest03 -->
+  <servlet>
+  	<servlet-name>ajaxTest03send</servlet-name>
+  	<servlet-class>com.test.ajax.AjaxTest03Controller</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ajaxTest03send</servlet-name>
+  	<url-pattern>/ajaxtest03.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>ajaxTest03</servlet-name>
+  	<servlet-class>com.test.ajax.AjaxTest03OkController</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ajaxTest03</servlet-name>
+  	<url-pattern>/ajaxtest03ok.do</url-pattern>
+  </servlet-mapping>
+</web-app>
+```
+
+<br>
+
+## 7.32. [jQuery의 ajax()활용 실습4: xml 이용]
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/7a3e2b65-9eae-48c6-8c2b-0c2146847bd5)
+![image](https://github.com/ohsukyoung/sist_storage/assets/143863402/27fadab9-cd5a-4a75-9ddc-eea5650d0f22)
+
+### 7.32.1. AjaxTest04Controller.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class AjaxTest04Controller extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		String view = "WEB-INF/view/AjaxTest04.jsp";
+		//String view = "AjaxTest04.jsp";
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+	}
+}
+```
+### 7.32.2. AjaxTest04OkController.java
+``` java
+/* ==================
+	ServletSample.java
+=================== */
+
+package com.test.ajax;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class AjaxTest04OkController extends HttpServlet
+{
+	private static final long serialVersionUID = 1L;
+
+	// 사용자의 http 프로토콜 요청이 GET 방식일 경우 호출되는 메소드
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+
+	// 사용자의 http 프로토콜 요청이 POST 방식을 경우 호출되는 메소드
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGetPost(request, response);
+	}
+	 
+	// 사용자 정의 메소드
+	protected void doGetPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// GET 방식이든 POST 방식이든
+		// 어떤 방식의 요청에도 모두 처리할 수 있는 사용자 정의 메소드
+		
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		
+		request.setAttribute("title", title);
+		request.setAttribute("content", content);
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/view/AjaxTest04_ok.jsp");
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("AjaxTest04_ok.jsp");
+		dispatcher.forward(request, response);
+		
+	}
+}
+```
+### 7.32.3. AjaxTest04_ok.jsp
+``` java
+<%@ page contentType="text/html; charset=UTF-8"
+%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" 
+%><%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%><%
+	// AjaxTest04_ok.jsp → xml 구성
+	
+	String title = request.getParameter("title");
+	String content = request.getParameter("content");
+	
+	response.setContentType("text.xml");
+%><?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<status>true</status>
+	<%
+	for(int i=1; i<=2; i++)
+	{
+	%>
+	<recodes id="<%=i%>">
+		<title><%=title %></title>
+		<content><%=content %></content>
+	</recodes>
+	<%
+	}
+	%>
+</root>
+```
+### 7.32.4. AjaxTest04.jsp
+``` html
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	request.setCharacterEncoding("UTF-8");
+	String cp = request.getContextPath();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+$(function()
+{
+	$("#sendButton").click(function()
+	{
+		//alert("확인");
+		
+		var params = "title="+$.trim($("#title").val())
+				+ "&content="+$.trim($("#content").val());
+		
+		$.ajax(
+		{
+			type : "POST"
+			, url: "ajaxtest04ok.do"
+			, data: params
+			, dataType: "xml"
+			, success: function(args)
+			{
+				var out = "";
+				//out = ">> id=" + $(args)
+				$(args).find("recodes").each(function()
+				{
+					var item = $(this);
+					var num = item.attr("id");
+					var title = item.find("title").text();
+					var content = item.find("content").text();
+					
+					out += ">> id=" + num + "<br>";
+					out += "- title=" + title + "<br>";
+					out += "- content=" + content + "<br>";
+					
+				});
+				
+				$("#title").val("");
+				$("#content").val("");
+				$("#title").focus();
+				$("#resultDiv").html(out);
+			}
+			, beforeSend: showRequest
+			, error:function(e)
+			{
+				alert(e.responseText);
+			}
+			
+		});
+		
+	});
+})
+function showRequest()
+{
+	if(!$.trim($("#title").val()))
+	{
+		alert("이름을 입력해주세요.");
+		$("#title").focus();
+		return false;
+	}
+	if(!$.trim($("#content").val()))
+	{
+		alert("내용을 입력해주세요.");
+		$("#content").focus();
+		return false;
+	}
+	return true;
+}
+</script>
+</head>
+<body class="section">
+
+<div>
+	<h1>jQuery의 ajax() 활용 실습4</h1>
+	<hr />
+</div>
+
+
+<div class="layout">
+	제목
+	<input type="text" id="title" class="txt" /><br><br>
+	
+	내용
+	<input type="text" id="content" class="txt" /><br><br>
+	
+	<input type="button" value="등록하기" id="sendButton" class="btn" />
+</div>
+<br>
+<div id="resultDiv">
+<!-- 
+>> id=1
+- title=테스트
+- content= 반갑습니다.
+
+>> id=2
+- title=테스트
+- content= 반갑습니다.
+ -->
+
+</div>
+
+</body>
+</html>
+```
+### 7.32.5. ajaxtest04.do
+... 내용없음...
+### 7.32.6. /AjaxJquery04/WebContent/WEB-INF/web.xml
+``` html
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>WebApp00</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 
+  <servlet>
+  	<servlet-name></servlet-name>
+  	<servlet-class></servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name></servlet-name>
+  	<url-pattern></url-pattern>
+  </servlet-mapping>
+  -->
+  
+  <!-- ajaxTest03 -->
+  <servlet>
+  	<servlet-name>ajaxTest03send</servlet-name>
+  	<servlet-class>com.test.ajax.AjaxTest03Controller</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ajaxTest03send</servlet-name>
+  	<url-pattern>/ajaxtest03.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>ajaxTest03</servlet-name>
+  	<servlet-class>com.test.ajax.AjaxTest03OkController</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ajaxTest03</servlet-name>
+  	<url-pattern>/ajaxtest03ok.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- ajaxTest04 -->
+  <servlet>
+  	<servlet-name>ajaxTest04send</servlet-name>
+  	<servlet-class>com.test.ajax.AjaxTest04Controller</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ajaxTest04send</servlet-name>
+  	<url-pattern>/ajaxtest04.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>ajaxTest04</servlet-name>
+  	<servlet-class>com.test.ajax.AjaxTest04OkController</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ajaxTest04</servlet-name>
+  	<url-pattern>/ajaxtest04ok.do</url-pattern>
+  </servlet-mapping>
+</web-app>
 ```
 
 ------------------------------------------------
