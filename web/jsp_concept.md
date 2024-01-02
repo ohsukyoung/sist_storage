@@ -1272,14 +1272,14 @@ AJAX 객체를 사용하려면 먼저 AJAX 생성 함수를 사용하여 AJAX �
 
 > 자바스크립트를 이용해 객체를 표현하는 표현방법
 
-○ JSON(JavaScript Object Notation) 이란?
+### 5.19.1. ○ JSON(JavaScript Object Notation) 이란?
 - JavaScript Object Notation, RFC 4627
 - Javascript 구문 형식을 따르며, 언제나 플랫폼에 독립적
 - 미디어 타입: 'application/json'
 - 표현 가능한 자료형
 	: object, array, string, number, boolean, null
 
-○ 개요  
+### 5.19.2. ○ 개요  
 JSON(JavaScript Object Notation)은
 네트워크 상에서(대표적으로 인터넷 상에서) 데이터를 주고 받을 때,
 그 데이터를 표현하는 방법이다.
@@ -1302,14 +1302,14 @@ C 계열 언어, 자바, 자바스크립트 등 다수 개발자들에게
 ※ 문자열에서 Native Object 로 변환하는 것으 파싱(Parsing)이라 한다,
 네트워크를 통해 전달할 수 있게 객체를 문자열로 변환하는 과정은 문자열화(Stringfication)라고 한다.
 
-○ 특징(※ JSON의 특징은.. 곧 XML의 단점 → 데이터의 크기, 속도)  
+### 5.19.3. ○ 특징(※ JSON의 특징은.. 곧 XML의 단점 → 데이터의 크기, 속도)  
 ① 경량 데이터 교환 방식  
 ② 데이터 표현이 단순하고 직관적  
 ③ Javascript 에서 eval()을 통해 parsing 가능  
 - 라이브러리 필요 없음(예외의 경우도 존재함)
 - 크로스 브라우저 호환 문제 없음
 
-○ 구조  
+### 5.19.4. ○ 구조  
 JSON은 두개의 구조를 기본으로 두고 있다.
 - name / value 형태의 쌍으로 collection 타입  
 	다양한 언어들에서 objec, record, struct(구조체), hashtable,
@@ -1317,11 +1317,11 @@ JSON은 두개의 구조를 기본으로 두고 있다.
 - 값들의 순서화된 리스트  
 	대부분 언어들에서 array, vector, list, sequence 등으로 실현되었다.
 
-○ 참조 페이지  
+### 5.19.5. ○ 참조 페이지  
 JSON 공식 홈페이지  
 - http://www.json.org
 
-○ JSON의 기본 문법  
+### 5.19.6. ○ JSON의 기본 문법  
 ※ http://www.json.org/json-ko.html → 설명 문서 참조  
 ① 표현하고자 하는 데이터는 『{}』로 감싼다.  
 ② 데이터는 『name:value』형식으로 표현한다.  
@@ -1348,7 +1348,7 @@ var obj =
 { "메소드명" : function(인수){...} }
 ```
 
-○ JSON 의 데이터 타입(자료형)
+### 5.19.7. ○ JSON 의 데이터 타입(자료형)
 - string
 - number
 - boolean
@@ -1418,7 +1418,7 @@ var obj =
 }
 ```
 
-○ 일시(날짜)
+### 5.19.8. ○ 일시(날짜)
 - JSON 에서 기본적으로 제공하는 자료형에 일시(날짜)는 없음.
 - 개발자 스스로 규칙을 정해서 사용
 - 가장 단순한 방법으로는 UNIX 시간을 수치로 표현.  
@@ -1430,7 +1430,7 @@ var obj =
 - Javascript 는 브라우저 별로 출력 내용이 달라지기 때문에 표준적인 ISO-8601 사용 권장  
 	("2023-05-12T14:41:15+0900")
 
-○ 링크
+### 5.19.9. ○ 링크
 - 단순히 URI 를 문자열로 표현
 	{ "href":"http:example.com/foo/bar" }
 - URI 는 상대 URI 가 아닌 절대 URI로 표현 권장
