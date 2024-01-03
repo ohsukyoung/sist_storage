@@ -748,7 +748,7 @@ JPS(입력) → Servlet(결과를 위한 처리) → JSP(결과) 방식으로 �
 ### 5.14.1. ○ EL(Expression Language: 표현 언어)
 
 EL 은 JSTL 1.0 스펙에서 잠깐 소개되었다가 JSP 2.0 부터 공식적으로 포함되었으며 JSP 페이지에서 사용되는 자바 코드를 대신해서 액션 태그 엘리먼트의 속성에 값을 지정하는 역할을 한다.
-예를 들어, `<someTags:aTag>`` 액션 태그 엘리먼트의 속성은 `attribute`` 이고 속성값은 `<% pageContent.getAttribute("aName")%>` 인 경우
+예를 들어, `<someTags:aTag>` 액션 태그 엘리먼트의 속성은 `attribute` 이고 속성값은 `<% pageContent.getAttribute("aName")%>` 인 경우
 
 `<someTags:aTag attribute="<% pageContent.getAttribute("aName")%>">` 의 방식으로 표현하지만
 
