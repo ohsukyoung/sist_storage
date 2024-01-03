@@ -492,7 +492,7 @@ request가 page 와 다른 점은 request 에서는 forward 나 include 를 사�
 
 ### 5.12.4. ○ <jsp:param>
 
-`<jsp:param>` 태그는 요청한 페이지로 저오를 전달할 때 사용하는 태그로 현재 페이지에서 요청한 페이지로 인자(parameter)와 인자값(value) 형태로 넘겨준다.
+`<jsp:param>` 태그는 요청한 페이지로 정보를 전달할 때 사용하는 태그로 현재 페이지에서 요청한 페이지로 인자(parameter)와 인자값(value) 형태로 넘겨준다.
 
 `<jsp:param name="paramName" value="var" />`
 
