@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EmmetTest01.html</title>
+<!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="section">
+
+<div>
+	<h1>※ 기능 적용 액션 키 -> Ctrl + E</h1>
+	<hr>
+</div>
+
+<div class="layout">
+
+<ul>
+	<li>
+		<h2>1. 태그 선택자</h2>
+
+		div
+		<xmp>
+			<div></div>
+		</xmp>
+		
+		div{넣을내용}
+		<xmp>
+			<div>넣을내용</div>
+		</xmp>
+		
+		<h3>emmet으로 만들고 속성값 사이를 'tab'으로 이동가능</h3>
+		a
+		<a href="http://www.naver.com">네이버</a>
+		
+		img
+		<xmp><img src="" alt="" /></xmp>
+		
+		table
+		<xmp>
+			<table></table>
+		</xmp>
+		
+		span
+		<xmp><span></span></xmp>
+		
+		p
+		<xmp>
+			<p></p>
+		</xmp>
+	</li>
+	<li>
+		<h2>2. 아이디 선택자</h2>
+		
+		div#box
+		<xmp>
+			<div id="box"></div>
+		</xmp>
+		
+		div#box{kkk}
+		<xmp>
+			<div id="box">kkk</div>
+		</xmp>
+		
+		div#box.happy{kkk}
+		<xmp>
+			<div id="box" class="happy">kkk</div>
+		</xmp>
+		
+		<h3>-> div는 별도의 작성없이도 div로 구성됨</h3>
+		#box
+		<xmp>
+			<div id="box"></div>
+		</xmp>
+		
+		#box{1234}
+		<xmp>
+			<div id="box">1234</div>
+		</xmp>
+
+	</li>
+	<li>
+		<h2>3. 클래스 선택자</h2>
+		
+		div.items
+		<xmp>
+			<div class="items"></div>
+		</xmp>
+		
+		div.items{aaa}
+		<xmp>
+			<div class="items">aaa</div>
+		</xmp>
+		
+		.items
+		<xmp>
+			<div class="items"></div>
+		</xmp>
+		
+		.items{bbb}
+		<xmp>
+			<div class="items">bbb</div>
+		</xmp>
+	</li>
+	<li>
+		<h2>4. 조합</h2>		
+		
+		div#box.items
+		<xmp>
+			<div id="box" class="items"></div>
+		</xmp>
+		
+		div#box.items.unit.control
+		<xmp>
+			<div id="box" class="items unit control"></div>
+		</xmp>
+		
+		div#box.items.unit{aaa}
+		<xmp>
+			<div id="box" class="items unit">aaa</div>
+		</xmp>
+		
+		div.items.unit{bbb}
+		<xmp>
+			<div class="items unit">bbb</div>
+		</xmp>
+	</li>
+	<li>
+		<h2>5. 속성 선택자</h2>
+		
+		div[title]
+		<xmp>
+			<div title=""></div>
+		</xmp>
+		
+		div[title='test']
+		<xmp>
+			<div title="test"></div>
+		</xmp>
+		
+		a[href='www.naver.com' title='네이버']
+		<xmp><a href="www.naver.com" title="네이버"></a></xmp>
+	
+		a[href='www.naver.com' title='네이버']{사이트로 이동}
+		<xmp><a href="www.naver.com" title="네이버">사이트로 이동</a></xmp>
+	</li>
+	<li>
+		<h2>6. PCDATA</h2>		
+		
+		div{박스}
+		<xmp>
+			<div>박스</div>
+		</xmp>
+		
+		a{홈페이지로 이동}
+		<xmp><a href="">홈페이지로 이동</a></xmp>
+		
+		p{문단내용기술}
+		<xmp>
+			<p>문단내용기술</p>
+		</xmp>
+	</li>
+	<li>
+		<h2>반복 생성</h2>
+		
+		div*5
+		<xmp>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</xmp>
+		
+		img[src=images/dog.jpg]*5
+		<xmp>
+			<img src="images/dog.jpg" alt="" />
+			<img src="images/dog.jpg" alt="" />
+			<img src="images/dog.jpg" alt="" />
+			<img src="images/dog.jpg" alt="" />
+			<img src="images/dog.jpg" alt="" />
+		</xmp>
+
+		.box*5
+		<xmp>
+			<div class="box"></div>
+			<div class="box"></div>
+			<div class="box"></div>
+			<div class="box"></div>
+			<div class="box"></div>
+		</xmp>
+		
+		.box{content}*5
+		<xmp>
+			<div class="box">content</div>
+			<div class="box">content</div>
+			<div class="box">content</div>
+			<div class="box">content</div>
+			<div class="box">content</div>
+		</xmp>
+		
+		<h3>$ -> 항목 번호 매기기</h3>
+		#box$.box{content}*5
+		<xmp>
+			<div id="box1" class="box">content</div>
+			<div id="box2" class="box">content</div>
+			<div id="box3" class="box">content</div>
+			<div id="box4" class="box">content</div>
+			<div id="box5" class="box">content</div>
+		</xmp>
+		
+		img[src=images.obj$.jpg]*5
+		<xmp>
+			<img src="images.obj1.jpg" alt="" />
+			<img src="images.obj2.jpg" alt="" />
+			<img src="images.obj3.jpg" alt="" />
+			<img src="images.obj4.jpg" alt="" />
+			<img src="images.obj5.jpg" alt="" />
+		</xmp>
+		
+		h1*6
+		<xmp>
+			<h1></h1>
+			<h1></h1>
+			<h1></h1>
+			<h1></h1>
+			<h1></h1>
+			<h1></h1>
+		</xmp>
+		
+		h$*6
+		<xmp>
+			<h1></h1>
+			<h2></h2>
+			<h3></h3>
+			<h4></h4>
+			<h5></h5>
+			<h6></h6>
+		</xmp>
+		
+		h${제목$}*6
+		<xmp>
+			<h1>제목1</h1>
+			<h2>제목2</h2>
+			<h3>제목3</h3>
+			<h4>제목4</h4>
+			<h5>제목5</h5>
+			<h6>제목6</h6>
+		</xmp>
+	</li>
+	<li>
+		<h2>8. 연속 생성</h2>
+		
+		div+p
+		<xmp>
+			<div></div>
+			<p></p>
+		</xmp>
+		
+		
+		h1{제목}+p{내용}*5
+		<xmp>
+			<h1>제목</h1>
+			<p>내용</p>
+			<p>내용</p>
+			<p>내용</p>
+			<p>내용</p>
+			<p>내용</p>
+		</xmp>
+		
+		(h1{제목}+p{내용}*2)*5
+		<xmp>
+			<h1>제목</h1>
+			<p>내용</p>
+			<p>내용</p>
+			<h1>제목</h1>
+			<p>내용</p>
+			<p>내용</p>
+			<h1>제목</h1>
+			<p>내용</p>
+			<p>내용</p>
+			<h1>제목</h1>
+			<p>내용</p>
+			<p>내용</p>
+			<h1>제목</h1>
+			<p>내용</p>
+			<p>내용</p>
+		</xmp>
+		
+		div+a+div+p+div+img
+		<xmp>
+			<div></div>
+			<a href=""></a>
+			<div></div>
+			<p></p>
+			<div></div>
+			<img src="" alt="" />
+		</xmp>
+	</li>
+	<li>
+		<h2>9. 하위 생성</h2>
+		
+		table+	
+		<xmp>
+			<table>
+				<tr>
+					<td></td>
+				</tr>
+			</table>
+		</xmp>
+		
+		ul+
+		<xmp>
+			<ul>
+				<li></li>
+			</ul>
+		</xmp>
+		
+		ol+
+		<xmp>
+			<ol>
+				<li></li>
+			</ol>
+		</xmp>
+		
+		select+	
+		<xmp><select name="" id="">
+				<option value=""></option>
+			</select></xmp>
+	</li>
+	<li>
+		<h2>10. 자식생성</h2>
+		
+		div>p
+		<xmp>
+			<div>
+				<p></p>
+			</div>
+		</xmp>
+		
+		div>p*5		
+		<xmp>
+			<div>
+				<p></p>
+				<p></p>
+				<p></p>
+				<p></p>
+				<p></p>
+			</div>
+		</xmp>	
+		
+		(div>p*2)*5		
+		<xmp>
+			<div>
+				<p></p>
+				<p></p>
+			</div>
+			<div>
+				<p></p>
+				<p></p>
+			</div>
+			<div>
+				<p></p>
+				<p></p>
+			</div>
+			<div>
+				<p></p>
+				<p></p>
+			</div>
+			<div>
+				<p></p>
+				<p></p>
+			</div>
+		</xmp>		
+		
+		table#tbl>tr*5>td*3		
+		<xmp>
+			<table id="tbl">
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+		</xmp>	
+		
+		table#tbl>tr*3>td.label+td.content		
+		<xmp>
+			<table id="tbl">
+				<tr>
+					<td class="label"></td>
+					<td class="content"></td>
+				</tr>
+				<tr>
+					<td class="label"></td>
+					<td class="content"></td>
+				</tr>
+				<tr>
+					<td class="label"></td>
+					<td class="content"></td>
+				</tr>
+			</table>
+		</xmp>	
+		
+		table#tbl>tr*3>td#label$+td.content
+		<xmp>
+			<table id="tbl">
+				<tr>
+					<td id="label1"></td>
+					<td class="content"></td>
+				</tr>
+				<tr>
+					<td id="label2"></td>
+					<td class="content"></td>
+				</tr>
+				<tr>
+					<td id="label3"></td>
+					<td class="content"></td>
+				</tr>
+			</table>
+		</xmp>
+				
+		table#tbl>(tr>th*3)+((tr>td*3)*5)
+		<xmp>
+			<table id="tbl">
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+		</xmp>
+		
+		
+	</li>
+	<li>
+		<h2>11. 더미 키워드</h2>
+		
+		lorem
+		<xmp>
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe quaerat modi totam temporibus voluptas vero exercitationem voluptate alias facilis quis quia deserunt adipisci debitis cumque maiores. Minus aliquam doloribus dolore.
+		</xmp>
+		
+		<h3>lorem을 태그사이에 넣으면 실행되지 않음</h3>
+		<p>ㄴ 방법1) lorem뒤에 커서두고 실행</p>
+		table>(tr>th*2)+(tr>(td{word}+td{lorem}))*3
+		<xmp>
+			<table>
+				<tr>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>word</td>
+					<td>lorem</td>
+				</tr>
+				<tr>
+					<td>word</td>
+					<td>lorem</td>
+				</tr>
+				<tr>
+					<td>word</td>
+					<td>lorem</td>
+				</tr>
+			</table>
+		</xmp>
+		
+		<p>ㄴlorem을 함수처럼 사용</p>
+		table>(tr>th*2)+(tr>(td{word}+lorem(td{desc})))*3
+		<xmp>
+			<table>
+				<tr>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>word</td>
+					<td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati exercitationem sed enim nam tempora aperiam magni aut. Minus eos beatae odio officia expedita fugit nesciunt molestiae eveniet error amet repellendus.</td>
+				</tr>
+				<tr>
+					<td>word</td>
+					<td>Optio dignissimos ipsa distinctio aperiam odit non ut repellendus odio maxime debitis nulla quos quisquam unde aliquam molestias consequatur ipsam perspiciatis consectetur omnis incidunt officiis eum vitae temporibus atque fuga.</td>
+				</tr>
+				<tr>
+					<td>word</td>
+					<td>Exercitationem tenetur voluptatibus non quam earum eveniet omnis soluta quibusdam dolorem sunt facilis esse incidunt inventore corporis nihil repudiandae at itaque quia officia provident tempore ea ad et ex commodi!</td>
+				</tr>
+			</table>
+		</xmp>
+	
+	</li>
+</ul>
+
+</div>
+
+</body>
+</html>

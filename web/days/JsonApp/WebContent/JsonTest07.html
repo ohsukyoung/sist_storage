@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest07.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject7 = ["test"]
+var myJsonObject7_1 = ["test1", "test2"]
+var myJsonObject7_2 = ["test2", "test2",123, 123+1]
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject7)">
+	<!-- → test -->
+	<input type="button" class="btn" value="click2" onclick="alert(myJsonObject7_1)">
+	<!-- → test1,test2 -->
+	<input type="button" class="btn" value="click3" onclick="alert(myJsonObject7_2)">
+	<!-- → test2,test2,123,124 -->
+	<!-- **더미로 출력되는 것을 확인할 수 있음** -->
+	
+	<br><br>
+	
+	<input type="button" class="btn" value="click4" onclick="alert(typeof myJsonObject7)">
+	<input type="button" class="btn" value="click5" onclick="alert(typeof myJsonObject7_1)">
+	<input type="button" class="btn" value="click6" onclick="alert(typeof myJsonObject7_2)">
+	<!-- 셋 모두 → object -->
+	
+	<br><br>
+	<input type="button" class="btn" value="click7" onclick="alert(myJsonObject7[0])">
+	<!-- → test -->
+	<input type="button" class="btn" value="click8" onclick="alert(typeof myJsonObject7[0])">
+	<!-- → string -->
+	<input type="button" class="btn" value="click9" onclick="alert(myJsonObject7[1])">
+	<!-- → undefined -->
+	<!-- **자바스크립트 배열이 자바의 배열과 다른점
+		고정값이 아님. 내용이 같지 않아도 들어감**-->
+	<input type="button" class="btn" value="click10" onclick="alert(typeof myJsonObject7[1])">
+	<!-- → undefined -->
+	<!-- **undefined 의 타입은 undefined** -->
+	
+	<br><br>
+	<input type="button" class="btn" value="click11"
+		onclick="alert(myJsonObject7_1[0] + myJsonObject7_1[1])">
+	<!-- → test1test2 -->
+	<input type="button" class="btn" value="click12"
+		onclick="alert(typeof (myJsonObject7_1[0] + myJsonObject7_1[1]))">
+	<!-- string -->
+	<!-- **괄호 안 씌울 경우 stringtest2 ** -->
+	
+	<br><br>
+	<input type="button" class="btn" value="click13"
+		onclick="alert(myJsonObject7_2[2] + myJsonObject7_2[3])">
+	<!-- → 247 -->
+	<input type="button" class="btn" value="click14"
+		onclick="alert(typeof (myJsonObject7_2[2] + myJsonObject7_2[3]))">
+	<!-- → number -->
+	
+	<br><br>
+	<!-- check~!!! -->
+	<input type="button" class="btn" value="click15"
+		onclick="alert(myJsonObject7_1[0] + myJsonObject7_1[2])">
+	<!-- → test1undefined -->
+	<!-- **undefined를 문자열로 취급함** -->
+	<input type="button" class="btn" value="click16"
+		onclick="alert(typeof (myJsonObject7_1[0] + myJsonObject7_1[2]))">
+	<!-- → string -->
+	
+	<br><br>
+	<!-- check~!!! -->
+	<input type="button" class="btn" value="click17"
+		onclick="alert(myJsonObject7_2[3] + myJsonObject7_2[4])">
+	<!-- → NaN(Not a Number) -->
+	<input type="button" class="btn" value="click18"
+		onclick="alert(typeof (myJsonObject7_2[3] + myJsonObject7_2[4]))">
+	<!-- → number -->
+	<!-- **NaN인지 아닌지 여부 확인을 위해 typeof 를 찍어보는 것은 의미없음!** -->
+	
+</form>
+
+</body>
+</html>

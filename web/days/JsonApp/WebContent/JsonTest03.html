@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest03.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject3=
+{
+	"test1":"hello1"
+	, "test2": "hello2"
+	, "test3": "hello3"
+}
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<!-- <input class="btn" type="button" value="click1" onclick="myJsonObject3.test1"> -->
+	
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject3.test1)"><br>
+	<!-- hello1 -->
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject3.test2)"><br>
+	<!-- hello2 -->
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject3.test3)">
+	<!-- hello3 -->
+	
+	<br><br>
+	
+	<input type="button" class="btn" value="click4" onclick="alert(typeof myJsonObject3.test1)"><br>
+	<input type="button" class="btn" value="click5" onclick="alert(typeof myJsonObject3.test2)"><br>
+	<input type="button" class="btn" value="click6" onclick="alert(typeof myJsonObject3.test3)">
+	<!-- 셋 모두 --==>> string -->
+	<!-- **typeof를 찍었을 때, test1 의 타입을 찍는 것이 아닌.. hello1의 타입을 확인하는 것** -->
+	
+</form>
+
+</body>
+</html>

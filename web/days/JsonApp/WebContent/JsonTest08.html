@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JsonTest08.html</title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript">
+var myJsonObject8=
+{
+	"test": ["ccc", "ddd"]
+	, "exam": ["kkk", "ppp"]
+}
+
+/* var myJsonObject8={	"test": ["ccc", "ddd"], "exam": ["kkk", "ppp"]} */
+</script>
+</head>
+<body class="section">
+
+<form action="" class="layout">
+	<input type="button" class="btn" value="click1" onclick="alert(myJsonObject8)">
+	<!-- → [object(자바스크립트 타입) Object(html dom 타입)] -->
+	<input type="button" class="btn" value="click2" onclick="alert(typeof myJsonObject8)">
+	<!-- → object -->
+	
+	<br><br>
+	
+	<input type="button" class="btn" value="click3" onclick="alert(myJsonObject8.test)">
+	<!-- → ccc,ddd -->
+	<input type="button" class="btn" value="click4" onclick="alert(typeof myJsonObject8.test)">
+	<!-- → object -->
+	<!-- **배열도 typeof에서는 object** -->
+	
+	<br><br>
+	
+	<input type="button" class="btn" value="click5" onclick="alert(myJsonObject8.test[0])">
+	<!-- → ccc -->
+	<input type="button" class="btn" value="click6" onclick="alert(typeof myJsonObject8.test[0])">
+	<!-- → string -->
+	
+	<!-- ※ 객체 구조상... 2차원 배열의 형태로 볼 수 있지만...
+			다음과 같은 접근이나 처리는 불가능하다.
+	 -->
+	 
+	<!-- ccc -->
+	<input type="button" class="btn" value="click7" onclick="alert(myJsonObject8.[0][0])">
+	<!-- → X -->
+	<!-- ppp -->
+	<input type="button" class="btn" value="click7" onclick="alert(myJsonObject8.[1][1])">
+	<!-- → X -->
+	
+</form>
+
+</body>
+</html>
