@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- 스프링이 제공하는 환경 설정 XML 파일 샘플 활용 -->
+	<!-- → 스프링이 생성하고 관리해야 할 객체들에 대한 정보 전달 -->
+	
+	<!-- CalculatorImpl 클래스의 객체 생성 및 관리를 위한 정보 전달 -->
+	<bean id="cal" class="com.test.spr.CalculatorImpl"></bean>
+	
+	<!-- CalculatorAspect 클래스의 객체 생성 및 관리를 위한 정보 전달 -->
+	<bean id="aspect" class="com.test.spr.CalculatorAspect"></bean>
+	
+	
+	<!-- ************************check~!!!**************************** -->
+	<!-- CalculatorBeforeAdvice 클래스의 객체 생성 및 관리를 위한 정보 전달 -->
+	<bean id="before" class="com.test.spr.CalculatorBeforeAdvice"></bean>
+	
+	
+	<!-- 스프링이 제공하는 가짜 객체(Proxy) 클래스의 객체 생성 및 관리를 위한 정보 전달 -->
+	<!-- 『ProxyFactoryBean』 -->	
+	<bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+	
+		<!-- 주 업무 클래스 인터페이스 정보 제공 -->
+		<!-- → 『proxyInterfaces』 -->     <!-- **'s'붙임을 유의** -->
+		<property name="proxyInterfaces">
+			<list>
+				<value>com.test.spr.Calculator</value>
+				<!-- ▶ 인터페이스이기 대문에 경로를 포함하여 넘김 -->
+			</list>
+			<!-- **복수의 형태로 배열 정보 넘기는 List** -->
+		</property>
+		
+		<!-- 주 업무 클래스의 객체 정보 제공 -->
+		<!-- → 『target』 -->
+		<property name="target" ref="cal"></property>
+		<!-- ▶ cal은 라인11의 id를 가져옴 -->
+		
+		<!-- 보조 업무 클래스 객체 정보 제공 -->
+		<!-- 『interceptorNames』 -->     <!-- **'s'붙임을 유의** -->
+		<property name="interceptorNames">
+			<list>
+				<!-- Around Advice -->
+				<value>aspect</value>
+				<!-- ▶ 라인14의 id="aspect"  -->
+				
+				<!-- Before Advice -->
+				<value>before</value>
+				<!-- ▶ 라인19의 id="before"  -->
+			</list>
+			
+			<!-- ******리스트 등록, 빈 등록 순서 상관 없음  -->
+		</property>
+		
+	</bean>
+	
+</beans>
