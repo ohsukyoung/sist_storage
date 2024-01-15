@@ -4138,7 +4138,7 @@ END CRYPTPACK;
 --==>> Package Body CRYPTPACK이(가) 컴파일되었습니다.
 ```
 
-## 9.3. 
+## 9.3. ■■■ 암호화 및 복호화 03 ■■■
 
 ``` sql
 SELECT USER
