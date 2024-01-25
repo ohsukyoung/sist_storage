@@ -319,12 +319,12 @@
    #02. Department.java		→ DTO 계층, 부서 데이터 자료형 클래스.
    #03. Region.java		    → DTO 계층, 지역 데이터 자료형 클래스.
    #04. Posiition.java		  → DTO 계층, 직위 데이터 자료형 클래스.
-
+ 
    #05. IEmployeeDAO.java		→ 인터페이스.
    #06. IDepartmentDAO.java	  → 인터페이스.
    #07. IRegionDAO.java		    → 인터페이스.
    #08. IPostionDAO.java		    → 인터페이스.
-
+ 
    #09. EmployeeDAO.java		    → 데이터베이스 액션 처리 클래스
                                    직원 데이터 CRUD 액션
                                    Connection 객체에 대한 의존성 주입 준비
@@ -341,92 +341,136 @@
                                    직원 데이터 CRUD 액션
                                    Connection 객체에 대한 의존성 주입 준비
                                    (인터페이스 속성 구성 / setter 구성)
-
+ 
    #13. EmployeeMenu.jsp		    → 메인 메뉴 뷰 페이지.
                                    로그아웃 기능 포함.
-
+ 
    #14. menuStyle.css		      → 메뉴 스타일 구성
-
+ 
    #15. EmployeeList.jsp		    → 직원 리스트 출력 페이지.
-
-   - main.css			          → 메인 스타일 구성.
-
-   - EmployeeListController.java → 사용자 정의 컨트롤러 클래스
+ 
+   #16. main.css			          → 메인 스타일 구성.
+ 
+   #17. EmployeeListController.java → 사용자 정의 컨트롤러 클래스
                                     리스트 출력 액션
                                     DAO 객체에 대한 의존성 주입
                                     (의존성 주입을 위한 준비 필요)
-
-   - web.xml			          → DispatcherServlet 객체 등록
+ 
+   #18. web.xml			          → DispatcherServlet 객체 등록
                                    URL 매핑 주소 등록
-
-   - dispatcher-servlet.xml     → 컨트롤러 객체 등록
+ 
+   #19. dispatcher-servlet.xml     → 컨트롤러 객체 등록
                                    URL 매핑 주소 등록
                                    SimpleDriverDataSource 객체 등록
                                    의존 객체 주입 설정
                                    DAO 객체 등록
-
-   - employeelist.action        → 이클립스 실행 과정에서 요청을 위한 빈 파일
-
-   - EmployeeInsertFormController.java
+ 
+   #20. employeelist.action        → 이클립스 실행 과정에서 요청을 위한 빈 파일
+   #21. EmployeeInsertForm.jsp
+   #22. EmployeeInsertFormController.java
      (employeeinsertform.action)
-
-   - EmployeeInsertController.java
-     (employeeinsert.action)
-
-   - AjaxController.java
+ 
+   #23. jquery-ui.js
+   #24. jquery-ui.css
+   #25. images
+ 
+   #26. AjaxController.java
      (ajax.action)
-
-   - Ajax.jsp
-
-   - EmployeeUpdateForm.jsp
-
-   - EmployeeUpdateFormController.java
+ 
+   #27. Ajax.jsp
+ 
+   #28. EmployeeInsertController.java
+     (employeeinsert.action)
+ 
+   #29. EmployeeUpdateForm.jsp
+   #30. EmployeeUpdateFormController.java
      (employeeupdateform.action)
-
-   - EmployeeUpdateController.java
+   #31. EmployeeUpdateController.java
      (employeeupdate.action)
-
-   - EmployeeDeleteController.java
+ 
+   #32. EmployeeDeleteController.java
      (employeedelete.action)
-
-   - LoginForm.jsp
-
-   - LoginFormController.java
-
-   - LoginController.java
-
-   - LogoutController.java
-
-   - EmpList.jsp
-
+ 
+   #33. LoginForm.jsp
+   #34. LoginFormController.java
+   #35. LoginController.java
+   #36. LogoutController.java
+ 
+   #37. EmpList.jsp
+   #38. EmpListController.java
+        (emplist.action)
+ 
             :
             :         
             :
-
-   - DepartmentList.jsp
-   - DepartmentInsertForm.jsp
-   - DepartmentUpdateForm.jsp
-
-   - DepartmentListController.java
-   - DepartmentInsertFormController.java
-   - DepartmentInsertController.java
-   - DepartmentUpdateFormController.java
-   - DepartmentUpdateController.java
-   - DepartmentDeleteController.java
-
+   #39. departmentlist.action
+   #40. DepartmentList.jsp
+   #41. DepartmentListController.java
+        (departmentlist.action)
+ 
+   #42. DepartmentInsertForm.jsp
+   #43. DepartmentInsertFormController.java
+        (departmentinsertform.action)
+   #44. DepartmentInsertController.java
+        (departmentinsert.action)
+   
+   #45. DepartmentUpdateFormController.java
+        (departmentupdateform.action)
+   #46. DepartmentUpdateForm.jsp
+   #47. DepartmentUpdateController.java
+        (departmentupdate.action)
+   
+   #48. DepartmentDeleteController.java
+ 
+   #49. DeptList.jsp
+   #50. DeptListController.java
+        (deptlist.action)
             :
             :
-
-   - RegionList.jsp
-   - RegionInsertFrom.jsp
-   - RegionUpdateForm.jsp
-
+            :
+   #51. regionlist.action
+   #52. RegionList.jsp
+   #53. RegionListController.java
+        (regionlist.action)
+ 
+   #54. RegionInsertForm.jsp
+   #55. RegionInsertFormController.java
+   #56. RegionInsertController.java
+   
+   #57. RegionUpdateFormController.java
+        (regionupdateform.action)
+   #58. RegionUpdateForm.jsp
+   #59. RegionUpdateController.java
+        (regionupdate.action)
+   
+   #60. RegionDeleteController.java
+ 
+   #61. RegtList.jsp
+   #62. RegtListController.java
+        (regtlist.action)
             :
             :
-
-   - PositionList.jsp
-   - PostitionInsertForm.jsp
-   - PostitionUpdateForm.jsp
+            :
+   #63. positionlist.action
+   #64. PositionList.jsp
+   #65. PositionListController.java
+        (positionlist.action)
+ 
+   #66. PositionInsertForm.jsp
+   #67. PositionInsertFormController.java
+   #68. PositionInsertController.java
+   
+   #69. PositionUpdateFormController.java
+        (positionupdateform.action)
+   #70. PositionUpdateForm.jsp
+   #71. PositionUpdateController.java
+        (positionupdate.action)
+   
+   #72. PositionDeleteController.java
+ 
+   #73. PosList.jsp
+   #74. PosListController.java
+        (poslist.action)
 
 
 ○ 사용자 최초 요청 주소
