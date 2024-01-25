@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mybatis.IGradeDAO">
+<!-- ============================================
+	#07 GradeDAO.xml
+		- mybatis 환경 설정 파일 활용
+================================================= -->
+	<select id="list" resultType="com.test.mybatis.GradeDTO">
+		SELECT SID, NAME, SUB1, SUB2, SUB3, TOT, AVG, CH
+		FROM GRADEVIEW
+		ORDER BY SID
+	</select>
+	
+	<select id="search" resultType="com.test.mybatis.GradeDTO">
+		SELECT SID, NAME, SUB1, SUB2, SUB3, TOT, AVG, CH
+		FROM GRADEVIEW
+		WHERE SID = #{SID}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM TBL_GRADE
+	</select>
+	
+	<insert id="add">
+		INSERT INTO TBL_GRADE(SID, SUB1, SUB2, SUB3)
+		VALUES(#{sid},#{sub1},#{sub2},#{sub3})
+	</insert>
+	
+	<delete id="remove">
+		DELETE
+		FROM TBL_GRADE
+		WHERE SID=#{sid}
+	</delete>
+	
+	<update id="update">
+		UPDATE TBL_GRADE
+		SET SUB1=#{sub1}, SUB2=#{sub2}, SUB3=#{sub3}
+		WHERE SID = #{sid}
+	</update>
+</mapper>

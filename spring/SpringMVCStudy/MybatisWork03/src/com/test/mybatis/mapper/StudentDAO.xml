@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mybatis.IStudentDAO">
+<!-- ============================================
+	#06 StudentDAO.xml
+		- mybatis 환경 설정 파일 활용
+================================================= -->
+	<select id="list" resultType="com.test.mybatis.StudentDTO">
+		SELECT SID, NAME, TEL, SUB
+		FROM STUDENTVIEW
+		ORDER BY SID
+	</select>
+	
+	<select id="search" resultType="com.test.mybatis.StudentDTO">
+		SELECT SID, NAME, TEL, SUB
+		FROM STUDENTVIEW
+		WHERE SID = #{sid}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM TBL_STUDENT
+	</select>
+	
+	<select id="maxId" resultType="java.lang.Integer">
+		SELECT MAX(SID)+1
+		FROM TBL_STUDENT
+	</select>
+	
+	<insert id="add">
+		INSERT INTO TBL_STUDENT(SID, NAME, TEL)
+		VALUES(#{sid}, #{name}, #{tel})
+	</insert>
+	
+	<delete id="remove">
+		DELETE
+		FROM TBL_STUDENT
+		WHERE SID = #{sid}
+	</delete>
+	
+	<update id="update">
+		UPDATE TBL_STUDENT
+		SET NAME=#{name}, TEL=#{tel}
+		WHERE SID = #{sid}
+	</update>
+</mapper>
